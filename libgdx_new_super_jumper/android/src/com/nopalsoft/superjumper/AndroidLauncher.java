@@ -5,14 +5,13 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.nopalsoft.superjumper.handlers.GameServicesHandler;
-import com.nopalsoft.superjumper.handlers.RequestHandler;
 
-public class AndroidLauncher extends AndroidApplication implements  RequestHandler, GameServicesHandler {
+public class AndroidLauncher extends AndroidApplication implements  GameServicesHandler {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new MainSuperJumper(this, this), config);
+        initialize(new MainSuperJumper( this), config);
     }
 
 
@@ -40,30 +39,5 @@ public class AndroidLauncher extends AndroidApplication implements  RequestHandl
     public void signIn() {
 
     }
-
-
-
-    @Override
-    public void showRater() {
-
-    }
-
-    @Override
-    public void showInterstitial() {
-
-    }
-
-
-
-    @Override
-    public void showAdBanner() {
-
-    }
-
-    @Override
-    public void hideAdBanner() {
-
-    }
-
 
 }

@@ -4,51 +4,21 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.nopalsoft.superjumper.MainSuperJumper;
 import com.nopalsoft.superjumper.handlers.GameServicesHandler;
-import com.nopalsoft.superjumper.handlers.RequestHandler;
+
 
 public class DesktopLauncher {
-    static RequestHandler handler = new RequestHandler() {
 
-        @Override
-        public void showRater() {
-            // TODO Auto-generated method stub
-        }
-
-
-        @Override
-        public void showInterstitial() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void showAdBanner() {
-            // TODO Auto-generated method stub
-
-        }
-
-
-        @Override
-        public void hideAdBanner() {
-            // TODO Auto-generated method stub
-
-        }
-
-    };
     static GameServicesHandler gameHandler = new GameServicesHandler() {
-
 
         @Override
         public void submitScore(long score) {
             // TODO Auto-generated method stub
-
         }
 
 
         @Override
         public void signIn() {
             // TODO Auto-generated method stub
-
         }
 
         @Override
@@ -60,15 +30,13 @@ public class DesktopLauncher {
         @Override
         public void getLeaderboard() {
             // TODO Auto-generated method stub
-
         }
-
 
     };
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setWindowedMode(480, 800);
-        new Lwjgl3Application(new MainSuperJumper(handler, gameHandler), config);
+        new Lwjgl3Application(new MainSuperJumper( gameHandler), config);
     }
 }

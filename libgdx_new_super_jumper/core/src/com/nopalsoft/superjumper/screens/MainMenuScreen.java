@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -20,7 +19,6 @@ public class MainMenuScreen extends Screens {
 	Image titulo;
 
 	TextButton btShop, btPlay, btLeaderboard, btRate;
-	Button btMusica;
 	Label lbBestScore;
 
 	public MainMenuScreen(final MainSuperJumper game) {
@@ -60,24 +58,14 @@ public class MainMenuScreen extends Screens {
 		btShop.pad(10);
 		btShop.pack();
 		addEfectoPress(btShop);
-		btShop.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
 
-			}
-		});
 
 		btRate = new TextButton("Rate", Assets.textButtonStyleGrande);
 		btRate.setPosition(SCREEN_WIDTH / 2f - btRate.getWidth() / 2f, 340);
 		btRate.pad(10);
 		btRate.pack();
 		addEfectoPress(btRate);
-		btRate.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				game.reqHandler.showRater();
-			}
-		});
+
 
 		btLeaderboard = new TextButton("Leaderboard", Assets.textButtonStyleGrande);
 		btLeaderboard.pad(10);

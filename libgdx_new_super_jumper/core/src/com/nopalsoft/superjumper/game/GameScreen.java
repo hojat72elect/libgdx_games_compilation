@@ -159,13 +159,6 @@ public class GameScreen extends Screens {
 	}
 
 	@Override
-	public void hide() {
-		if (Settings.numeroVecesJugadas % 7 == 0)
-			game.reqHandler.showInterstitial();
-		super.hide();
-	}
-
-	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		touchPositionWorldCoords.set(screenX, 0, 0);// Siempre como si hubiera tocado la parte mas alta de la pantalla
 		renderer.unprojectToWorldCoords(touchPositionWorldCoords);
