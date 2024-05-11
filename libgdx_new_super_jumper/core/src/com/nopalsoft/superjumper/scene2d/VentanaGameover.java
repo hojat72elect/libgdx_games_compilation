@@ -41,7 +41,7 @@ public class VentanaGameover extends Ventana {
 		Label lblNumScore = new Label(oWorld.distanciaMax + "", Assets.labelStyleChico);
 		lblNumScore.setAlignment(Align.right);
 
-		Label lbBestScore = new Label("Mejor puntuación", Assets.labelStyleChico);
+		Label lbBestScore = new Label("Best Score", Assets.labelStyleChico);
 		lbScore.setAlignment(Align.left);
 
 		Label lbBestNumScore = new Label(Settings.bestScore + "", Assets.labelStyleChico);
