@@ -15,12 +15,6 @@ public class PiezaPlataformas implements Poolable {
 	public static final float WIDTH_NORMAL = Plataformas.WIDTH_NORMAL / 2f;
 	public static final float HEIGTH_NORMAL = Plataformas.HEIGTH_NORMAL;
 
-	public static final int COLOR_BEIGE = 0;
-	public static final int COLOR_BLUE = 1;
-	public static final int COLOR_GRAY = 2;
-	public static final int COLOR_GREEN = 3;
-	public static final int COLOR_MULTICOLOR = 4;
-	public static final int COLOR_PINK = 5;
 	public int color;
 
 	public static final int TIPO_LEFT = 0;

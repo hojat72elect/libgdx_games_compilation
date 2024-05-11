@@ -1,7 +1,5 @@
 package com.nopalsoft.superjumper.game;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -32,8 +30,7 @@ import com.nopalsoft.superjumper.objetos.Rayo;
 import com.nopalsoft.superjumper.screens.Screens;
 
 public class WorldGame {
-	final float WIDTH = Screens.WORLD_WIDTH;
-	final float HEIGHT = Screens.WORLD_HEIGHT;
+
 
 	final public static int STATE_RUNNING = 0;
 	final public static int STATE_GAMEOVER = 1;
@@ -45,7 +42,7 @@ public class WorldGame {
 	public World oWorldBox;
 
 	Personaje oPer;
-	private Array<Body> arrBodies;
+	private final Array<Body> arrBodies;
 	Array<Plataformas> arrPlataformas;
 	Array<PiezaPlataformas> arrPiezasPlataformas;
 	Array<Moneda> arrMonedas;
@@ -188,8 +185,6 @@ public class WorldGame {
 
 	/**
 	 * La plataforma rompible son 2 cuadros
-	 * 
-	 * @param i
 	 */
 	private void crearPiezasPlataforma(Plataformas oPlat) {
 		crearPiezasPlataforma(oPlat, PiezaPlataformas.TIPO_LEFT);
@@ -381,49 +376,36 @@ public class WorldGame {
 
 		eliminarObjetos();
 
-		/**
-		 * REviso si es necesario generar la siquiete parte del mundo
-		 */
-		if (oPer.position.y + 10 > mundoCreadoHastaY) {
+        if (oPer.position.y + 10 > mundoCreadoHastaY) {
 			crearSiguienteParte();
 		}
 
 		timeToCreateNube += delta;// Actualizo el tiempo para crear una nube
 
 		oWorldBox.getBodies(arrBodies);
-		Iterator<Body> i = arrBodies.iterator();
 
-		while (i.hasNext()) {
-			Body body = i.next();
-			if (body.getUserData() instanceof Personaje) {
-				updatePersonaje(body, delta, acelX, fire, touchPositionWorldCoords);
-			}
-			else if (body.getUserData() instanceof Plataformas) {
-				updatePlataforma(body, delta);
-			}
-			else if (body.getUserData() instanceof PiezaPlataformas) {
-				updatePiezaPlataforma(body, delta);
-			}
-			else if (body.getUserData() instanceof Moneda) {
-				updateMoneda(body, delta);
-			}
-			else if (body.getUserData() instanceof Enemigo) {
-				updateEnemigo(body, delta);
-			}
-			else if (body.getUserData() instanceof Item) {
-				updateItem(body, delta);
-			}
-			else if (body.getUserData() instanceof Nube) {
-				updateNube(body, delta);
-			}
-			else if (body.getUserData() instanceof Rayo) {
-				updateRayo(body, delta);
-			}
-			else if (body.getUserData() instanceof Bullet) {
-				updateBullet(body, delta);
-			}
+        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
+            if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Personaje) {
+                updatePersonaje(body, delta, acelX, fire, touchPositionWorldCoords);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Plataformas) {
+                updatePlataforma(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.PiezaPlataformas) {
+                updatePiezaPlataforma(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Moneda) {
+                updateMoneda(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Enemigo) {
+                updateEnemigo(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Item) {
+                updateItem(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Nube) {
+                updateNube(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Rayo) {
+                updateRayo(body, delta);
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Bullet) {
+                updateBullet(body, delta);
+            }
 
-		}
+        }
 
 		if (distanciaMax < (oPer.position.y * 10)) {
 			distanciaMax = (int) (oPer.position.y * 10);
@@ -441,86 +423,75 @@ public class WorldGame {
 
 	private void eliminarObjetos() {
 		oWorldBox.getBodies(arrBodies);
-		Iterator<Body> i = arrBodies.iterator();
 
-		while (i.hasNext()) {
-			Body body = i.next();
+        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
+            if (!oWorldBox.isLocked()) {
 
-			if (!oWorldBox.isLocked()) {
-
-				if (body.getUserData() instanceof Plataformas) {
-					Plataformas oPlat = (Plataformas) body.getUserData();
-					if (oPlat.state == Plataformas.STATE_DESTROY) {
-						arrPlataformas.removeValue(oPlat, true);
-						oWorldBox.destroyBody(body);
-						if (oPlat.tipo == Plataformas.TIPO_ROMPIBLE)
-							crearPiezasPlataforma(oPlat);
-						Pools.free(oPlat);
-					}
-				}
-				else if (body.getUserData() instanceof Moneda) {
-					Moneda oMon = (Moneda) body.getUserData();
-					if (oMon.state == Moneda.STATE_TAKEN) {
-						arrMonedas.removeValue(oMon, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oMon);
-					}
-				}
-				else if (body.getUserData() instanceof PiezaPlataformas) {
-					PiezaPlataformas oPiez = (PiezaPlataformas) body.getUserData();
-					if (oPiez.state == PiezaPlataformas.STATE_DESTROY) {
-						arrPiezasPlataformas.removeValue(oPiez, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oPiez);
-					}
-				}
-				else if (body.getUserData() instanceof Enemigo) {
-					Enemigo oEnemy = (Enemigo) body.getUserData();
-					if (oEnemy.state == Enemigo.STATE_DEAD) {
-						arrEnemigo.removeValue(oEnemy, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oEnemy);
-					}
-				}
-				else if (body.getUserData() instanceof Item) {
-					Item oItem = (Item) body.getUserData();
-					if (oItem.state == Item.STATE_TAKEN) {
-						arrItem.removeValue(oItem, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oItem);
-					}
-				}
-				else if (body.getUserData() instanceof Nube) {
-					Nube oNube = (Nube) body.getUserData();
-					if (oNube.state == Nube.STATE_DEAD) {
-						arrNubes.removeValue(oNube, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oNube);
-					}
-				}
-				else if (body.getUserData() instanceof Rayo) {
-					Rayo oRayo = (Rayo) body.getUserData();
-					if (oRayo.state == Rayo.STATE_DESTROY) {
-						arrRayos.removeValue(oRayo, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oRayo);
-					}
-				}
-				else if (body.getUserData() instanceof Bullet) {
-					Bullet oBullet = (Bullet) body.getUserData();
-					if (oBullet.state == Bullet.STATE_DESTROY) {
-						arrBullets.removeValue(oBullet, true);
-						oWorldBox.destroyBody(body);
-						Pools.free(oBullet);
-					}
-				}
-				else if (body.getUserData().equals("piso")) {
-					if (oPer.position.y - 5.5f > body.getPosition().y || oPer.state == Personaje.STATE_DEAD) {
-						oWorldBox.destroyBody(body);
-					}
-				}
-			}
-		}
+                if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Plataformas) {
+                    com.nopalsoft.superjumper.objetos.Plataformas oPlat = (com.nopalsoft.superjumper.objetos.Plataformas) body.getUserData();
+                    if (oPlat.state == com.nopalsoft.superjumper.objetos.Plataformas.STATE_DESTROY) {
+                        arrPlataformas.removeValue(oPlat, true);
+                        oWorldBox.destroyBody(body);
+                        if (oPlat.tipo == com.nopalsoft.superjumper.objetos.Plataformas.TIPO_ROMPIBLE)
+                            crearPiezasPlataforma(oPlat);
+                        com.badlogic.gdx.utils.Pools.free(oPlat);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Moneda) {
+                    com.nopalsoft.superjumper.objetos.Moneda oMon = (com.nopalsoft.superjumper.objetos.Moneda) body.getUserData();
+                    if (oMon.state == com.nopalsoft.superjumper.objetos.Moneda.STATE_TAKEN) {
+                        arrMonedas.removeValue(oMon, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oMon);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.PiezaPlataformas) {
+                    com.nopalsoft.superjumper.objetos.PiezaPlataformas oPiez = (com.nopalsoft.superjumper.objetos.PiezaPlataformas) body.getUserData();
+                    if (oPiez.state == com.nopalsoft.superjumper.objetos.PiezaPlataformas.STATE_DESTROY) {
+                        arrPiezasPlataformas.removeValue(oPiez, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oPiez);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Enemigo) {
+                    com.nopalsoft.superjumper.objetos.Enemigo oEnemy = (com.nopalsoft.superjumper.objetos.Enemigo) body.getUserData();
+                    if (oEnemy.state == com.nopalsoft.superjumper.objetos.Enemigo.STATE_DEAD) {
+                        arrEnemigo.removeValue(oEnemy, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oEnemy);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Item) {
+                    com.nopalsoft.superjumper.objetos.Item oItem = (com.nopalsoft.superjumper.objetos.Item) body.getUserData();
+                    if (oItem.state == com.nopalsoft.superjumper.objetos.Item.STATE_TAKEN) {
+                        arrItem.removeValue(oItem, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oItem);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Nube) {
+                    com.nopalsoft.superjumper.objetos.Nube oNube = (com.nopalsoft.superjumper.objetos.Nube) body.getUserData();
+                    if (oNube.state == com.nopalsoft.superjumper.objetos.Nube.STATE_DEAD) {
+                        arrNubes.removeValue(oNube, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oNube);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Rayo) {
+                    com.nopalsoft.superjumper.objetos.Rayo oRayo = (com.nopalsoft.superjumper.objetos.Rayo) body.getUserData();
+                    if (oRayo.state == com.nopalsoft.superjumper.objetos.Rayo.STATE_DESTROY) {
+                        arrRayos.removeValue(oRayo, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oRayo);
+                    }
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Bullet) {
+                    com.nopalsoft.superjumper.objetos.Bullet oBullet = (com.nopalsoft.superjumper.objetos.Bullet) body.getUserData();
+                    if (oBullet.state == com.nopalsoft.superjumper.objetos.Bullet.STATE_DESTROY) {
+                        arrBullets.removeValue(oBullet, true);
+                        oWorldBox.destroyBody(body);
+                        com.badlogic.gdx.utils.Pools.free(oBullet);
+                    }
+                } else if (body.getUserData().equals("piso")) {
+                    if (oPer.position.y - 5.5f > body.getPosition().y || oPer.state == com.nopalsoft.superjumper.objetos.Personaje.STATE_DEAD) {
+                        oWorldBox.destroyBody(body);
+                    }
+                }
+            }
+        }
 	}
 
 	private void updatePersonaje(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
@@ -617,9 +588,9 @@ public class WorldGame {
 			Fixture b = contact.getFixtureB();
 
 			if (a.getBody().getUserData() instanceof Personaje)
-				beginContactPersonaje(a, b);
+				beginContactPersonaje(b);
 			else if (b.getBody().getUserData() instanceof Personaje)
-				beginContactPersonaje(b, a);
+				beginContactPersonaje(a);
 
 			if (a.getBody().getUserData() instanceof Bullet)
 				beginContactBullet(a, b);
@@ -628,7 +599,7 @@ public class WorldGame {
 
 		}
 
-		private void beginContactPersonaje(Fixture fixPersonaje, Fixture fixOtraCosa) {
+		private void beginContactPersonaje(Fixture fixOtraCosa) {
 			Object otraCosa = fixOtraCosa.getBody().getUserData();
 
 			if (otraCosa.equals("piso")) {

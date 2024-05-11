@@ -16,8 +16,6 @@ public class VentanaPause extends Ventana {
 	TextButton btMenu, btResume;
 	WorldGame oWorld;
 
-	int buttonSize = 55;
-
 	public VentanaPause(final GameScreen currentScreen) {
 		super(currentScreen, 350, 280, 300);
 		oWorld = currentScreen.oWorld;
@@ -54,7 +52,7 @@ public class VentanaPause extends Ventana {
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				hide();
 				screen.changeScreenWithFadeOut(MainMenuScreen.class, game);
-			};
+			}
 		});
 
 		btResume = new TextButton("Resume", Assets.textButtonStyleGrande);
@@ -65,7 +63,7 @@ public class VentanaPause extends Ventana {
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				hide();
 
-			};
+			}
 		});
 	}
 

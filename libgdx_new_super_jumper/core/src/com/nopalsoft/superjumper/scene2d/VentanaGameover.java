@@ -17,8 +17,6 @@ public class VentanaGameover extends Ventana {
 	TextButton btMenu, btTryAgain;
 	WorldGame oWorld;
 
-	int buttonSize = 55;
-
 	public VentanaGameover(final GameScreen currentScreen) {
 		super(currentScreen, 350, 400, 250);
 		oWorld = currentScreen.oWorld;
@@ -81,7 +79,7 @@ public class VentanaGameover extends Ventana {
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				hide();
 				screen.changeScreenWithFadeOut(MainMenuScreen.class, game);
-			};
+			}
 		});
 
 		btTryAgain = new TextButton("Try again", Assets.textButtonStyleGrande);
@@ -92,8 +90,8 @@ public class VentanaGameover extends Ventana {
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				hide();
 				screen.changeScreenWithFadeOut(GameScreen.class, game);
-			};
-		});
+			}
+        });
 	}
 
 	@Override

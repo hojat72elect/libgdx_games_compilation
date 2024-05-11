@@ -102,7 +102,6 @@ public class Assets {
 	public static void load() {
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/atlasMap.txt"));
 
-		// fontChico = new BitmapFont(Gdx.files.internal("data/fontChico.fnt"), atlas.findRegion("fontChico"));
 		fontChico = new BitmapFont(Gdx.files.internal("data/fontGrande.fnt"), atlas.findRegion("fontGrande"));
 		fontGrande = new BitmapFont(Gdx.files.internal("data/fontGrande.fnt"), atlas.findRegion("fontGrande"));
 

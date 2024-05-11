@@ -1,23 +1,14 @@
 package com.nopalsoft.superjumper;
 
-import com.badlogic.gdx.Game;
-import com.nopalsoft.superjumper.handlers.FacebookHandler;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.nopalsoft.superjumper.handlers.GameServicesHandler;
 import com.nopalsoft.superjumper.handlers.RequestHandler;
+
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 
-import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.nopalsoft.superjumper.MainSuperJumper;
-
-public class IOSLauncher extends IOSApplication.Delegate implements FacebookHandler, GameServicesHandler, RequestHandler {
-    @Override
-    protected IOSApplication createApplication() {
-        IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new MainSuperJumper(this, this, this), config);
-    }
-
+public class IOSLauncher extends IOSApplication.Delegate implements GameServicesHandler, RequestHandler {
     public static void main(String[] argv) {
         NSAutoreleasePool pool = new NSAutoreleasePool();
         UIApplication.main(argv, null, IOSLauncher.class);
@@ -25,33 +16,9 @@ public class IOSLauncher extends IOSApplication.Delegate implements FacebookHand
     }
 
     @Override
-    public void facebookSignIn() {
-
-    }
-
-    @Override
-    public void facebookSignOut() {
-
-    }
-
-    @Override
-    public boolean facebookIsSignedIn() {
-        return false;
-    }
-
-    @Override
-    public void facebookShareFeed(String message) {
-
-    }
-
-    @Override
-    public void showFacebook() {
-
-    }
-
-    @Override
-    public void facebookInviteFriends(String message) {
-
+    protected IOSApplication createApplication() {
+        IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        return new IOSApplication(new MainSuperJumper(this, this), config);
     }
 
     @Override
@@ -59,20 +26,12 @@ public class IOSLauncher extends IOSApplication.Delegate implements FacebookHand
 
     }
 
-    @Override
-    public void unlockAchievement(String achievementId) {
-
-    }
 
     @Override
     public void getLeaderboard() {
 
     }
 
-    @Override
-    public void getAchievements() {
-
-    }
 
     @Override
     public boolean isSignedIn() {
@@ -81,11 +40,6 @@ public class IOSLauncher extends IOSApplication.Delegate implements FacebookHand
 
     @Override
     public void signIn() {
-
-    }
-
-    @Override
-    public void signOut() {
 
     }
 
@@ -100,21 +54,6 @@ public class IOSLauncher extends IOSApplication.Delegate implements FacebookHand
     }
 
     @Override
-    public void showMoreGames() {
-
-    }
-
-    @Override
-    public void shareOnTwitter(String mensaje) {
-
-    }
-
-    @Override
-    public void removeAds() {
-
-    }
-
-    @Override
     public void showAdBanner() {
 
     }
@@ -124,23 +63,4 @@ public class IOSLauncher extends IOSApplication.Delegate implements FacebookHand
 
     }
 
-    @Override
-    public void buy5milCoins() {
-
-    }
-
-    @Override
-    public void buy15milCoins() {
-
-    }
-
-    @Override
-    public void buy30milCoins() {
-
-    }
-
-    @Override
-    public void buy50milCoins() {
-
-    }
 }

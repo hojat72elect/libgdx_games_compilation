@@ -30,14 +30,7 @@ public class Ventana extends Group {
 		setX(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f);
 
 		setScale(.5f);
-		addAction(Actions.sequence(Actions.scaleTo(1, 1, DURACION_ANIMATION), Actions.run(new Runnable() {
-
-			@Override
-			public void run() {
-				endResize();
-			}
-
-		})));
+		addAction(Actions.sequence(Actions.scaleTo(1, 1, DURACION_ANIMATION), Actions.run(this::endResize)));
 
 		isVisible = true;
 		stage.addActor(this);

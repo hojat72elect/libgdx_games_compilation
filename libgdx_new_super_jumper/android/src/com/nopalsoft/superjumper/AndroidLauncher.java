@@ -4,48 +4,21 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.nopalsoft.superjumper.MainSuperJumper;
-import com.nopalsoft.superjumper.handlers.FacebookHandler;
 import com.nopalsoft.superjumper.handlers.GameServicesHandler;
 import com.nopalsoft.superjumper.handlers.RequestHandler;
 
-public class AndroidLauncher extends AndroidApplication implements FacebookHandler, RequestHandler, GameServicesHandler {
+public class AndroidLauncher extends AndroidApplication implements  RequestHandler, GameServicesHandler {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new MainSuperJumper(this, this, this), config);
+        initialize(new MainSuperJumper(this, this), config);
     }
 
-    @Override
-    public void facebookSignIn() {
 
-    }
 
-    @Override
-    public void facebookSignOut() {
 
-    }
 
-    @Override
-    public boolean facebookIsSignedIn() {
-        return false;
-    }
-
-    @Override
-    public void showFacebook() {
-
-    }
-
-    @Override
-    public void facebookInviteFriends(String message) {
-
-    }
-
-    @Override
-    public void facebookShareFeed(String message) {
-
-    }
 
     @Override
     public void submitScore(long score) {
@@ -57,10 +30,6 @@ public class AndroidLauncher extends AndroidApplication implements FacebookHandl
 
     }
 
-    @Override
-    public void getAchievements() {
-
-    }
 
     @Override
     public boolean isSignedIn() {
@@ -72,15 +41,7 @@ public class AndroidLauncher extends AndroidApplication implements FacebookHandl
 
     }
 
-    @Override
-    public void signOut() {
 
-    }
-
-    @Override
-    public void unlockAchievement(String achievementId) {
-
-    }
 
     @Override
     public void showRater() {
@@ -92,15 +53,7 @@ public class AndroidLauncher extends AndroidApplication implements FacebookHandl
 
     }
 
-    @Override
-    public void showMoreGames() {
 
-    }
-
-    @Override
-    public void removeAds() {
-
-    }
 
     @Override
     public void showAdBanner() {
@@ -112,28 +65,5 @@ public class AndroidLauncher extends AndroidApplication implements FacebookHandl
 
     }
 
-    @Override
-    public void buy5milCoins() {
 
-    }
-
-    @Override
-    public void buy15milCoins() {
-
-    }
-
-    @Override
-    public void buy30milCoins() {
-
-    }
-
-    @Override
-    public void buy50milCoins() {
-
-    }
-
-    @Override
-    public void shareOnTwitter(String mensaje) {
-
-    }
 }

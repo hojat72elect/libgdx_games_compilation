@@ -97,7 +97,7 @@ public class GameScreen extends Screens {
 
 	private void updateRunning(float delta) {
 
-		float acelX = 0;
+		float acelX;
 
 		acelX = -(Gdx.input.getAccelerometerX() / 3f);
 
@@ -133,7 +133,7 @@ public class GameScreen extends Screens {
 		batcher.end();
 
 		if (state != STATE_PAUSED) {
-			renderer.render(delta);
+			renderer.render();
 		}
 
 	}

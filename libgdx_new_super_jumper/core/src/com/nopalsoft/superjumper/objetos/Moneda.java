@@ -71,9 +71,8 @@ public class Moneda implements Poolable {
 
 	/**
 	 * Genera una posicion en X dependiendo del numero de monedas del renglon para que no se salgan de la pantalla por la derecha o por la izquieda
-	 * 
-	 * @param numeroMonedasDelRenglon
-	 */
+	 *
+     */
 	private static float generaPosX(int numeroMonedasDelRenglon) {
 		float x = MathUtils.random(Screens.WORLD_WIDTH) + WIDTH / 2f;
 		if (x + (numeroMonedasDelRenglon * (WIDTH + SEPARACION_MONEDAS)) > Screens.WORLD_WIDTH) {
