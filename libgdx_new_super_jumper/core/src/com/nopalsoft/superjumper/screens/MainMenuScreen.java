@@ -27,14 +27,7 @@ public class MainMenuScreen extends Screens {
 		titulo = new Image(Assets.titulo);
 		titulo.setPosition(SCREEN_WIDTH / 2f - titulo.getWidth() / 2f, 800);
 
-		titulo.addAction(Actions.sequence(Actions.moveTo(titulo.getX(), 600, 1, Interpolation.bounceOut), Actions.run(new Runnable() {
-
-			@Override
-			public void run() {
-				stage.addActor(lbBestScore);
-
-			}
-		})));
+		titulo.addAction(Actions.sequence(Actions.moveTo(titulo.getX(), 600, 1, Interpolation.bounceOut), Actions.run(() -> stage.addActor(lbBestScore))));
 
 		lbBestScore = new Label("Best score " + Settings.bestScore, Assets.labelStyleChico);
 		lbBestScore.setPosition(SCREEN_WIDTH / 2f - lbBestScore.getWidth() / 2f, 570);
@@ -73,20 +66,10 @@ public class MainMenuScreen extends Screens {
 		btLeaderboard.setPosition(SCREEN_WIDTH / 2f - btLeaderboard.getWidth() / 2f, 240);
 
 		addEfectoPress(btLeaderboard);
-		btLeaderboard.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (game.gameServiceHandler.isSignedIn())
-					game.gameServiceHandler.getLeaderboard();
-				else
-					game.gameServiceHandler.signIn();
-			}
-		});
 
 		stage.addActor(titulo);
 		stage.addActor(btPlay);
 		stage.addActor(btRate);
-		// stage.addActor(btShop);
 		stage.addActor(btLeaderboard);
 
 	}

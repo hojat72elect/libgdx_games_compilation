@@ -112,9 +112,6 @@ public class Assets {
 		fondo = atlas.findRegion("Background");
 		titulo = new TextureRegionDrawable(atlas.findRegion("titulo"));
 
-		/**
-		 * Personaje
-		 */
 
 		personajeJump = atlas.findRegion("personajeJump");
 		personajeStand = atlas.findRegion("personajeStand");
@@ -148,9 +145,6 @@ public class Assets {
 		AtlasRegion lightning2 = atlas.findRegion("Lightning2");
 		rayo = new Animation(.08f, lightning1, lightning2);
 
-		/**
-		 * Plataformas
-		 */
 
 		plataformaBeige = atlas.findRegion("LandPiece_DarkBeige");
 		plataformaBeigeLight = atlas.findRegion("LandPiece_LightBeige");

@@ -60,15 +60,15 @@ public class WorldGame {
 		oWorldBox = new World(new Vector2(0, -9.8f), true);
 		oWorldBox.setContactListener(new Colisiones());
 
-		arrBodies = new Array<Body>();
-		arrPlataformas = new Array<Plataformas>();
-		arrPiezasPlataformas = new Array<PiezaPlataformas>();
-		arrMonedas = new Array<Moneda>();
-		arrEnemigo = new Array<Enemigo>();
-		arrItem = new Array<Item>();
-		arrNubes = new Array<Nube>();
-		arrRayos = new Array<Rayo>();
-		arrBullets = new Array<Bullet>();
+		arrBodies = new Array<>();
+		arrPlataformas = new Array<>();
+		arrPiezasPlataformas = new Array<>();
+		arrMonedas = new Array<>();
+		arrEnemigo = new Array<>();
+		arrItem = new Array<>();
+		arrNubes = new Array<>();
+		arrRayos = new Array<>();
+		arrBullets = new Array<>();
 
 		timeToCreateNube = 0;
 

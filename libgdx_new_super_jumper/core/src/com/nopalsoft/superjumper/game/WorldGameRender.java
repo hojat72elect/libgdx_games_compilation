@@ -63,7 +63,7 @@ public class WorldGameRender {
 	}
 
 	private void renderPersonaje() {
-		AtlasRegion keyframe = null;
+		AtlasRegion keyframe;
 
 		Personaje obj = oWorld.oPer;
 
