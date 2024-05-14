@@ -10,7 +10,7 @@ import com.nopalsoft.superjumper.screens.Screens;
 
 public class MainSuperJumper extends Game {
 
-	public I18NBundle idiomas;
+	public I18NBundle languages;
 
 	public MainSuperJumper( ) {
 

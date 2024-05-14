@@ -18,7 +18,7 @@ public class BaseScreen extends Group {
 	public BaseScreen(Screens currentScreen, float width, float height, float positionY) {
 		screen = currentScreen;
 		game = currentScreen.game;
-		languages = game.idiomas;
+		languages = game.languages;
 		setSize(width, height);
 		setY(positionY);
 
