@@ -6,61 +6,55 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class PlatformPiece implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DESTROY = 1;
-	public int state;
+    public final static int STATE_NORMAL = 0;
+    public final static int STATE_DESTROY = 1;
+    public static final float DRAW_WIDTH_NORMAL = Platform.DRAW_WIDTH_NORMAL / 2f;
+    public static final float DRAW_HEIGHT_NORMAL = Platform.DRAW_HEIGHT_NORMAL;
+    public static final float WIDTH_NORMAL = Platform.WIDTH_NORMAL / 2f;
+    public static final float HEIGHT_NORMAL = Platform.HEIGHT_NORMAL;
+    public static final int TYPE_LEFT = 0;
+    public static final int TYPE_RIGHT = 1;
+    public final Vector2 position;
+    public int state;
+    public int color;
+    public int type;
+    public float stateTime;
+    public float angleDegree;
 
-	public static final float DRAW_WIDTH_NORMAL = Platform.DRAW_WIDTH_NORMAL / 2f;
-	public static final float DRAW_HEIGHT_NORMAL = Platform.DRAW_HEIGHT_NORMAL;
-	public static final float WIDTH_NORMAL = Platform.WIDTH_NORMAL / 2f;
-	public static final float HEIGHT_NORMAL = Platform.HEIGHT_NORMAL;
+    public PlatformPiece() {
+        position = new Vector2();
 
-	public int color;
+    }
 
-	public static final int TYPE_LEFT = 0;
-	public static final int TYPE_RIGHT = 1;
-	public int type;
+    public void init(float x, float y, int tipo, int color) {
+        position.set(x, y);
+        this.type = tipo;
+        this.color = color;
+        angleDegree = 0;
+        stateTime = 0;
+        state = STATE_NORMAL;
+    }
 
-	public final Vector2 position;
+    public void update(float delta, Body body) {
+        position.x = body.getPosition().x;
+        position.y = body.getPosition().y;
+        angleDegree = MathUtils.radiansToDegrees * body.getAngle();
 
-	public float stateTime;
-	public float angleDeg;
+        if (angleDegree > 90) {
+            body.setTransform(position, MathUtils.degreesToRadians * 90);
+            angleDegree = 90;
+        }
 
-	public PlatformPiece() {
-		position = new Vector2();
+        stateTime += delta;
 
-	}
+    }
 
-	public void init(float x, float y, int tipo, int color) {
-		position.set(x, y);
-		this.type = tipo;
-		this.color = color;
-		angleDeg = 0;
-		stateTime = 0;
-		state = STATE_NORMAL;
-	}
+    @Override
+    public void reset() {
+        // TODO Auto-generated method stub
+    }
 
-	public void update(float delta, Body body) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
-		angleDeg = MathUtils.radiansToDegrees * body.getAngle();
-
-		if (angleDeg > 90) {
-			body.setTransform(position, MathUtils.degreesToRadians * 90);
-			angleDeg = 90;
-		}
-
-		stateTime += delta;
-
-	}
-
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setDestroy() {
-		state = STATE_DESTROY;
-	}
+    public void setDestroy() {
+        state = STATE_DESTROY;
+    }
 }
