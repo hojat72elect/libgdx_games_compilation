@@ -1,55 +1,56 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
 
-public class Ray implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DESTROY = 1;
-	public int state;
+/**
+ * The ray that gets casted from cloud, downwards.
+ */
+class Ray : Poolable {
 
-	public final static float DRAW_WIDTH = .25f;
-	public final static float DRAW_HEIGHT = .98f;
+    @JvmField
+    val position = Vector2()
 
-	public final static float WIDTH = .21f;
-	public final static float HEIGHT = .93f;
+    @JvmField
+    var stateTime = 0f
 
-	public final static float Y_SPEED = -3f;
+    @JvmField
+    var state = 0
 
-	final public Vector2 position;
+    fun initializeRay(x: Float, y: Float) {
+        position.set(x, y)
+        stateTime = 0f
+        state = STATE_NORMAL
+    }
 
-	public float stateTime;
+    fun update(body: Body, delta: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
+        stateTime += delta
+    }
 
-	public Ray() {
-		position = new Vector2();
-	}
+    fun destroy() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DESTROY
+            stateTime = 0f
+        }
+    }
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		stateTime = 0;
-		state = STATE_NORMAL;
 
-	}
+    override fun reset() {
+        // this was defined as a poolable, but this function
+        // has not been implemented.
+    }
 
-	public void update(Body body, float delta) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
 
-		stateTime += delta;
-
-	}
-
-	public void destroy() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DESTROY;
-			stateTime = 0;
-		}
-
-	}
-
-	@Override
-	public void reset() {
-	}
-
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DESTROY = 1
+        const val DRAW_WIDTH = .25f
+        const val DRAW_HEIGHT = .98f
+        const val WIDTH = .21f
+        const val HEIGHT = .93f
+        const val Y_SPEED = -3f
+    }
 }

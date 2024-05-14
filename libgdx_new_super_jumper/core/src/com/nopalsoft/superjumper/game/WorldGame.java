@@ -310,7 +310,7 @@ public class WorldGame {
 
 	private void crearRayo(float x, float y) {
 		com.nopalsoft.superjumper.objects.Ray ray = Pools.obtain(com.nopalsoft.superjumper.objects.Ray.class);
-		ray.init(x, y);
+		ray.initializeRay(x, y);
 
 		BodyDef bd = new BodyDef();
 		bd.position.set(ray.position.x, ray.position.y);
