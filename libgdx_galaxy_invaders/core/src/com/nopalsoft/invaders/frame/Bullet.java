@@ -49,9 +49,9 @@ public class Bullet extends DynamicGameObject {
     }
 
     /**
-     * En caso de que la bala se salga de la pantalla World.Height pues mando llamar este metodo para que se remueva del arreglo
+     * In case the bullet leaves the World.Height screen, I call this method to remove it from the array.
      */
-    public void destruirBala() {
+    public void destroyBullet() {
         velocity.set(0, 0);
         stateTime = 0;
         state = STATE_EXPLOTANDO;

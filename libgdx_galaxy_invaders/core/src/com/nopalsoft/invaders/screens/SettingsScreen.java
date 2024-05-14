@@ -18,11 +18,10 @@ import com.badlogic.gdx.utils.Align;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.MainInvaders;
 import com.nopalsoft.invaders.Settings;
-import com.nopalsoft.invaders.frame.Nave;
 
 public class SettingsScreen extends Screens {
 
-    public final Nave oNave;
+    public final com.nopalsoft.invaders.frame.Ship oNave;
     ImageButton tiltControl;
     ImageButton onScreenControl;
     Slider aceletometerSlider;
@@ -154,7 +153,7 @@ public class SettingsScreen extends Screens {
         setOptions();
 
         // Voy a poner a la nave aqui que se mueva tambien;
-        oNave = new Nave(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 3.0f); // Coloco la nave en posicion
+        oNave = new com.nopalsoft.invaders.frame.Ship(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 3.0f); // Coloco la nave en posicion
         this.camRender = new OrthographicCamera(WORLD_SCREEN_WIDTH, WORLD_SCREEN_HEIGHT);
         camRender.position.set(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 2.0f, 0);
         // menuControls.debug();
@@ -201,7 +200,7 @@ public class SettingsScreen extends Screens {
                     accel = -5f;
             }
         }
-        oNave.velocity.x = -accel / Settings.accelerometerSensitivity * Nave.NAVE_MOVE_SPEED;
+        oNave.velocity.x = -accel / Settings.accelerometerSensitivity * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
 
         oNave.update(delta);
     }
@@ -209,8 +208,8 @@ public class SettingsScreen extends Screens {
     @Override
     public void draw(float delta) {
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.disableBlending();
         Assets.parallaxBackground.render(delta);
@@ -226,7 +225,7 @@ public class SettingsScreen extends Screens {
             String tiltSensitive = Assets.languages.get("tilt_sensitive");
             float textWidth = Assets.getTextWidth(Assets.font15, tiltSensitive);
             Assets.font15.draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
-            batcher.draw(Assets.clickAyuda, 155, 0, 10, 125);
+            batcher.draw(Assets.clickHelp, 155, 0, 10, 125);
         } else {
             String speed = Assets.languages.get("speed");
             float textWidth = Assets.getTextWidth(Assets.font15, speed);
@@ -253,7 +252,7 @@ public class SettingsScreen extends Screens {
         else
             keyFrame = Assets.ship;
 
-        batcher.draw(keyFrame, oNave.position.x - Nave.DRAW_WIDTH / 2f, oNave.position.y - Nave.DRAW_HEIGHT / 2f, Nave.DRAW_WIDTH, Nave.DRAW_HEIGHT);
+        batcher.draw(keyFrame, oNave.position.x - com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH / 2f, oNave.position.y - com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT / 2f, com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH, com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT);
     }
 
     @Override

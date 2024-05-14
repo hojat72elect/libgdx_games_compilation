@@ -20,34 +20,34 @@ import com.nopalsoft.invaders.game.GameScreen;
 
 public class MainMenuScreen extends Screens {
 
-    TextButton btPlay, btSettings, btLeaderBoard, btMore, btFacebook;
+    TextButton buttonPlay, buttonSettings, buttonLeaderBoard, buttonMore, buttonFacebook;
 
-    Label lbHighestScore;
+    Label labelHighestScore;
 
-    ImageButton btSonido, btMusica;
-    Image elipseIzq;
+    ImageButton buttonSound, buttonMusic;
+    Image ellipseLeft;
 
     public MainMenuScreen(final MainInvaders game) {
         super(game);
 
-        Table tituloTable = new Table();
-        tituloTable.setBackground(Assets.titleMenuBox);
-        Label titulo = new Label(Assets.languages.get("titulo_app"), new LabelStyle(Assets.font60, Color.GREEN));
-        titulo.setAlignment(Align.center);
-        tituloTable.setSize(265, 100);
-        tituloTable.setPosition((SCREEN_WIDTH - 265) / 2f, SCREEN_HEIGHT - 110);
-        tituloTable.add(titulo).expand().center();
+        Table titleTable = new Table();
+        titleTable.setBackground(Assets.titleMenuBox);
+        Label qualification = new Label(Assets.languages.get("titulo_app"), new LabelStyle(Assets.font60, Color.GREEN));
+        qualification.setAlignment(Align.center);
+        titleTable.setSize(265, 100);
+        titleTable.setPosition((SCREEN_WIDTH - 265) / 2f, SCREEN_HEIGHT - 110);
+        titleTable.add(qualification).expand().center();
 
-        // El texto se lo pongo en el update
-        lbHighestScore = new Label("", new LabelStyle(Assets.font10, Color.GREEN));
-        lbHighestScore.setWidth(SCREEN_WIDTH);
-        lbHighestScore.setAlignment(Align.center);
-        lbHighestScore.setPosition(0, SCREEN_HEIGHT - 120);
+        // I put the text in the update
+        labelHighestScore = new Label("", new LabelStyle(Assets.font10, Color.GREEN));
+        labelHighestScore.setWidth(SCREEN_WIDTH);
+        labelHighestScore.setAlignment(Align.center);
+        labelHighestScore.setPosition(0, SCREEN_HEIGHT - 120);
 
-        btPlay = new TextButton(Assets.languages.get("play"), Assets.styleTextButtonMenu);
-        btPlay.setSize(250, 50);
-        btPlay.setPosition(0, 280);
-        btPlay.addListener(new ClickListener() {
+        buttonPlay = new TextButton(Assets.languages.get("play"), Assets.styleTextButtonMenu);
+        buttonPlay.setSize(250, 50);
+        buttonPlay.setPosition(0, 280);
+        buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
@@ -56,10 +56,10 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btSettings = new TextButton(Assets.languages.get("settings"), Assets.styleTextButtonMenu);
-        btSettings.setSize(300, 50);
-        btSettings.setPosition(0, 210);
-        btSettings.addListener(new ClickListener() {
+        buttonSettings = new TextButton(Assets.languages.get("settings"), Assets.styleTextButtonMenu);
+        buttonSettings.setSize(300, 50);
+        buttonSettings.setPosition(0, 210);
+        buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
@@ -67,10 +67,10 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btLeaderBoard = new TextButton(Assets.languages.get("leaderboard"), Assets.styleTextButtonMenu);
-        btLeaderBoard.setSize(310, 50);
-        btLeaderBoard.setPosition(0, 140);
-        btLeaderBoard.addListener(new ClickListener() {
+        buttonLeaderBoard = new TextButton(Assets.languages.get("leaderboard"), Assets.styleTextButtonMenu);
+        buttonLeaderBoard.setSize(310, 50);
+        buttonLeaderBoard.setPosition(0, 140);
+        buttonLeaderBoard.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
@@ -78,21 +78,21 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btMore = new TextButton(Assets.languages.get("more"), Assets.styleTextButtonMenu);
-        btMore.setSize(250, 50);
-        btMore.setPosition(0, 70);
-        btMore.addListener(new ClickListener() {
+        buttonMore = new TextButton(Assets.languages.get("more"), Assets.styleTextButtonMenu);
+        buttonMore.setSize(250, 50);
+        buttonMore.setPosition(0, 70);
+        buttonMore.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
             }
         });
 
-        btFacebook = new TextButton(Assets.languages.get("like_us_to_get_lastest_news"), Assets.styleTextButtonFacebook);
-        btFacebook.getLabel().setWrap(true);
-        btFacebook.setWidth(170);
-        btFacebook.setPosition(SCREEN_WIDTH - btFacebook.getWidth() - 2, 2);
-        btFacebook.addListener(new ClickListener() {
+        buttonFacebook = new TextButton(Assets.languages.get("like_us_to_get_lastest_news"), Assets.styleTextButtonFacebook);
+        buttonFacebook.getLabel().setWrap(true);
+        buttonFacebook.setWidth(170);
+        buttonFacebook.setPosition(SCREEN_WIDTH - buttonFacebook.getWidth() - 2, 2);
+        buttonFacebook.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
@@ -101,37 +101,37 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btSonido = new ImageButton(Assets.botonSonidoOn, Assets.botonSonidoOff, Assets.botonSonidoOff);
-        btSonido.setSize(40, 40);
-        btSonido.setPosition(2, 2);
+        buttonSound = new ImageButton(Assets.buttonSoundOn, Assets.buttonSoundOff, Assets.buttonSoundOff);
+        buttonSound.setSize(40, 40);
+        buttonSound.setPosition(2, 2);
         if (!Settings.soundEnabled)
-            btSonido.setChecked(true);
-        btSonido.addListener(new ClickListener() {
+            buttonSound.setChecked(true);
+        buttonSound.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 Settings.soundEnabled = !Settings.soundEnabled;
                 Assets.playSound(Assets.clickSound);
-                btSonido.setChecked(!Settings.soundEnabled);
+                buttonSound.setChecked(!Settings.soundEnabled);
             }
         });
 
-        btMusica = new ImageButton(Assets.botonMusicaOn, Assets.botonMusicaOff, Assets.botonMusicaOff);
-        btMusica.setSize(40, 40);
-        btMusica.setPosition(44, 2);
+        buttonMusic = new ImageButton(Assets.buttonMusicOn, Assets.buttonMusicOff, Assets.buttonMusicOff);
+        buttonMusic.setSize(40, 40);
+        buttonMusic.setPosition(44, 2);
         if (!Settings.musicEnabled)
-            btMusica.setChecked(true);
-        btMusica.addListener(new ClickListener() {
+            buttonMusic.setChecked(true);
+        buttonMusic.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 Settings.musicEnabled = !Settings.musicEnabled;
                 Assets.playSound(Assets.clickSound);
                 if (!Settings.musicEnabled) {
-                    btMusica.setChecked(true);
+                    buttonMusic.setChecked(true);
                     Assets.music.pause();
                 } else {
-                    btMusica.setChecked(false);
+                    buttonMusic.setChecked(false);
                     Assets.music.play();
                 }
             }
@@ -139,21 +139,21 @@ public class MainMenuScreen extends Screens {
 
         // Las medidas se sacaron con una formual de 3 si 480 / 960 x 585 donde 585 es el tamano,
         // 960 es el tamano para lo que se hicieron y 480 es el tamano de la camara
-        elipseIzq = new Image(Assets.ellipseMenuLeft);
-        elipseIzq.setSize(18.5f, 292.5f);
-        elipseIzq.setPosition(0, 60);
+        ellipseLeft = new Image(Assets.ellipseMenuLeft);
+        ellipseLeft.setSize(18.5f, 292.5f);
+        ellipseLeft.setPosition(0, 60);
 
-        stage.addActor(tituloTable);
-        stage.addActor(lbHighestScore);
+        stage.addActor(titleTable);
+        stage.addActor(labelHighestScore);
 
-        stage.addActor(btPlay);
-        stage.addActor(btSettings);
-        stage.addActor(btLeaderBoard);
-        stage.addActor(btMore);
-        stage.addActor(elipseIzq);
-        stage.addActor(btSonido);
-        stage.addActor(btMusica);
-        stage.addActor(btFacebook);
+        stage.addActor(buttonPlay);
+        stage.addActor(buttonSettings);
+        stage.addActor(buttonLeaderBoard);
+        stage.addActor(buttonMore);
+        stage.addActor(ellipseLeft);
+        stage.addActor(buttonSound);
+        stage.addActor(buttonMusic);
+        stage.addActor(buttonFacebook);
 
 
         if (Settings.numberOfTimesGameHasBeenPlayed == 0) {
@@ -164,13 +164,13 @@ public class MainMenuScreen extends Screens {
 
     @Override
     public void update(float delta) {
-        lbHighestScore.setText(Assets.languages.format("local_highest_score", String.valueOf(Settings.highScores[0])));
+        labelHighestScore.setText(Assets.languages.format("local_highest_score", String.valueOf(Settings.highScores[0])));
     }
 
     @Override
     public void draw(float delta) {
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.disableBlending();
         Assets.parallaxBackground.render(delta);

@@ -22,19 +22,19 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     public MainInvaders game;
 
-    public OrthographicCamera oCam;
+    public OrthographicCamera myCamera;
     public SpriteBatch batcher;
     public Stage stage;
-    public Assets oAssets;
+    public Assets myAssets;
 
     public Screens(MainInvaders game) {
         stage = game.stage;
         stage.clear();
         this.game = game;
-        oAssets = game.oAssets;
+        myAssets = game.oAssets;
 
-        oCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        oCam.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        myCamera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+        myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
         batcher = game.spriteBatch;
 
         InputMultiplexer input = new InputMultiplexer(this, stage);

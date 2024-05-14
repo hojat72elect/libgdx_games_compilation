@@ -3,7 +3,7 @@ package com.nopalsoft.invaders.frame;
 import com.badlogic.gdx.Gdx;
 import com.nopalsoft.invaders.game.World;
 
-public class Nave extends DynamicGameObject {
+public class Ship extends DynamicGameObject {
 
     public static final float DRAW_WIDTH = 4.5f;
     public static final float DRAW_HEIGHT = 3.6f;
@@ -17,18 +17,18 @@ public class Nave extends DynamicGameObject {
     public static final int NAVE_STATE_EXPLODE = 1;
     public static final int NAVE_STATE_BEING_HIT = 2;
 
-    public static final float TIEMPO_EXPLODE = 0.05f * 19;
-    public static final float TIEMPO_BEING_HIT = 0.05f * 21; // uno mas pa que tenga tantillo tiempo de pensar jaja
+    public static final float EXPLODE_TIME = 0.05f * 19;
+    public static final float HIT_TIME = 0.05f * 21; // uno mas pa que tenga tantillo tiempo de pensar jaja
 
-    public int vidasEscudo;
-    public int vidas;
+    public int livesShield;
+    public int lives;
     public int state;
     public float stateTime;
 
-    public Nave(float x, float y) {
+    public Ship(float x, float y) {
         super(x, y, WIDTH, HEIGHT);
-        vidas = 3;
-        vidasEscudo = 1;// empizas con 1 de shield por si los putos te pegan
+        lives = 3;
+        livesShield = 1;// empizas con 1 de shield por si los putos te pegan
         state = NAVE_STATE_NORMAL;
         Gdx.app.log("Estado", "Se creo la nave");
     }
@@ -38,7 +38,7 @@ public class Nave extends DynamicGameObject {
         boundsRectangle.x = position.x - boundsRectangle.width / 2;
         boundsRectangle.y = position.y - boundsRectangle.height / 2;
 
-        if (state == NAVE_STATE_BEING_HIT && stateTime > TIEMPO_BEING_HIT) {
+        if (state == NAVE_STATE_BEING_HIT && stateTime > HIT_TIME) {
             state = NAVE_STATE_NORMAL;
             stateTime = 0;
             Gdx.app.log("Estado", "Se cambio a normal");
@@ -52,11 +52,11 @@ public class Nave extends DynamicGameObject {
     }
 
     public void beingHit() {
-        if (vidasEscudo > 0) {
-            vidasEscudo--;
+        if (livesShield > 0) {
+            livesShield--;
         } else {
-            vidas--;
-            if (vidas <= 0) {
+            lives--;
+            if (lives <= 0) {
                 state = NAVE_STATE_EXPLODE;
                 stateTime = 0;
                 velocity.set(0, 0);
@@ -67,15 +67,15 @@ public class Nave extends DynamicGameObject {
         }
     }
 
-    public void hitVidaExtra() {
-        if (vidas < 99) {
-            vidas++;
+    public void hitExtraLife() {
+        if (lives < 99) {
+            lives++;
         }
     }
 
-    public void hitEscudo() {
+    public void hitShield() {
         stateTime = 0;
-        vidasEscudo = 3;
+        livesShield = 3;
     }
 
 }

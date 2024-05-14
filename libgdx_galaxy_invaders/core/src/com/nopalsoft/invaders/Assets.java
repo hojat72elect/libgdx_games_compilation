@@ -57,22 +57,22 @@ public class Assets {
 
     // Aid
     public static AtlasRegion help1;
-    public static AtlasRegion clickAyuda;
+    public static AtlasRegion clickHelp;
 
     // Buttons
-    public static TextureRegionDrawable botonSonidoOn;
-    public static TextureRegionDrawable botonSonidoOff;
-    public static TextureRegionDrawable botonMusicaOn;
-    public static TextureRegionDrawable botonMusicaOff;
+    public static TextureRegionDrawable buttonSoundOn;
+    public static TextureRegionDrawable buttonSoundOff;
+    public static TextureRegionDrawable buttonMusicOn;
+    public static TextureRegionDrawable buttonMusicOff;
 
     // Ammunition
     public static AtlasRegion balaNormal;
-    public static Animation<TextureRegion> misil;
-    public static Animation<TextureRegion> superRayo;
-    public static AtlasRegion balaNivel1;
-    public static AtlasRegion balaNivel2;
-    public static AtlasRegion balaNivel3;
-    public static AtlasRegion balaNivel4;
+    public static Animation<TextureRegion> missile;
+    public static Animation<TextureRegion> superLightning;
+    public static AtlasRegion bulletLevel1;
+    public static AtlasRegion bulletLevel2;
+    public static AtlasRegion bulletLevel3;
+    public static AtlasRegion bulletLevel4;
 
     public static AtlasRegion boost1;
     public static AtlasRegion boost2;
@@ -82,7 +82,7 @@ public class Assets {
     public static Animation<TextureRegion> explosionFuego;
     public static Animation<TextureRegion> shield;
 
-    public static AtlasRegion balaNormalEnemigo;
+    public static AtlasRegion bulletNormalEnemy;
     public static AtlasRegion alien1;
     public static AtlasRegion alien2;
     public static AtlasRegion alien3;
@@ -93,7 +93,7 @@ public class Assets {
     public static Sound coinSound;
     public static Sound clickSound;
     public static Sound explosionSound;
-    public static Sound missilFire;
+    public static Sound missileFire;
 
     // Styles
     public static TextButtonStyle styleTextButtonMenu;
@@ -161,9 +161,9 @@ public class Assets {
         styleTextButtonBack = new TextButtonStyle(btBackUp, btBackDown, null, font15);
         styleTextButtonBack.fontColor = Color.GREEN;
 
-        TextureRegionDrawable btPauseUp = new TextureRegionDrawable(atlas.findRegion("btPause"));
-        TextureRegionDrawable btPauseDown = new TextureRegionDrawable(atlas.findRegion("btPauseDown"));
-        styleImageButtonPause = new ImageButtonStyle(btPauseUp, btPauseDown, null, null, null, null);
+        TextureRegionDrawable buttonPauseUp = new TextureRegionDrawable(atlas.findRegion("btPause"));
+        TextureRegionDrawable buttonPauseDown = new TextureRegionDrawable(atlas.findRegion("btPauseDown"));
+        styleImageButtonPause = new ImageButtonStyle(buttonPauseUp, buttonPauseDown, null, null, null, null);
 
         NinePatchDrawable botonFacebook = new NinePatchDrawable(atlas.createPatch("btShareFacebookUp"));
         NinePatchDrawable botonFacebookDown = new NinePatchDrawable(atlas.createPatch("btShareFacebookDown"));
@@ -204,15 +204,15 @@ public class Assets {
 
         /* Ayuda */
         help1 = atlas1.findRegion("help1");
-        clickAyuda = atlas1.findRegion("ayudaClick");
+        clickHelp = atlas1.findRegion("ayudaClick");
 
         /* Botones */
-        botonMusicaOn = new TextureRegionDrawable(atlas1.findRegion("btMusica"));
-        botonMusicaOff = new TextureRegionDrawable(atlas1.findRegion("btSinMusica"));
-        botonSonidoOn = new TextureRegionDrawable(atlas1.findRegion("btSonido"));
-        botonSonidoOff = new TextureRegionDrawable(atlas1.findRegion("btSinSonido"));
+        buttonMusicOn = new TextureRegionDrawable(atlas1.findRegion("btMusica"));
+        buttonMusicOff = new TextureRegionDrawable(atlas1.findRegion("btSinMusica"));
+        buttonSoundOn = new TextureRegionDrawable(atlas1.findRegion("btSonido"));
+        buttonSoundOff = new TextureRegionDrawable(atlas1.findRegion("btSinSonido"));
 
-        /* Nave */
+        /* Ship */
         shipRight = atlas1.findRegion("naveRight");
         shipLeft = atlas1.findRegion("naveLeft");
         ship = atlas1.findRegion("nave");
@@ -244,42 +244,42 @@ public class Assets {
 
         // Ammunition
         balaNormal = atlas1.findRegion("balaNormal");
-        balaNormalEnemigo = atlas1.findRegion("balaNormalEnemigo");
+        bulletNormalEnemy = atlas1.findRegion("balaNormalEnemigo");
 
         AtlasRegion misil1 = atlas1.findRegion("misil1");
         AtlasRegion misil2 = atlas1.findRegion("misil2");
-        misil = new Animation<>(0.2f, misil1, misil2);
+        missile = new Animation<>(0.2f, misil1, misil2);
 
         AtlasRegion superRayo1 = atlas1.findRegion("superRayo1");
         AtlasRegion superRayo2 = atlas1.findRegion("superRayo2");
-        superRayo = new Animation<>(0.2f, superRayo1, superRayo2);
+        superLightning = new Animation<>(0.2f, superRayo1, superRayo2);
 
-        balaNivel1 = atlas1.findRegion("disparoA1");
-        balaNivel2 = atlas1.findRegion("disparoA2");
-        balaNivel3 = atlas1.findRegion("disparoA3");
-        balaNivel4 = atlas1.findRegion("disparoA4");
+        bulletLevel1 = atlas1.findRegion("disparoA1");
+        bulletLevel2 = atlas1.findRegion("disparoA2");
+        bulletLevel3 = atlas1.findRegion("disparoA3");
+        bulletLevel4 = atlas1.findRegion("disparoA4");
 
         // explosion fire
-        AtlasRegion newExpl1 = atlas1.findRegion("newExplosion1");
-        AtlasRegion newExpl2 = atlas1.findRegion("newExplosion2");
-        AtlasRegion newExpl3 = atlas1.findRegion("newExplosion3");
-        AtlasRegion newExpl4 = atlas1.findRegion("newExplosion4");
-        AtlasRegion newExpl5 = atlas1.findRegion("newExplosion5");
-        AtlasRegion newExpl6 = atlas1.findRegion("newExplosion6");
-        AtlasRegion newExpl7 = atlas1.findRegion("newExplosion7");
-        AtlasRegion newExpl8 = atlas1.findRegion("newExplosion8");
-        AtlasRegion newExpl9 = atlas1.findRegion("newExplosion9");
-        AtlasRegion newExpl10 = atlas1.findRegion("newExplosion10");
-        AtlasRegion newExpl11 = atlas1.findRegion("newExplosion11");
-        AtlasRegion newExpl12 = atlas1.findRegion("newExplosion12");
-        AtlasRegion newExpl13 = atlas1.findRegion("newExplosion13");
-        AtlasRegion newExpl14 = atlas1.findRegion("newExplosion14");
-        AtlasRegion newExpl15 = atlas1.findRegion("newExplosion15");
-        AtlasRegion newExpl16 = atlas1.findRegion("newExplosion16");
-        AtlasRegion newExpl17 = atlas1.findRegion("newExplosion17");
-        AtlasRegion newExpl18 = atlas1.findRegion("newExplosion18");
-        AtlasRegion newExpl19 = atlas1.findRegion("newExplosion19");
-        explosionFuego = new Animation<>(0.05f, newExpl1, newExpl2, newExpl3, newExpl4, newExpl5, newExpl6, newExpl7, newExpl8, newExpl9, newExpl10, newExpl11, newExpl12, newExpl13, newExpl14, newExpl15, newExpl16, newExpl17, newExpl18, newExpl19);
+        AtlasRegion newExplosion1 = atlas1.findRegion("newExplosion1");
+        AtlasRegion newExplosion2 = atlas1.findRegion("newExplosion2");
+        AtlasRegion newExplosion3 = atlas1.findRegion("newExplosion3");
+        AtlasRegion newExplosion4 = atlas1.findRegion("newExplosion4");
+        AtlasRegion newExplosion5 = atlas1.findRegion("newExplosion5");
+        AtlasRegion newExplosion6 = atlas1.findRegion("newExplosion6");
+        AtlasRegion newExplosion7 = atlas1.findRegion("newExplosion7");
+        AtlasRegion newExplosion8 = atlas1.findRegion("newExplosion8");
+        AtlasRegion newExplosion9 = atlas1.findRegion("newExplosion9");
+        AtlasRegion newExplosion10 = atlas1.findRegion("newExplosion10");
+        AtlasRegion newExplosion11 = atlas1.findRegion("newExplosion11");
+        AtlasRegion newExplosion12 = atlas1.findRegion("newExplosion12");
+        AtlasRegion newExplosion13 = atlas1.findRegion("newExplosion13");
+        AtlasRegion newExplosion14 = atlas1.findRegion("newExplosion14");
+        AtlasRegion newExplosion15 = atlas1.findRegion("newExplosion15");
+        AtlasRegion newExplosion16 = atlas1.findRegion("newExplosion16");
+        AtlasRegion newExplosion17 = atlas1.findRegion("newExplosion17");
+        AtlasRegion newExplosion18 = atlas1.findRegion("newExplosion18");
+        AtlasRegion newExplosion19 = atlas1.findRegion("newExplosion19");
+        explosionFuego = new Animation<>(0.05f, newExplosion1, newExplosion2, newExplosion3, newExplosion4, newExplosion5, newExplosion6, newExplosion7, newExplosion8, newExplosion9, newExplosion10, newExplosion11, newExplosion12, newExplosion13, newExplosion14, newExplosion15, newExplosion16, newExplosion17, newExplosion18, newExplosion19);
 
         ParallaxLayer para1 = new ParallaxLayer(background, new Vector2(0, 50), new Vector2(0, 0));
         ParallaxLayer[] arr = new ParallaxLayer[]{para1};
@@ -291,7 +291,7 @@ public class Assets {
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/coin.ogg"));
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/click.ogg"));
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/sound_explode.ogg"));
-        missilFire = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/missilFire3.ogg"));
+        missileFire = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/missilFire3.ogg"));
 
         Settings.load();
         if (Settings.musicEnabled)

@@ -13,7 +13,6 @@ import com.nopalsoft.invaders.frame.AlienShip;
 import com.nopalsoft.invaders.frame.Boost;
 import com.nopalsoft.invaders.frame.Bullet;
 import com.nopalsoft.invaders.frame.Missile;
-import com.nopalsoft.invaders.frame.Nave;
 import com.nopalsoft.invaders.screens.Screens;
 
 
@@ -70,7 +69,7 @@ public class WorldRenderer {
 
     private void renderNave() {
         TextureRegion keyFrame;
-        if (oWorld.oNave.state == Nave.NAVE_STATE_NORMAL) {
+        if (oWorld.oNave.state == com.nopalsoft.invaders.frame.Ship.NAVE_STATE_NORMAL) {
             if (oWorld.oNave.velocity.x < -3)
                 keyFrame = Assets.shipLeft;
             else if (oWorld.oNave.velocity.x > 3)
@@ -80,11 +79,11 @@ public class WorldRenderer {
         } else {
             keyFrame = Assets.explosionFuego.getKeyFrame(oWorld.oNave.stateTime, false);
         }
-        batch.draw(keyFrame, oWorld.oNave.position.x - Nave.DRAW_WIDTH / 2f, oWorld.oNave.position.y - Nave.DRAW_HEIGHT
-                / 2f, Nave.DRAW_WIDTH, Nave.DRAW_HEIGHT);
+        batch.draw(keyFrame, oWorld.oNave.position.x - com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH / 2f, oWorld.oNave.position.y - com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT
+                / 2f, com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH, com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT);
 
         /* Dibuja el escudo de la nave */
-        if (oWorld.oNave.vidasEscudo > 0) {
+        if (oWorld.oNave.livesShield > 0) {
             batch.draw(Assets.shield.getKeyFrame(oWorld.oNave.stateTime, true), oWorld.oNave.position.x - 5.5f,
                     oWorld.oNave.position.y - 5.5f, 11, 11);
         }
@@ -122,13 +121,13 @@ public class WorldRenderer {
             if (bullet.level <= 1) {
                 batch.draw(Assets.balaNormal, bullet.position.x - 0.15f, bullet.position.y - 0.45f, 0.3f, 0.9f);
             } else if (bullet.level == 2) {
-                batch.draw(Assets.balaNivel1, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
+                batch.draw(Assets.bulletLevel1, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
             } else if (bullet.level == 3) {
-                batch.draw(Assets.balaNivel2, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
+                batch.draw(Assets.bulletLevel2, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
             } else if (bullet.level == 4) {
-                batch.draw(Assets.balaNivel3, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
+                batch.draw(Assets.bulletLevel3, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
             } else {
-                batch.draw(Assets.balaNivel4, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
+                batch.draw(Assets.bulletLevel4, bullet.position.x - 1.05f, bullet.position.y - 0.75f, 2.1f, 1.5f);
             }
 
         }
@@ -139,7 +138,7 @@ public class WorldRenderer {
         int len = oWorld.alienBullets.size;
         for (int i = 0; i < len; i++) {
             Bullet oAlienBullet = oWorld.alienBullets.get(i);
-            batch.draw(Assets.balaNormalEnemigo, oAlienBullet.position.x - 0.15f, oAlienBullet.position.y - 0.45f, 0.3f,
+            batch.draw(Assets.bulletNormalEnemy, oAlienBullet.position.x - 0.15f, oAlienBullet.position.y - 0.45f, 0.3f,
                     0.9f);
         }
     }
@@ -152,7 +151,7 @@ public class WorldRenderer {
             TextureRegion keyFrame;
             switch (oMissile.state) {
                 case Missile.STATE_DISPARADO:
-                    keyFrame = Assets.misil.getKeyFrame(oMissile.stateTime, true);
+                    keyFrame = Assets.missile.getKeyFrame(oMissile.stateTime, true);
                     widht = .8f;
                     heigth = 2.5f;
                     break;
@@ -182,10 +181,10 @@ public class WorldRenderer {
                     keyFrame = Assets.upgLife;
 
                     break;
-                case Boost.UPGRADE_NIVEL_ARMAS:
+                case Boost.UPGRADE_LEVEL_WEAPONS:
                     keyFrame = Assets.boost1;
                     break;
-                case Boost.MISSIL_EXTRA:
+                case Boost.MISSILE_EXTRA:
                     keyFrame = Assets.boost2;
                     break;
                 default:// Boost.SHIELD

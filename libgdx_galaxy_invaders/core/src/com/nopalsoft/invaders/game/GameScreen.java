@@ -226,7 +226,7 @@ public class GameScreen extends Screens {
 
         lbLevel = new Label(Assets.languages.get("level") + " " + oWorld.currentLevel, Assets.styleLabel);
         lbScore = new Label(Assets.languages.get("score") + " " + oWorld.score, Assets.styleLabel);
-        lbNumVidas = new Label("x" + oWorld.oNave.vidas, Assets.styleLabel);
+        lbNumVidas = new Label("x" + oWorld.oNave.lives, Assets.styleLabel);
         Image imVida = new Image(Assets.ship);
 
         scoresBar = new Table();
@@ -365,7 +365,7 @@ public class GameScreen extends Screens {
             oWorld.update(deltaTime, accel, seDisparo, seDisparoMissil);
         } else if (Settings.isTiltControl) {
             if (Gdx.input.justTouched()) {
-                oCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+                myCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
                 if (leftButton.contains(touchPoint.x, touchPoint.y)) {
                     seDisparoMissil = true;
@@ -385,7 +385,7 @@ public class GameScreen extends Screens {
         }
 
         lbScore.setText(Assets.languages.get("score") + " " + oWorld.score);
-        lbNumVidas.setText("x" + oWorld.oNave.vidas);
+        lbNumVidas.setText("x" + oWorld.oNave.lives);
 
         if (oWorld.state == World.STATE_GAME_OVER) {
             state = GAME_OVER;
@@ -412,8 +412,8 @@ public class GameScreen extends Screens {
             renderer.render(delta);
         else
             Assets.parallaxBackground.render(delta);
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
         batcher.enableBlending();
         batcher.begin();
 
@@ -440,7 +440,7 @@ public class GameScreen extends Screens {
             rotacion += addRotacion;
             batcher.draw(Assets.help1, SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotacion);
         } else {
-            batcher.draw(Assets.clickAyuda, 155, 0, 10, 125);
+            batcher.draw(Assets.clickHelp, 155, 0, 10, 125);
 
         }
 
@@ -454,7 +454,7 @@ public class GameScreen extends Screens {
 
     private void presentRunning() {
         if (oWorld.missileCount > 0 && Settings.isTiltControl) {
-            batcher.draw(Assets.misil.getKeyFrame(0), 1, 1, 8, 28);
+            batcher.draw(Assets.missile.getKeyFrame(0), 1, 1, 8, 28);
             Assets.font15.draw(batcher, "X" + oWorld.missileCount, 10, 25);
         }
     }

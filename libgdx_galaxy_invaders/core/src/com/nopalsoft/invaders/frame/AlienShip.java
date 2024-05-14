@@ -20,29 +20,29 @@ public class AlienShip extends DynamicGameObject {
 	public final int PUNTUACION_SIMPLE = 10;
 
 	public int vidasLeft;
-	public int puntuacion;
+	public int punctuation;
 	public float stateTime;
 	public int state;
 	float movedDistance;
-	float aumentoVelocidad;
+	float increaseSpeed;
 
-	public AlienShip(int vida, float aumentoVelocidad, float x, float y) {
+	public AlienShip(int vida, float increaseSpeed, float x, float y) {
 		super(x, y, RADIUS);
 		stateTime = 0;
 		state = MOVE_SIDES;
 		velocity.set(SPEED, SPEED_DOWN);
 		movedDistance = 0;
-		puntuacion = PUNTUACION_SIMPLE;
+		punctuation = PUNTUACION_SIMPLE;
 		vidasLeft = vida;
-		this.aumentoVelocidad = 1 + aumentoVelocidad;
+		this.increaseSpeed = 1 + increaseSpeed;
 	}
 
 	public void update(float deltaTime) {
 		if (state != EXPLOTING) {
 			switch (state) {
 				case MOVE_SIDES:
-					position.x += velocity.x * deltaTime * aumentoVelocidad;
-					movedDistance += Math.abs(velocity.x * deltaTime) * aumentoVelocidad;
+					position.x += velocity.x * deltaTime * increaseSpeed;
+					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
 					if (movedDistance > MOVE_RANGO_SIDES) {
 						state = MOVE_DOWN;
 						velocity.x *= -1;
@@ -50,8 +50,8 @@ public class AlienShip extends DynamicGameObject {
 					}
 					break;
 				case MOVE_DOWN:
-					position.y += velocity.y * deltaTime * aumentoVelocidad;
-					movedDistance += Math.abs(velocity.x * deltaTime) * aumentoVelocidad;
+					position.y += velocity.y * deltaTime * increaseSpeed;
+					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
 					if (movedDistance > MOVE_RANGO_DOWN) {
 						state = MOVE_SIDES;
 						movedDistance = 0;

@@ -12,7 +12,7 @@ import com.nopalsoft.invaders.MainInvaders;
 public class LeaderboardScreen extends Screens {
 
     TextButton btLeaderBoard, btAchievements, btBack, btSignOut;
-    Image elipseIzq;
+    Image ellipseLeft;
 
     public LeaderboardScreen(final MainInvaders game) {
         super(game);
@@ -30,8 +30,8 @@ public class LeaderboardScreen extends Screens {
         });
 
         btLeaderBoard = new TextButton(Assets.languages.get("leaderboard"), Assets.styleTextButtonMenu);
-        btLeaderBoard.setHeight(50);// Altura 50
-        btLeaderBoard.setSize(50, 0);// Al ancho actual le agregamos 50
+        btLeaderBoard.setHeight(50);// Height 50
+        btLeaderBoard.setSize(50, 0);// We add 50 to the current width.
         btLeaderBoard.setPosition(0, 245);
         btLeaderBoard.addListener(new ClickListener() {
             @Override
@@ -41,8 +41,8 @@ public class LeaderboardScreen extends Screens {
         });
 
         btAchievements = new TextButton(Assets.languages.get("achievements"), Assets.styleTextButtonMenu);
-        btAchievements.setHeight(50);// Altura 50
-        btAchievements.setSize(50, 0);// Al ancho actual le agregamos 50
+        btAchievements.setHeight(50);// Height 50
+        btAchievements.setSize(50, 0);//  We add 50 to the current width.
         btAchievements.setPosition(0, 150);
         btAchievements.addListener(new ClickListener() {
             @Override
@@ -63,22 +63,22 @@ public class LeaderboardScreen extends Screens {
             }
         });
 
-        elipseIzq = new Image(Assets.ellipseMenuLeft);
-        elipseIzq.setSize(18.5f, 250.5f);
-        elipseIzq.setPosition(0, 105);
+        ellipseLeft = new Image(Assets.ellipseMenuLeft);
+        ellipseLeft.setSize(18.5f, 250.5f);
+        ellipseLeft.setPosition(0, 105);
 
         stage.addActor(btSignOut);
         stage.addActor(btAchievements);
         stage.addActor(btLeaderBoard);
         stage.addActor(btBack);
-        stage.addActor(elipseIzq);
+        stage.addActor(ellipseLeft);
 
     }
 
     @Override
     public void draw(float delta) {
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.disableBlending();
         Assets.parallaxBackground.render(delta);

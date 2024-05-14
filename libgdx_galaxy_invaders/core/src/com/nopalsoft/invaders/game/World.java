@@ -9,7 +9,6 @@ import com.nopalsoft.invaders.frame.AlienShip;
 import com.nopalsoft.invaders.frame.Boost;
 import com.nopalsoft.invaders.frame.Bullet;
 import com.nopalsoft.invaders.frame.Missile;
-import com.nopalsoft.invaders.frame.Nave;
 import com.nopalsoft.invaders.screens.Screens;
 
 import java.util.Iterator;
@@ -24,7 +23,7 @@ public class World {
     public static float WIDTH = Screens.WORLD_SCREEN_WIDTH;
     int state;
 
-    Nave oNave;
+    com.nopalsoft.invaders.frame.Ship oNave;
     Array<Boost> boosts = new Array<>();
     Array<Missile> missiles = new Array<>();
     Array<Bullet> shipBullets = new Array<>();
@@ -44,9 +43,9 @@ public class World {
     float aumentoVel;
 
     public World() {
-        oNave = new Nave(WIDTH / 2f, 9.5f);
+        oNave = new com.nopalsoft.invaders.frame.Ship(WIDTH / 2f, 9.5f);
 
-        oNave.vidas = 5;
+        oNave.lives = 5;
         extraChanceDrop = 5;
         maxMissilesRonda = 5;
         maxBalasRonda = 5;
@@ -102,7 +101,7 @@ public class World {
         /* Los boost se agregan cada vez que se da hit a un alienShip. Aqui solo se actualizan */
         updateBoost(deltaTime);
 
-        if (oNave.state != Nave.NAVE_STATE_EXPLODE) {
+        if (oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
             checkCollision();
         }
         checkGameOver();
@@ -110,8 +109,8 @@ public class World {
     }
 
     private void updateNave(float deltaTime, float accelX) {
-        if (oNave.state != Nave.NAVE_STATE_EXPLODE) {
-            oNave.velocity.x = -accelX / Settings.accelerometerSensitivity * Nave.NAVE_MOVE_SPEED;
+        if (oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
+            oNave.velocity.x = -accelX / Settings.accelerometerSensitivity * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
         }
         oNave.update(deltaTime);
     }
@@ -151,7 +150,7 @@ public class World {
         while (it.hasNext()) {
             Bullet oAlienBullet = it.next();
             if (oAlienBullet.position.y < -2)
-                oAlienBullet.destruirBala();
+                oAlienBullet.destroyBullet();
             oAlienBullet.update(deltaTime);
             if (oAlienBullet.state == Bullet.STATE_EXPLOTANDO) {
                 it.remove();
@@ -173,7 +172,7 @@ public class World {
         while (it1.hasNext()) {
             Bullet oBullet = it1.next();
             if (oBullet.position.y > HEIGHT + 2)
-                oBullet.destruirBala();// para que no llegue tan lejos el misil
+                oBullet.destroyBullet();// para que no llegue tan lejos el misil
             oBullet.update(deltaTime);
             if (oBullet.state == Bullet.STATE_EXPLOTANDO) {
                 it1.remove();
@@ -189,7 +188,7 @@ public class World {
             float y = oNave.position.y + 1;
             missiles.add(new Missile(x, y));
             missileCount--;
-            Assets.playSound(Assets.missilFire, 0.15f);
+            Assets.playSound(Assets.missileFire, 0.15f);
         }
 
         /* Ahora Actualizo. Recalculo len por si se disparo una missil nueva */
@@ -231,7 +230,7 @@ public class World {
 
     private void checkColisionNaveBalaAliens() {
         for (Bullet oAlienBullet : alienBullets) {
-            if (Intersector.overlaps(oNave.boundsRectangle, oAlienBullet.boundsRectangle) && oNave.state != Nave.NAVE_STATE_EXPLODE && oNave.state != Nave.NAVE_STATE_BEING_HIT) {
+            if (Intersector.overlaps(oNave.boundsRectangle, oAlienBullet.boundsRectangle) && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_BEING_HIT) {
                 oNave.beingHit();
                 oAlienBullet.hitTarget(1);
             }
@@ -245,7 +244,7 @@ public class World {
                     oBala.hitTarget(oAlien.vidasLeft);
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.puntuacion;// Actualizo la puntuacion
+                        score += oAlien.punctuation;// Actualizo la puntuacion
                         agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
@@ -262,7 +261,7 @@ public class World {
                     oMissile.hitTarget();
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.puntuacion;// Actualizo la puntuacion
+                        score += oAlien.punctuation;// Actualizo la puntuacion
                         agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
@@ -271,7 +270,7 @@ public class World {
                 if (oMissile.state == Missile.STATE_EXPLOTANDO && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsCircle) && oAlien.state != AlienShip.EXPLOTING) {
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.puntuacion;// Actualizo la puntuacion
+                        score += oAlien.punctuation;// Actualizo la puntuacion
                         agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
@@ -285,20 +284,20 @@ public class World {
         Iterator<Boost> it = boosts.iterator();
         while (it.hasNext()) {
             Boost oBoost = it.next();
-            if (Intersector.overlaps(oBoost.boundsCircle, oNave.boundsRectangle) && oNave.state != Nave.NAVE_STATE_EXPLODE) {
+            if (Intersector.overlaps(oBoost.boundsCircle, oNave.boundsRectangle) && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
                 switch (oBoost.type) {
                     case Boost.VIDA_EXTRA:
-                        oNave.hitVidaExtra();
+                        oNave.hitExtraLife();
                         break;
-                    case Boost.UPGRADE_NIVEL_ARMAS:
+                    case Boost.UPGRADE_LEVEL_WEAPONS:
                         nivelBala++;
                         break;
-                    case Boost.MISSIL_EXTRA:
+                    case Boost.MISSILE_EXTRA:
                         missileCount++;
                         break;
                     default:
                     case Boost.SHIELD:
-                        oNave.hitEscudo();
+                        oNave.hitShield();
                         break;
                 }
                 it.remove();
@@ -322,10 +321,10 @@ public class World {
                     boosts.add(new Boost(Boost.VIDA_EXTRA, x, y));
                     break;
                 case 1:
-                    boosts.add(new Boost(Boost.UPGRADE_NIVEL_ARMAS, x, y));
+                    boosts.add(new Boost(Boost.UPGRADE_LEVEL_WEAPONS, x, y));
                     break;
-                case Boost.MISSIL_EXTRA:
-                    boosts.add(new Boost(Boost.MISSIL_EXTRA, x, y));
+                case Boost.MISSILE_EXTRA:
+                    boosts.add(new Boost(Boost.MISSILE_EXTRA, x, y));
                     break;
                 default:// Boost.SHIELD
                     boosts.add(new Boost(Boost.SHIELD, x, y));
@@ -335,7 +334,7 @@ public class World {
     }
 
     private void checkGameOver() {
-        if (oNave.state == Nave.NAVE_STATE_EXPLODE && oNave.stateTime > Nave.TIEMPO_EXPLODE) {
+        if (oNave.state == com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE && oNave.stateTime > com.nopalsoft.invaders.frame.Ship.EXPLODE_TIME) {
             oNave.position.x = 200;
             state = STATE_GAME_OVER;
         }
