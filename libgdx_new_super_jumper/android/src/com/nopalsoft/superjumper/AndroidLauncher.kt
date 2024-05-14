@@ -1,16 +1,12 @@
-package com.nopalsoft.superjumper;
+package com.nopalsoft.superjumper
 
-import android.os.Bundle;
+import android.os.Bundle
+import com.badlogic.gdx.backends.android.AndroidApplication
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
-public class AndroidLauncher extends AndroidApplication {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new MainSuperJumper(), config);
+class AndroidLauncher : AndroidApplication() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initialize(MainSuperJumper(), AndroidApplicationConfiguration())
     }
-
 }
