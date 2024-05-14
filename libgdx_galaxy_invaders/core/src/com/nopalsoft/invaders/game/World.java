@@ -111,7 +111,7 @@ public class World {
 
     private void updateNave(float deltaTime, float accelX) {
         if (oNave.state != Nave.NAVE_STATE_EXPLODE) {
-            oNave.velocity.x = -accelX / Settings.aceletometerSensitive * Nave.NAVE_MOVE_SPEED;
+            oNave.velocity.x = -accelX / Settings.accelerometerSensitivity * Nave.NAVE_MOVE_SPEED;
         }
         oNave.update(deltaTime);
     }

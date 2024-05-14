@@ -56,9 +56,9 @@ public class GameScreen extends Screens {
 
     public GameScreen(final MainInvaders game) {
         super(game);
-        Settings.numeroDeVecesQueSeHaJugado++;
+        Settings.numberOfTimesGameHasBeenPlayed++;
         state = GAME_READY;
-        if (Settings.numeroDeVecesQueSeHaJugado < 3) {// Se mostrara 2 veces, la vez cero y la vez 1
+        if (Settings.numberOfTimesGameHasBeenPlayed < 3) {// Se mostrara 2 veces, la vez cero y la vez 1
             state = GAME_TUTORIAL;
             pantallaTutorial = 0;
             setUpTutorial();
@@ -130,10 +130,10 @@ public class GameScreen extends Screens {
         // Fin Controles OnScreen
 
         // /Inicio dialog Pause
-        dialogPause = new Dialog(Assets.idiomas.get("game_paused"), Assets.styleDialogPause);
+        dialogPause = new Dialog(Assets.languages.get("game_paused"), Assets.styleDialogPause);
 
-        TextButton btContinue = new TextButton(Assets.idiomas.get("continue"), Assets.styleTextButton);
-        TextButton btMenu = new TextButton(Assets.idiomas.get("main_menu"), Assets.styleTextButton);
+        TextButton btContinue = new TextButton(Assets.languages.get("continue"), Assets.styleTextButton);
+        TextButton btMenu = new TextButton(Assets.languages.get("main_menu"), Assets.styleTextButton);
 
         btContinue.addListener(new ClickListener() {
             @Override
@@ -165,9 +165,9 @@ public class GameScreen extends Screens {
 
         dialogGameOver = new Dialog("Game Over", Assets.styleDialogPause);
 
-        TextButton btTryAgain = new TextButton(Assets.idiomas.get("try_again"), Assets.styleTextButton);
-        TextButton btMenu2 = new TextButton(Assets.idiomas.get("main_menu"), Assets.styleTextButton);
-        TextButton btShare = new TextButton(Assets.idiomas.get("share"), Assets.styleTextButtonFacebook);
+        TextButton btTryAgain = new TextButton(Assets.languages.get("try_again"), Assets.styleTextButton);
+        TextButton btMenu2 = new TextButton(Assets.languages.get("main_menu"), Assets.styleTextButton);
+        TextButton btShare = new TextButton(Assets.languages.get("share"), Assets.styleTextButtonFacebook);
 
         btTryAgain.addListener(new ClickListener() {
             @Override
@@ -191,7 +191,7 @@ public class GameScreen extends Screens {
         btShare.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String text = Assets.idiomas.format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score);
+                String text = Assets.languages.format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score);
                 Gdx.app.log("Share text", text);
                 Assets.playSound(Assets.clickSound);
             }
@@ -204,7 +204,7 @@ public class GameScreen extends Screens {
         dialogGameOver.getButtonTable().row();
 
 
-        Label lbShare = new Label(Assets.idiomas.get("share_your_score_on_facebook"), Assets.styleLabelDialog);
+        Label lbShare = new Label(Assets.languages.get("share_your_score_on_facebook"), Assets.styleLabelDialog);
         lbShare.setAlignment(Align.center);
         lbShare.setWrap(true);
         dialogGameOver.getButtonTable().add(lbShare).width(200).expand();
@@ -212,7 +212,7 @@ public class GameScreen extends Screens {
         dialogGameOver.getButtonTable().add(btShare).expand();
 
 
-        if (Settings.numeroDeVecesQueSeHaJugado % 5 == 0) {
+        if (Settings.numberOfTimesGameHasBeenPlayed % 5 == 0) {
             game.dialogs.showDialogRate();
         }
 
@@ -224,10 +224,10 @@ public class GameScreen extends Screens {
             }
         });
 
-        lbLevel = new Label(Assets.idiomas.get("level") + " " + oWorld.currentLevel, Assets.styleLabel);
-        lbScore = new Label(Assets.idiomas.get("score") + " " + oWorld.score, Assets.styleLabel);
+        lbLevel = new Label(Assets.languages.get("level") + " " + oWorld.currentLevel, Assets.styleLabel);
+        lbScore = new Label(Assets.languages.get("score") + " " + oWorld.score, Assets.styleLabel);
         lbNumVidas = new Label("x" + oWorld.oNave.vidas, Assets.styleLabel);
-        Image imVida = new Image(Assets.nave);
+        Image imVida = new Image(Assets.ship);
 
         scoresBar = new Table();
         scoresBar.setBackground(Assets.recuadroInGameStatus);
@@ -250,7 +250,7 @@ public class GameScreen extends Screens {
 
     private void setUpTutorial() {
 
-        lbTiltYourDevice = new Label(Assets.idiomas.get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.font45, Color.GREEN));
+        lbTiltYourDevice = new Label(Assets.languages.get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.font45, Color.GREEN));
         lbTiltYourDevice.setWrap(true);
         lbTiltYourDevice.setAlignment(Align.center);
         lbTiltYourDevice.setPosition(0, 120);
@@ -268,10 +268,10 @@ public class GameScreen extends Screens {
         Image boostEscudo = new Image(Assets.boost3);
         Image boostUpgradeWeapon = new Image(Assets.boost1);
 
-        Label lblVida = new Label(Assets.idiomas.get("get_one_extra_life"), Assets.styleLabel);
-        Label lblBomba = new Label(Assets.idiomas.get("get_one_extra_missil"), Assets.styleLabel);
-        Label lblShield = new Label(Assets.idiomas.get("get_a_shield"), Assets.styleLabel);
-        Label lblUpgradeWeapn = new Label(Assets.idiomas.get("upgrade_your_weapon"), Assets.styleLabel);
+        Label lblVida = new Label(Assets.languages.get("get_one_extra_life"), Assets.styleLabel);
+        Label lblBomba = new Label(Assets.languages.get("get_one_extra_missil"), Assets.styleLabel);
+        Label lblShield = new Label(Assets.languages.get("get_a_shield"), Assets.styleLabel);
+        Label lblUpgradeWeapn = new Label(Assets.languages.get("upgrade_your_weapon"), Assets.styleLabel);
 
         boostTable.setPosition(0, 340);
         boostTable.setWidth(SCREEN_WIDTH);
@@ -290,13 +290,13 @@ public class GameScreen extends Screens {
         boostTable.add(lblUpgradeWeapn).padLeft(15).left();
 
         Label touchLeft, touchRight;
-        touchLeft = new Label(Assets.idiomas.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
+        touchLeft = new Label(Assets.languages.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
         touchLeft.setWrap(true);
         touchLeft.setWidth(160);
         touchLeft.setAlignment(Align.center);
         touchLeft.setPosition(0, 50);
 
-        touchRight = new Label(Assets.idiomas.get("touch_right_side_to_fire"), Assets.styleLabel);
+        touchRight = new Label(Assets.languages.get("touch_right_side_to_fire"), Assets.styleLabel);
         touchRight.setWrap(true);
         touchRight.setWidth(160);
         touchRight.setAlignment(Align.center);
@@ -381,10 +381,10 @@ public class GameScreen extends Screens {
 
         if (nivel != oWorld.currentLevel) {
             nivel = oWorld.currentLevel;
-            lbLevel.setText(Assets.idiomas.get("level") + " " + nivel);
+            lbLevel.setText(Assets.languages.get("level") + " " + nivel);
         }
 
-        lbScore.setText(Assets.idiomas.get("score") + " " + oWorld.score);
+        lbScore.setText(Assets.languages.get("score") + " " + oWorld.score);
         lbNumVidas.setText("x" + oWorld.oNave.vidas);
 
         if (oWorld.state == World.STATE_GAME_OVER) {
@@ -411,7 +411,7 @@ public class GameScreen extends Screens {
         if (state != GAME_TUTORIAL)
             renderer.render(delta);
         else
-            Assets.parallaxFondo.render(delta);
+            Assets.parallaxBackground.render(delta);
         oCam.update();
         batcher.setProjectionMatrix(oCam.combined);
         batcher.enableBlending();
@@ -447,7 +447,7 @@ public class GameScreen extends Screens {
     }
 
     private void presentReady() {
-        String touchToStart = Assets.idiomas.get("touch_to_start");
+        String touchToStart = Assets.languages.get("touch_to_start");
         float textWidth = Assets.getTextWidth(Assets.font45, touchToStart);
         Assets.font45.draw(batcher, touchToStart, (SCREEN_WIDTH / 2f) - (textWidth / 2f), 220);
     }
@@ -461,7 +461,7 @@ public class GameScreen extends Screens {
 
     @Override
     public void hide() {
-        Settings.agregarPuntuacion(oWorld.score);
+        Settings.addScore(oWorld.score);
         super.hide();
     }
 

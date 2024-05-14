@@ -39,11 +39,11 @@ public class SettingsScreen extends Screens {
         /* Acelerometer Slider */
         aceletometerSlider = new Slider(1, 20, 1f, false, Assets.styleSlider);
         aceletometerSlider.setPosition(70, 295);
-        aceletometerSlider.setValue(21 - Settings.aceletometerSensitive);
+        aceletometerSlider.setValue(21 - Settings.accelerometerSensitivity);
         aceletometerSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Settings.aceletometerSensitive = 21 - (int) ((Slider) actor).getValue();
+                Settings.accelerometerSensitivity = 21 - (int) ((Slider) actor).getValue();
 
             }
         });
@@ -121,13 +121,13 @@ public class SettingsScreen extends Screens {
         btFire.setSize(60, 60);
         btFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
 
-        menuControls.add(new Label(Assets.idiomas.get("on_screen_control"), Assets.styleLabel)).left();
+        menuControls.add(new Label(Assets.languages.get("on_screen_control"), Assets.styleLabel)).left();
         menuControls.add(onScreenControl).size(25);
         menuControls.row().padTop(10);
-        menuControls.add(new Label(Assets.idiomas.get("tilt_control"), Assets.styleLabel)).left();
+        menuControls.add(new Label(Assets.languages.get("tilt_control"), Assets.styleLabel)).left();
         menuControls.add(tiltControl).size(25);
 
-        btBack = new TextButton(Assets.idiomas.get("back"), Assets.styleTextButtonBack);
+        btBack = new TextButton(Assets.languages.get("back"), Assets.styleTextButtonBack);
         btBack.pad(0, 15, 35, 0);
         btBack.setSize(63, 63);
         btBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
@@ -139,13 +139,13 @@ public class SettingsScreen extends Screens {
             }
         });
 
-        touchLeft = new Label(Assets.idiomas.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
+        touchLeft = new Label(Assets.languages.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
         touchLeft.setWrap(true);
         touchLeft.setWidth(160);
         touchLeft.setAlignment(Align.center);
         touchLeft.setPosition(0, 50);
 
-        touchRight = new Label(Assets.idiomas.get("touch_right_side_to_fire"), Assets.styleLabel);
+        touchRight = new Label(Assets.languages.get("touch_right_side_to_fire"), Assets.styleLabel);
         touchRight.setWrap(true);
         touchRight.setWidth(160);
         touchRight.setAlignment(Align.center);
@@ -201,7 +201,7 @@ public class SettingsScreen extends Screens {
                     accel = -5f;
             }
         }
-        oNave.velocity.x = -accel / Settings.aceletometerSensitive * Nave.NAVE_MOVE_SPEED;
+        oNave.velocity.x = -accel / Settings.accelerometerSensitivity * Nave.NAVE_MOVE_SPEED;
 
         oNave.update(delta);
     }
@@ -213,22 +213,22 @@ public class SettingsScreen extends Screens {
         batcher.setProjectionMatrix(oCam.combined);
 
         batcher.disableBlending();
-        Assets.parallaxFondo.render(delta);
+        Assets.parallaxBackground.render(delta);
 
         stage.act(delta);
         stage.draw();
 
         batcher.enableBlending();
         batcher.begin();
-        Assets.font45.draw(batcher, Assets.idiomas.get("control_options"), 10, 460);
+        Assets.font45.draw(batcher, Assets.languages.get("control_options"), 10, 460);
 
         if (Settings.isTiltControl) {
-            String tiltSensitive = Assets.idiomas.get("tilt_sensitive");
+            String tiltSensitive = Assets.languages.get("tilt_sensitive");
             float textWidth = Assets.getTextWidth(Assets.font15, tiltSensitive);
             Assets.font15.draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
             batcher.draw(Assets.clickAyuda, 155, 0, 10, 125);
         } else {
-            String speed = Assets.idiomas.get("speed");
+            String speed = Assets.languages.get("speed");
             float textWidth = Assets.getTextWidth(Assets.font15, speed);
             Assets.font15.draw(batcher, speed, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
 
@@ -247,11 +247,11 @@ public class SettingsScreen extends Screens {
     private void renderNave() {
         TextureRegion keyFrame;
         if (oNave.velocity.x < -3)
-            keyFrame = Assets.naveLeft;
+            keyFrame = Assets.shipLeft;
         else if (oNave.velocity.x > 3)
-            keyFrame = Assets.naveRight;
+            keyFrame = Assets.shipRight;
         else
-            keyFrame = Assets.nave;
+            keyFrame = Assets.ship;
 
         batcher.draw(keyFrame, oNave.position.x - Nave.DRAW_WIDTH / 2f, oNave.position.y - Nave.DRAW_HEIGHT / 2f, Nave.DRAW_WIDTH, Nave.DRAW_HEIGHT);
     }

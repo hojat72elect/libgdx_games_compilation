@@ -26,25 +26,25 @@ import com.nopalsoft.invaders.parallax.ParallaxLayer;
 public class Assets {
 
     private static final GlyphLayout glyphLayout = new GlyphLayout();
-    public static I18NBundle idiomas;
-    public static AtlasRegion fondo;
-    public static ParallaxBackground parallaxFondo;
+    public static I18NBundle languages;
+    public static AtlasRegion background;
+    public static ParallaxBackground parallaxBackground;
 
-    public static AtlasRegion naveLeft;
-    public static AtlasRegion naveRight;
-    public static AtlasRegion nave;
+    public static AtlasRegion shipLeft;
+    public static AtlasRegion shipRight;
+    public static AtlasRegion ship;
 
     // Fonts
-    public static BitmapFont font60;// Principalemnte para el titulo de la app
+    public static BitmapFont font60;// Mainly for the title of the app
     public static BitmapFont font45;
     public static BitmapFont font15;
     public static BitmapFont font10;
 
     // Menu
-    public static AtlasRegion elipseMenuIzq;
-    public static NinePatchDrawable btSignInUp;
-    public static NinePatchDrawable btSignInDown;
-    public static NinePatchDrawable tituloMenuRecuadro;
+    public static AtlasRegion ellipseMenuLeft;
+    public static NinePatchDrawable buttonSignInUp;
+    public static NinePatchDrawable buttonSignInDown;
+    public static NinePatchDrawable titleMenuBox;
 
     // Game
     public static NinePatchDrawable recuadroInGameStatus;
@@ -176,7 +176,7 @@ public class Assets {
     }
 
     public static void load() {
-        idiomas = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
+        languages = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
 
         TextureAtlas atlas1 = new TextureAtlas(Gdx.files.internal("data/atlasMap.txt"));
@@ -185,8 +185,8 @@ public class Assets {
         loadSceneStyles(atlas1);
 
         // Menu
-        elipseMenuIzq = atlas1.findRegion("elipseMenuIzq");
-        tituloMenuRecuadro = new NinePatchDrawable(atlas1.createPatch("tituloMenuRecuadro"));
+        ellipseMenuLeft = atlas1.findRegion("elipseMenuIzq");
+        titleMenuBox = new NinePatchDrawable(atlas1.createPatch("tituloMenuRecuadro"));
 
         // Game
         recuadroInGameStatus = new NinePatchDrawable(atlas1.createPatch("recuadroInGameStatus"));
@@ -197,10 +197,10 @@ public class Assets {
         btMissil = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
         btMissilDown = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
 
-        fondo = atlas1.findRegion("fondo");
+        background = atlas1.findRegion("fondo");
 
-        btSignInUp = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInUp")));
-        btSignInDown = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInDown")));
+        buttonSignInUp = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInUp")));
+        buttonSignInDown = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInDown")));
 
         /* Ayuda */
         help1 = atlas1.findRegion("help1");
@@ -213,9 +213,9 @@ public class Assets {
         botonSonidoOff = new TextureRegionDrawable(atlas1.findRegion("btSinSonido"));
 
         /* Nave */
-        naveRight = atlas1.findRegion("naveRight");
-        naveLeft = atlas1.findRegion("naveLeft");
-        nave = atlas1.findRegion("nave");
+        shipRight = atlas1.findRegion("naveRight");
+        shipLeft = atlas1.findRegion("naveLeft");
+        ship = atlas1.findRegion("nave");
 
         AtlasRegion shield0 = atlas1.findRegion("shield0");
         AtlasRegion shield1 = atlas1.findRegion("shield1");
@@ -281,9 +281,9 @@ public class Assets {
         AtlasRegion newExpl19 = atlas1.findRegion("newExplosion19");
         explosionFuego = new Animation<>(0.05f, newExpl1, newExpl2, newExpl3, newExpl4, newExpl5, newExpl6, newExpl7, newExpl8, newExpl9, newExpl10, newExpl11, newExpl12, newExpl13, newExpl14, newExpl15, newExpl16, newExpl17, newExpl18, newExpl19);
 
-        ParallaxLayer para1 = new ParallaxLayer(fondo, new Vector2(0, 50), new Vector2(0, 0));
+        ParallaxLayer para1 = new ParallaxLayer(background, new Vector2(0, 50), new Vector2(0, 0));
         ParallaxLayer[] arr = new ParallaxLayer[]{para1};
-        parallaxFondo = new ParallaxBackground(arr, 320, 480, new Vector2(0, 1));
+        parallaxBackground = new ParallaxBackground(arr, 320, 480, new Vector2(0, 1));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/sonidos/musica.mp3"));
         music.setLooping(true);

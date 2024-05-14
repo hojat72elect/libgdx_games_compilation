@@ -46,9 +46,9 @@ public class WorldRenderer {
         // batch.draw(Assets.fondo1, cam.position.x - FRUSTUM_WIDTH / 2, cam.position.y - FRUSTUM_HEIGHT / 2, FRUSTUM_WIDTH,FRUSTUM_HEIGHT);
         batch.end();
         if (oWorld.state == World.STATE_RUNNING) {
-            Assets.parallaxFondo.render(deltaTime);
+            Assets.parallaxBackground.render(deltaTime);
         } else {// GAMEOVER, PAUSA, READY, ETC
-            Assets.parallaxFondo.render(0);
+            Assets.parallaxBackground.render(0);
         }
 
     }
@@ -72,11 +72,11 @@ public class WorldRenderer {
         TextureRegion keyFrame;
         if (oWorld.oNave.state == Nave.NAVE_STATE_NORMAL) {
             if (oWorld.oNave.velocity.x < -3)
-                keyFrame = Assets.naveLeft;
+                keyFrame = Assets.shipLeft;
             else if (oWorld.oNave.velocity.x > 3)
-                keyFrame = Assets.naveRight;
+                keyFrame = Assets.shipRight;
             else
-                keyFrame = Assets.nave;
+                keyFrame = Assets.ship;
         } else {
             keyFrame = Assets.explosionFuego.getKeyFrame(oWorld.oNave.stateTime, false);
         }

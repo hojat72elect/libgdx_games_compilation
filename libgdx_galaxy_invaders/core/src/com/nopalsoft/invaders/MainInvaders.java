@@ -21,7 +21,7 @@ public class MainInvaders extends Game {
         dialogs = new DialogSingInGGS(this, stage);
 
         Assets.load();
-        setScreen(new MainMenuScreen(this));// aqui tengo que poner lo principal
+        setScreen(new MainMenuScreen(this));// Here I have to put the main thing
     }
 
     @Override

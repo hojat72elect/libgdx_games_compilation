@@ -31,8 +31,8 @@ public class MainMenuScreen extends Screens {
         super(game);
 
         Table tituloTable = new Table();
-        tituloTable.setBackground(Assets.tituloMenuRecuadro);
-        Label titulo = new Label(Assets.idiomas.get("titulo_app"), new LabelStyle(Assets.font60, Color.GREEN));
+        tituloTable.setBackground(Assets.titleMenuBox);
+        Label titulo = new Label(Assets.languages.get("titulo_app"), new LabelStyle(Assets.font60, Color.GREEN));
         titulo.setAlignment(Align.center);
         tituloTable.setSize(265, 100);
         tituloTable.setPosition((SCREEN_WIDTH - 265) / 2f, SCREEN_HEIGHT - 110);
@@ -44,7 +44,7 @@ public class MainMenuScreen extends Screens {
         lbHighestScore.setAlignment(Align.center);
         lbHighestScore.setPosition(0, SCREEN_HEIGHT - 120);
 
-        btPlay = new TextButton(Assets.idiomas.get("play"), Assets.styleTextButtonMenu);
+        btPlay = new TextButton(Assets.languages.get("play"), Assets.styleTextButtonMenu);
         btPlay.setSize(250, 50);
         btPlay.setPosition(0, 280);
         btPlay.addListener(new ClickListener() {
@@ -56,7 +56,7 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btSettings = new TextButton(Assets.idiomas.get("settings"), Assets.styleTextButtonMenu);
+        btSettings = new TextButton(Assets.languages.get("settings"), Assets.styleTextButtonMenu);
         btSettings.setSize(300, 50);
         btSettings.setPosition(0, 210);
         btSettings.addListener(new ClickListener() {
@@ -67,7 +67,7 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btLeaderBoard = new TextButton(Assets.idiomas.get("leaderboard"), Assets.styleTextButtonMenu);
+        btLeaderBoard = new TextButton(Assets.languages.get("leaderboard"), Assets.styleTextButtonMenu);
         btLeaderBoard.setSize(310, 50);
         btLeaderBoard.setPosition(0, 140);
         btLeaderBoard.addListener(new ClickListener() {
@@ -78,7 +78,7 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btMore = new TextButton(Assets.idiomas.get("more"), Assets.styleTextButtonMenu);
+        btMore = new TextButton(Assets.languages.get("more"), Assets.styleTextButtonMenu);
         btMore.setSize(250, 50);
         btMore.setPosition(0, 70);
         btMore.addListener(new ClickListener() {
@@ -88,7 +88,7 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btFacebook = new TextButton(Assets.idiomas.get("like_us_to_get_lastest_news"), Assets.styleTextButtonFacebook);
+        btFacebook = new TextButton(Assets.languages.get("like_us_to_get_lastest_news"), Assets.styleTextButtonFacebook);
         btFacebook.getLabel().setWrap(true);
         btFacebook.setWidth(170);
         btFacebook.setPosition(SCREEN_WIDTH - btFacebook.getWidth() - 2, 2);
@@ -139,7 +139,7 @@ public class MainMenuScreen extends Screens {
 
         // Las medidas se sacaron con una formual de 3 si 480 / 960 x 585 donde 585 es el tamano,
         // 960 es el tamano para lo que se hicieron y 480 es el tamano de la camara
-        elipseIzq = new Image(Assets.elipseMenuIzq);
+        elipseIzq = new Image(Assets.ellipseMenuLeft);
         elipseIzq.setSize(18.5f, 292.5f);
         elipseIzq.setPosition(0, 60);
 
@@ -156,7 +156,7 @@ public class MainMenuScreen extends Screens {
         stage.addActor(btFacebook);
 
 
-        if (Settings.numeroDeVecesQueSeHaJugado == 0) {
+        if (Settings.numberOfTimesGameHasBeenPlayed == 0) {
             game.dialogs.showDialogSignIn();
 
         }
@@ -164,7 +164,7 @@ public class MainMenuScreen extends Screens {
 
     @Override
     public void update(float delta) {
-        lbHighestScore.setText(Assets.idiomas.format("local_highest_score", String.valueOf(Settings.highScores[0])));
+        lbHighestScore.setText(Assets.languages.format("local_highest_score", String.valueOf(Settings.highScores[0])));
     }
 
     @Override
@@ -173,7 +173,7 @@ public class MainMenuScreen extends Screens {
         batcher.setProjectionMatrix(oCam.combined);
 
         batcher.disableBlending();
-        Assets.parallaxFondo.render(delta);
+        Assets.parallaxBackground.render(delta);
     }
 
     @Override
