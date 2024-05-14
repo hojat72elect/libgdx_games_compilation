@@ -12,7 +12,7 @@ import com.nopalsoft.superjumper.screens.Screens;
  * @author Yayo
  * 
  */
-public class Nube implements Poolable {
+public class Cloud implements Poolable {
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_DEAD = 1;
 	public int state;
@@ -27,7 +27,7 @@ public class Nube implements Poolable {
 
 	public final static int TIPO_HAPPY = 0;
 	public final static int TIPO_ANGRY = 1;
-	public int tipo;
+	public int guy;
 
 	public final static float TIME_TO_BLOW = 2;
 	public float timeToBlow;
@@ -46,7 +46,7 @@ public class Nube implements Poolable {
 
 	public float stateTime;
 
-	public Nube() {
+	public Cloud() {
 		position = new Vector2();
 		velocidad = new Vector2();
 
@@ -54,10 +54,10 @@ public class Nube implements Poolable {
 
 	public void init(float x, float y) {
 		position.set(x, y);
-		velocidad.set(0, 0);// La velocidad se la pongo desde el metodo donde la creo
+		velocidad.set(0, 0);// I set the speed from the method where I create it
 		stateTime = 0;
 		state = STATE_NORMAL;
-		tipo = TIPO_HAPPY;
+		guy = TIPO_HAPPY;
 
 		isBlowing = isLighthing = false;
 
@@ -78,7 +78,7 @@ public class Nube implements Poolable {
 		body.setLinearVelocity(velocidad);
 		velocidad = body.getLinearVelocity();
 
-		if (tipo == TIPO_ANGRY) {
+		if (guy == TIPO_ANGRY) {
 			timeToBlow += delta;
 			if (!isBlowing && timeToBlow >= TIME_TO_BLOW) {
 				if (MathUtils.randomBoolean())
@@ -94,7 +94,7 @@ public class Nube implements Poolable {
 				}
 			}
 		}
-		else {// TIPO HAPPY
+		else {// Happy Type
 
 			if (!isLighthing) {
 				timeForRayo += delta;
@@ -114,8 +114,8 @@ public class Nube implements Poolable {
 	}
 
 	public void hit() {
-		if (tipo == TIPO_HAPPY) {
-			tipo = TIPO_ANGRY;
+		if (guy == TIPO_HAPPY) {
+			guy = TIPO_ANGRY;
 			stateTime = timeToBlow = durationBlow = 0;
 		}
 	}

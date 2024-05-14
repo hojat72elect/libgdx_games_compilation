@@ -14,10 +14,10 @@ public class Item implements Poolable {
 	public final static float WIDTH = .25f;
 	public final static float HEIGHT = .32f;
 
-	public final static int TIPO_JETPACK = 0;
-	public final static int TIPO_BUBBLE = 1;
-	public final static int TIPO_GUN = 2;
-	public int tipo;
+	public final static int TYPE_JETPACK = 0;
+	public final static int TYPE_BUBBLE = 1;
+	public final static int TYPE_GUN = 2;
+	public int type;
 
 	public final Vector2 position;
 
@@ -32,7 +32,7 @@ public class Item implements Poolable {
 		state = STATE_NORMAL;
 		stateTime = 0;
 
-		tipo = MathUtils.random(2);
+		type = MathUtils.random(2);
 	}
 
 	public void update(float delta) {

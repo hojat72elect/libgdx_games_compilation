@@ -5,35 +5,35 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class PiezaPlataformas implements Poolable {
+public class PlatformPiece implements Poolable {
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_DESTROY = 1;
 	public int state;
 
-	public static final float DRAW_WIDTH_NORMAL = Plataformas.DRAW_WIDTH_NORMAL / 2f;
-	public static final float DRAW_HEIGTH_NORMAL = Plataformas.DRAW_HEIGTH_NORMAL;
-	public static final float WIDTH_NORMAL = Plataformas.WIDTH_NORMAL / 2f;
-	public static final float HEIGTH_NORMAL = Plataformas.HEIGTH_NORMAL;
+	public static final float DRAW_WIDTH_NORMAL = Platform.DRAW_WIDTH_NORMAL / 2f;
+	public static final float DRAW_HEIGHT_NORMAL = Platform.DRAW_HEIGHT_NORMAL;
+	public static final float WIDTH_NORMAL = Platform.WIDTH_NORMAL / 2f;
+	public static final float HEIGHT_NORMAL = Platform.HEIGHT_NORMAL;
 
 	public int color;
 
-	public static final int TIPO_LEFT = 0;
-	public static final int TIPO_RIGHT = 1;
-	public int tipo;
+	public static final int TYPE_LEFT = 0;
+	public static final int TYPE_RIGHT = 1;
+	public int type;
 
 	public final Vector2 position;
 
 	public float stateTime;
 	public float angleDeg;
 
-	public PiezaPlataformas() {
+	public PlatformPiece() {
 		position = new Vector2();
 
 	}
 
 	public void init(float x, float y, int tipo, int color) {
 		position.set(x, y);
-		this.tipo = tipo;
+		this.type = tipo;
 		this.color = color;
 		angleDeg = 0;
 		stateTime = 0;

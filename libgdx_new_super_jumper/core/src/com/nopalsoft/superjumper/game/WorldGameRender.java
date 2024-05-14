@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.superjumper.Assets;
-import com.nopalsoft.superjumper.objetos.Personaje;
 import com.nopalsoft.superjumper.screens.Screens;
 
 public class WorldGameRender {
@@ -65,20 +64,20 @@ public class WorldGameRender {
 	private void renderPersonaje() {
 		AtlasRegion keyframe;
 
-		Personaje obj = oWorld.oPer;
+		com.nopalsoft.superjumper.objetos.Character obj = oWorld.oPer;
 
-		if (obj.velocidad.y > 0)
+		if (obj.speed.y > 0)
 			keyframe = Assets.personajeJump;
 		else
 			keyframe = Assets.personajeStand;
 
-		if (obj.velocidad.x > 0)
-			batcher.draw(keyframe, obj.position.x + Personaje.DRAW_WIDTH / 2f, obj.position.y - Personaje.DRAW_HEIGTH / 2f,
-					-Personaje.DRAW_WIDTH / 2f, Personaje.DRAW_HEIGTH / 2f, -Personaje.DRAW_WIDTH, Personaje.DRAW_HEIGTH, 1, 1, obj.angleDeg);
+		if (obj.speed.x > 0)
+			batcher.draw(keyframe, obj.position.x + com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH / 2f,
+					-com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH / 2f, com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH / 2f, -com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH, 1, 1, obj.angleDeg);
 
 		else
-			batcher.draw(keyframe, obj.position.x - Personaje.DRAW_WIDTH / 2f, obj.position.y - Personaje.DRAW_HEIGTH / 2f,
-					Personaje.DRAW_WIDTH / 2f, Personaje.DRAW_HEIGTH / 2f, Personaje.DRAW_WIDTH, Personaje.DRAW_HEIGTH, 1, 1, obj.angleDeg);
+			batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH / 2f,
+					com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH / 2f, com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH / 2f, com.nopalsoft.superjumper.objetos.Character.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Character.DRAW_HEIGTH, 1, 1, obj.angleDeg);
 
 		if (obj.isJetPack) {
 			batcher.draw(Assets.jetpack, obj.position.x - .45f / 2f, obj.position.y - .7f / 2f, .45f, .7f);
@@ -94,130 +93,130 @@ public class WorldGameRender {
 	}
 
 	private void renderPlataformas() {
-        for (com.nopalsoft.superjumper.objetos.Plataformas obj : oWorld.arrPlataformas) {
+        for (com.nopalsoft.superjumper.objetos.Platform obj : oWorld.arrPlataformas) {
             com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion keyframe = null;
 
-            if (obj.tipo == com.nopalsoft.superjumper.objetos.Plataformas.TIPO_ROMPIBLE) {
+            if (obj.type == com.nopalsoft.superjumper.objetos.Platform.TYPE_BREAKABLE) {
                 switch (obj.color) {
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BEIGE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BEIGE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBeigeBroken;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BLUE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BLUE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBlueBroken;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GRAY:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GRAY:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGrayBroken;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GREEN:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GREEN:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGreenBroken;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_MULTICOLOR:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_MULTICOLOR:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaMulticolorBroken;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_PINK:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_PINK:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaPinkBroken;
                         break;
 
                 }
             } else {
                 switch (obj.color) {
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BEIGE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BEIGE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBeige;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BLUE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BLUE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBlue;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GRAY:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GRAY:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGray;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GREEN:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GREEN:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGreen;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_MULTICOLOR:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_MULTICOLOR:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaMulticolor;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_PINK:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_PINK:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaPink;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BEIGE_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BEIGE_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBeigeLight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BLUE_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BLUE_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBlueLight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GRAY_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GRAY_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGrayLight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GREEN_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GREEN_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGreenLight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_MULTICOLOR_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_MULTICOLOR_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaMulticolorLight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_PINK_LIGHT:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_PINK_LIGHT:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaPinkLight;
                         break;
                 }
 
             }
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Plataformas.DRAW_WIDTH_NORMAL / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Plataformas.DRAW_HEIGTH_NORMAL / 2f,
-                    com.nopalsoft.superjumper.objetos.Plataformas.DRAW_WIDTH_NORMAL, com.nopalsoft.superjumper.objetos.Plataformas.DRAW_HEIGTH_NORMAL);
+            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Platform.DRAW_WIDTH_NORMAL / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Platform.DRAW_HEIGHT_NORMAL / 2f,
+                    com.nopalsoft.superjumper.objetos.Platform.DRAW_WIDTH_NORMAL, com.nopalsoft.superjumper.objetos.Platform.DRAW_HEIGHT_NORMAL);
         }
 	}
 
 	private void renderPiezasPlataformas() {
-        for (com.nopalsoft.superjumper.objetos.PiezaPlataformas obj : oWorld.arrPiezasPlataformas) {
+        for (com.nopalsoft.superjumper.objetos.PlatformPiece obj : oWorld.arrPiezasPlataformas) {
             com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion keyframe = null;
 
-            if (obj.tipo == com.nopalsoft.superjumper.objetos.PiezaPlataformas.TIPO_LEFT) {
+            if (obj.type == com.nopalsoft.superjumper.objetos.PlatformPiece.TYPE_LEFT) {
                 switch (obj.color) {
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BEIGE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BEIGE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBeigeLeft;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BLUE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BLUE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBlueLeft;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GRAY:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GRAY:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGrayLeft;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GREEN:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GREEN:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGreenLeft;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_MULTICOLOR:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_MULTICOLOR:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaMulticolorLeft;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_PINK:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_PINK:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaPinkLeft;
                         break;
 
                 }
             } else {
                 switch (obj.color) {
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BEIGE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BEIGE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBeigeRight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_BLUE:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_BLUE:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaBlueRight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GRAY:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GRAY:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGrayRight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_GREEN:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_GREEN:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaGreenRight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_MULTICOLOR:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_MULTICOLOR:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaMulticolorRight;
                         break;
-                    case com.nopalsoft.superjumper.objetos.Plataformas.COLOR_PINK:
+                    case com.nopalsoft.superjumper.objetos.Platform.COLOR_PINK:
                         keyframe = com.nopalsoft.superjumper.Assets.plataformaPinkRight;
                         break;
 
                 }
             }
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_WIDTH_NORMAL / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_HEIGTH_NORMAL
-                            / 2f, com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_WIDTH_NORMAL / 2f, com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_HEIGTH_NORMAL / 2f, com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_WIDTH_NORMAL,
-                    com.nopalsoft.superjumper.objetos.PiezaPlataformas.DRAW_HEIGTH_NORMAL, 1, 1, obj.angleDeg);
+            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_WIDTH_NORMAL / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_HEIGHT_NORMAL
+                            / 2f, com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_WIDTH_NORMAL / 2f, com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_HEIGHT_NORMAL / 2f, com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_WIDTH_NORMAL,
+                    com.nopalsoft.superjumper.objetos.PlatformPiece.DRAW_HEIGHT_NORMAL, 1, 1, obj.angleDeg);
 
         }
 	}
@@ -234,14 +233,14 @@ public class WorldGameRender {
         for (com.nopalsoft.superjumper.objetos.Item obj : oWorld.arrItem) {
             com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = null;
 
-            switch (obj.tipo) {
-                case com.nopalsoft.superjumper.objetos.Item.TIPO_BUBBLE:
+            switch (obj.type) {
+                case com.nopalsoft.superjumper.objetos.Item.TYPE_BUBBLE:
                     keyframe = com.nopalsoft.superjumper.Assets.bubbleSmall;
                     break;
-                case com.nopalsoft.superjumper.objetos.Item.TIPO_JETPACK:
+                case com.nopalsoft.superjumper.objetos.Item.TYPE_JETPACK:
                     keyframe = com.nopalsoft.superjumper.Assets.jetpackSmall;
                     break;
-                case com.nopalsoft.superjumper.objetos.Item.TIPO_GUN:
+                case com.nopalsoft.superjumper.objetos.Item.TYPE_GUN:
                     keyframe = com.nopalsoft.superjumper.Assets.gun;
                     break;
 
@@ -254,30 +253,30 @@ public class WorldGameRender {
 	}
 
 	private void renderEnemigo() {
-        for (com.nopalsoft.superjumper.objetos.Enemigo obj : oWorld.arrEnemigo) {
+        for (com.nopalsoft.superjumper.objetos.Enemy obj : oWorld.arrEnemigo) {
             com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = com.nopalsoft.superjumper.Assets.enemigo.getKeyFrame(obj.stateTime, true);
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Enemigo.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Enemigo.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Enemigo.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objetos.Enemigo.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Enemy.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Enemy.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Enemy.DRAW_WIDTH,
+                    com.nopalsoft.superjumper.objetos.Enemy.DRAW_HEIGHT);
         }
 
 	}
 
 	private void renderNube() {
-        for (com.nopalsoft.superjumper.objetos.Nube obj : oWorld.arrNubes) {
+        for (com.nopalsoft.superjumper.objetos.Cloud obj : oWorld.arrNubes) {
             com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = null;
 
-            switch (obj.tipo) {
-                case com.nopalsoft.superjumper.objetos.Nube.TIPO_ANGRY:
+            switch (obj.guy) {
+                case com.nopalsoft.superjumper.objetos.Cloud.TIPO_ANGRY:
                     keyframe = com.nopalsoft.superjumper.Assets.nubeAngry;
                     break;
-                case com.nopalsoft.superjumper.objetos.Nube.TIPO_HAPPY:
+                case com.nopalsoft.superjumper.objetos.Cloud.TIPO_HAPPY:
                     keyframe = com.nopalsoft.superjumper.Assets.nubeHappy;
                     break;
 
             }
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Nube.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Nube.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Nube.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Nube.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Cloud.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Cloud.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Cloud.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Cloud.DRAW_HEIGHT);
 
             if (obj.isBlowing) {
                 batcher.draw(com.nopalsoft.superjumper.Assets.nubeViento, obj.position.x - .35f, obj.position.y - .85f, .6f, .8f);
@@ -287,10 +286,10 @@ public class WorldGameRender {
 	}
 
 	private void renderRayo() {
-        for (com.nopalsoft.superjumper.objetos.Rayo obj : oWorld.arrRayos) {
+        for (com.nopalsoft.superjumper.objetos.Ray obj : oWorld.arrRayos) {
             com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = com.nopalsoft.superjumper.Assets.rayo.getKeyFrame(obj.stateTime, true);
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Rayo.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Rayo.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Rayo.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Rayo.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objetos.Ray.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Ray.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Ray.DRAW_WIDTH, com.nopalsoft.superjumper.objetos.Ray.DRAW_HEIGHT);
         }
 	}
 

@@ -18,7 +18,7 @@ public class Assets {
 	public static TextureRegionDrawable titulo;
 
 	/**
-	 * Personaje
+	 * Character
 	 */
 	public static AtlasRegion personajeJump;
 	public static AtlasRegion personajeStand;
@@ -42,7 +42,7 @@ public class Assets {
 	public static Animation<TextureRegion> rayo;
 	public static AtlasRegion nubeViento;
 	/**
-	 * Plataformas
+	 * Platform
 	 */
 
 	public static AtlasRegion plataformaBeige;
