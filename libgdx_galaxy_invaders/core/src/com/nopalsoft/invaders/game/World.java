@@ -5,7 +5,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.Settings;
-import com.nopalsoft.invaders.frame.*;
+import com.nopalsoft.invaders.frame.AlienShip;
+import com.nopalsoft.invaders.frame.Boost;
+import com.nopalsoft.invaders.frame.Bullet;
+import com.nopalsoft.invaders.frame.Missile;
+import com.nopalsoft.invaders.frame.Nave;
 import com.nopalsoft.invaders.screens.Screens;
 
 import java.util.Iterator;
@@ -13,12 +17,11 @@ import java.util.Random;
 
 public class World {
 
-    public static float WIDTH = Screens.WORLD_SCREEN_WIDTH;
     public static final float HEIGHT = Screens.WORLD_SCREEN_HEIGHT;
-
     public static final int STATE_RUNNING = 0;
     public static final int STATE_GAME_OVER = 1;
     public static final int STATE_PAUSED = 2;
+    public static float WIDTH = Screens.WORLD_SCREEN_WIDTH;
     int state;
 
     Nave oNave;
@@ -77,7 +80,7 @@ public class World {
 
         // agregare 25 aliens 5x5 columnas de 5 filas de 5
         for (int col = 0; col < 6; col++) {
-            y += 3.8;
+            y += 3.8F;
             x = 1.5f;
             for (int ren = 0; ren < 6; ren++) {
                 if (vidaAlterable)

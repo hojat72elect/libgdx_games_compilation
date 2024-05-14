@@ -9,7 +9,11 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.Settings;
-import com.nopalsoft.invaders.frame.*;
+import com.nopalsoft.invaders.frame.AlienShip;
+import com.nopalsoft.invaders.frame.Boost;
+import com.nopalsoft.invaders.frame.Bullet;
+import com.nopalsoft.invaders.frame.Missile;
+import com.nopalsoft.invaders.frame.Nave;
 import com.nopalsoft.invaders.screens.Screens;
 
 

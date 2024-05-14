@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -15,16 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import com.badlogic.gdx.utils.I18NBundle;
 import com.nopalsoft.invaders.parallax.ParallaxBackground;
 import com.nopalsoft.invaders.parallax.ParallaxLayer;
 
 public class Assets {
 
-    public static I18NBundle idiomas;
     private static final GlyphLayout glyphLayout = new GlyphLayout();
-
+    public static I18NBundle idiomas;
     public static AtlasRegion fondo;
     public static ParallaxBackground parallaxFondo;
 
@@ -32,19 +34,19 @@ public class Assets {
     public static AtlasRegion naveRight;
     public static AtlasRegion nave;
 
-    /* Fonts */
+    // Fonts
     public static BitmapFont font60;// Principalemnte para el titulo de la app
     public static BitmapFont font45;
     public static BitmapFont font15;
     public static BitmapFont font10;
 
-    /* Menu */
+    // Menu
     public static AtlasRegion elipseMenuIzq;
     public static NinePatchDrawable btSignInUp;
     public static NinePatchDrawable btSignInDown;
     public static NinePatchDrawable tituloMenuRecuadro;
 
-    /* Game */
+    // Game
     public static NinePatchDrawable recuadroInGameStatus;
     public static TextureRegionDrawable btLeft;
     public static TextureRegionDrawable btRight;
@@ -53,17 +55,17 @@ public class Assets {
     public static TextureRegionDrawable btMissil;
     public static TextureRegionDrawable btMissilDown;
 
-    /* Ayuda */
+    // Aid
     public static AtlasRegion help1;
     public static AtlasRegion clickAyuda;
-    /* Botones */
 
+    // Buttons
     public static TextureRegionDrawable botonSonidoOn;
     public static TextureRegionDrawable botonSonidoOff;
     public static TextureRegionDrawable botonMusicaOn;
     public static TextureRegionDrawable botonMusicaOff;
 
-    /* Municiones */
+    // Ammunition
     public static AtlasRegion balaNormal;
     public static Animation<TextureRegion> misil;
     public static Animation<TextureRegion> superRayo;
@@ -86,14 +88,14 @@ public class Assets {
     public static AtlasRegion alien3;
     public static AtlasRegion alien4;
 
-    /* Sonidos */
+    // Sounds
     public static Music music;
     public static Sound coinSound;
     public static Sound clickSound;
     public static Sound explosionSound;
     public static Sound missilFire;
 
-    /* Styles */
+    // Styles
     public static TextButtonStyle styleTextButtonMenu;
     public static TextButtonStyle styleTextButtonFacebook;
     public static TextButtonStyle styleTextButtonBack;
@@ -108,10 +110,6 @@ public class Assets {
 
     public static ImageButtonStyle styleImageButtonPause;
     public static ImageButtonStyle styleImageButtonStyleCheckBox;
-
-    public static Texture loadTexture(String file) {
-        return new Texture(Gdx.files.internal(file));
-    }
 
 
     static private void loadFont(TextureAtlas atlas) {
@@ -186,11 +184,11 @@ public class Assets {
         loadFont(atlas1);
         loadSceneStyles(atlas1);
 
-        /* Menu */
+        // Menu
         elipseMenuIzq = atlas1.findRegion("elipseMenuIzq");
         tituloMenuRecuadro = new NinePatchDrawable(atlas1.createPatch("tituloMenuRecuadro"));
 
-        /* Game */
+        // Game
         recuadroInGameStatus = new NinePatchDrawable(atlas1.createPatch("recuadroInGameStatus"));
         btLeft = new TextureRegionDrawable(atlas1.findRegion("btLeft"));
         btRight = new TextureRegionDrawable(atlas1.findRegion("btRight"));
@@ -231,10 +229,9 @@ public class Assets {
         AtlasRegion shield9 = atlas1.findRegion("shield9");
         AtlasRegion shield10 = atlas1.findRegion("shield10");
         AtlasRegion shield11 = atlas1.findRegion("shield11");
-        shield = new Animation(.1f, shield0, shield1, shield2, shield3, shield4, shield5, shield6, shield7, shield8, shield9, shield10, shield11);
+        shield = new Animation<>(.1f, shield0, shield1, shield2, shield3, shield4, shield5, shield6, shield7, shield8, shield9, shield10, shield11);
 
-        /* Ufo */
-
+        // UFOs
         alien1 = atlas1.findRegion("alien1");
         alien2 = atlas1.findRegion("alien2");
         alien3 = atlas1.findRegion("alien3");
@@ -245,24 +242,24 @@ public class Assets {
         boost3 = atlas1.findRegion("upgShield");
         upgLife = atlas1.findRegion("upgLife");
 
-        /* Municiones */
+        // Ammunition
         balaNormal = atlas1.findRegion("balaNormal");
         balaNormalEnemigo = atlas1.findRegion("balaNormalEnemigo");
 
         AtlasRegion misil1 = atlas1.findRegion("misil1");
         AtlasRegion misil2 = atlas1.findRegion("misil2");
-        misil = new Animation(0.2f, misil1, misil2);
+        misil = new Animation<>(0.2f, misil1, misil2);
 
         AtlasRegion superRayo1 = atlas1.findRegion("superRayo1");
         AtlasRegion superRayo2 = atlas1.findRegion("superRayo2");
-        superRayo = new Animation(0.2f, superRayo1, superRayo2);
+        superRayo = new Animation<>(0.2f, superRayo1, superRayo2);
 
         balaNivel1 = atlas1.findRegion("disparoA1");
         balaNivel2 = atlas1.findRegion("disparoA2");
         balaNivel3 = atlas1.findRegion("disparoA3");
         balaNivel4 = atlas1.findRegion("disparoA4");
 
-        /* explosionFuego */
+        // explosion fire
         AtlasRegion newExpl1 = atlas1.findRegion("newExplosion1");
         AtlasRegion newExpl2 = atlas1.findRegion("newExplosion2");
         AtlasRegion newExpl3 = atlas1.findRegion("newExplosion3");
@@ -282,10 +279,10 @@ public class Assets {
         AtlasRegion newExpl17 = atlas1.findRegion("newExplosion17");
         AtlasRegion newExpl18 = atlas1.findRegion("newExplosion18");
         AtlasRegion newExpl19 = atlas1.findRegion("newExplosion19");
-        explosionFuego = new Animation(0.05f, newExpl1, newExpl2, newExpl3, newExpl4, newExpl5, newExpl6, newExpl7, newExpl8, newExpl9, newExpl10, newExpl11, newExpl12, newExpl13, newExpl14, newExpl15, newExpl16, newExpl17, newExpl18, newExpl19);
+        explosionFuego = new Animation<>(0.05f, newExpl1, newExpl2, newExpl3, newExpl4, newExpl5, newExpl6, newExpl7, newExpl8, newExpl9, newExpl10, newExpl11, newExpl12, newExpl13, newExpl14, newExpl15, newExpl16, newExpl17, newExpl18, newExpl19);
 
         ParallaxLayer para1 = new ParallaxLayer(fondo, new Vector2(0, 50), new Vector2(0, 0));
-        ParallaxLayer arr[] = new ParallaxLayer[]{para1};
+        ParallaxLayer[] arr = new ParallaxLayer[]{para1};
         parallaxFondo = new ParallaxBackground(arr, 320, 480, new Vector2(0, 1));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/sonidos/musica.mp3"));

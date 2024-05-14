@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import com.badlogic.gdx.utils.Align;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.MainInvaders;
@@ -23,17 +22,14 @@ import com.nopalsoft.invaders.frame.Nave;
 
 public class SettingsScreen extends Screens {
 
+    public final Nave oNave;
     ImageButton tiltControl;
     ImageButton onScreenControl;
     Slider aceletometerSlider;
     TextButton btBack;
     Table menuControls;
-
     ImageButton btLeft, btRight, btMissil, btFire;
-
     Label touchLeft, touchRight;
-
-    public final Nave oNave;
     OrthographicCamera camRender;
     float accel;
 
@@ -243,12 +239,12 @@ public class SettingsScreen extends Screens {
         camRender.update();
         batcher.setProjectionMatrix(camRender.combined);
         batcher.begin();
-        renderNave(delta);
+        renderNave();
         batcher.end();
 
     }
 
-    private void renderNave(float delta) {
+    private void renderNave() {
         TextureRegion keyFrame;
         if (oNave.velocity.x < -3)
             keyFrame = Assets.naveLeft;

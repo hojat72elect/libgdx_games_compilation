@@ -1,10 +1,6 @@
 package com.nopalsoft.invaders.frame;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class Missile extends DynamicGameObject {
 
@@ -12,11 +8,10 @@ public class Missile extends DynamicGameObject {
     public static final float HEIGHT = 1.4f;
 
     public static final float RADIO_EXPLOSION = 7.5f;
-    public final float VELOCIDAD = 30;
     public static final float TIEMPO_EXPLODE = 0.05f * 19;
     public final static int STATE_DISPARADO = 0;
     public final static int STATE_EXPLOTANDO = 1;
-
+    public final float VELOCIDAD = 30;
     public float stateTime;
     public int state;
 
@@ -48,12 +43,6 @@ public class Missile extends DynamicGameObject {
         velocity.set(0, 0);
         stateTime = 0;
         state = STATE_EXPLOTANDO;
-    }
-
-    // Regresa la velocidad
-    public Vector2 getVelocity() {
-        Vector2 vel = new Vector2(velocity.x, velocity.y);
-        return vel;
     }
 
 }

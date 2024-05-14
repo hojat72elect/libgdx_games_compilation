@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ParallaxBackground {
 
-    private ParallaxLayer[] layers;
-    private Camera camera;
-    private SpriteBatch batch;
-    private Vector2 speed = new Vector2();
+    private final ParallaxLayer[] layers;
+    private final Camera camera;
+    private final SpriteBatch batch;
+    private final Vector2 speed = new Vector2();
 
     /**
      * @param layers The  background layers
@@ -32,10 +32,10 @@ public class ParallaxBackground {
             batch.begin();
             float currentX = -camera.position.x * layer.parallaxRatio.x % (layer.region.getRegionWidth() + layer.padding.x);
 
-            if (speed.x < 0) currentX += -(layer.region.getRegionWidth() + layer.padding.x);
+            if (speed.x < 0) currentX -= (layer.region.getRegionWidth() + layer.padding.x);
             do {
                 float currentY = -camera.position.y * layer.parallaxRatio.y % (layer.region.getRegionHeight() + layer.padding.y);
-                if (speed.y < 0) currentY += -(layer.region.getRegionHeight() + layer.padding.y);
+                if (speed.y < 0) currentY -= (layer.region.getRegionHeight() + layer.padding.y);
                 do {
                     batch.draw(layer.region,
                             -this.camera.viewportWidth / 2 + currentX + layer.startPosition.x,

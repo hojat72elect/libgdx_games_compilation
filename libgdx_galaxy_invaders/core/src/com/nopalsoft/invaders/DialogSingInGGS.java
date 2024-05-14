@@ -9,9 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class DialogSingInGGS {
-    Stage stage;
     final MainInvaders game;
-
+    Stage stage;
     Dialog dialogSignIn, dialogRate;
 
     public DialogSingInGGS(MainInvaders game, Stage stage) {

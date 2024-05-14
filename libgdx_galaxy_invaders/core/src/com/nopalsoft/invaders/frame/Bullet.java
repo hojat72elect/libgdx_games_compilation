@@ -4,11 +4,9 @@ public class Bullet extends DynamicGameObject {
 
     public static final float WIDTH = 2.1f;
     public static final float HEIGHT = 1.5f;
-
-    public final float SPEED = 30;
     public final static int STATE_DISPARADO = 0;
     public final static int STATE_EXPLOTANDO = 1;
-
+    public final float SPEED = 30;
     public int level = 1;
     public float stateTime;
     public int state;

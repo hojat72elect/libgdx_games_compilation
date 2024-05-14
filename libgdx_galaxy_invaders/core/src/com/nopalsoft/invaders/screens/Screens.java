@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.MainInvaders;
 import com.nopalsoft.invaders.Settings;

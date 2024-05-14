@@ -3,14 +3,18 @@ package com.nopalsoft.invaders.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -21,12 +25,11 @@ import com.nopalsoft.invaders.screens.MainMenuScreen;
 import com.nopalsoft.invaders.screens.Screens;
 
 public class GameScreen extends Screens {
-    FPSLogger fps = new FPSLogger();
-
-    static final int GAME_READY = 0;
     public static final int GAME_RUNNING = 1;
-    static final int GAME_OVER = 2;
     public static final int GAME_PAUSE = 3;
+    static final int GAME_READY = 0;
+    static final int GAME_OVER = 2;
+    public static int state;
     public final int GAME_TUTORIAL = 4;
 
     int pantallaTutorial; // si esta en la pantalla 1 o en la 2 del tutorial
@@ -35,27 +38,21 @@ public class GameScreen extends Screens {
     boolean seDisparo = false;
     boolean seDisparoMissil = false;
     Vector3 touchPoint;
-
     Rectangle leftButton;
     Rectangle rightButton;
-
     Dialog dialogPause, dialogGameOver;
-
     Table scoresBar;
     Label lbLevel, lbScore, lbNumVidas;
     ImageButton btPause;
-
     ImageButton btLeft, btRight, btFire;
     TextButton btMissil;
-
     Group gpTutorial;
     Label lbTiltYourDevice;
-
-    public static int state;
-
     float accel;
 
     int nivel;
+    float rotacion = 0;
+    float addRotacion = .3f;
 
     public GameScreen(final MainInvaders game) {
         super(game);
@@ -422,7 +419,7 @@ public class GameScreen extends Screens {
 
         switch (state) {
             case GAME_TUTORIAL:
-                presentTurorial(delta);
+                presentTurorial();
                 break;
             case GAME_READY:
                 presentReady();
@@ -436,10 +433,7 @@ public class GameScreen extends Screens {
 
     }
 
-    float rotacion = 0;
-    float addRotacion = .3f;
-
-    private void presentTurorial(float delta) {
+    private void presentTurorial() {
         if (pantallaTutorial == 0 && Settings.isTiltControl) {
             if (rotacion < -20 || rotacion > 20)
                 addRotacion *= -1;
