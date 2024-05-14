@@ -21,7 +21,6 @@ import com.nopalsoft.superjumper.Settings;
 import com.nopalsoft.superjumper.objetos.Bullet;
 import com.nopalsoft.superjumper.objetos.Enemigo;
 import com.nopalsoft.superjumper.objetos.Item;
-import com.nopalsoft.superjumper.objetos.Moneda;
 import com.nopalsoft.superjumper.objetos.Nube;
 import com.nopalsoft.superjumper.objetos.Personaje;
 import com.nopalsoft.superjumper.objetos.PiezaPlataformas;
@@ -45,7 +44,7 @@ public class WorldGame {
 	private final Array<Body> arrBodies;
 	Array<Plataformas> arrPlataformas;
 	Array<PiezaPlataformas> arrPiezasPlataformas;
-	Array<Moneda> arrMonedas;
+	Array<com.nopalsoft.superjumper.objetos.Coin> arrMonedas;
 	Array<Enemigo> arrEnemigo;
 	Array<Item> arrItem;
 	Array<Nube> arrNubes;
@@ -92,10 +91,10 @@ public class WorldGame {
 			crearPlataforma(mundoCreadoHastaY);
 
 			if (MathUtils.random(100) < 5)
-				Moneda.createMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY);
+				com.nopalsoft.superjumper.objetos.Coin.createCoins(oWorldBox, arrMonedas, mundoCreadoHastaY);
 
 			if (MathUtils.random(20) < 5)
-				Moneda.createUnaMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY + .5f);
+				com.nopalsoft.superjumper.objetos.Coin.createUnaMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY + .5f);
 
 			if (MathUtils.random(20) < 5)
 				crearEnemigo(mundoCreadoHastaY + .5f);
@@ -391,7 +390,7 @@ public class WorldGame {
                 updatePlataforma(body, delta);
             } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.PiezaPlataformas) {
                 updatePiezaPlataforma(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Moneda) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Coin) {
                 updateMoneda(body, delta);
             } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Enemigo) {
                 updateEnemigo(body, delta);
@@ -436,9 +435,9 @@ public class WorldGame {
                             crearPiezasPlataforma(oPlat);
                         com.badlogic.gdx.utils.Pools.free(oPlat);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Moneda) {
-                    com.nopalsoft.superjumper.objetos.Moneda oMon = (com.nopalsoft.superjumper.objetos.Moneda) body.getUserData();
-                    if (oMon.state == com.nopalsoft.superjumper.objetos.Moneda.STATE_TAKEN) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Coin) {
+                    com.nopalsoft.superjumper.objetos.Coin oMon = (com.nopalsoft.superjumper.objetos.Coin) body.getUserData();
+                    if (oMon.state == com.nopalsoft.superjumper.objetos.Coin.STATE_TAKEN) {
                         arrMonedas.removeValue(oMon, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oMon);
@@ -523,7 +522,7 @@ public class WorldGame {
 	}
 
 	private void updateMoneda(Body body, float delta) {
-		Moneda obj = (Moneda) body.getUserData();
+		com.nopalsoft.superjumper.objetos.Coin obj = (com.nopalsoft.superjumper.objetos.Coin) body.getUserData();
 		obj.update(delta);
 		if (oPer.position.y - 5.5f > obj.position.y) {
 			obj.take();
@@ -620,8 +619,8 @@ public class WorldGame {
 				}
 
 			}
-			else if (otraCosa instanceof Moneda) {
-				Moneda obj = (Moneda) otraCosa;
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Coin) {
+				com.nopalsoft.superjumper.objetos.Coin obj = (com.nopalsoft.superjumper.objetos.Coin) otraCosa;
 				obj.take();
 				coins++;
 				oPer.jump();

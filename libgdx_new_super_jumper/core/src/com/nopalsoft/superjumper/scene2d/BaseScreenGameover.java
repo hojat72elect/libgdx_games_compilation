@@ -12,12 +12,12 @@ import com.nopalsoft.superjumper.game.GameScreen;
 import com.nopalsoft.superjumper.game.WorldGame;
 import com.nopalsoft.superjumper.screens.MainMenuScreen;
 
-public class VentanaGameover extends Ventana {
+public class BaseScreenGameover extends BaseScreen {
 
 	TextButton btMenu, btTryAgain;
 	WorldGame oWorld;
 
-	public VentanaGameover(final GameScreen currentScreen) {
+	public BaseScreenGameover(final GameScreen currentScreen) {
 		super(currentScreen, 350, 400, 250);
 		oWorld = currentScreen.oWorld;
 

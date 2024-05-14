@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.Pools;
 import com.nopalsoft.superjumper.screens.Screens;
 
-public class Moneda implements Poolable {
+public class Coin implements Poolable {
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_TAKEN = 1;
 	public int state;
@@ -27,7 +27,7 @@ public class Moneda implements Poolable {
 
 	public float stateTime;
 
-	public Moneda() {
+	public Coin() {
 		position = new Vector2();
 	}
 
@@ -46,24 +46,24 @@ public class Moneda implements Poolable {
 		stateTime = 0;
 	}
 
-	final static float SEPARACION_MONEDAS = .025f;// Variable para que las monedas no esten pegadas
+	final static float SEPARACION_MONEDAS = .025f;// Variable so that the coins are not stuck
 
-	public static void createMoneda(World worldBox, Array<Moneda> arrMonedas, float y) {
-		createCubo(worldBox, arrMonedas, y);
+	public static void createCoins(World worldBox, Array<Coin> coinsArray, float y) {
+		createCubo(worldBox, coinsArray, y);
 	}
 
-	public static void createUnaMoneda(World worldBox, Array<Moneda> arrMonedas, float y) {
-		createMoneda(worldBox, arrMonedas, generaPosX(1), y);
+	public static void createUnaMoneda(World worldBox, Array<Coin> arrMonedas, float y) {
+		createCoins(worldBox, arrMonedas, generaPosX(1), y);
 	}
 
-	private static void createCubo(World worldBox, Array<Moneda> arrMonedas, float y) {
+	private static void createCubo(World worldBox, Array<Coin> arrMonedas, float y) {
 		int renMax = MathUtils.random(25) + 1;
 		int colMax = MathUtils.random(6) + 1;
 
 		float x = generaPosX(colMax);
 		for (int col = 0; col < colMax; col++) {
 			for (int ren = 0; ren < renMax; ren++) {
-				createMoneda(worldBox, arrMonedas, x + (col * (WIDTH + SEPARACION_MONEDAS)), y + (ren * (HEIGHT + SEPARACION_MONEDAS)));
+				createCoins(worldBox, arrMonedas, x + (col * (WIDTH + SEPARACION_MONEDAS)), y + (ren * (HEIGHT + SEPARACION_MONEDAS)));
 			}
 		}
 
@@ -82,9 +82,9 @@ public class Moneda implements Poolable {
 		return x;
 	}
 
-	private static void createMoneda(World worldBox, Array<Moneda> arrMonedas, float x, float y) {
-		Moneda oMoneda = Pools.obtain(Moneda.class);
-		oMoneda.init(x, y);
+	private static void createCoins(World worldBox, Array<Coin> arrMonedas, float x, float y) {
+		Coin coin = Pools.obtain(Coin.class);
+		coin.init(x, y);
 
 		BodyDef bd = new BodyDef();
 		bd.position.x = x;
@@ -99,9 +99,9 @@ public class Moneda implements Poolable {
 		fixture.shape = shape;
 		fixture.isSensor = true;
 		oBody.createFixture(fixture);
-		oBody.setUserData(oMoneda);
+		oBody.setUserData(coin);
 		shape.dispose();
-		arrMonedas.add(oMoneda);
+		arrMonedas.add(coin);
 	}
 
 	@Override

@@ -13,170 +13,168 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.superjumper.Assets;
 import com.nopalsoft.superjumper.MainSuperJumper;
 import com.nopalsoft.superjumper.Settings;
-import com.nopalsoft.superjumper.scene2d.VentanaGameover;
-import com.nopalsoft.superjumper.scene2d.VentanaPause;
 import com.nopalsoft.superjumper.screens.Screens;
 
 public class GameScreen extends Screens {
 
-	static final int STATE_RUNNING = 2;
-	static final int STATE_PAUSED = 3;
-	static final int STATE_GAME_OVER = 4;
-	static int state;
+    static final int STATE_RUNNING = 2;
+    static final int STATE_PAUSED = 3;
+    static final int STATE_GAME_OVER = 4;
+    static int state;
 
-	public WorldGame oWorld;
-	WorldGameRender renderer;
+    public WorldGame oWorld;
+    WorldGameRender renderer;
 
-	Vector3 touchPositionWorldCoords;
-	boolean didFire;
+    Vector3 touchPositionWorldCoords;
+    boolean didFire;
 
-	Label lbDistancia, lbMonedas, lbBullets;
+    Label lbDistance, lbCoins, lbBullets;
 
-	Button btPause;
+    Button btPause;
 
-	VentanaPause ventanPause;
+    com.nopalsoft.superjumper.scene2d.PauseScreen ventanPause;
 
-	public GameScreen(MainSuperJumper game) {
-		super(game);
+    public GameScreen(MainSuperJumper game) {
+        super(game);
 
-		ventanPause = new VentanaPause(this);
+        ventanPause = new com.nopalsoft.superjumper.scene2d.PauseScreen(this);
 
-		oWorld = new WorldGame();
-		renderer = new WorldGameRender(batcher, oWorld);
-		touchPositionWorldCoords = new Vector3();
+        oWorld = new WorldGame();
+        renderer = new WorldGameRender(batcher, oWorld);
+        touchPositionWorldCoords = new Vector3();
 
-		state = STATE_RUNNING;
-		Settings.numeroVecesJugadas++;
+        state = STATE_RUNNING;
+        Settings.numeroVecesJugadas++;
 
-		// stage.setDebugAll(true);
+        // stage.setDebugAll(true);
 
-		Table menuMarcador = new Table();
-		menuMarcador.setSize(SCREEN_WIDTH, 40);
-		menuMarcador.setY(SCREEN_HEIGHT - menuMarcador.getHeight());
+        Table menuMarcador = new Table();
+        menuMarcador.setSize(SCREEN_WIDTH, 40);
+        menuMarcador.setY(SCREEN_HEIGHT - menuMarcador.getHeight());
 
-		lbMonedas = new Label("", Assets.labelStyleGrande);
-		lbDistancia = new Label("", Assets.labelStyleGrande);
-		lbBullets = new Label("", Assets.labelStyleGrande);
+        lbCoins = new Label("", Assets.labelStyleGrande);
+        lbDistance = new Label("", Assets.labelStyleGrande);
+        lbBullets = new Label("", Assets.labelStyleGrande);
 
-		menuMarcador.add(new Image(new TextureRegionDrawable(Assets.coin))).left().padLeft(5);
-		menuMarcador.add(lbMonedas).left();
+        menuMarcador.add(new Image(new TextureRegionDrawable(Assets.coin))).left().padLeft(5);
+        menuMarcador.add(lbCoins).left();
 
-		menuMarcador.add(lbDistancia).center().expandX();
+        menuMarcador.add(lbDistance).center().expandX();
 
-		menuMarcador.add(new Image(new TextureRegionDrawable(Assets.gun))).height(45).width(30).left();
-		menuMarcador.add(lbBullets).left().padRight(5);
+        menuMarcador.add(new Image(new TextureRegionDrawable(Assets.gun))).height(45).width(30).left();
+        menuMarcador.add(lbBullets).left().padRight(5);
 
-		btPause = new Button(Assets.btPause);
-		btPause.setSize(35, 35);
-		btPause.setPosition(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80);
-		addEfectoPress(btPause);
-		btPause.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				setPaused();
-			}
-		});
+        btPause = new Button(Assets.btPause);
+        btPause.setSize(35, 35);
+        btPause.setPosition(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80);
+        addEfectoPress(btPause);
+        btPause.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setPaused();
+            }
+        });
 
-		stage.addActor(menuMarcador);
-		stage.addActor(btPause);
+        stage.addActor(menuMarcador);
+        stage.addActor(btPause);
 
-	}
+    }
 
-	@Override
-	public void update(float delta) {
-		switch (state) {
-		case STATE_RUNNING:
-			updateRunning(delta);
-			break;
-		case STATE_GAME_OVER:
-			updateGameOver(delta);
-			break;
-		}
+    @Override
+    public void update(float delta) {
+        switch (state) {
+            case STATE_RUNNING:
+                updateRunning(delta);
+                break;
+            case STATE_GAME_OVER:
+                updateGameOver(delta);
+                break;
+        }
 
-	}
+    }
 
-	private void updateRunning(float delta) {
+    private void updateRunning(float delta) {
 
-		float acelX;
+        float acelX;
 
-		acelX = -(Gdx.input.getAccelerometerX() / 3f);
+        acelX = -(Gdx.input.getAccelerometerX() / 3f);
 
-		if (Gdx.input.isKeyPressed(Keys.A))
-			acelX = -1;
-		else if (Gdx.input.isKeyPressed(Keys.D))
-			acelX = 1;
+        if (Gdx.input.isKeyPressed(Keys.A))
+            acelX = -1;
+        else if (Gdx.input.isKeyPressed(Keys.D))
+            acelX = 1;
 
-		oWorld.update(delta, acelX, didFire, touchPositionWorldCoords);
+        oWorld.update(delta, acelX, didFire, touchPositionWorldCoords);
 
-		lbMonedas.setText("x" + oWorld.coins);
-		lbDistancia.setText("Score " + oWorld.distanciaMax);
-		lbBullets.setText("x" + Settings.numBullets);
+        lbCoins.setText("x" + oWorld.coins);
+        lbDistance.setText("Score " + oWorld.distanciaMax);
+        lbBullets.setText("x" + Settings.numBullets);
 
-		if (oWorld.state == WorldGame.STATE_GAMEOVER) {
-			setGameover();
-		}
+        if (oWorld.state == WorldGame.STATE_GAMEOVER) {
+            setGameover();
+        }
 
-		didFire = false;
+        didFire = false;
 
-	}
+    }
 
-	private void updateGameOver(float delta) {
-		oWorld.update(delta, 0, false, touchPositionWorldCoords);
+    private void updateGameOver(float delta) {
+        oWorld.update(delta, 0, false, touchPositionWorldCoords);
 
-	}
+    }
 
-	@Override
-	public void draw(float delta) {
+    @Override
+    public void draw(float delta) {
 
-		batcher.begin();
-		batcher.draw(Assets.fondo, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		batcher.end();
+        batcher.begin();
+        batcher.draw(Assets.fondo, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        batcher.end();
 
-		if (state != STATE_PAUSED) {
-			renderer.render();
-		}
+        if (state != STATE_PAUSED) {
+            renderer.render();
+        }
 
-	}
+    }
 
-	private void setPaused() {
-		if (state == STATE_RUNNING) {
-			state = STATE_PAUSED;
-			ventanPause.show(stage);
-		}
-	}
+    private void setPaused() {
+        if (state == STATE_RUNNING) {
+            state = STATE_PAUSED;
+            ventanPause.show(stage);
+        }
+    }
 
-	public void setRunning() {
-		state = STATE_RUNNING;
+    public void setRunning() {
+        state = STATE_RUNNING;
 
-	}
+    }
 
-	private void setGameover() {
-		state = STATE_GAME_OVER;
-		Settings.setBestScore(oWorld.distanciaMax);
-		new VentanaGameover(this).show(stage);
+    private void setGameover() {
+        state = STATE_GAME_OVER;
+        Settings.setBestScore(oWorld.distanciaMax);
+        new com.nopalsoft.superjumper.scene2d.BaseScreenGameover(this).show(stage);
 
-	}
+    }
 
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		touchPositionWorldCoords.set(screenX, 0, 0);// Siempre como si hubiera tocado la parte mas alta de la pantalla
-		renderer.unprojectToWorldCoords(touchPositionWorldCoords);
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touchPositionWorldCoords.set(screenX, 0, 0);// Siempre como si hubiera tocado la parte mas alta de la pantalla
+        renderer.unprojectToWorldCoords(touchPositionWorldCoords);
 
-		// oCam.unproject(touchPoint);
-		didFire = true;
-		return false;
-	}
+        // oCam.unproject(touchPoint);
+        didFire = true;
+        return false;
+    }
 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-			if (ventanPause.isVisible())
-				ventanPause.hide();
-			else
-				setPaused();
-			return true;
-		}
-		return super.keyDown(keycode);
-	}
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+            if (ventanPause.isVisible())
+                ventanPause.hide();
+            else
+                setPaused();
+            return true;
+        }
+        return super.keyDown(keycode);
+    }
 
 }

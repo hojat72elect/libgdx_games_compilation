@@ -223,9 +223,9 @@ public class WorldGameRender {
 	}
 
 	private void renderCoins() {
-        for (com.nopalsoft.superjumper.objetos.Moneda obj : oWorld.arrMonedas) {
-            batcher.draw(com.nopalsoft.superjumper.Assets.coin, obj.position.x - com.nopalsoft.superjumper.objetos.Moneda.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Moneda.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Moneda.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objetos.Moneda.DRAW_HEIGHT);
+        for (com.nopalsoft.superjumper.objetos.Coin obj : oWorld.arrMonedas) {
+            batcher.draw(com.nopalsoft.superjumper.Assets.coin, obj.position.x - com.nopalsoft.superjumper.objetos.Coin.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objetos.Coin.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objetos.Coin.DRAW_WIDTH,
+                    com.nopalsoft.superjumper.objetos.Coin.DRAW_HEIGHT);
         }
 
 	}
