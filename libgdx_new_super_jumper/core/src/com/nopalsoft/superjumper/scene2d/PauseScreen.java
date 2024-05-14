@@ -18,9 +18,9 @@ public class PauseScreen extends BaseScreen {
 
 	public PauseScreen(final GameScreen currentScreen) {
 		super(currentScreen, 350, 280, 300);
-		oWorld = currentScreen.oWorld;
+		oWorld = currentScreen.myWorldGame;
 
-		Label lbShop = new Label("Pause", Assets.labelStyleGrande);
+		Label lbShop = new Label("Pause", Assets.labelStyleBig);
 		lbShop.setFontScale(1.5f);
 		lbShop.setAlignment(Align.center);
 		lbShop.setPosition(getWidth() / 2f - lbShop.getWidth() / 2f, 230);
@@ -44,7 +44,7 @@ public class PauseScreen extends BaseScreen {
 	}
 
 	private void initButtons() {
-		btMenu = new TextButton("Menu", Assets.textButtonStyleGrande);
+		btMenu = new TextButton("Menu", Assets.textButtonStyleBig);
 		btMenu.pad(15);
 
 		screen.addEfectoPress(btMenu);
@@ -55,7 +55,7 @@ public class PauseScreen extends BaseScreen {
 			}
 		});
 
-		btResume = new TextButton("Resume", Assets.textButtonStyleGrande);
+		btResume = new TextButton("Resume", Assets.textButtonStyleBig);
 		btResume.pad(15);
 
 		screen.addEfectoPress(btResume);

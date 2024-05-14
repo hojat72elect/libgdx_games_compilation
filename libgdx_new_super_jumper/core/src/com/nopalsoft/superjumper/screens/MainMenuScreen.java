@@ -24,7 +24,7 @@ public class MainMenuScreen extends Screens {
 	public MainMenuScreen(final MainSuperJumper game) {
 		super(game);
 
-		titulo = new Image(Assets.titulo);
+		titulo = new Image(Assets.settings);
 		titulo.setPosition(SCREEN_WIDTH / 2f - titulo.getWidth() / 2f, 800);
 
 		titulo.addAction(Actions.sequence(Actions.moveTo(titulo.getX(), 600, 1, Interpolation.bounceOut), Actions.run(() -> stage.addActor(lbBestScore))));
@@ -34,7 +34,7 @@ public class MainMenuScreen extends Screens {
 		lbBestScore.getColor().a = 0;
 		lbBestScore.addAction(Actions.alpha(1, .25f));
 
-		btPlay = new TextButton("Play", Assets.textButtonStyleGrande);
+		btPlay = new TextButton("Play", Assets.textButtonStyleBig);
 		btPlay.setPosition(SCREEN_WIDTH / 2f - btPlay.getWidth() / 2f, 440);
 		btPlay.pad(10);
 		btPlay.pack();
@@ -46,21 +46,21 @@ public class MainMenuScreen extends Screens {
 			}
 		});
 
-		btShop = new TextButton("Shop", Assets.textButtonStyleGrande);
+		btShop = new TextButton("Shop", Assets.textButtonStyleBig);
 		btShop.setPosition(SCREEN_WIDTH / 2f - btShop.getWidth() / 2f, 340);
 		btShop.pad(10);
 		btShop.pack();
 		addEfectoPress(btShop);
 
 
-		btRate = new TextButton("Rate", Assets.textButtonStyleGrande);
+		btRate = new TextButton("Rate", Assets.textButtonStyleBig);
 		btRate.setPosition(SCREEN_WIDTH / 2f - btRate.getWidth() / 2f, 340);
 		btRate.pad(10);
 		btRate.pack();
 		addEfectoPress(btRate);
 
 
-		btLeaderboard = new TextButton("Leaderboard", Assets.textButtonStyleGrande);
+		btLeaderboard = new TextButton("Leaderboard", Assets.textButtonStyleBig);
 		btLeaderboard.pad(10);
 		btLeaderboard.pack();
 		btLeaderboard.setPosition(SCREEN_WIDTH / 2f - btLeaderboard.getWidth() / 2f, 240);
@@ -82,12 +82,12 @@ public class MainMenuScreen extends Screens {
 	@Override
 	public void draw(float delta) {
 		batcher.begin();
-		batcher.draw(Assets.fondo, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		batcher.draw(Assets.plataformaBeigeBroken, 100, 100, 125, 45);
-		batcher.draw(Assets.plataformaBlue, 350, 280, 125, 45);
-		batcher.draw(Assets.plataformaMulticolor, 25, 430, 125, 45);
-		batcher.draw(Assets.personajeJump, 25, 270, 75, 80);
-		batcher.draw(Assets.nubeHappy, 350, 500, 95, 60);
+		batcher.draw(Assets.background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		batcher.draw(Assets.platformBeigeBroken, 100, 100, 125, 45);
+		batcher.draw(Assets.platformBlue, 350, 280, 125, 45);
+		batcher.draw(Assets.platformMulticolor, 25, 430, 125, 45);
+		batcher.draw(Assets.characterJump, 25, 270, 75, 80);
+		batcher.draw(Assets.cloudHappy, 350, 500, 95, 60);
 		batcher.end();
 	}
 

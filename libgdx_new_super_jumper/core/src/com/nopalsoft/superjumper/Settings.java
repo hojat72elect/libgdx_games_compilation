@@ -12,7 +12,7 @@ public class Settings {
 	public static boolean didLikeFacebook;
 	public static boolean didRate;
 
-	public static int numeroVecesJugadas;
+	public static int numberOfTimesPlayed;
 
 	public static int coinsTotal;
 	public static int numBullets;
@@ -35,7 +35,7 @@ public class Settings {
 		pref.putBoolean("didLikeFacebook", didLikeFacebook);
 		pref.putBoolean("didRate", didRate);
 
-		pref.putInteger("numeroVecesJugadas", numeroVecesJugadas);
+		pref.putInteger("numeroVecesJugadas", numberOfTimesPlayed);
 		pref.putInteger("coinsTotal", coinsTotal);
 		pref.putInteger("numBullets", numBullets);
 		pref.putInteger("bestScore", bestScore);
@@ -58,7 +58,7 @@ public class Settings {
 		didLikeFacebook = pref.getBoolean("didLikeFacebook", false);
 		didRate = pref.getBoolean("didRate", false);
 
-		numeroVecesJugadas = pref.getInteger("numeroVecesJugadas", 0);
+		numberOfTimesPlayed = pref.getInteger("numeroVecesJugadas", 0);
 
 		coinsTotal = pref.getInteger("coinsTotal", 0);
 		numBullets = pref.getInteger("numBullets", 30);

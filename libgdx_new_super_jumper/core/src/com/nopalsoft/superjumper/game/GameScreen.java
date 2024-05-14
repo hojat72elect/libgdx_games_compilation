@@ -14,6 +14,7 @@ import com.nopalsoft.superjumper.Assets;
 import com.nopalsoft.superjumper.MainSuperJumper;
 import com.nopalsoft.superjumper.Settings;
 import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.scene2d.PauseScreen;
 
 public class GameScreen extends Screens {
 
@@ -22,61 +23,59 @@ public class GameScreen extends Screens {
     static final int STATE_GAME_OVER = 4;
     static int state;
 
-    public WorldGame oWorld;
+    public WorldGame myWorldGame;
     WorldGameRender renderer;
 
     Vector3 touchPositionWorldCoords;
     boolean didFire;
 
-    Label lbDistance, lbCoins, lbBullets;
+    Label labelDistance, labelCoins, labelBullets;
 
-    Button btPause;
+    Button buttonPause;
 
-    com.nopalsoft.superjumper.scene2d.PauseScreen ventanPause;
+    PauseScreen pauseScreen;
 
     public GameScreen(MainSuperJumper game) {
         super(game);
 
-        ventanPause = new com.nopalsoft.superjumper.scene2d.PauseScreen(this);
+        pauseScreen = new PauseScreen(this);
 
-        oWorld = new WorldGame();
-        renderer = new WorldGameRender(batcher, oWorld);
+        myWorldGame = new WorldGame();
+        renderer = new WorldGameRender(batcher, myWorldGame);
         touchPositionWorldCoords = new Vector3();
 
         state = STATE_RUNNING;
-        Settings.numeroVecesJugadas++;
+        Settings.numberOfTimesPlayed++;
 
-        // stage.setDebugAll(true);
+        Table menuMarker = new Table();
+        menuMarker.setSize(SCREEN_WIDTH, 40);
+        menuMarker.setY(SCREEN_HEIGHT - menuMarker.getHeight());
 
-        Table menuMarcador = new Table();
-        menuMarcador.setSize(SCREEN_WIDTH, 40);
-        menuMarcador.setY(SCREEN_HEIGHT - menuMarcador.getHeight());
+        labelCoins = new Label("", Assets.labelStyleBig);
+        labelDistance = new Label("", Assets.labelStyleBig);
+        labelBullets = new Label("", Assets.labelStyleBig);
 
-        lbCoins = new Label("", Assets.labelStyleGrande);
-        lbDistance = new Label("", Assets.labelStyleGrande);
-        lbBullets = new Label("", Assets.labelStyleGrande);
+        menuMarker.add(new Image(new TextureRegionDrawable(Assets.coin))).left().padLeft(5);
+        menuMarker.add(labelCoins).left();
 
-        menuMarcador.add(new Image(new TextureRegionDrawable(Assets.coin))).left().padLeft(5);
-        menuMarcador.add(lbCoins).left();
+        menuMarker.add(labelDistance).center().expandX();
 
-        menuMarcador.add(lbDistance).center().expandX();
+        menuMarker.add(new Image(new TextureRegionDrawable(Assets.gun))).height(45).width(30).left();
+        menuMarker.add(labelBullets).left().padRight(5);
 
-        menuMarcador.add(new Image(new TextureRegionDrawable(Assets.gun))).height(45).width(30).left();
-        menuMarcador.add(lbBullets).left().padRight(5);
-
-        btPause = new Button(Assets.btPause);
-        btPause.setSize(35, 35);
-        btPause.setPosition(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80);
-        addEfectoPress(btPause);
-        btPause.addListener(new ClickListener() {
+        buttonPause = new Button(Assets.btPause);
+        buttonPause.setSize(35, 35);
+        buttonPause.setPosition(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80);
+        addEfectoPress(buttonPause);
+        buttonPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setPaused();
             }
         });
 
-        stage.addActor(menuMarcador);
-        stage.addActor(btPause);
+        stage.addActor(menuMarker);
+        stage.addActor(buttonPause);
 
     }
 
@@ -104,13 +103,13 @@ public class GameScreen extends Screens {
         else if (Gdx.input.isKeyPressed(Keys.D))
             acelX = 1;
 
-        oWorld.update(delta, acelX, didFire, touchPositionWorldCoords);
+        myWorldGame.update(delta, acelX, didFire, touchPositionWorldCoords);
 
-        lbCoins.setText("x" + oWorld.coins);
-        lbDistance.setText("Score " + oWorld.distanciaMax);
-        lbBullets.setText("x" + Settings.numBullets);
+        labelCoins.setText("x" + myWorldGame.coins);
+        labelDistance.setText("Score " + myWorldGame.distanciaMax);
+        labelBullets.setText("x" + Settings.numBullets);
 
-        if (oWorld.state == WorldGame.STATE_GAMEOVER) {
+        if (myWorldGame.state == WorldGame.STATE_GAMEOVER) {
             setGameover();
         }
 
@@ -119,7 +118,7 @@ public class GameScreen extends Screens {
     }
 
     private void updateGameOver(float delta) {
-        oWorld.update(delta, 0, false, touchPositionWorldCoords);
+        myWorldGame.update(delta, 0, false, touchPositionWorldCoords);
 
     }
 
@@ -127,7 +126,7 @@ public class GameScreen extends Screens {
     public void draw(float delta) {
 
         batcher.begin();
-        batcher.draw(Assets.fondo, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        batcher.draw(Assets.background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         batcher.end();
 
         if (state != STATE_PAUSED) {
@@ -139,7 +138,7 @@ public class GameScreen extends Screens {
     private void setPaused() {
         if (state == STATE_RUNNING) {
             state = STATE_PAUSED;
-            ventanPause.show(stage);
+            pauseScreen.show(stage);
         }
     }
 
@@ -150,7 +149,7 @@ public class GameScreen extends Screens {
 
     private void setGameover() {
         state = STATE_GAME_OVER;
-        Settings.setBestScore(oWorld.distanciaMax);
+        Settings.setBestScore(myWorldGame.distanciaMax);
         new com.nopalsoft.superjumper.scene2d.BaseScreenGameover(this).show(stage);
 
     }
@@ -168,8 +167,8 @@ public class GameScreen extends Screens {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-            if (ventanPause.isVisible())
-                ventanPause.hide();
+            if (pauseScreen.isVisible())
+                pauseScreen.hide();
             else
                 setPaused();
             return true;

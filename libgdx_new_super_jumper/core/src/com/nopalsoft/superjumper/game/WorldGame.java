@@ -18,9 +18,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
 import com.nopalsoft.superjumper.Settings;
-import com.nopalsoft.superjumper.objetos.Bullet;
-import com.nopalsoft.superjumper.objetos.Item;
+import com.nopalsoft.superjumper.objects.Bullet;
+import com.nopalsoft.superjumper.objects.Item;
 import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.objects.PlatformPiece;
 
 public class WorldGame {
 
@@ -34,15 +35,15 @@ public class WorldGame {
 
 	public World oWorldBox;
 
-	com.nopalsoft.superjumper.objetos.Character oPer;
+	com.nopalsoft.superjumper.objects.Character oPer;
 	private final Array<Body> arrBodies;
-	Array<com.nopalsoft.superjumper.objetos.Platform> arrPlataformas;
-	Array<com.nopalsoft.superjumper.objetos.PlatformPiece> arrPiezasPlataformas;
-	Array<com.nopalsoft.superjumper.objetos.Coin> arrMonedas;
-	Array<com.nopalsoft.superjumper.objetos.Enemy> arrEnemigo;
+	Array<com.nopalsoft.superjumper.objects.Platform> arrPlataformas;
+	Array<com.nopalsoft.superjumper.objects.PlatformPiece> arrPiezasPlataformas;
+	Array<com.nopalsoft.superjumper.objects.Coin> arrMonedas;
+	Array<com.nopalsoft.superjumper.objects.Enemy> arrEnemigo;
 	Array<Item> arrItem;
-	Array<com.nopalsoft.superjumper.objetos.Cloud> arrNubes;
-	Array<com.nopalsoft.superjumper.objetos.Ray> arrRayos;
+	Array<com.nopalsoft.superjumper.objects.Cloud> arrNubes;
+	Array<com.nopalsoft.superjumper.objects.Ray> arrRayos;
 	Array<Bullet> arrBullets;
 
 	public int coins;
@@ -71,24 +72,24 @@ public class WorldGame {
 		crearPersonaje();
 
 		mundoCreadoHastaY = oPer.position.y;
-		crearSiguienteParte();
+		createNextPart();
 
 	}
 
-	private void crearSiguienteParte() {
+	private void createNextPart() {
 		float y = mundoCreadoHastaY + 2;
 
 		for (int i = 0; mundoCreadoHastaY < (y + 10); i++) {
 			mundoCreadoHastaY = y + (i * 2);
 
-			crearPlataforma(mundoCreadoHastaY);
-			crearPlataforma(mundoCreadoHastaY);
+			createPlatform(mundoCreadoHastaY);
+			createPlatform(mundoCreadoHastaY);
 
 			if (MathUtils.random(100) < 5)
-				com.nopalsoft.superjumper.objetos.Coin.createCoins(oWorldBox, arrMonedas, mundoCreadoHastaY);
+				com.nopalsoft.superjumper.objects.Coin.createCoins(oWorldBox, arrMonedas, mundoCreadoHastaY);
 
 			if (MathUtils.random(20) < 5)
-				com.nopalsoft.superjumper.objetos.Coin.createUnaMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY + .5f);
+				com.nopalsoft.superjumper.objects.Coin.createUnaMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY + .5f);
 
 			if (MathUtils.random(20) < 5)
 				crearEnemigo(mundoCreadoHastaY + .5f);
@@ -127,7 +128,7 @@ public class WorldGame {
 	}
 
 	private void crearPersonaje() {
-		oPer = new com.nopalsoft.superjumper.objetos.Character(2.4f, .5f);
+		oPer = new com.nopalsoft.superjumper.objects.Character(2.4f, .5f);
 
 		BodyDef bd = new BodyDef();
 		bd.position.set(oPer.position.x, oPer.position.y);
@@ -136,7 +137,7 @@ public class WorldGame {
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.Character.WIDTH / 2f, com.nopalsoft.superjumper.objetos.Character.HEIGTH / 2f);
+		shape.setAsBox(com.nopalsoft.superjumper.objects.Character.WIDTH / 2f, com.nopalsoft.superjumper.objects.Character.HEIGTH / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
@@ -151,9 +152,9 @@ public class WorldGame {
 		shape.dispose();
 	}
 
-	private void crearPlataforma(float y) {
+	private void createPlatform(float y) {
 
-		com.nopalsoft.superjumper.objetos.Platform oPlat = Pools.obtain(com.nopalsoft.superjumper.objetos.Platform.class);
+		com.nopalsoft.superjumper.objects.Platform oPlat = Pools.obtain(com.nopalsoft.superjumper.objects.Platform.class);
 		oPlat.init(MathUtils.random(Screens.WORLD_WIDTH), y, MathUtils.random(1));
 
 		BodyDef bd = new BodyDef();
@@ -163,7 +164,7 @@ public class WorldGame {
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.Platform.WIDTH_NORMAL / 2f, com.nopalsoft.superjumper.objetos.Platform.HEIGHT_NORMAL / 2f);
+		shape.setAsBox(com.nopalsoft.superjumper.objects.Platform.WIDTH_NORMAL / 2f, com.nopalsoft.superjumper.objects.Platform.HEIGHT_NORMAL / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
@@ -177,53 +178,53 @@ public class WorldGame {
 	}
 
 	/**
-	 * La plataforma rompible son 2 cuadros
+	 * The breakable platform is 2 squares.
 	 */
-	private void crearPiezasPlataforma(com.nopalsoft.superjumper.objetos.Platform oPlat) {
-		crearPiezasPlataforma(oPlat, com.nopalsoft.superjumper.objetos.PlatformPiece.TYPE_LEFT);
-		crearPiezasPlataforma(oPlat, com.nopalsoft.superjumper.objetos.PlatformPiece.TYPE_RIGHT);
+	private void createPiecesOfPlatforms(com.nopalsoft.superjumper.objects.Platform oPlat) {
+		createPiecesOfPlatforms(oPlat, com.nopalsoft.superjumper.objects.PlatformPiece.TYPE_LEFT);
+		createPiecesOfPlatforms(oPlat, PlatformPiece.TYPE_RIGHT);
 
 	}
 
-	private void crearPiezasPlataforma(com.nopalsoft.superjumper.objetos.Platform oPla, int tipo) {
-		com.nopalsoft.superjumper.objetos.PlatformPiece oPieza;
+	private void createPiecesOfPlatforms(com.nopalsoft.superjumper.objects.Platform oPla, int type) {
+		PlatformPiece piece;
 		float x;
 		float angularVelocity = 100;
 
-		if (tipo == com.nopalsoft.superjumper.objetos.PlatformPiece.TYPE_LEFT) {
-			x = oPla.position.x - com.nopalsoft.superjumper.objetos.PlatformPiece.WIDTH_NORMAL / 2f;
+		if (type == PlatformPiece.TYPE_LEFT) {
+			x = oPla.position.x - PlatformPiece.WIDTH_NORMAL / 2f;
 			angularVelocity *= -1;
 		}
 		else {
-			x = oPla.position.x + com.nopalsoft.superjumper.objetos.PlatformPiece.WIDTH_NORMAL / 2f;
+			x = oPla.position.x + PlatformPiece.WIDTH_NORMAL / 2f;
 		}
 
-		oPieza = Pools.obtain(com.nopalsoft.superjumper.objetos.PlatformPiece.class);
-		oPieza.init(x, oPla.position.y, tipo, oPla.color);
+		piece = Pools.obtain(PlatformPiece.class);
+		piece.init(x, oPla.position.y, type, oPla.color);
 
 		BodyDef bd = new BodyDef();
-		bd.position.set(oPieza.position.x, oPieza.position.y);
+		bd.position.set(piece.position.x, piece.position.y);
 		bd.type = BodyType.DynamicBody;
 
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.PlatformPiece.WIDTH_NORMAL / 2f, com.nopalsoft.superjumper.objetos.PlatformPiece.HEIGHT_NORMAL / 2f);
+		shape.setAsBox(PlatformPiece.WIDTH_NORMAL / 2f, PlatformPiece.HEIGHT_NORMAL / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
 		fixutre.isSensor = true;
 
 		body.createFixture(fixutre);
-		body.setUserData(oPieza);
+		body.setUserData(piece);
 		body.setAngularVelocity(MathUtils.degRad * angularVelocity);
-		arrPiezasPlataformas.add(oPieza);
+		arrPiezasPlataformas.add(piece);
 
 		shape.dispose();
 	}
 
 	private void crearEnemigo(float y) {
-		com.nopalsoft.superjumper.objetos.Enemy oEn = Pools.obtain(com.nopalsoft.superjumper.objetos.Enemy.class);
+		com.nopalsoft.superjumper.objects.Enemy oEn = Pools.obtain(com.nopalsoft.superjumper.objects.Enemy.class);
 		oEn.init(MathUtils.random(Screens.WORLD_WIDTH), y);
 
 		BodyDef bd = new BodyDef();
@@ -233,7 +234,7 @@ public class WorldGame {
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.Enemy.WIDTH / 2f, com.nopalsoft.superjumper.objetos.Enemy.HEIGHT / 2f);
+		shape.setAsBox(com.nopalsoft.superjumper.objects.Enemy.WIDTH / 2f, com.nopalsoft.superjumper.objects.Enemy.HEIGHT / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
@@ -243,7 +244,7 @@ public class WorldGame {
 		body.setUserData(oEn);
 		body.setGravityScale(0);
 
-		float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objetos.Enemy.VELOCIDAD_X);
+		float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Enemy.VELOCIDAD_X);
 
 		if (MathUtils.randomBoolean())
 			body.setLinearVelocity(velocidad, 0);
@@ -276,7 +277,7 @@ public class WorldGame {
 	}
 
 	private void crearNubes(float y) {
-		com.nopalsoft.superjumper.objetos.Cloud cloud = Pools.obtain(com.nopalsoft.superjumper.objetos.Cloud.class);
+		com.nopalsoft.superjumper.objects.Cloud cloud = Pools.obtain(com.nopalsoft.superjumper.objects.Cloud.class);
 		cloud.init(MathUtils.random(Screens.WORLD_WIDTH), y);
 
 		BodyDef bd = new BodyDef();
@@ -286,7 +287,7 @@ public class WorldGame {
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.Cloud.WIDTH / 2f, com.nopalsoft.superjumper.objetos.Cloud.HEIGHT / 2f);
+		shape.setAsBox(com.nopalsoft.superjumper.objects.Cloud.WIDTH / 2f, com.nopalsoft.superjumper.objects.Cloud.HEIGHT / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
@@ -296,7 +297,7 @@ public class WorldGame {
 		body.setUserData(cloud);
 		body.setGravityScale(0);
 
-		float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objetos.Cloud.VELOCIDAD_X);
+		float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Cloud.VELOCIDAD_X);
 
 		if (MathUtils.randomBoolean())
 			body.setLinearVelocity(velocidad, 0);
@@ -308,7 +309,7 @@ public class WorldGame {
 	}
 
 	private void crearRayo(float x, float y) {
-		com.nopalsoft.superjumper.objetos.Ray ray = Pools.obtain(com.nopalsoft.superjumper.objetos.Ray.class);
+		com.nopalsoft.superjumper.objects.Ray ray = Pools.obtain(com.nopalsoft.superjumper.objects.Ray.class);
 		ray.init(x, y);
 
 		BodyDef bd = new BodyDef();
@@ -318,7 +319,7 @@ public class WorldGame {
 		Body body = oWorldBox.createBody(bd);
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(com.nopalsoft.superjumper.objetos.Ray.WIDTH / 2f, com.nopalsoft.superjumper.objetos.Ray.HEIGHT / 2f);
+		shape.setAsBox(com.nopalsoft.superjumper.objects.Ray.WIDTH / 2f, com.nopalsoft.superjumper.objects.Ray.HEIGHT / 2f);
 
 		FixtureDef fixutre = new FixtureDef();
 		fixutre.shape = shape;
@@ -327,7 +328,7 @@ public class WorldGame {
 		body.createFixture(fixutre);
 		body.setUserData(ray);
 
-		body.setLinearVelocity(0, com.nopalsoft.superjumper.objetos.Ray.Y_SPEED);
+		body.setLinearVelocity(0, com.nopalsoft.superjumper.objects.Ray.Y_SPEED);
 		arrRayos.add(ray);
 
 		shape.dispose();
@@ -370,7 +371,7 @@ public class WorldGame {
 		eliminarObjetos();
 
         if (oPer.position.y + 10 > mundoCreadoHastaY) {
-			crearSiguienteParte();
+			createNextPart();
 		}
 
 		timeToCreateNube += delta;// Actualizo el tiempo para crear una nube
@@ -378,23 +379,23 @@ public class WorldGame {
 		oWorldBox.getBodies(arrBodies);
 
         for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
-            if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Character) {
+            if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Character) {
                 updatePersonaje(body, delta, acelX, fire, touchPositionWorldCoords);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Platform) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Platform) {
                 updatePlataforma(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.PlatformPiece) {
+            } else if (body.getUserData() instanceof PlatformPiece) {
                 updatePiezaPlataforma(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Coin) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Coin) {
                 updateMoneda(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Enemy) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Enemy) {
                 updateEnemigo(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Item) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Item) {
                 updateItem(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Cloud) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Cloud) {
                 updateNube(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Ray) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Ray) {
                 updateRayo(body, delta);
-            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Bullet) {
+            } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Bullet) {
                 updateBullet(body, delta);
             }
 
@@ -405,10 +406,10 @@ public class WorldGame {
 		}
 
 		// Si el personaje esta 5.5f mas abajo de la altura maxima se muere (Se multiplica por 10 porque la distancia se multiplica por 10 )
-		if (oPer.state == com.nopalsoft.superjumper.objetos.Character.STATE_NORMAL && distanciaMax - (5.5f * 10) > (oPer.position.y * 10)) {
+		if (oPer.state == com.nopalsoft.superjumper.objects.Character.STATE_NORMAL && distanciaMax - (5.5f * 10) > (oPer.position.y * 10)) {
 			oPer.die();
 		}
-		if (oPer.state == com.nopalsoft.superjumper.objetos.Character.STATE_DEAD && distanciaMax - (25 * 10) > (oPer.position.y * 10)) {
+		if (oPer.state == com.nopalsoft.superjumper.objects.Character.STATE_DEAD && distanciaMax - (25 * 10) > (oPer.position.y * 10)) {
 			state = STATE_GAMEOVER;
 		}
 
@@ -420,66 +421,66 @@ public class WorldGame {
         for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
             if (!oWorldBox.isLocked()) {
 
-                if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Platform) {
-                    com.nopalsoft.superjumper.objetos.Platform oPlat = (com.nopalsoft.superjumper.objetos.Platform) body.getUserData();
-                    if (oPlat.state == com.nopalsoft.superjumper.objetos.Platform.STATE_DESTROY) {
+                if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Platform) {
+                    com.nopalsoft.superjumper.objects.Platform oPlat = (com.nopalsoft.superjumper.objects.Platform) body.getUserData();
+                    if (oPlat.state == com.nopalsoft.superjumper.objects.Platform.STATE_DESTROY) {
                         arrPlataformas.removeValue(oPlat, true);
                         oWorldBox.destroyBody(body);
-                        if (oPlat.type == com.nopalsoft.superjumper.objetos.Platform.TYPE_BREAKABLE)
-                            crearPiezasPlataforma(oPlat);
+                        if (oPlat.type == com.nopalsoft.superjumper.objects.Platform.TYPE_BREAKABLE)
+                            createPiecesOfPlatforms(oPlat);
                         com.badlogic.gdx.utils.Pools.free(oPlat);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Coin) {
-                    com.nopalsoft.superjumper.objetos.Coin oMon = (com.nopalsoft.superjumper.objetos.Coin) body.getUserData();
-                    if (oMon.state == com.nopalsoft.superjumper.objetos.Coin.STATE_TAKEN) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Coin) {
+                    com.nopalsoft.superjumper.objects.Coin oMon = (com.nopalsoft.superjumper.objects.Coin) body.getUserData();
+                    if (oMon.state == com.nopalsoft.superjumper.objects.Coin.STATE_TAKEN) {
                         arrMonedas.removeValue(oMon, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oMon);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.PlatformPiece) {
-                    com.nopalsoft.superjumper.objetos.PlatformPiece oPiez = (com.nopalsoft.superjumper.objetos.PlatformPiece) body.getUserData();
-                    if (oPiez.state == com.nopalsoft.superjumper.objetos.PlatformPiece.STATE_DESTROY) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.PlatformPiece) {
+                    com.nopalsoft.superjumper.objects.PlatformPiece oPiez = (com.nopalsoft.superjumper.objects.PlatformPiece) body.getUserData();
+                    if (oPiez.state == com.nopalsoft.superjumper.objects.PlatformPiece.STATE_DESTROY) {
                         arrPiezasPlataformas.removeValue(oPiez, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oPiez);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Enemy) {
-                    com.nopalsoft.superjumper.objetos.Enemy oEnemy = (com.nopalsoft.superjumper.objetos.Enemy) body.getUserData();
-                    if (oEnemy.state == com.nopalsoft.superjumper.objetos.Enemy.STATE_DEAD) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Enemy) {
+                    com.nopalsoft.superjumper.objects.Enemy oEnemy = (com.nopalsoft.superjumper.objects.Enemy) body.getUserData();
+                    if (oEnemy.state == com.nopalsoft.superjumper.objects.Enemy.STATE_DEAD) {
                         arrEnemigo.removeValue(oEnemy, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oEnemy);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Item) {
-                    com.nopalsoft.superjumper.objetos.Item oItem = (com.nopalsoft.superjumper.objetos.Item) body.getUserData();
-                    if (oItem.state == com.nopalsoft.superjumper.objetos.Item.STATE_TAKEN) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Item) {
+                    com.nopalsoft.superjumper.objects.Item oItem = (com.nopalsoft.superjumper.objects.Item) body.getUserData();
+                    if (oItem.state == com.nopalsoft.superjumper.objects.Item.STATE_TAKEN) {
                         arrItem.removeValue(oItem, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oItem);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Cloud) {
-                    com.nopalsoft.superjumper.objetos.Cloud cloud = (com.nopalsoft.superjumper.objetos.Cloud) body.getUserData();
-                    if (cloud.state == com.nopalsoft.superjumper.objetos.Cloud.STATE_DEAD) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Cloud) {
+                    com.nopalsoft.superjumper.objects.Cloud cloud = (com.nopalsoft.superjumper.objects.Cloud) body.getUserData();
+                    if (cloud.state == com.nopalsoft.superjumper.objects.Cloud.STATE_DEAD) {
                         arrNubes.removeValue(cloud, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(cloud);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Ray) {
-                    com.nopalsoft.superjumper.objetos.Ray ray = (com.nopalsoft.superjumper.objetos.Ray) body.getUserData();
-                    if (ray.state == com.nopalsoft.superjumper.objetos.Ray.STATE_DESTROY) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Ray) {
+                    com.nopalsoft.superjumper.objects.Ray ray = (com.nopalsoft.superjumper.objects.Ray) body.getUserData();
+                    if (ray.state == com.nopalsoft.superjumper.objects.Ray.STATE_DESTROY) {
                         arrRayos.removeValue(ray, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(ray);
                     }
-                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objetos.Bullet) {
-                    com.nopalsoft.superjumper.objetos.Bullet oBullet = (com.nopalsoft.superjumper.objetos.Bullet) body.getUserData();
-                    if (oBullet.state == com.nopalsoft.superjumper.objetos.Bullet.STATE_DESTROY) {
+                } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Bullet) {
+                    com.nopalsoft.superjumper.objects.Bullet oBullet = (com.nopalsoft.superjumper.objects.Bullet) body.getUserData();
+                    if (oBullet.state == com.nopalsoft.superjumper.objects.Bullet.STATE_DESTROY) {
                         arrBullets.removeValue(oBullet, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oBullet);
                     }
                 } else if (body.getUserData().equals("piso")) {
-                    if (oPer.position.y - 5.5f > body.getPosition().y || oPer.state == com.nopalsoft.superjumper.objetos.Character.STATE_DEAD) {
+                    if (oPer.position.y - 5.5f > body.getPosition().y || oPer.state == com.nopalsoft.superjumper.objects.Character.STATE_DEAD) {
                         oWorldBox.destroyBody(body);
                     }
                 }
@@ -499,7 +500,7 @@ public class WorldGame {
 	}
 
 	private void updatePlataforma(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.Platform obj = (com.nopalsoft.superjumper.objetos.Platform) body.getUserData();
+		com.nopalsoft.superjumper.objects.Platform obj = (com.nopalsoft.superjumper.objects.Platform) body.getUserData();
 		obj.update(delta);
 		if (oPer.position.y - 5.5f > obj.position.y) {
 			obj.setDestroy();
@@ -507,7 +508,7 @@ public class WorldGame {
 	}
 
 	private void updatePiezaPlataforma(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.PlatformPiece obj = (com.nopalsoft.superjumper.objetos.PlatformPiece) body.getUserData();
+		com.nopalsoft.superjumper.objects.PlatformPiece obj = (com.nopalsoft.superjumper.objects.PlatformPiece) body.getUserData();
 		obj.update(delta, body);
 		if (oPer.position.y - 5.5f > obj.position.y) {
 			obj.setDestroy();
@@ -516,7 +517,7 @@ public class WorldGame {
 	}
 
 	private void updateMoneda(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.Coin obj = (com.nopalsoft.superjumper.objetos.Coin) body.getUserData();
+		com.nopalsoft.superjumper.objects.Coin obj = (com.nopalsoft.superjumper.objects.Coin) body.getUserData();
 		obj.update(delta);
 		if (oPer.position.y - 5.5f > obj.position.y) {
 			obj.take();
@@ -525,7 +526,7 @@ public class WorldGame {
 	}
 
 	private void updateEnemigo(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.Enemy obj = (com.nopalsoft.superjumper.objetos.Enemy) body.getUserData();
+		com.nopalsoft.superjumper.objects.Enemy obj = (com.nopalsoft.superjumper.objects.Enemy) body.getUserData();
 		obj.update(body, delta);
 		if (oPer.position.y - 5.5f > obj.position.y) {
 			obj.hit();
@@ -542,7 +543,7 @@ public class WorldGame {
 	}
 
 	private void updateNube(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.Cloud obj = (com.nopalsoft.superjumper.objetos.Cloud) body.getUserData();
+		com.nopalsoft.superjumper.objects.Cloud obj = (com.nopalsoft.superjumper.objects.Cloud) body.getUserData();
 		obj.update(body, delta);
 
 		if (obj.isLighthing) {
@@ -556,7 +557,7 @@ public class WorldGame {
 	}
 
 	private void updateRayo(Body body, float delta) {
-		com.nopalsoft.superjumper.objetos.Ray obj = (com.nopalsoft.superjumper.objetos.Ray) body.getUserData();
+		com.nopalsoft.superjumper.objects.Ray obj = (com.nopalsoft.superjumper.objects.Ray) body.getUserData();
 		obj.update(body, delta);
 
 		if (oPer.position.y - 5.5f > obj.position.y) {
@@ -580,9 +581,9 @@ public class WorldGame {
 			Fixture a = contact.getFixtureA();
 			Fixture b = contact.getFixtureB();
 
-			if (a.getBody().getUserData() instanceof com.nopalsoft.superjumper.objetos.Character)
+			if (a.getBody().getUserData() instanceof com.nopalsoft.superjumper.objects.Character)
 				beginContactPersonaje(b);
-			else if (b.getBody().getUserData() instanceof com.nopalsoft.superjumper.objetos.Character)
+			else if (b.getBody().getUserData() instanceof com.nopalsoft.superjumper.objects.Character)
 				beginContactPersonaje(a);
 
 			if (a.getBody().getUserData() instanceof Bullet)
@@ -598,31 +599,31 @@ public class WorldGame {
 			if (otraCosa.equals("piso")) {
 				oPer.jump();
 
-				if (oPer.state == com.nopalsoft.superjumper.objetos.Character.STATE_DEAD) {
+				if (oPer.state == com.nopalsoft.superjumper.objects.Character.STATE_DEAD) {
 					state = STATE_GAMEOVER;
 				}
 			}
-			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Platform) {
-				com.nopalsoft.superjumper.objetos.Platform obj = (com.nopalsoft.superjumper.objetos.Platform) otraCosa;
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objects.Platform) {
+				com.nopalsoft.superjumper.objects.Platform obj = (com.nopalsoft.superjumper.objects.Platform) otraCosa;
 
 				if (oPer.speed.y <= 0) {
 					oPer.jump();
-					if (obj.type == com.nopalsoft.superjumper.objetos.Platform.TYPE_BREAKABLE) {
+					if (obj.type == com.nopalsoft.superjumper.objects.Platform.TYPE_BREAKABLE) {
 						obj.setDestroy();
 					}
 				}
 
 			}
-			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Coin) {
-				com.nopalsoft.superjumper.objetos.Coin obj = (com.nopalsoft.superjumper.objetos.Coin) otraCosa;
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objects.Coin) {
+				com.nopalsoft.superjumper.objects.Coin obj = (com.nopalsoft.superjumper.objects.Coin) otraCosa;
 				obj.take();
 				coins++;
 				oPer.jump();
 			}
-			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Enemy) {
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objects.Enemy) {
 				oPer.hit();
 			}
-			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Ray) {
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objects.Ray) {
 				oPer.hit();
 			}
 			else if (otraCosa instanceof Item) {
@@ -650,15 +651,15 @@ public class WorldGame {
 			Object otraCosa = fixOtraCosa.getBody().getUserData();
 			Bullet oBullet = (Bullet) fixBullet.getBody().getUserData();
 
-			if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Enemy) {
-				com.nopalsoft.superjumper.objetos.Enemy obj = (com.nopalsoft.superjumper.objetos.Enemy) otraCosa;
+			if (otraCosa instanceof com.nopalsoft.superjumper.objects.Enemy) {
+				com.nopalsoft.superjumper.objects.Enemy obj = (com.nopalsoft.superjumper.objects.Enemy) otraCosa;
 				obj.hit();
 				oBullet.destroy();
 
 			}
 
-			else if (otraCosa instanceof com.nopalsoft.superjumper.objetos.Cloud) {
-				com.nopalsoft.superjumper.objetos.Cloud obj = (com.nopalsoft.superjumper.objetos.Cloud) otraCosa;
+			else if (otraCosa instanceof com.nopalsoft.superjumper.objects.Cloud) {
+				com.nopalsoft.superjumper.objects.Cloud obj = (com.nopalsoft.superjumper.objects.Cloud) otraCosa;
 				obj.hit();
 				oBullet.destroy();
 
@@ -675,9 +676,9 @@ public class WorldGame {
 			Fixture a = contact.getFixtureA();
 			Fixture b = contact.getFixtureB();
 
-			if (a.getBody().getUserData() instanceof com.nopalsoft.superjumper.objetos.Character)
+			if (a.getBody().getUserData() instanceof com.nopalsoft.superjumper.objects.Character)
 				preSolveHero(a, b, contact);
-			else if (b.getBody().getUserData() instanceof com.nopalsoft.superjumper.objetos.Character)
+			else if (b.getBody().getUserData() instanceof com.nopalsoft.superjumper.objects.Character)
 				preSolveHero(b, a, contact);
 
 		}
@@ -685,18 +686,18 @@ public class WorldGame {
 		private void preSolveHero(Fixture fixPersonaje, Fixture otraCosa, Contact contact) {
 			Object oOtraCosa = otraCosa.getBody().getUserData();
 
-			if (oOtraCosa instanceof com.nopalsoft.superjumper.objetos.Platform) {
+			if (oOtraCosa instanceof com.nopalsoft.superjumper.objects.Platform) {
 				// Si va para arriba atraviesa la plataforma
 
-				com.nopalsoft.superjumper.objetos.Platform obj = (com.nopalsoft.superjumper.objetos.Platform) oOtraCosa;
+				com.nopalsoft.superjumper.objects.Platform obj = (com.nopalsoft.superjumper.objects.Platform) oOtraCosa;
 
 				float ponyY = fixPersonaje.getBody().getPosition().y - .30f;
-				float pisY = obj.position.y + com.nopalsoft.superjumper.objetos.Platform.HEIGHT_NORMAL / 2f;
+				float pisY = obj.position.y + com.nopalsoft.superjumper.objects.Platform.HEIGHT_NORMAL / 2f;
 
 				if (ponyY < pisY)
 					contact.setEnabled(false);
 
-				if (obj.type == com.nopalsoft.superjumper.objetos.Platform.TYPE_NORMAL && oPer.state == com.nopalsoft.superjumper.objetos.Character.STATE_DEAD) {
+				if (obj.type == com.nopalsoft.superjumper.objects.Platform.TYPE_NORMAL && oPer.state == com.nopalsoft.superjumper.objects.Character.STATE_DEAD) {
 					contact.setEnabled(false);
 				}
 

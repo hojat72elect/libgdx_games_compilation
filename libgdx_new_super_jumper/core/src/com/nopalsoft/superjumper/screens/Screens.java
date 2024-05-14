@@ -101,7 +101,7 @@ public abstract class Screens extends InputAdapter implements Screen {
             // blackFadeout.remove();
         })));
 
-		Label lbl = new Label("Loading..", Assets.labelStyleGrande);
+		Label lbl = new Label("Loading..", Assets.labelStyleBig);
 		lbl.setPosition(SCREEN_WIDTH / 2f - lbl.getWidth() / 2f, SCREEN_HEIGHT / 2f - lbl.getHeight() / 2f);
 		lbl.getColor().a = 0;
 		lbl.addAction(Actions.fadeIn(.6f));

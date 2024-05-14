@@ -19,9 +19,9 @@ public class BaseScreenGameover extends BaseScreen {
 
 	public BaseScreenGameover(final GameScreen currentScreen) {
 		super(currentScreen, 350, 400, 250);
-		oWorld = currentScreen.oWorld;
+		oWorld = currentScreen.myWorldGame;
 
-		Label lbShop = new Label("Game over!", Assets.labelStyleGrande);
+		Label lbShop = new Label("Game over!", Assets.labelStyleBig);
 		lbShop.setFontScale(1.5f);
 		lbShop.setAlignment(Align.center);
 		lbShop.setPosition(getWidth() / 2f - lbShop.getWidth() / 2f, 350);
@@ -71,7 +71,7 @@ public class BaseScreenGameover extends BaseScreen {
 	}
 
 	private void initButtons() {
-		btMenu = new TextButton("Menu", Assets.textButtonStyleGrande);
+		btMenu = new TextButton("Menu", Assets.textButtonStyleBig);
 		btMenu.pad(15);
 
 		screen.addEfectoPress(btMenu);
@@ -82,7 +82,7 @@ public class BaseScreenGameover extends BaseScreen {
 			}
 		});
 
-		btTryAgain = new TextButton("Try again", Assets.textButtonStyleGrande);
+		btTryAgain = new TextButton("Try again", Assets.textButtonStyleBig);
 		btTryAgain.pad(15);
 
 		screen.addEfectoPress(btTryAgain);
