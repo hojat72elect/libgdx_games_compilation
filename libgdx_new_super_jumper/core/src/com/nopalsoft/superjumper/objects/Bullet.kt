@@ -1,48 +1,44 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
 
-public class Bullet implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DESTROY = 1;
-	public int state;
+class Bullet : Poolable {
+    var state = 0
+    var stateTime = 0f
 
-	public final static float SIZE = .15f;
+    @JvmField
+    val position = Vector2()
 
-	public final static float VELOCIDAD_XY = 8f;
 
-	final public Vector2 position;
-	public float stateTime;
+    override fun reset() {
+        // TODO -> "Not yet implemented"
+    }
 
-	public Bullet() {
-		position = new Vector2();
-	}
+    fun initializeBullet(x: Float, y: Float) {
+        position.set(x, y)
+        stateTime = 0f
+        state = STATE_NORMAL
+    }
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		stateTime = 0;
-		state = STATE_NORMAL;
+    fun update(body: Body, delta: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
+        stateTime += delta
+    }
 
-	}
+    fun destroy() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DESTROY
+            stateTime = 0f
+        }
+    }
 
-	public void update(Body body, float delta) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
-		stateTime += delta;
-
-	}
-
-	public void destroy() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DESTROY;
-			stateTime = 0;
-		}
-	}
-
-	@Override
-	public void reset() {
-	}
-
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DESTROY = 1
+        const val SIZE = .15f
+        const val XY_SPEED = 8f
+    }
 }

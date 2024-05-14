@@ -336,7 +336,7 @@ public class WorldGame {
 
 	private void crearBullet(float origenX, float origenY, float destinoX, float destinoY) {
 		Bullet oBullet = Pools.obtain(Bullet.class);
-		oBullet.init(origenX, origenY);
+		oBullet.initializeBullet(origenX, origenY);
 
 		BodyDef bd = new BodyDef();
 		bd.position.set(oBullet.position.x, oBullet.position.y);
@@ -356,7 +356,7 @@ public class WorldGame {
 		body.setBullet(true);
 
 		Vector2 destino = new Vector2(destinoX, destinoY);
-		destino.sub(oBullet.position).nor().scl(Bullet.VELOCIDAD_XY);
+		destino.sub(oBullet.position).nor().scl(Bullet.XY_SPEED);
 
 		body.setLinearVelocity(destino.x, destino.y);
 
@@ -474,7 +474,7 @@ public class WorldGame {
                     }
                 } else if (body.getUserData() instanceof com.nopalsoft.superjumper.objects.Bullet) {
                     com.nopalsoft.superjumper.objects.Bullet oBullet = (com.nopalsoft.superjumper.objects.Bullet) body.getUserData();
-                    if (oBullet.state == com.nopalsoft.superjumper.objects.Bullet.STATE_DESTROY) {
+                    if (oBullet.getState() == com.nopalsoft.superjumper.objects.Bullet.STATE_DESTROY) {
                         arrBullets.removeValue(oBullet, true);
                         oWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oBullet);
@@ -687,7 +687,7 @@ public class WorldGame {
 			Object oOtraCosa = otraCosa.getBody().getUserData();
 
 			if (oOtraCosa instanceof com.nopalsoft.superjumper.objects.Platform) {
-				// Si va para arriba atraviesa la plataforma
+				// If you go up, cross the platform.
 
 				com.nopalsoft.superjumper.objects.Platform obj = (com.nopalsoft.superjumper.objects.Platform) oOtraCosa;
 

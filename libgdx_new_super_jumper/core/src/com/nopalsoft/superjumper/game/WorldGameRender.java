@@ -8,11 +8,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.superjumper.Assets;
 import com.nopalsoft.superjumper.objects.Character;
-import com.nopalsoft.superjumper.objects.Platform;
-import com.nopalsoft.superjumper.screens.Screens;
-import com.nopalsoft.superjumper.objects.PlatformPiece;
 import com.nopalsoft.superjumper.objects.Coin;
+import com.nopalsoft.superjumper.objects.Enemy;
 import com.nopalsoft.superjumper.objects.Item;
+import com.nopalsoft.superjumper.objects.Platform;
+import com.nopalsoft.superjumper.objects.PlatformPiece;
+import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.objects.Cloud;
+import com.nopalsoft.superjumper.objects.Ray;
+import com.nopalsoft.superjumper.objects.Bullet;
 
 public class WorldGameRender {
     final float WIDTH = Screens.WORLD_WIDTH;
@@ -62,14 +66,12 @@ public class WorldGameRender {
 
         batcher.end();
 
-        // boxRender.render(oWorld.oWorldBox, oCam.combined);
-
     }
 
     private void renderCharacters() {
         AtlasRegion keyframe;
 
-        com.nopalsoft.superjumper.objects.Character obj = oWorld.oPer;
+        Character obj = oWorld.oPer;
 
         if (obj.speed.y > 0)
             keyframe = Assets.characterJump;
@@ -77,8 +79,18 @@ public class WorldGameRender {
             keyframe = Assets.characterStand;
 
         if (obj.speed.x > 0)
-            batcher.draw(keyframe, obj.position.x + Character.DRAW_WIDTH / 2f, obj.position.y - Character.DRAW_HEIGTH / 2f,
-                    -Character.DRAW_WIDTH / 2f, Character.DRAW_HEIGTH / 2f, -Character.DRAW_WIDTH, com.nopalsoft.superjumper.objects.Character.DRAW_HEIGTH, 1, 1, obj.angleDeg);
+            batcher.draw(
+                    keyframe,
+                    obj.position.x + Character.DRAW_WIDTH / 2f,
+                    obj.position.y - Character.DRAW_HEIGTH / 2f,
+                    -Character.DRAW_WIDTH / 2f,
+                    Character.DRAW_HEIGTH / 2f,
+                    -Character.DRAW_WIDTH,
+                    Character.DRAW_HEIGTH,
+                    1,
+                    1,
+                    obj.angleDeg
+            );
 
         else
             batcher.draw(
@@ -95,21 +107,42 @@ public class WorldGameRender {
             );
 
         if (obj.isJetPack) {
-            batcher.draw(Assets.jetpack, obj.position.x - .45f / 2f, obj.position.y - .7f / 2f, .45f, .7f);
+            batcher.draw(
+                    Assets.jetpack,
+                    obj.position.x - .45f / 2f,
+                    obj.position.y - .7f / 2f,
+                    .45f,
+                    .7f
+            );
 
-            TextureRegion fireFrame = Assets.jetpackFire.getKeyFrame(obj.durationJetPack, true);
-            batcher.draw(fireFrame, obj.position.x - .35f / 2f, obj.position.y - .95f, .35f, .6f);
+            TextureRegion fireFrame = Assets.jetpackFire.getKeyFrame(
+                    obj.durationJetPack,
+                    true
+            );
+            batcher.draw(
+                    fireFrame,
+                    obj.position.x - .35f / 2f,
+                    obj.position.y - .95f,
+                    .35f,
+                    .6f
+            );
 
         }
         if (obj.isBubble) {
-            batcher.draw(Assets.bubble, obj.position.x - .5f, obj.position.y - .5f, 1, 1);
+            batcher.draw(
+                    Assets.bubble,
+                    obj.position.x - .5f,
+                    obj.position.y - .5f,
+                    1,
+                    1
+            );
         }
 
     }
 
     private void renderPlatforms() {
         for (Platform obj : oWorld.arrPlataformas) {
-            com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion keyframe = null;
+            AtlasRegion keyframe = null;
 
             if (obj.type == Platform.TYPE_BREAKABLE) {
                 switch (obj.color) {
@@ -180,10 +213,10 @@ public class WorldGameRender {
     }
 
     private void renderPlatformPieces() {
-        for (com.nopalsoft.superjumper.objects.PlatformPiece obj : oWorld.arrPiezasPlataformas) {
-            com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion keyframe = null;
+        for (PlatformPiece obj : oWorld.arrPiezasPlataformas) {
+            AtlasRegion keyframe = null;
 
-            if (obj.type == com.nopalsoft.superjumper.objects.PlatformPiece.TYPE_LEFT) {
+            if (obj.type == PlatformPiece.TYPE_LEFT) {
                 switch (obj.color) {
                     case Platform.COLOR_BEIGE:
                         keyframe = Assets.platformBeigeLeft;
@@ -231,7 +264,7 @@ public class WorldGameRender {
 
             batcher.draw(keyframe, obj.position.x - PlatformPiece.DRAW_WIDTH_NORMAL / 2f, obj.position.y - PlatformPiece.DRAW_HEIGHT_NORMAL
                             / 2f, PlatformPiece.DRAW_WIDTH_NORMAL / 2f, PlatformPiece.DRAW_HEIGHT_NORMAL / 2f, PlatformPiece.DRAW_WIDTH_NORMAL,
-                    com.nopalsoft.superjumper.objects.PlatformPiece.DRAW_HEIGHT_NORMAL, 1, 1, obj.angleDegree);
+                    PlatformPiece.DRAW_HEIGHT_NORMAL, 1, 1, obj.angleDegree);
 
         }
     }
@@ -246,71 +279,71 @@ public class WorldGameRender {
 
     private void renderItems() {
         for (Item obj : oWorld.arrItem) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = null;
+            TextureRegion keyframe = null;
 
             switch (obj.type) {
-                case com.nopalsoft.superjumper.objects.Item.TYPE_BUBBLE:
-                    keyframe = com.nopalsoft.superjumper.Assets.bubbleSmall;
+                case Item.TYPE_BUBBLE:
+                    keyframe = Assets.bubbleSmall;
                     break;
-                case com.nopalsoft.superjumper.objects.Item.TYPE_JETPACK:
-                    keyframe = com.nopalsoft.superjumper.Assets.jetpackSmall;
+                case Item.TYPE_JETPACK:
+                    keyframe = Assets.jetpackSmall;
                     break;
-                case com.nopalsoft.superjumper.objects.Item.TYPE_GUN:
-                    keyframe = com.nopalsoft.superjumper.Assets.gun;
+                case Item.TYPE_GUN:
+                    keyframe = Assets.gun;
                     break;
 
             }
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objects.Item.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objects.Item.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objects.Item.DRAW_WIDTH, com.nopalsoft.superjumper.objects.Item.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - Item.DRAW_WIDTH / 2f, obj.position.y - Item.DRAW_HEIGHT / 2f, Item.DRAW_WIDTH, Item.DRAW_HEIGHT);
 
         }
 
     }
 
     private void renderEnemy() {
-        for (com.nopalsoft.superjumper.objects.Enemy obj : oWorld.arrEnemigo) {
+        for (Enemy obj : oWorld.arrEnemigo) {
             com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = com.nopalsoft.superjumper.Assets.enemy.getKeyFrame(obj.stateTime, true);
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objects.Enemy.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objects.Enemy.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objects.Enemy.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objects.Enemy.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - Enemy.DRAW_WIDTH / 2f, obj.position.y - Enemy.DRAW_HEIGHT / 2f, Enemy.DRAW_WIDTH,
+                    Enemy.DRAW_HEIGHT);
         }
 
     }
 
     private void renderCloud() {
-        for (com.nopalsoft.superjumper.objects.Cloud obj : oWorld.arrNubes) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = null;
+        for (Cloud obj : oWorld.arrNubes) {
+            TextureRegion keyframe = null;
 
             switch (obj.guy) {
-                case com.nopalsoft.superjumper.objects.Cloud.TIPO_ANGRY:
-                    keyframe = com.nopalsoft.superjumper.Assets.cloudAngry;
+                case Cloud.TIPO_ANGRY:
+                    keyframe = Assets.cloudAngry;
                     break;
-                case com.nopalsoft.superjumper.objects.Cloud.TIPO_HAPPY:
-                    keyframe = com.nopalsoft.superjumper.Assets.cloudHappy;
+                case Cloud.TIPO_HAPPY:
+                    keyframe = Assets.cloudHappy;
                     break;
 
             }
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objects.Cloud.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objects.Cloud.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objects.Cloud.DRAW_WIDTH, com.nopalsoft.superjumper.objects.Cloud.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - Cloud.DRAW_WIDTH / 2f, obj.position.y - Cloud.DRAW_HEIGHT / 2f, Cloud.DRAW_WIDTH, Cloud.DRAW_HEIGHT);
 
             if (obj.isBlowing) {
-                batcher.draw(com.nopalsoft.superjumper.Assets.cloudWind, obj.position.x - .35f, obj.position.y - .85f, .6f, .8f);
+                batcher.draw(Assets.cloudWind, obj.position.x - .35f, obj.position.y - .85f, .6f, .8f);
             }
         }
 
     }
 
     private void renderRay() {
-        for (com.nopalsoft.superjumper.objects.Ray obj : oWorld.arrRayos) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = com.nopalsoft.superjumper.Assets.ray.getKeyFrame(obj.stateTime, true);
+        for (Ray obj : oWorld.arrRayos) {
+            TextureRegion keyframe = Assets.ray.getKeyFrame(obj.stateTime, true);
 
-            batcher.draw(keyframe, obj.position.x - com.nopalsoft.superjumper.objects.Ray.DRAW_WIDTH / 2f, obj.position.y - com.nopalsoft.superjumper.objects.Ray.DRAW_HEIGHT / 2f, com.nopalsoft.superjumper.objects.Ray.DRAW_WIDTH, com.nopalsoft.superjumper.objects.Ray.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - Ray.DRAW_WIDTH / 2f, obj.position.y - Ray.DRAW_HEIGHT / 2f, Ray.DRAW_WIDTH, Ray.DRAW_HEIGHT);
         }
     }
 
     private void renderBullet() {
-        for (com.nopalsoft.superjumper.objects.Bullet obj : oWorld.arrBullets) {
-            batcher.draw(com.nopalsoft.superjumper.Assets.bullet, obj.position.x - com.nopalsoft.superjumper.objects.Bullet.SIZE / 2f, obj.position.y - com.nopalsoft.superjumper.objects.Bullet.SIZE / 2f, com.nopalsoft.superjumper.objects.Bullet.SIZE, com.nopalsoft.superjumper.objects.Bullet.SIZE);
+        for (Bullet obj : oWorld.arrBullets) {
+            batcher.draw(Assets.bullet, obj.position.x - Bullet.SIZE / 2f, obj.position.y - Bullet.SIZE / 2f, Bullet.SIZE, Bullet.SIZE);
         }
     }
 
