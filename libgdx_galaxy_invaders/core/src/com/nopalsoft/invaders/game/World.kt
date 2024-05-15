@@ -1,351 +1,359 @@
-package com.nopalsoft.invaders.game;
+package com.nopalsoft.invaders.game
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.utils.Array;
-import com.nopalsoft.invaders.Assets;
-import com.nopalsoft.invaders.frame.AlienShip;
-import com.nopalsoft.invaders.frame.Boost;
-import com.nopalsoft.invaders.frame.Bullet;
-import com.nopalsoft.invaders.frame.Missile;
-import com.nopalsoft.invaders.screens.Screens;
-import com.nopalsoft.invaders.frame.Ship;
-import java.util.Iterator;
-import java.util.Random;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Intersector
+import com.nopalsoft.invaders.Assets
+import com.nopalsoft.invaders.Settings.accelerometerSensitivity
+import com.nopalsoft.invaders.frame.AlienShip
+import com.nopalsoft.invaders.frame.Boost
+import com.nopalsoft.invaders.frame.Bullet
+import com.nopalsoft.invaders.frame.Missile
+import com.nopalsoft.invaders.frame.Ship
+import com.nopalsoft.invaders.screens.Screens
+import java.util.Random
 
-public class World {
+class World {
+    @JvmField
+    var state: Int
 
-    public static final float HEIGHT = Screens.WORLD_SCREEN_HEIGHT;
-    public static final int STATE_RUNNING = 0;
-    public static final int STATE_GAME_OVER = 1;
-    public static final int STATE_PAUSED = 2;
-    public static float WIDTH = Screens.WORLD_SCREEN_WIDTH;
-    int state;
+    @JvmField
+    var myShip = Ship(WIDTH / 2f, 9.5f)
+    var boosts = arrayListOf<Boost>()
+    var missiles = arrayListOf<Missile>()
+    var shipBullets = arrayListOf<Bullet>()
+    var alienBullets = arrayListOf<Bullet>()
+    var alienShips = arrayListOf<AlienShip>()
 
-    com.nopalsoft.invaders.frame.Ship oNave;
-    Array<com.nopalsoft.invaders.frame.Boost> boosts = new Array<>();
-    Array<Missile> missiles = new Array<>();
-    Array<Bullet> shipBullets = new Array<>();
-    Array<Bullet> alienBullets = new Array<>();
-    Array<AlienShip> alienShips = new Array<>();
+    private var oRan: Random
 
-    Random oRan;
-    int score;
-    int currentLevel;
-    int missileCount = 5;
+    @JvmField
+    var score: Int
 
-    int extraChanceDrop;
+    @JvmField
+    var currentLevel: Int
 
-    int maxMissilesRonda, maxBalasRonda;
-    int nivelBala;// Es el nivel en que se encuentra la bala actual cada vez que se agarra un boost aumenta
-    float probs;// Esta variable ira aumentando cada nivel para dar mas dificultad al juego
-    float aumentoVel;
+    @JvmField
+    var missileCount: Int = 5
 
-    public World() {
-        oNave = new com.nopalsoft.invaders.frame.Ship(WIDTH / 2f, 9.5f);
+    private var extraChanceDrop: Int
 
-        oNave.lives = 5;
-        extraChanceDrop = 5;
-        maxMissilesRonda = 5;
-        maxBalasRonda = 5;
+    private var maxMissilesRonda: Int
+    private var maxBalasRonda: Int
+    private var nivelBala: Int =
+        0 // It is the level at which the current bullet is, each time a boost is grabbed it increases.
+    private var probs: Float // This variable will increase each level to make the game more difficult.
+    private var aumentoVel: Float
 
-        score = 0;
-        currentLevel = 0;
-        probs = aumentoVel = 0;
-        oRan = new Random((long) Gdx.app.getGraphics().getDeltaTime() * 10000);
-        state = STATE_RUNNING;
-        agregarAliens();
+    init {
+
+        myShip.lives = 5
+        extraChanceDrop = 5
+        maxMissilesRonda = 5
+        maxBalasRonda = 5
+
+        score = 0
+        currentLevel = 0
+        aumentoVel = 0f
+        probs = aumentoVel
+        oRan = Random(Gdx.app.graphics.deltaTime.toLong() * 10_000)
+        state = STATE_RUNNING
+        agregarAliens()
     }
 
-    private void agregarAliens() {
-        currentLevel++;
+    private fun agregarAliens() {
+        currentLevel++
 
         // Cada 2 niveles aumento los missiles que se pueden disparar
-        if (currentLevel % 2f == 0) {
-            maxMissilesRonda++;
-            maxBalasRonda++;
+        if (currentLevel % 2f == 0f) {
+            maxMissilesRonda++
+            maxBalasRonda++
         }
-        float x;
-        float y = 21f;
-        int vida = 1;
+        var x: Float
+        var y = 21f
+        var vida = 1
 
-        boolean vidaAlterable = false;
+        var vidaAlterable = false
         if (currentLevel > 2) {
-            vidaAlterable = true;
-            probs += 0.2f;
-            aumentoVel += .02f;
+            vidaAlterable = true
+            probs += 0.2f
+            aumentoVel += .02f
         }
 
-        // agregare 25 aliens 5x5 columnas de 5 filas de 5
-        for (int col = 0; col < 6; col++) {
-            y += 3.8F;
-            x = 1.5f;
-            for (int ren = 0; ren < 6; ren++) {
-                if (vidaAlterable)
-                    vida = oRan.nextInt(3) + 1 + (int) probs;//
-                alienShips.add(new AlienShip(vida, aumentoVel, x, y));
-                x += 4.5f;
+        // I will add 25 aliens 5x5 (5 columns and 5 rows)
+        for (col in 0..5) {
+            y += 3.8f
+            x = 1.5f
+            for (ren in 0..5) {
+                if (vidaAlterable) vida = oRan.nextInt(3) + 1 + probs.toInt() //
+
+                alienShips.add(AlienShip(vida, aumentoVel, x, y))
+                x += 4.5f
             }
         }
-
     }
 
-    public void update(float deltaTime, float accelX, boolean seDisparo, boolean seDisparoMissil) {
-        updateNave(deltaTime, accelX);
-        updateAlienShip(deltaTime);// The alien bullets are added right here. They are updated in another method
+    fun update(deltaTime: Float, accelX: Float, seDisparo: Boolean, seDisparoMissil: Boolean) {
+        updateNave(deltaTime, accelX)
+        updateAlienShip(deltaTime) // The alien bullets are added right here. They are updated in another method
 
-        updateBalaNormalYConNivel(deltaTime, seDisparo);
-        updateMissil(deltaTime, seDisparoMissil);
-        updateBalaAlien(deltaTime);
+        updateBalaNormalYConNivel(deltaTime, seDisparo)
+        updateMissil(deltaTime, seDisparoMissil)
+        updateBalaAlien(deltaTime)
         // Boosts are added every time an alienShip is hit. Here they are only updated.
-        updateBoost(deltaTime);
+        updateBoost(deltaTime)
 
-        if (oNave.state != Ship.NAVE_STATE_EXPLODE) {
-            checkCollision();
+        if (myShip.state != Ship.NAVE_STATE_EXPLODE) {
+            checkCollision()
         }
-        checkGameOver();
-        checkLevelEnd();// Cuando ya mate a todos los aliens
+        checkGameOver()
+        checkLevelEnd() // When I have killed all the aliens
     }
 
-    private void updateNave(float deltaTime, float accelX) {
-        if (oNave.state != Ship.NAVE_STATE_EXPLODE) {
-            oNave.velocity.x = -accelX / com.nopalsoft.invaders.Settings.getAccelerometerSensitivity() * Ship.NAVE_MOVE_SPEED;
+    private fun updateNave(deltaTime: Float, accelX: Float) {
+        if (myShip.state != Ship.NAVE_STATE_EXPLODE) {
+            myShip.velocity.x = -accelX / accelerometerSensitivity * Ship.NAVE_MOVE_SPEED
         }
-        oNave.update(deltaTime);
+        myShip.update(deltaTime)
     }
 
-    private void updateAlienShip(float deltaTime) {
-
-        Iterator<AlienShip> it = alienShips.iterator();
+    private fun updateAlienShip(deltaTime: Float) {
+        val it: MutableIterator<AlienShip> = alienShips.iterator()
         while (it.hasNext()) {
-            AlienShip oAlienShip = it.next();
-            oAlienShip.update(deltaTime);
+            val oAlienShip = it.next()
+            oAlienShip.update(deltaTime)
 
-            /* AgregoBalas a los Aliens */
+            /* Add Bullets to Aliens */
             if (oRan.nextInt(5000) < (1 + probs) && oAlienShip.state != AlienShip.EXPLOTING) {
-                float x = oAlienShip.position.x;
-                float y = oAlienShip.position.y;
-                alienBullets.add(new Bullet(x, y));
+                val x = oAlienShip.position.x
+                val y = oAlienShip.position.y
+                alienBullets.add(Bullet(x, y))
             }
 
-            /* Elimino si ya explotaron */
+            /* I delete if they have already exploded */
             if (oAlienShip.state == AlienShip.EXPLOTING && oAlienShip.stateTime > AlienShip.TIEMPO_EXPLODE) {
-                it.remove();
+                it.remove()
             }
 
-            /* Si los alien llegan hacia abajo pierdes automaticamente */
+            /* If the aliens reach the bottom you automatically lose */
             if (oAlienShip.position.y < 9.5f) {
-                state = STATE_GAME_OVER;
+                state = STATE_GAME_OVER
             }
-
         }
-
     }
 
-    private void updateBalaAlien(float deltaTime) {
-        /* Ahora Actualizo //Recalculo len por si se disparo una bala nueva */
+    private fun updateBalaAlien(deltaTime: Float) {
+        /* Now I update and recalculate len in case a new bullet is fired */
 
-        Iterator<Bullet> it = alienBullets.iterator();
+        val it: MutableIterator<Bullet> = alienBullets.iterator()
         while (it.hasNext()) {
-            Bullet oAlienBullet = it.next();
-            if (oAlienBullet.position.y < -2)
-                oAlienBullet.destroyBullet();
-            oAlienBullet.update(deltaTime);
+            val oAlienBullet = it.next()
+            if (oAlienBullet.position.y < -2) oAlienBullet.destroyBullet()
+            oAlienBullet.update(deltaTime)
             if (oAlienBullet.state == Bullet.STATE_EXPLOTANDO) {
-                it.remove();
+                it.remove()
             }
-
         }
-
     }
 
-    private void updateBalaNormalYConNivel(float deltaTime, boolean seDisparo) {
-        float x = oNave.position.x;
-        float y = oNave.position.y + 1;
+    private fun updateBalaNormalYConNivel(deltaTime: Float, seDisparo: Boolean) {
+        val x = myShip.position.x
+        val y = myShip.position.y + 1
 
         if (seDisparo && shipBullets.size < maxBalasRonda) {
-            shipBullets.add(new Bullet(x, y, nivelBala));
+            shipBullets.add(Bullet(x, y, nivelBala))
         }
 
-        Iterator<Bullet> it1 = shipBullets.iterator();
+        val it1: MutableIterator<Bullet> = shipBullets.iterator()
         while (it1.hasNext()) {
-            Bullet oBullet = it1.next();
-            if (oBullet.position.y > HEIGHT + 2)
-                oBullet.destroyBullet();// para que no llegue tan lejos el misil
-            oBullet.update(deltaTime);
+            val oBullet = it1.next()
+            if (oBullet.position.y > HEIGHT + 2) oBullet.destroyBullet() // So that the missile does not go so far
+
+            oBullet.update(deltaTime)
             if (oBullet.state == Bullet.STATE_EXPLOTANDO) {
-                it1.remove();
+                it1.remove()
             }
         }
     }
 
-    private void updateMissil(float deltaTime, boolean seDisparoMissil) {
-        /* Limite de maxMissilesRonda Missiles en una ronda */
-        int len = missiles.size;
+    private fun updateMissil(deltaTime: Float, seDisparoMissil: Boolean) {
+        // Limit of maxMissilesRound Missiles in a round
+        val len = missiles.size
         if (seDisparoMissil && missileCount > 0 && len < maxMissilesRonda) {
-            float x = oNave.position.x;
-            float y = oNave.position.y + 1;
-            missiles.add(new Missile(x, y));
-            missileCount--;
-            Assets.playSound(Assets.missileFire, 0.15f);
+            val x = myShip.position.x
+            val y = myShip.position.y + 1
+            missiles.add(Missile(x, y))
+            missileCount--
+            Assets.playSound(Assets.missileFire, 0.15f)
         }
 
-        /* Ahora Actualizo. Recalculo len por si se disparo una missil nueva */
-        Iterator<Missile> it = missiles.iterator();
+        // Now I update. Len recalculate in case a new missile was fired.
+        val it: MutableIterator<Missile> = missiles.iterator()
         while (it.hasNext()) {
-            Missile oMissile = it.next();
-            if (oMissile.position.y > HEIGHT + 2 && oMissile.state != Missile.STATE_EXPLODING)
-                oMissile.hitTarget();
-            oMissile.update(deltaTime);
+            val oMissile = it.next()
+            if (oMissile.position.y > HEIGHT + 2 && oMissile.state != Missile.STATE_EXPLODING) oMissile.hitTarget()
+            oMissile.update(deltaTime)
             if (oMissile.state == Missile.STATE_EXPLODING && oMissile.stateTime > Missile.EXPLODE_TIME) {
-                it.remove();
-
+                it.remove()
             }
-
         }
     }
 
-    private void updateBoost(float deltaTime) {
-        Iterator<Boost> it = boosts.iterator();
+    private fun updateBoost(deltaTime: Float) {
+        val it: MutableIterator<Boost> = boosts.iterator()
         while (it.hasNext()) {
-            Boost oBoost = it.next();
-            oBoost.update(deltaTime);
+            val oBoost = it.next()
+            oBoost.update(deltaTime)
             if (oBoost.position.y < -2) {
-                it.remove();
+                it.remove()
             }
-
         }
     }
 
     /**
-     * ##################################### # Se Checan todo tipo de colisiones # #####################################
+     * All types of collisions are checked
      */
-    private void checkCollision() {
-        checkColisionNaveBalaAliens();// Primero reviso si le dieron a mi nave =(
-        checkColisionAliensBala();// Checo si mis balas les dio a esos weas (Reviso BalaNormal, BalaNivel1, BalaNivel2, BalaNivel3.... etc
-        checkColisionAlienMissil();
-        checkColisionBoostNave();
+    private fun checkCollision() {
+        checkColisionNaveBalaAliens() // First I check if they hit my ship =(
+        checkColisionAliensBala() // I check if my bullets hit those guys (I checkNormal Bullet, Level1 Bullet, Level2 Bullet, Level3 Bullet... etc.
+        checkColisionAlienMissil()
+        checkColisionBoostNave()
     }
 
-    private void checkColisionNaveBalaAliens() {
-        for (Bullet oAlienBullet : alienBullets) {
-            if (Intersector.overlaps(oNave.boundsRectangle, oAlienBullet.boundsRectangle) && oNave.state != Ship.NAVE_STATE_EXPLODE && oNave.state != Ship.NAVE_STATE_BEING_HIT) {
-                oNave.beingHit();
-                oAlienBullet.hitTarget(1);
+    private fun checkColisionNaveBalaAliens() {
+        for (oAlienBullet in alienBullets) {
+            if (Intersector.overlaps(
+                    myShip.boundsRectangle,
+                    oAlienBullet.boundsRectangle
+                ) && myShip.state != Ship.NAVE_STATE_EXPLODE && myShip.state != Ship.NAVE_STATE_BEING_HIT
+            ) {
+                myShip.beingHit()
+                oAlienBullet.hitTarget(1)
             }
         }
     }
 
-    private void checkColisionAliensBala() {
-        for (Bullet oBala : shipBullets) {
-            for (AlienShip oAlien : alienShips) {
-                if (Intersector.overlaps(oAlien.boundsCircle, oBala.boundsRectangle) && (oAlien.state != AlienShip.EXPLOTING)) {
-                    oBala.hitTarget(oAlien.vidasLeft);
-                    oAlien.beingHit();
-                    if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.punctuation;// Actualizo la puntuacion
-                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
-                        Assets.playSound(Assets.explosionSound, 0.6f);
-                    }
-                }
-
-            }
-        }
-    }
-
-    private void checkColisionAlienMissil() {
-        for (Missile oMissile : missiles) {
-            for (AlienShip oAlien : alienShips) {
-                if (oMissile.state == Missile.STATE_TRIGGERED && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsRectangle) && oAlien.state != AlienShip.EXPLOTING) {
-                    oMissile.hitTarget();
-                    oAlien.beingHit();
-                    if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.punctuation;// Actualizo la puntuacion
-                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
-                        Assets.playSound(Assets.explosionSound, 0.6f);
-                    }
-                }
-                // Checo con el radio de la explosion
-                if (oMissile.state == Missile.STATE_EXPLODING && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsCircle) && oAlien.state != AlienShip.EXPLOTING) {
-                    oAlien.beingHit();
-                    if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
-                        score += oAlien.punctuation;// Actualizo la puntuacion
-                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
-                        Assets.playSound(Assets.explosionSound, 0.6f);
+    private fun checkColisionAliensBala() {
+        for (oBala in shipBullets) {
+            for (oAlien in alienShips) {
+                if (Intersector.overlaps(
+                        oAlien.boundsCircle,
+                        oBala.boundsRectangle
+                    ) && (oAlien.state != AlienShip.EXPLOTING)
+                ) {
+                    oBala.hitTarget(oAlien.vidasLeft)
+                    oAlien.beingHit()
+                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                        score += oAlien.punctuation // I update the score
+                        addBoost(
+                            oAlien.position.x,
+                            oAlien.position.y
+                        ) // Here I'm going to see if it gives me any boost or not.
+                        Assets.playSound(Assets.explosionSound, 0.6f)
                     }
                 }
             }
         }
     }
 
-    private void checkColisionBoostNave() {
+    private fun checkColisionAlienMissil() {
+        for (oMissile in missiles) {
+            for (oAlien in alienShips) {
+                if (oMissile.state == Missile.STATE_TRIGGERED && Intersector.overlaps(
+                        oAlien.boundsCircle,
+                        oMissile.boundsRectangle
+                    ) && oAlien.state != AlienShip.EXPLOTING
+                ) {
+                    oMissile.hitTarget()
+                    oAlien.beingHit()
+                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                        score += oAlien.punctuation // I update the score
+                        addBoost(
+                            oAlien.position.x,
+                            oAlien.position.y
+                        ) // Here I'm going to see if it gives me any boost or not.
+                        Assets.playSound(Assets.explosionSound, 0.6f)
+                    }
+                }
+                // Check with the radius of the explosion
+                if (oMissile.state == Missile.STATE_EXPLODING && Intersector.overlaps(
+                        oAlien.boundsCircle,
+                        oMissile.boundsCircle
+                    ) && oAlien.state != AlienShip.EXPLOTING
+                ) {
+                    oAlien.beingHit()
+                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                        score += oAlien.punctuation // I update the score
+                        addBoost(
+                            oAlien.position.x,
+                            oAlien.position.y
+                        ) // Here I'm going to see if it gives me any boost or not.
+                        Assets.playSound(Assets.explosionSound, 0.6f)
+                    }
+                }
+            }
+        }
+    }
 
-        Iterator<Boost> it = boosts.iterator();
+    private fun checkColisionBoostNave() {
+        val it: MutableIterator<Boost> = boosts.iterator()
         while (it.hasNext()) {
-            Boost oBoost = it.next();
-            if (Intersector.overlaps(oBoost.boundsCircle, oNave.boundsRectangle) && oNave.state != Ship.NAVE_STATE_EXPLODE) {
-                switch (oBoost.getType()) {
-                    case Boost.VIDA_EXTRA:
-                        oNave.hitExtraLife();
-                        break;
-                    case Boost.UPGRADE_LEVEL_WEAPONS:
-                        nivelBala++;
-                        break;
-                    case Boost.MISSILE_EXTRA:
-                        missileCount++;
-                        break;
-                    default:
-                    case Boost.SHIELD:
-                        oNave.hitShield();
-                        break;
+            val oBoost = it.next()
+            if (Intersector.overlaps(
+                    oBoost.boundsCircle,
+                    myShip.boundsRectangle
+                ) && myShip.state != Ship.NAVE_STATE_EXPLODE
+            ) {
+                when (oBoost.type) {
+                    Boost.VIDA_EXTRA -> myShip.hitExtraLife()
+                    Boost.UPGRADE_LEVEL_WEAPONS -> nivelBala++
+                    Boost.MISSILE_EXTRA -> missileCount++
+                    Boost.SHIELD -> myShip.hitShield()
+                    else -> myShip.hitShield()
                 }
-                it.remove();
-                Assets.playSound(Assets.coinSound);
+                it.remove()
+                Assets.playSound(Assets.coinSound)
             }
-
         }
-
     }
 
     /**
-     * Recibe las coordenadas en x,y de la nave que acaba de ser destruida El Boost puede ser una vida, armas, escudo, etc
+     * Receives the x,y coordinates of the ship that has just been destroyed. The Boost can be a
+     * life, weapons, shield, etc.
      *
-     * @param x posicion donde va aparecer el boost
-     * @param y posicion donde va aparecer el boost
+     * @param x position where the boost will appear.
+     * @param y position where the boost will appear.
      */
-    private void addBoost(float x, float y) {
-        if (oRan.nextInt(100) < 5 + extraChanceDrop) {// Chances of a boost appearing
-            switch (oRan.nextInt(4)) {
-                case Boost.VIDA_EXTRA:
-                    boosts.add(new Boost(Boost.VIDA_EXTRA, x, y));
-                    break;
-                case 1:
-                    boosts.add(new Boost(Boost.UPGRADE_LEVEL_WEAPONS, x, y));
-                    break;
-                case Boost.MISSILE_EXTRA:
-                    boosts.add(new Boost(Boost.MISSILE_EXTRA, x, y));
-                    break;
-                default:// Boost.SHIELD
-                    boosts.add(new Boost(Boost.SHIELD, x, y));
-                    break;
+    private fun addBoost(x: Float, y: Float) {
+        if (oRan.nextInt(100) < 5 + extraChanceDrop) { // Chances of a boost appearing
+            when (oRan.nextInt(4)) {
+                Boost.VIDA_EXTRA -> boosts.add(Boost(Boost.VIDA_EXTRA, x, y))
+                1 -> boosts.add(Boost(Boost.UPGRADE_LEVEL_WEAPONS, x, y))
+                Boost.MISSILE_EXTRA -> boosts.add(Boost(Boost.MISSILE_EXTRA, x, y))
+                else -> boosts.add(Boost(Boost.SHIELD, x, y))
             }
         }
     }
 
-    private void checkGameOver() {
-        if (oNave.state == Ship.NAVE_STATE_EXPLODE && oNave.stateTime > Ship.EXPLODE_TIME) {
-            oNave.position.x = 200;
-            state = STATE_GAME_OVER;
+    private fun checkGameOver() {
+        if (myShip.state == Ship.NAVE_STATE_EXPLODE && myShip.stateTime > Ship.EXPLODE_TIME) {
+            myShip.position.x = 200f
+            state = STATE_GAME_OVER
         }
     }
 
-    private void checkLevelEnd() {
+    private fun checkLevelEnd() {
         if (alienShips.size == 0) {
-            shipBullets.clear();
-            alienBullets.clear();
-            agregarAliens();
+            shipBullets.clear()
+            alienBullets.clear()
+            agregarAliens()
         }
-
     }
 
+    companion object {
+        const val HEIGHT = Screens.WORLD_SCREEN_HEIGHT
+        const val STATE_RUNNING = 0
+        const val STATE_GAME_OVER = 1
+        const val STATE_PAUSED = 2
+        var WIDTH = Screens.WORLD_SCREEN_WIDTH.toFloat()
+    }
 }

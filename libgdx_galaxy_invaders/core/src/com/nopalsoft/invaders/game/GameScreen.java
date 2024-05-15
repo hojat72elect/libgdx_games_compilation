@@ -225,7 +225,7 @@ public class GameScreen extends Screens {
 
         lbLevel = new Label(Assets.languages.get("level") + " " + oWorld.currentLevel, Assets.styleLabel);
         lbScore = new Label(Assets.languages.get("score") + " " + oWorld.score, Assets.styleLabel);
-        lbNumVidas = new Label("x" + oWorld.oNave.lives, Assets.styleLabel);
+        lbNumVidas = new Label("x" + oWorld.myShip.lives, Assets.styleLabel);
         Image imVida = new Image(Assets.ship);
 
         scoresBar = new Table();
@@ -384,7 +384,7 @@ public class GameScreen extends Screens {
         }
 
         lbScore.setText(Assets.languages.get("score") + " " + oWorld.score);
-        lbNumVidas.setText("x" + oWorld.oNave.lives);
+        lbNumVidas.setText("x" + oWorld.myShip.lives);
 
         if (oWorld.state == World.STATE_GAME_OVER) {
             state = GAME_OVER;

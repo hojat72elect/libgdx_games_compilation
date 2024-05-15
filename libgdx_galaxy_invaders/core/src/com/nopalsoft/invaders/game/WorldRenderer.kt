@@ -58,28 +58,28 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
     }
 
     private fun renderNave() {
-        val keyFrame = if (oWorld.oNave.state == Ship.NAVE_STATE_NORMAL) {
-            if (oWorld.oNave.velocity.x < -3) Assets.shipLeft
-            else if (oWorld.oNave.velocity.x > 3) Assets.shipRight
+        val keyFrame = if (oWorld.myShip.state == Ship.NAVE_STATE_NORMAL) {
+            if (oWorld.myShip.velocity.x < -3) Assets.shipLeft
+            else if (oWorld.myShip.velocity.x > 3) Assets.shipRight
             else Assets.ship
         } else {
-            Assets.explosionFuego.getKeyFrame(oWorld.oNave.stateTime, false)
+            Assets.explosionFuego.getKeyFrame(oWorld.myShip.stateTime, false)
         }
         batch.draw(
             keyFrame,
-            oWorld.oNave.position.x - Ship.DRAW_WIDTH / 2f,
-            oWorld.oNave.position.y - Ship.DRAW_HEIGHT
+            oWorld.myShip.position.x - Ship.DRAW_WIDTH / 2f,
+            oWorld.myShip.position.y - Ship.DRAW_HEIGHT
                     / 2f,
             Ship.DRAW_WIDTH,
             Ship.DRAW_HEIGHT
         )
 
         /* Dibuja el escudo de la nave */
-        if (oWorld.oNave.livesShield > 0) {
+        if (oWorld.myShip.livesShield > 0) {
             batch.draw(
-                Assets.shield.getKeyFrame(oWorld.oNave.stateTime, true),
-                oWorld.oNave.position.x - 5.5f,
-                oWorld.oNave.position.y - 5.5f,
+                Assets.shield.getKeyFrame(oWorld.myShip.stateTime, true),
+                oWorld.myShip.position.x - 5.5f,
+                oWorld.myShip.position.y - 5.5f,
                 11f,
                 11f
             )
@@ -237,7 +237,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         render.projectionMatrix = cam.combined
         render.begin(ShapeType.Line)
 
-        val naveBounds = oWorld.oNave.boundsRectangle
+        val naveBounds = oWorld.myShip.boundsRectangle
         render.rect(naveBounds!!.x, naveBounds.y, naveBounds.width, naveBounds.height)
 
         for (obj in oWorld.alienShips) {
