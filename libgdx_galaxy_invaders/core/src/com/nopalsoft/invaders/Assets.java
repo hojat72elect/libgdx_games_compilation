@@ -202,17 +202,17 @@ public class Assets {
         buttonSignInUp = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInUp")));
         buttonSignInDown = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInDown")));
 
-        /* Ayuda */
+        // Aid
         help1 = atlas1.findRegion("help1");
         clickHelp = atlas1.findRegion("ayudaClick");
 
-        /* Botones */
+        // Buttons
         buttonMusicOn = new TextureRegionDrawable(atlas1.findRegion("btMusica"));
         buttonMusicOff = new TextureRegionDrawable(atlas1.findRegion("btSinMusica"));
         buttonSoundOn = new TextureRegionDrawable(atlas1.findRegion("btSonido"));
         buttonSoundOff = new TextureRegionDrawable(atlas1.findRegion("btSinSonido"));
 
-        /* Ship */
+        // Ship
         shipRight = atlas1.findRegion("naveRight");
         shipLeft = atlas1.findRegion("naveLeft");
         ship = atlas1.findRegion("nave");
@@ -246,9 +246,9 @@ public class Assets {
         balaNormal = atlas1.findRegion("balaNormal");
         bulletNormalEnemy = atlas1.findRegion("balaNormalEnemigo");
 
-        AtlasRegion misil1 = atlas1.findRegion("misil1");
-        AtlasRegion misil2 = atlas1.findRegion("misil2");
-        missile = new Animation<>(0.2f, misil1, misil2);
+        AtlasRegion missile1 = atlas1.findRegion("misil1");
+        AtlasRegion missile2 = atlas1.findRegion("misil2");
+        missile = new Animation<>(0.2f, missile1, missile2);
 
         AtlasRegion superRayo1 = atlas1.findRegion("superRayo1");
         AtlasRegion superRayo2 = atlas1.findRegion("superRayo2");

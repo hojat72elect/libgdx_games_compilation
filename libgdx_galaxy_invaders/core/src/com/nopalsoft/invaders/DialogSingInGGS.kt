@@ -1,96 +1,89 @@
-package com.nopalsoft.invaders;
+package com.nopalsoft.invaders
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
-public class DialogSingInGGS {
-    final MainInvaders game;
-    Stage stage;
-    Dialog dialogSignIn, dialogRate;
+class DialogSingInGGS(val game: MainInvaders, private var stage: Stage) {
+    var dialogSignIn: Dialog? = null
+    var dialogRate: Dialog? = null
 
-    public DialogSingInGGS(MainInvaders game, Stage stage) {
-        this.stage = stage;
-        this.game = game;
-    }
+    fun showDialogSignIn() {
+        dialogSignIn = Dialog(Assets.languages["sign_in"], Assets.styleDialogPause)
+        val labelContent = Label(
+            Assets.languages["sign_in_with_google_to_share_your_scores_and_achievements_with_your_friends"],
+            Assets.styleLabelDialog
+        )
+        labelContent.wrap = true
 
-    public void showDialogSignIn() {
-        dialogSignIn = new Dialog(Assets.languages.get("sign_in"), Assets.styleDialogPause);
-        Label labelContent = new Label(Assets.languages.get("sign_in_with_google_to_share_your_scores_and_achievements_with_your_friends"), Assets.styleLabelDialog);
-        labelContent.setWrap(true);
+        dialogSignIn!!.contentTable.add(labelContent).width(300f).height(120f)
 
-        dialogSignIn.getContentTable().add(labelContent).width(300).height(120);
+        val style =
+            TextButtonStyle(Assets.buttonSignInUp, Assets.buttonSignInDown, null, Assets.font15)
+        val buttonSignIn = TextButton(Assets.languages["sign_in"], style)
+        buttonSignIn.label.wrap = true
+        val buttonNotNow = TextButton(Assets.languages["not_now"], Assets.styleTextButton)
 
-        TextButtonStyle style = new TextButtonStyle(Assets.buttonSignInUp, Assets.buttonSignInDown, null, Assets.font15);
-        TextButton buttonSignIn = new TextButton(Assets.languages.get("sign_in"), style);
-        buttonSignIn.getLabel().setWrap(true);
-        TextButton buttonNotNow = new TextButton(Assets.languages.get("not_now"), Assets.styleTextButton);
-
-        buttonNotNow.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialogSignIn.hide();
+        buttonNotNow.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                dialogSignIn!!.hide()
             }
-        });
+        })
 
-        buttonSignIn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        buttonSignIn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 // TODO: Handle login
-                dialogSignIn.hide();
+                dialogSignIn!!.hide()
             }
-        });
+        })
 
-        dialogSignIn.getButtonTable().add(buttonSignIn).minWidth(140).fill();
-        dialogSignIn.getButtonTable().add(buttonNotNow).minWidth(140).fill();
-        dialogSignIn.show(stage);
+        dialogSignIn!!.buttonTable.add(buttonSignIn).minWidth(140f).fill()
+        dialogSignIn!!.buttonTable.add(buttonNotNow).minWidth(140f).fill()
+        dialogSignIn!!.show(stage)
     }
 
-    public void showDialogRate() {
-        dialogRate = new Dialog(Assets.languages.get("please_rate_the_app"), Assets.styleDialogPause);
-        Label lblContenido = new Label(Assets.languages.get("thank_you_for_playing_if_you_like_this_game_please"), Assets.styleLabelDialog);
-        lblContenido.setWrap(true);
+    fun showDialogRate() {
+        dialogRate = Dialog(Assets.languages["please_rate_the_app"], Assets.styleDialogPause)
+        val lblContenido = Label(
+            Assets.languages["thank_you_for_playing_if_you_like_this_game_please"],
+            Assets.styleLabelDialog
+        )
+        lblContenido.wrap = true
 
-        dialogRate.getContentTable().add(lblContenido).width(300).height(150);
+        dialogRate!!.contentTable.add(lblContenido).width(300f).height(150f)
 
-        TextButton rate = new TextButton(Assets.languages.get("rate"), Assets.styleTextButton);
-        TextButton btNotNow = new TextButton(Assets.languages.get("not_now"), Assets.styleTextButton);
-        rate.setHeight(10);
+        val rate = TextButton(Assets.languages["rate"], Assets.styleTextButton)
+        val btNotNow = TextButton(Assets.languages["not_now"], Assets.styleTextButton)
+        rate.height = 10f
 
-        btNotNow.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialogRate.hide();
+        btNotNow.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                dialogRate!!.hide()
             }
-        });
+        })
 
-        rate.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        rate.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 //TODO: Open appstore
-                dialogRate.hide();
+                dialogRate!!.hide()
             }
-        });
+        })
 
-        dialogRate.getButtonTable().add(rate).minWidth(140).minHeight(40).fill();
-        dialogRate.getButtonTable().add(btNotNow).minWidth(140).minHeight(40).fill();
-        dialogRate.show(stage);
+        dialogRate!!.buttonTable.add(rate).minWidth(140f).minHeight(40f).fill()
+        dialogRate!!.buttonTable.add(btNotNow).minWidth(140f).minHeight(40f).fill()
+        dialogRate!!.show(stage)
     }
 
-    public boolean isDialogShown() {
-        return stage.getActors().contains(dialogRate, true) || stage.getActors().contains(dialogSignIn, true);
-    }
+    val isDialogShown: Boolean
+        get() = stage.actors.contains(dialogRate, true) || stage.actors.contains(dialogSignIn, true)
 
-    public void dismissAll() {
-        if (stage.getActors().contains(dialogRate, true))
-            dialogRate.hide();
+    fun dismissAll() {
+        if (stage.actors.contains(dialogRate, true)) dialogRate!!.hide()
 
-        if (stage.getActors().contains(dialogSignIn, true))
-            dialogSignIn.hide();
-
+        if (stage.actors.contains(dialogSignIn, true)) dialogSignIn!!.hide()
     }
 }

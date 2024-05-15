@@ -1,33 +1,37 @@
-package com.nopalsoft.invaders;
+package com.nopalsoft.invaders
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nopalsoft.invaders.screens.MainMenuScreen;
-import com.nopalsoft.invaders.screens.Screens;
+import com.badlogic.gdx.Game
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.nopalsoft.invaders.screens.MainMenuScreen
+import com.nopalsoft.invaders.screens.Screens
 
-public class MainInvaders extends Game {
+class MainInvaders : Game() {
+    @JvmField
+    var stage: Stage? = null
 
-    public Stage stage;
-    public Assets oAssets;
-    public SpriteBatch spriteBatch;
-    public DialogSingInGGS dialogs;
+    @JvmField
+    var oAssets: Assets? = null
 
-    @Override
-    public void create() {
-        stage = new Stage(new StretchViewport(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT));
-        spriteBatch = new SpriteBatch();
-        dialogs = new DialogSingInGGS(this, stage);
+    @JvmField
+    var spriteBatch: SpriteBatch? = null
 
-        Assets.load();
-        setScreen(new MainMenuScreen(this));// Here I have to put the main thing
+    @JvmField
+    var dialogs: DialogSingInGGS? = null
+
+    override fun create() {
+        stage =
+            Stage(StretchViewport(Screens.SCREEN_WIDTH.toFloat(), Screens.SCREEN_HEIGHT.toFloat()))
+        spriteBatch = SpriteBatch()
+        dialogs = DialogSingInGGS(this, stage!!)
+
+        Assets.load()
+        setScreen(MainMenuScreen(this)) // Here I have to put the main thing
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        getScreen().dispose();
+    override fun dispose() {
+        super.dispose()
+        getScreen().dispose()
     }
-
 }
