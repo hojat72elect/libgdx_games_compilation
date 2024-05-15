@@ -9,7 +9,7 @@ import com.nopalsoft.invaders.frame.Boost;
 import com.nopalsoft.invaders.frame.Bullet;
 import com.nopalsoft.invaders.frame.Missile;
 import com.nopalsoft.invaders.screens.Screens;
-
+import com.nopalsoft.invaders.frame.Ship;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -23,7 +23,7 @@ public class World {
     int state;
 
     com.nopalsoft.invaders.frame.Ship oNave;
-    Array<Boost> boosts = new Array<>();
+    Array<com.nopalsoft.invaders.frame.Boost> boosts = new Array<>();
     Array<Missile> missiles = new Array<>();
     Array<Bullet> shipBullets = new Array<>();
     Array<Bullet> alienBullets = new Array<>();
@@ -31,7 +31,7 @@ public class World {
 
     Random oRan;
     int score;
-    int currentLevel = 0;
+    int currentLevel;
     int missileCount = 5;
 
     int extraChanceDrop;
@@ -92,15 +92,15 @@ public class World {
 
     public void update(float deltaTime, float accelX, boolean seDisparo, boolean seDisparoMissil) {
         updateNave(deltaTime, accelX);
-        updateAlienShip(deltaTime);// <-- aqui mismo se agregan las balas de los aliens. Se updatean en otro metodo
+        updateAlienShip(deltaTime);// The alien bullets are added right here. They are updated in another method
 
         updateBalaNormalYConNivel(deltaTime, seDisparo);
         updateMissil(deltaTime, seDisparoMissil);
         updateBalaAlien(deltaTime);
-        /* Los boost se agregan cada vez que se da hit a un alienShip. Aqui solo se actualizan */
+        // Boosts are added every time an alienShip is hit. Here they are only updated.
         updateBoost(deltaTime);
 
-        if (oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
+        if (oNave.state != Ship.NAVE_STATE_EXPLODE) {
             checkCollision();
         }
         checkGameOver();
@@ -108,8 +108,8 @@ public class World {
     }
 
     private void updateNave(float deltaTime, float accelX) {
-        if (oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
-            oNave.velocity.x = -accelX / com.nopalsoft.invaders.Settings.getAccelerometerSensitivity() * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
+        if (oNave.state != Ship.NAVE_STATE_EXPLODE) {
+            oNave.velocity.x = -accelX / com.nopalsoft.invaders.Settings.getAccelerometerSensitivity() * Ship.NAVE_MOVE_SPEED;
         }
         oNave.update(deltaTime);
     }
@@ -229,7 +229,7 @@ public class World {
 
     private void checkColisionNaveBalaAliens() {
         for (Bullet oAlienBullet : alienBullets) {
-            if (Intersector.overlaps(oNave.boundsRectangle, oAlienBullet.boundsRectangle) && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_BEING_HIT) {
+            if (Intersector.overlaps(oNave.boundsRectangle, oAlienBullet.boundsRectangle) && oNave.state != Ship.NAVE_STATE_EXPLODE && oNave.state != Ship.NAVE_STATE_BEING_HIT) {
                 oNave.beingHit();
                 oAlienBullet.hitTarget(1);
             }
@@ -244,7 +244,7 @@ public class World {
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
                         score += oAlien.punctuation;// Actualizo la puntuacion
-                        agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
+                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
                 }
@@ -261,7 +261,7 @@ public class World {
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
                         score += oAlien.punctuation;// Actualizo la puntuacion
-                        agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
+                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
                 }
@@ -270,7 +270,7 @@ public class World {
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
                         score += oAlien.punctuation;// Actualizo la puntuacion
-                        agregarBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
+                        addBoost(oAlien.position.x, oAlien.position.y);/* Aqui voy a ver si me da algun boost o no */
                         Assets.playSound(Assets.explosionSound, 0.6f);
                     }
                 }
@@ -283,8 +283,8 @@ public class World {
         Iterator<Boost> it = boosts.iterator();
         while (it.hasNext()) {
             Boost oBoost = it.next();
-            if (Intersector.overlaps(oBoost.boundsCircle, oNave.boundsRectangle) && oNave.state != com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE) {
-                switch (oBoost.type) {
+            if (Intersector.overlaps(oBoost.boundsCircle, oNave.boundsRectangle) && oNave.state != Ship.NAVE_STATE_EXPLODE) {
+                switch (oBoost.getType()) {
                     case Boost.VIDA_EXTRA:
                         oNave.hitExtraLife();
                         break;
@@ -313,8 +313,8 @@ public class World {
      * @param x posicion donde va aparecer el boost
      * @param y posicion donde va aparecer el boost
      */
-    private void agregarBoost(float x, float y) {
-        if (oRan.nextInt(100) < 5 + extraChanceDrop) {// Probabilidades de que aparezca un boost
+    private void addBoost(float x, float y) {
+        if (oRan.nextInt(100) < 5 + extraChanceDrop) {// Chances of a boost appearing
             switch (oRan.nextInt(4)) {
                 case Boost.VIDA_EXTRA:
                     boosts.add(new Boost(Boost.VIDA_EXTRA, x, y));
@@ -333,7 +333,7 @@ public class World {
     }
 
     private void checkGameOver() {
-        if (oNave.state == com.nopalsoft.invaders.frame.Ship.NAVE_STATE_EXPLODE && oNave.stateTime > com.nopalsoft.invaders.frame.Ship.EXPLODE_TIME) {
+        if (oNave.state == Ship.NAVE_STATE_EXPLODE && oNave.stateTime > Ship.EXPLODE_TIME) {
             oNave.position.x = 200;
             state = STATE_GAME_OVER;
         }

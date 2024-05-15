@@ -1,30 +1,28 @@
-package com.nopalsoft.invaders.frame;
+package com.nopalsoft.invaders.frame
 
-public class Boost extends DynamicGameObject {
+class Boost(val type: Int, x: Float, y: Float) : DynamicGameObject(x, y, RADIUS) {
 
-    public static final float DRAW_SIZE = 5;
-    public static final float RADIUS = 1f;
-    public static final float SPEED = -10f;
+    private var stateTime = 0
 
-    public static final int VIDA_EXTRA = 0;
-    public static final int UPGRADE_LEVEL_WEAPONS = 1;
-    public static final int MISSILE_EXTRA = 2;
-    public static final int SHIELD = 3;
-    public final int type;
-    int stateTime;
-
-    public Boost(int type, float x, float y) {
-        super(x, y, RADIUS);
-        this.type = type;
-        velocity.add(0, SPEED);
-        stateTime = 0;
+    init {
+        velocity.add(0f, SPEED)
     }
 
-    public void update(float deltaTime) {
-        position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-        boundsCircle.x = position.x;
-        boundsCircle.y = position.y;
-        stateTime += (int) deltaTime;
+    fun update(deltaTime: Float) {
+        position.add(velocity.x * deltaTime, velocity.y * deltaTime)
+        boundsCircle.x = position.x
+        boundsCircle.y = position.y
+        stateTime += deltaTime.toInt()
     }
 
+    companion object {
+        const val DRAW_SIZE = 5f
+        const val RADIUS = 1f
+        const val SPEED = -10f
+
+        const val VIDA_EXTRA = 0
+        const val UPGRADE_LEVEL_WEAPONS = 1
+        const val MISSILE_EXTRA = 2
+        const val SHIELD = 3
+    }
 }

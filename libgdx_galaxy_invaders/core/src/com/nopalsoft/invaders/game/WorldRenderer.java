@@ -162,8 +162,6 @@ public class WorldRenderer {
 
             }
 
-            // Pa cuando era perseguidor
-            // batch.draw(keyFrame, oMissil.position.x-widht/2f, oMissil.position.y-heigth/2f,.5f,.5f,widht,heigth,1,1,oMissil.getVelocity().rotate(-90).angle());
             batch.draw(keyFrame, oMissile.position.x - widht / 2f, oMissile.position.y - heigth / 2f, widht, heigth);
 
         }
@@ -172,10 +170,10 @@ public class WorldRenderer {
     private void renderBoost() {
         int len = oWorld.boosts.size;
         for (int i = 0; i < len; i++) {
-            Boost oBoost = oWorld.boosts.get(i);
+            com.nopalsoft.invaders.frame.Boost oBoost = oWorld.boosts.get(i);
             TextureRegion keyFrame;
 
-            switch (oBoost.type) {
+            switch (oBoost.getType()) {
                 case Boost.VIDA_EXTRA:
                     keyFrame = Assets.upgLife;
 
@@ -209,7 +207,7 @@ public class WorldRenderer {
             render.circle(objBounds.x, objBounds.y, objBounds.radius);
         }
 
-        for (Boost obj : oWorld.boosts) {
+        for (com.nopalsoft.invaders.frame.Boost obj : oWorld.boosts) {
             Circle objBounds = obj.boundsCircle;
             render.circle(objBounds.x, objBounds.y, objBounds.radius);
         }
