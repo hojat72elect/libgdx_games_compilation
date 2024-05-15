@@ -294,18 +294,18 @@ public class Assets {
         missileFire = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/missilFire3.ogg"));
 
         Settings.load();
-        if (Settings.musicEnabled)
+        if (Settings.getMusicEnabled())
             music.play();
 
     }
 
     public static void playSound(Sound sound, float volumen) {
-        if (Settings.soundEnabled)
+        if (Settings.getSoundEnabled())
             sound.play(volumen);
     }
 
     public static void playSound(Sound sound) {
-        if (Settings.soundEnabled)
+        if (Settings.getSoundEnabled())
             sound.play(1);
     }
 

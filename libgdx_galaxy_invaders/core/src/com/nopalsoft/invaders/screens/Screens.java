@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.MainInvaders;
-import com.nopalsoft.invaders.Settings;
 import com.nopalsoft.invaders.game.GameScreen;
 
 public abstract class Screens extends InputAdapter implements Screen {
@@ -91,7 +90,7 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        Settings.save();
+        com.nopalsoft.invaders.Settings.save();
     }
 
     @Override
@@ -101,7 +100,7 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     @Override
     public void resume() {
-        if (Settings.musicEnabled && !Assets.music.isPlaying())
+        if (com.nopalsoft.invaders.Settings.getMusicEnabled() && !Assets.music.isPlaying())
             Assets.music.play();
     }
 

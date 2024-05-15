@@ -104,30 +104,30 @@ public class MainMenuScreen extends Screens {
         buttonSound = new ImageButton(Assets.buttonSoundOn, Assets.buttonSoundOff, Assets.buttonSoundOff);
         buttonSound.setSize(40, 40);
         buttonSound.setPosition(2, 2);
-        if (!Settings.soundEnabled)
+        if (!Settings.getSoundEnabled())
             buttonSound.setChecked(true);
         buttonSound.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Settings.soundEnabled = !Settings.soundEnabled;
+                Settings.setSoundEnabled(!Settings.getSoundEnabled());
                 Assets.playSound(Assets.clickSound);
-                buttonSound.setChecked(!Settings.soundEnabled);
+                buttonSound.setChecked(!Settings.getSoundEnabled());
             }
         });
 
         buttonMusic = new ImageButton(Assets.buttonMusicOn, Assets.buttonMusicOff, Assets.buttonMusicOff);
         buttonMusic.setSize(40, 40);
         buttonMusic.setPosition(44, 2);
-        if (!Settings.musicEnabled)
+        if (!Settings.getMusicEnabled())
             buttonMusic.setChecked(true);
         buttonMusic.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Settings.musicEnabled = !Settings.musicEnabled;
+                Settings.setMusicEnabled(!Settings.getMusicEnabled());
                 Assets.playSound(Assets.clickSound);
-                if (!Settings.musicEnabled) {
+                if (!Settings.getMusicEnabled()) {
                     buttonMusic.setChecked(true);
                     Assets.music.pause();
                 } else {
@@ -156,7 +156,7 @@ public class MainMenuScreen extends Screens {
         stage.addActor(buttonFacebook);
 
 
-        if (Settings.numberOfTimesGameHasBeenPlayed == 0) {
+        if (Settings.getNumberOfTimesGameHasBeenPlayed() == 0) {
             game.dialogs.showDialogSignIn();
 
         }
@@ -164,7 +164,7 @@ public class MainMenuScreen extends Screens {
 
     @Override
     public void update(float delta) {
-        labelHighestScore.setText(Assets.languages.format("local_highest_score", String.valueOf(Settings.highScores[0])));
+        labelHighestScore.setText(Assets.languages.format("local_highest_score", String.valueOf(com.nopalsoft.invaders.Settings.getHighScores()[0])));
     }
 
     @Override

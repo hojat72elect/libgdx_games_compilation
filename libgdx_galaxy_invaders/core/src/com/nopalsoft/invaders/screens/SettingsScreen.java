@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.nopalsoft.invaders.Assets;
 import com.nopalsoft.invaders.MainInvaders;
-import com.nopalsoft.invaders.Settings;
 
 public class SettingsScreen extends Screens {
 
@@ -35,28 +34,28 @@ public class SettingsScreen extends Screens {
     public SettingsScreen(final MainInvaders game) {
         super(game);
 
-        /* Acelerometer Slider */
+        // Accelerometer Slider
         aceletometerSlider = new Slider(1, 20, 1f, false, Assets.styleSlider);
         aceletometerSlider.setPosition(70, 295);
-        aceletometerSlider.setValue(21 - Settings.accelerometerSensitivity);
+        aceletometerSlider.setValue(21 - com.nopalsoft.invaders.Settings.getAccelerometerSensitivity());
         aceletometerSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Settings.accelerometerSensitivity = 21 - (int) ((Slider) actor).getValue();
+                com.nopalsoft.invaders.Settings.setAccelerometerSensitivity(21 - (int) ((Slider) actor).getValue());
 
             }
         });
 
         menuControls = new Table();
-        menuControls.setPosition(SCREEN_WIDTH / 2f - 30, 380);// a la mitad menos 30
+        menuControls.setPosition(SCREEN_WIDTH / 2f - 30, 380);// half minus 30
 
         onScreenControl = new ImageButton(Assets.styleImageButtonStyleCheckBox);
-        if (!Settings.isTiltControl)
+        if (!com.nopalsoft.invaders.Settings.getTiltControlEnabled())
             onScreenControl.setChecked(true);
         onScreenControl.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Settings.isTiltControl = false;
+                com.nopalsoft.invaders.Settings.setTiltControlEnabled(false);
                 onScreenControl.setChecked(true);
                 tiltControl.setChecked(false);
                 setOptions();
@@ -65,12 +64,12 @@ public class SettingsScreen extends Screens {
         });
 
         tiltControl = new ImageButton(Assets.styleImageButtonStyleCheckBox);
-        if (Settings.isTiltControl)
+        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
             tiltControl.setChecked(true);
         tiltControl.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Settings.isTiltControl = true;
+                com.nopalsoft.invaders.Settings.setTiltControlEnabled(true);
                 onScreenControl.setChecked(false);
                 tiltControl.setChecked(true);
                 setOptions();
@@ -166,7 +165,7 @@ public class SettingsScreen extends Screens {
         stage.addActor(btBack);
         stage.addActor(menuControls);
         stage.addActor(aceletometerSlider);
-        if (Settings.isTiltControl)
+        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
             setTiltControls();
         else
             setOnScreenControl();
@@ -188,7 +187,7 @@ public class SettingsScreen extends Screens {
     @Override
     public void update(float delta) {
 
-        if (Settings.isTiltControl) {
+        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled()) {
             accel = Gdx.input.getAccelerometerX();
 
         } else {
@@ -200,7 +199,7 @@ public class SettingsScreen extends Screens {
                     accel = -5f;
             }
         }
-        oNave.velocity.x = -accel / Settings.accelerometerSensitivity * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
+        oNave.velocity.x = -accel / com.nopalsoft.invaders.Settings.getAccelerometerSensitivity() * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
 
         oNave.update(delta);
     }
@@ -221,7 +220,7 @@ public class SettingsScreen extends Screens {
         batcher.begin();
         Assets.font45.draw(batcher, Assets.languages.get("control_options"), 10, 460);
 
-        if (Settings.isTiltControl) {
+        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled()) {
             String tiltSensitive = Assets.languages.get("tilt_sensitive");
             float textWidth = Assets.getTextWidth(Assets.font15, tiltSensitive);
             Assets.font15.draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);

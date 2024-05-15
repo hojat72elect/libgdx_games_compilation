@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.nopalsoft.invaders.Assets;
-import com.nopalsoft.invaders.Settings;
 import com.nopalsoft.invaders.frame.AlienShip;
 import com.nopalsoft.invaders.frame.Boost;
 import com.nopalsoft.invaders.frame.Bullet;
@@ -62,7 +61,7 @@ public class WorldRenderer {
         renderMissil();
         renderBoost();
         batch.end();
-        if (Settings.drawDebugLines) {
+        if (com.nopalsoft.invaders.Settings.drawDebugLines) {
             renderDebugBounds();
         }
     }

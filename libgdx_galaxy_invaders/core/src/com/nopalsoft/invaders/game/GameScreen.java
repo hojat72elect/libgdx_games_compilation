@@ -56,9 +56,9 @@ public class GameScreen extends Screens {
 
     public GameScreen(final MainInvaders game) {
         super(game);
-        Settings.numberOfTimesGameHasBeenPlayed++;
+        Settings.setNumberOfTimesGameHasBeenPlayed(Settings.getNumberOfTimesGameHasBeenPlayed() + 1);
         state = GAME_READY;
-        if (Settings.numberOfTimesGameHasBeenPlayed < 3) {// Se mostrara 2 veces, la vez cero y la vez 1
+        if (Settings.getNumberOfTimesGameHasBeenPlayed() < 3) {// It will be shown 2 times, time zero and time 1.
             state = GAME_TUTORIAL;
             pantallaTutorial = 0;
             setUpTutorial();
@@ -70,7 +70,7 @@ public class GameScreen extends Screens {
         leftButton = new Rectangle(0, 0, 160, 480);
         rightButton = new Rectangle(161, 0, 160, 480);
 
-        // Controles OnScreen
+        // OnScreen Controls
         accel = 0;
         nivel = oWorld.currentLevel;
         btLeft = new ImageButton(Assets.btLeft);
@@ -212,7 +212,7 @@ public class GameScreen extends Screens {
         dialogGameOver.getButtonTable().add(btShare).expand();
 
 
-        if (Settings.numberOfTimesGameHasBeenPlayed % 5 == 0) {
+        if (Settings.getNumberOfTimesGameHasBeenPlayed() % 5 == 0) {
             game.dialogs.showDialogRate();
         }
 
@@ -343,7 +343,7 @@ public class GameScreen extends Screens {
         if (Gdx.input.justTouched() && !game.dialogs.isDialogShown()) {
             state = GAME_RUNNING;
 
-            if (!Settings.isTiltControl) {
+            if (!Settings.getTiltControlEnabled()) {
                 stage.addActor(btLeft);
                 stage.addActor(btRight);
                 stage.addActor(btMissil);
@@ -363,7 +363,7 @@ public class GameScreen extends Screens {
                 accel = -5f;
 
             oWorld.update(deltaTime, accel, seDisparo, seDisparoMissil);
-        } else if (Settings.isTiltControl) {
+        } else if (Settings.getTiltControlEnabled()) {
             if (Gdx.input.justTouched()) {
                 myCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
@@ -434,7 +434,7 @@ public class GameScreen extends Screens {
     }
 
     private void presentTurorial() {
-        if (pantallaTutorial == 0 && Settings.isTiltControl) {
+        if (pantallaTutorial == 0 && Settings.getTiltControlEnabled()) {
             if (rotacion < -20 || rotacion > 20)
                 addRotacion *= -1;
             rotacion += addRotacion;
@@ -453,7 +453,7 @@ public class GameScreen extends Screens {
     }
 
     private void presentRunning() {
-        if (oWorld.missileCount > 0 && Settings.isTiltControl) {
+        if (oWorld.missileCount > 0 && Settings.getTiltControlEnabled()) {
             batcher.draw(Assets.missile.getKeyFrame(0), 1, 1, 8, 28);
             Assets.font15.draw(batcher, "X" + oWorld.missileCount, 10, 25);
         }
@@ -461,7 +461,7 @@ public class GameScreen extends Screens {
 
     @Override
     public void hide() {
-        Settings.addScore(oWorld.score);
+        com.nopalsoft.invaders.Settings.addScore(oWorld.score);
         super.hide();
     }
 
