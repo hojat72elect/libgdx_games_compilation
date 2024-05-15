@@ -17,7 +17,7 @@ class Ship(x: Float, y: Float) : DynamicGameObject(x, y, WIDTH, HEIGHT) {
     var stateTime: Float = 0f
 
     init {
-        // empizas con 1 de shield por si los putos te pegan
+        // You start with 1 shield in case the bastards hit you.
         state = NAVE_STATE_NORMAL
         Gdx.app.log("Estado", "Se creo la nave")
     }
@@ -80,6 +80,6 @@ class Ship(x: Float, y: Float) : DynamicGameObject(x, y, WIDTH, HEIGHT) {
 
         const val EXPLODE_TIME: Float = 0.05f * 19
         const val HIT_TIME: Float =
-            0.05f * 21 // uno mas pa que tenga tantillo tiempo de pensar jaja
+            0.05f * 21 // one more so that I have a little time to think haha.
     }
 }

@@ -32,11 +32,11 @@ public class GameScreen extends Screens {
     public static int state;
     public final int GAME_TUTORIAL = 4;
 
-    int pantallaTutorial; // si esta en la pantalla 1 o en la 2 del tutorial
+    int screenTutorial; // If it is on screen 1 or 2 of the tutorial
     World oWorld;
     WorldRenderer renderer;
-    boolean seDisparo = false;
-    boolean seDisparoMissil = false;
+    boolean isItShotItself = false;
+    boolean didItFireMissile = false;
     Vector3 touchPoint;
     Rectangle leftButton;
     Rectangle rightButton;
@@ -45,14 +45,14 @@ public class GameScreen extends Screens {
     Label lbLevel, lbScore, lbNumVidas;
     ImageButton btPause;
     ImageButton btLeft, btRight, btFire;
-    TextButton btMissil;
-    Group gpTutorial;
-    Label lbTiltYourDevice;
+    TextButton buttonMissile;
+    Group groupTutorial;
+    Label labelTiltYourDevice;
     float accel;
 
-    int nivel;
-    float rotacion = 0;
-    float addRotacion = .3f;
+    int level;
+    float rotation = 0;
+    float addRotation = .3f;
 
     public GameScreen(final MainInvaders game) {
         super(game);
@@ -60,7 +60,7 @@ public class GameScreen extends Screens {
         state = GAME_READY;
         if (Settings.getNumberOfTimesGameHasBeenPlayed() < 3) {// It will be shown 2 times, time zero and time 1.
             state = GAME_TUTORIAL;
-            pantallaTutorial = 0;
+            screenTutorial = 0;
             setUpTutorial();
         }
         touchPoint = new Vector3();
@@ -72,7 +72,7 @@ public class GameScreen extends Screens {
 
         // OnScreen Controls
         accel = 0;
-        nivel = oWorld.currentLevel;
+        level = oWorld.currentLevel;
         btLeft = new ImageButton(Assets.btLeft);
         btLeft.setSize(65, 50);
         btLeft.setPosition(10, 5);
@@ -107,14 +107,14 @@ public class GameScreen extends Screens {
 
         });
 
-        btMissil = new TextButton(oWorld.missileCount + "", new TextButtonStyle(Assets.btMissil, Assets.btMissilDown, null, Assets.font10));
-        btMissil.getLabel().setColor(Color.GREEN);
-        btMissil.setSize(60, 60);
-        btMissil.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
-        btMissil.addListener(new ClickListener() {
+        buttonMissile = new TextButton(oWorld.missileCount + "", new TextButtonStyle(Assets.btMissil, Assets.btMissilDown, null, Assets.font10));
+        buttonMissile.getLabel().setColor(Color.GREEN);
+        buttonMissile.setSize(60, 60);
+        buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
+        buttonMissile.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                seDisparoMissil = true;
+                didItFireMissile = true;
             }
         });
         btFire = new ImageButton(Assets.btFire, Assets.btFireDown);
@@ -123,13 +123,12 @@ public class GameScreen extends Screens {
         btFire.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                seDisparo = true;
+                isItShotItself = true;
             }
         });
 
-        // Fin Controles OnScreen
-
-        // /Inicio dialog Pause
+        // End OnScreen Controls
+        // Start dialog Pause
         dialogPause = new Dialog(Assets.languages.get("game_paused"), Assets.styleDialogPause);
 
         TextButton btContinue = new TextButton(Assets.languages.get("continue"), Assets.styleTextButton);
@@ -250,18 +249,18 @@ public class GameScreen extends Screens {
 
     private void setUpTutorial() {
 
-        lbTiltYourDevice = new Label(Assets.languages.get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.font45, Color.GREEN));
-        lbTiltYourDevice.setWrap(true);
-        lbTiltYourDevice.setAlignment(Align.center);
-        lbTiltYourDevice.setPosition(0, 120);
-        lbTiltYourDevice.setWidth(SCREEN_WIDTH);
-        stage.addActor(lbTiltYourDevice);
+        labelTiltYourDevice = new Label(Assets.languages.get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.font45, Color.GREEN));
+        labelTiltYourDevice.setWrap(true);
+        labelTiltYourDevice.setAlignment(Align.center);
+        labelTiltYourDevice.setPosition(0, 120);
+        labelTiltYourDevice.setWidth(SCREEN_WIDTH);
+        stage.addActor(labelTiltYourDevice);
 
-        gpTutorial = new Group();
+        groupTutorial = new Group();
         // gpTutorial.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         Table boostTable = new Table();
-        gpTutorial.addActor(boostTable);
+        groupTutorial.addActor(boostTable);
 
         Image vida = new Image(Assets.upgLife);
         Image boostBomba = new Image(Assets.boost2);
@@ -302,8 +301,8 @@ public class GameScreen extends Screens {
         touchRight.setAlignment(Align.center);
         touchRight.setPosition(165, 50);
 
-        gpTutorial.addActor(touchRight);
-        gpTutorial.addActor(touchLeft);
+        groupTutorial.addActor(touchRight);
+        groupTutorial.addActor(touchLeft);
 
     }
 
@@ -327,13 +326,13 @@ public class GameScreen extends Screens {
 
     private void updateTutorial() {
         if (Gdx.input.justTouched()) {
-            if (pantallaTutorial == 0) {
-                pantallaTutorial++;
-                lbTiltYourDevice.remove();
-                stage.addActor(gpTutorial);
+            if (screenTutorial == 0) {
+                screenTutorial++;
+                labelTiltYourDevice.remove();
+                stage.addActor(groupTutorial);
             } else {
                 state = GAME_READY;
-                gpTutorial.remove();
+                groupTutorial.remove();
             }
 
         }
@@ -346,7 +345,7 @@ public class GameScreen extends Screens {
             if (!Settings.getTiltControlEnabled()) {
                 stage.addActor(btLeft);
                 stage.addActor(btRight);
-                stage.addActor(btMissil);
+                stage.addActor(buttonMissile);
                 stage.addActor(btFire);
             }
 
@@ -362,26 +361,26 @@ public class GameScreen extends Screens {
             if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Keys.D))
                 accel = -5f;
 
-            oWorld.update(deltaTime, accel, seDisparo, seDisparoMissil);
+            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile);
         } else if (Settings.getTiltControlEnabled()) {
             if (Gdx.input.justTouched()) {
                 myCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
                 if (leftButton.contains(touchPoint.x, touchPoint.y)) {
-                    seDisparoMissil = true;
+                    didItFireMissile = true;
                 }
                 if (rightButton.contains(touchPoint.x, touchPoint.y)) {
-                    seDisparo = true;
+                    isItShotItself = true;
                 }
             }
-            oWorld.update(deltaTime, Gdx.input.getAccelerometerX(), seDisparo, seDisparoMissil);
+            oWorld.update(deltaTime, Gdx.input.getAccelerometerX(), isItShotItself, didItFireMissile);
         } else {
-            oWorld.update(deltaTime, accel, seDisparo, seDisparoMissil);
+            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile);
         }
 
-        if (nivel != oWorld.currentLevel) {
-            nivel = oWorld.currentLevel;
-            lbLevel.setText(Assets.languages.get("level") + " " + nivel);
+        if (level != oWorld.currentLevel) {
+            level = oWorld.currentLevel;
+            lbLevel.setText(Assets.languages.get("level") + " " + level);
         }
 
         lbScore.setText(Assets.languages.get("score") + " " + oWorld.score);
@@ -392,10 +391,10 @@ public class GameScreen extends Screens {
             dialogGameOver.show(stage);
         }
 
-        btMissil.setText(oWorld.missileCount + "");
+        buttonMissile.setText(oWorld.missileCount + "");
 
-        seDisparo = false;
-        seDisparoMissil = false;
+        isItShotItself = false;
+        didItFireMissile = false;
     }
 
     private void setPaused() {
@@ -434,11 +433,11 @@ public class GameScreen extends Screens {
     }
 
     private void presentTurorial() {
-        if (pantallaTutorial == 0 && Settings.getTiltControlEnabled()) {
-            if (rotacion < -20 || rotacion > 20)
-                addRotacion *= -1;
-            rotacion += addRotacion;
-            batcher.draw(Assets.help1, SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotacion);
+        if (screenTutorial == 0 && Settings.getTiltControlEnabled()) {
+            if (rotation < -20 || rotation > 20)
+                addRotation *= -1;
+            rotation += addRotation;
+            batcher.draw(Assets.help1, SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotation);
         } else {
             batcher.draw(Assets.clickHelp, 155, 0, 10, 125);
 
@@ -486,11 +485,11 @@ public class GameScreen extends Screens {
             setPaused();
             return true;
         } else if (keycode == Keys.SPACE) {
-            seDisparo = true;
+            isItShotItself = true;
 
             return true;
         } else if (keycode == Keys.ALT_LEFT) {
-            seDisparoMissil = true;
+            didItFireMissile = true;
             return true;
         }
         return false;

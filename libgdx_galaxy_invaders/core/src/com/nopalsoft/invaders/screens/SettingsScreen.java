@@ -24,11 +24,11 @@ public class SettingsScreen extends Screens {
     ImageButton tiltControl;
     ImageButton onScreenControl;
     Slider aceletometerSlider;
-    TextButton btBack;
+    TextButton buttonBack;
     Table menuControls;
-    ImageButton btLeft, btRight, btMissil, btFire;
+    ImageButton buttonLeft, buttonRight, buttonMissile, buttonFire;
     Label touchLeft, touchRight;
-    OrthographicCamera camRender;
+    OrthographicCamera myCameraRenderer;
     float accel;
 
     public SettingsScreen(final MainInvaders game) {
@@ -78,10 +78,10 @@ public class SettingsScreen extends Screens {
 
         /* OnScreenControls */
 
-        btLeft = new ImageButton(Assets.btLeft);
-        btLeft.setSize(65, 50);
-        btLeft.setPosition(10, 5);
-        btLeft.addListener(new ClickListener() {
+        buttonLeft = new ImageButton(Assets.btLeft);
+        buttonLeft.setSize(65, 50);
+        buttonLeft.setPosition(10, 5);
+        buttonLeft.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 accel = 5;
@@ -94,10 +94,10 @@ public class SettingsScreen extends Screens {
             }
 
         });
-        btRight = new ImageButton(Assets.btRight);
-        btRight.setSize(65, 50);
-        btRight.setPosition(85, 5);
-        btRight.addListener(new ClickListener() {
+        buttonRight = new ImageButton(Assets.btRight);
+        buttonRight.setSize(65, 50);
+        buttonRight.setPosition(85, 5);
+        buttonRight.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 accel = -5;
@@ -112,12 +112,12 @@ public class SettingsScreen extends Screens {
 
         });
 
-        btMissil = new ImageButton(Assets.btMissil, Assets.btMissilDown);
-        btMissil.setSize(60, 60);
-        btMissil.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
-        btFire = new ImageButton(Assets.btFire, Assets.btFireDown);
-        btFire.setSize(60, 60);
-        btFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
+        buttonMissile = new ImageButton(Assets.btMissil, Assets.btMissilDown);
+        buttonMissile.setSize(60, 60);
+        buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
+        buttonFire = new ImageButton(Assets.btFire, Assets.btFireDown);
+        buttonFire.setSize(60, 60);
+        buttonFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
 
         menuControls.add(new Label(Assets.languages.get("on_screen_control"), Assets.styleLabel)).left();
         menuControls.add(onScreenControl).size(25);
@@ -125,11 +125,11 @@ public class SettingsScreen extends Screens {
         menuControls.add(new Label(Assets.languages.get("tilt_control"), Assets.styleLabel)).left();
         menuControls.add(tiltControl).size(25);
 
-        btBack = new TextButton(Assets.languages.get("back"), Assets.styleTextButtonBack);
-        btBack.pad(0, 15, 35, 0);
-        btBack.setSize(63, 63);
-        btBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
-        btBack.addListener(new ClickListener() {
+        buttonBack = new TextButton(Assets.languages.get("back"), Assets.styleTextButtonBack);
+        buttonBack.pad(0, 15, 35, 0);
+        buttonBack.setSize(63, 63);
+        buttonBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
+        buttonBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Assets.playSound(Assets.clickSound);
@@ -153,8 +153,8 @@ public class SettingsScreen extends Screens {
 
         // Voy a poner a la nave aqui que se mueva tambien;
         oNave = new com.nopalsoft.invaders.frame.Ship(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 3.0f); // Coloco la nave en posicion
-        this.camRender = new OrthographicCamera(WORLD_SCREEN_WIDTH, WORLD_SCREEN_HEIGHT);
-        camRender.position.set(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 2.0f, 0);
+        this.myCameraRenderer = new OrthographicCamera(WORLD_SCREEN_WIDTH, WORLD_SCREEN_HEIGHT);
+        myCameraRenderer.position.set(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 2.0f, 0);
         // menuControls.debug();
 
     }
@@ -162,7 +162,7 @@ public class SettingsScreen extends Screens {
     protected void setOptions() {
         stage.clear();
         accel = 0;// porque a veces se quedaba moviendo la nave cuando se pasaba de tilt a control
-        stage.addActor(btBack);
+        stage.addActor(buttonBack);
         stage.addActor(menuControls);
         stage.addActor(aceletometerSlider);
         if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
@@ -178,10 +178,10 @@ public class SettingsScreen extends Screens {
     }
 
     protected void setOnScreenControl() {
-        stage.addActor(btLeft);
-        stage.addActor(btRight);
-        stage.addActor(btMissil);
-        stage.addActor(btFire);
+        stage.addActor(buttonLeft);
+        stage.addActor(buttonRight);
+        stage.addActor(buttonMissile);
+        stage.addActor(buttonFire);
     }
 
     @Override
@@ -234,8 +234,8 @@ public class SettingsScreen extends Screens {
         Assets.font15.draw(batcher, (int) aceletometerSlider.getValue() + "", 215, 313);
         batcher.end();
 
-        camRender.update();
-        batcher.setProjectionMatrix(camRender.combined);
+        myCameraRenderer.update();
+        batcher.setProjectionMatrix(myCameraRenderer.combined);
         batcher.begin();
         renderNave();
         batcher.end();
