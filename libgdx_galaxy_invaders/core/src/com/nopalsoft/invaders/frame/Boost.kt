@@ -10,8 +10,8 @@ class Boost(val type: Int, x: Float, y: Float) : DynamicGameObject(x, y, RADIUS)
 
     fun update(deltaTime: Float) {
         position.add(velocity.x * deltaTime, velocity.y * deltaTime)
-        boundsCircle.x = position.x
-        boundsCircle.y = position.y
+        boundsCircle?.x = position.x
+        boundsCircle?.y = position.y
         stateTime += deltaTime.toInt()
     }
 
