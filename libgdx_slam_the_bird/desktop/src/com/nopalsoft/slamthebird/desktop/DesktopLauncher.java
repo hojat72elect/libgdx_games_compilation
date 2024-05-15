@@ -8,13 +8,6 @@ import com.nopalsoft.slamthebird.handlers.GoogleGameServicesHandler;
 import com.nopalsoft.slamthebird.handlers.RequestHandler;
 
 public class DesktopLauncher {
-    public static void main(String[] arg) {
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setWindowedMode(480, 800);
-        config.setTitle("Slam the bird");
-        new Lwjgl3Application(new MainSlamBird(handler, gameHandler), config);
-    }
-
     static RequestHandler handler = new RequestHandler() {
 
         @Override
@@ -94,7 +87,6 @@ public class DesktopLauncher {
 
         }
     };
-
     static GoogleGameServicesHandler gameHandler = new GoogleGameServicesHandler() {
 
         @Override
@@ -139,4 +131,11 @@ public class DesktopLauncher {
 
         }
     };
+
+    public static void main(String[] arg) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setWindowedMode(480, 800);
+        config.setTitle("Slam the bird");
+        new Lwjgl3Application(new MainSlamBird(handler, gameHandler), config);
+    }
 }
