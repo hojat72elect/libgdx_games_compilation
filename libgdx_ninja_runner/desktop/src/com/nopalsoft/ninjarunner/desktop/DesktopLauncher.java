@@ -16,19 +16,7 @@ public class DesktopLauncher {
     static GoogleGameServicesHandler gameHandler = new GoogleGameServicesHandler() {
 
         @Override
-        public void unlockAchievement(String achievementId) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
         public void submitScore(long score) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void signOut() {
             // TODO Auto-generated method stub
 
         }
@@ -77,55 +65,7 @@ public class DesktopLauncher {
         }
 
         @Override
-        public void showInterstitial() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void showAdBanner() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
         public void shareApp() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void removeAds() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void hideAdBanner() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void buy5milCoins() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void buy50milCoins() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void buy30milCoins() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void buy15milCoins() {
             // TODO Auto-generated method stub
 
         }
@@ -138,12 +78,6 @@ public class DesktopLauncher {
     };
     private static boolean isSigned = true;
     static FacebookHandler faceHandler = new FacebookHandler() {
-
-        @Override
-        public void facebookSignOut() {
-            isSigned = false;
-            Gdx.app.log("Facebook", "Sign out");
-        }
 
         @Override
         public void facebookSignIn() {
@@ -179,11 +113,6 @@ public class DesktopLauncher {
 
         }
 
-        @Override
-        public void facebookInviteFriends(String message) {
-            // TODO Auto-generated method stub
-
-        }
     };
 
     public static void main(String[] arg) {

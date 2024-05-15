@@ -30,11 +30,6 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
     }
 
     @Override
-    public void facebookSignOut() {
-        isSigned = false;
-    }
-
-    @Override
     public boolean facebookIsSignedIn() {
         return isSigned;
     }
@@ -61,17 +56,7 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
     }
 
     @Override
-    public void facebookInviteFriends(String message) {
-
-    }
-
-    @Override
     public void submitScore(long score) {
-
-    }
-
-    @Override
-    public void unlockAchievement(String achievementId) {
 
     }
 
@@ -101,11 +86,6 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
     }
 
     @Override
-    public void signOut() {
-
-    }
-
-    @Override
     public void showRater() {
 
     }
@@ -116,27 +96,7 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
     }
 
     @Override
-    public void showInterstitial() {
-
-    }
-
-    @Override
     public void showMoreGames() {
-
-    }
-
-    @Override
-    public void removeAds() {
-
-    }
-
-    @Override
-    public void showAdBanner() {
-
-    }
-
-    @Override
-    public void hideAdBanner() {
 
     }
 
@@ -145,23 +105,4 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
 
     }
 
-    @Override
-    public void buy5milCoins() {
-
-    }
-
-    @Override
-    public void buy15milCoins() {
-
-    }
-
-    @Override
-    public void buy30milCoins() {
-
-    }
-
-    @Override
-    public void buy50milCoins() {
-
-    }
 }

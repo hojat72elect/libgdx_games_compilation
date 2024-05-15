@@ -2,29 +2,39 @@ package com.nopalsoft.ninjarunner.game;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.objetos.*;
-
-import java.util.Iterator;
+import com.nopalsoft.ninjarunner.objetos.Item;
+import com.nopalsoft.ninjarunner.objetos.ItemCandyBean;
+import com.nopalsoft.ninjarunner.objetos.ItemCandyCorn;
+import com.nopalsoft.ninjarunner.objetos.ItemCandyJelly;
+import com.nopalsoft.ninjarunner.objetos.ItemEnergy;
+import com.nopalsoft.ninjarunner.objetos.ItemHearth;
+import com.nopalsoft.ninjarunner.objetos.ItemMagnet;
+import com.nopalsoft.ninjarunner.objetos.ItemMoneda;
+import com.nopalsoft.ninjarunner.objetos.Mascota;
+import com.nopalsoft.ninjarunner.objetos.Missil;
+import com.nopalsoft.ninjarunner.objetos.Obstaculo;
+import com.nopalsoft.ninjarunner.objetos.Pared;
+import com.nopalsoft.ninjarunner.objetos.Personaje;
+import com.nopalsoft.ninjarunner.objetos.Plataforma;
 
 public class WorldGame {
-    static final int STATE_RUNNING = 0;
     static final int STATE_GAMEOVER = 1;
     public int state;
-
-    private final float TIME_TO_SPAWN_MISSIL = 15;
-    float timeToSpwanMissil;
-
-    ObjectManagerBox2d oManager;
     public World oWorldBox;
-
     public Personaje oPersonaje;
     public Mascota oMascota;
-
+    float timeToSpwanMissil;
+    ObjectManagerBox2d oManager;
     Array<Body> arrBodies;
     Array<Plataforma> arrPlataformas;
     Array<Pared> arrPared;
@@ -39,6 +49,8 @@ public class WorldGame {
 
     int monedasTomadas;
     long puntuacion;
+    boolean bodyIsSLide;// INdica el si el cuarpo que tiene ahorita es sliding;
+    boolean recreateFixture = false;
 
     public WorldGame() {
         oWorldBox = new World(new Vector2(0, -9.8f), true);
@@ -46,12 +58,12 @@ public class WorldGame {
 
         oManager = new ObjectManagerBox2d(this);
 
-        arrBodies = new Array<Body>();
-        arrPlataformas = new Array<Plataforma>();
-        arrItems = new Array<Item>();
-        arrPared = new Array<Pared>();
-        arrObstaculos = new Array<Obstaculo>();
-        arrMissiles = new Array<Missil>();
+        arrBodies = new Array<>();
+        arrPlataformas = new Array<>();
+        arrItems = new Array<>();
+        arrPared = new Array<>();
+        arrObstaculos = new Array<>();
+        arrMissiles = new Array<>();
 
         timeToSpwanMissil = 0;
 
@@ -105,26 +117,11 @@ public class WorldGame {
                 }
             }
 
-            /**
+            /*
              * PARED y+3.17; CAJA4 y+.8f; CAJA7 y+1f;
              */
 
-            // float xAux = oManager.crearCaja4(x + separacion, y + .8f);
-            // xAux = oManager.crearCaja4(xAux, y + .8f);
-            // xAux = oManager.crearCaja7(xAux, y + 1f);
-            //
-
-            // // SEPRACION DE CADA MONEDA EN X =.4
-            // for (float i = x; i < mundoCreadoHastaX; i += .4f) {
-            // oManager.crearMoneda(i + separacion, y + 1.5f);
-            // oManager.crearMoneda(i + separacion, y + 1f);
-            // }
-
         }
-
-        // mundoCreadoHastaX += crearPlataforma(mundoCreadoHastaX, 1);
-        //
-        // mundoCreadoHastaX += crearPlataforma(mundoCreadoHastaX, 2);
 
     }
 
@@ -164,30 +161,27 @@ public class WorldGame {
         return xAux;
     }
 
-    public void update(float delta, boolean didJump, boolean isJumpPressed, boolean dash, boolean didSlide) {
+    public void update(float delta, boolean didJump, boolean dash, boolean didSlide) {
         oWorldBox.step(delta, 8, 4);
 
         oWorldBox.getBodies(arrBodies);
         eliminarObjetos();
         oWorldBox.getBodies(arrBodies);
 
-        Iterator<Body> i = arrBodies.iterator();
-        while (i.hasNext()) {
-            Body body = i.next();
-
-            if (body.getUserData() instanceof Personaje) {
-                updatePersonaje(delta, body, didJump, isJumpPressed, dash, didSlide);
-            } else if (body.getUserData() instanceof Mascota) {
+        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
+            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Personaje) {
+                updatePersonaje(delta, body, didJump, dash, didSlide);
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Mascota) {
                 updateMascota(delta, body);
-            } else if (body.getUserData() instanceof Plataforma) {
-                updatePlataforma(delta, body);
-            } else if (body.getUserData() instanceof Pared) {
-                updatePared(delta, body);
-            } else if (body.getUserData() instanceof Item) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Plataforma) {
+                updatePlataforma(body);
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Pared) {
+                updatePared(body);
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Item) {
                 updateItem(delta, body);
-            } else if (body.getUserData() instanceof Obstaculo) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Obstaculo) {
                 updateObstaculos(delta, body);
-            } else if (body.getUserData() instanceof Missil) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Missil) {
                 updateMissil(delta, body);
             }
         }
@@ -199,6 +193,7 @@ public class WorldGame {
             state = STATE_GAMEOVER;
 
         timeToSpwanMissil += delta;
+        float TIME_TO_SPAWN_MISSIL = 15;
         if (timeToSpwanMissil >= TIME_TO_SPAWN_MISSIL) {
             timeToSpwanMissil -= TIME_TO_SPAWN_MISSIL;
 
@@ -209,64 +204,58 @@ public class WorldGame {
     }
 
     private void eliminarObjetos() {
-        Iterator<Body> i = arrBodies.iterator();
-        while (i.hasNext()) {
-            Body body = i.next();
-
-            if (body.getUserData() instanceof Plataforma) {
-                Plataforma obj = (Plataforma) body.getUserData();
-                if (obj.state == Plataforma.STATE_DESTROY) {
+        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
+            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Plataforma) {
+                com.nopalsoft.ninjarunner.objetos.Plataforma obj = (com.nopalsoft.ninjarunner.objetos.Plataforma) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.Plataforma.STATE_DESTROY) {
                     arrPlataformas.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof Pared) {
-                Pared obj = (Pared) body.getUserData();
-                if (obj.state == Pared.STATE_DESTROY) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Pared) {
+                com.nopalsoft.ninjarunner.objetos.Pared obj = (com.nopalsoft.ninjarunner.objetos.Pared) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.Pared.STATE_DESTROY) {
                     arrPared.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof Item) {
-                Item obj = (Item) body.getUserData();
-                if (obj.state == Item.STATE_DESTROY && obj.stateTime >= Item.DURATION_PICK) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Item) {
+                com.nopalsoft.ninjarunner.objetos.Item obj = (com.nopalsoft.ninjarunner.objetos.Item) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.Item.STATE_DESTROY && obj.stateTime >= com.nopalsoft.ninjarunner.objetos.Item.DURATION_PICK) {
                     arrItems.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof ObstaculoCajas4) {
-                ObstaculoCajas4 obj = (ObstaculoCajas4) body.getUserData();
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4) {
+                com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4 obj = (com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4) body.getUserData();
 
-                if (obj.state == ObstaculoCajas4.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrObstaculos.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof ObstaculoCajas7) {
-                ObstaculoCajas7 obj = (ObstaculoCajas7) body.getUserData();
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7) {
+                com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7 obj = (com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7) body.getUserData();
 
-                if (obj.state == ObstaculoCajas7.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrObstaculos.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof Missil) {
-                Missil obj = (Missil) body.getUserData();
-                if (obj.state == Missil.STATE_DESTROY) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Missil) {
+                com.nopalsoft.ninjarunner.objetos.Missil obj = (com.nopalsoft.ninjarunner.objetos.Missil) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objetos.Missil.STATE_DESTROY) {
                     arrMissiles.removeValue(obj, true);
-                    Pools.free(obj);
+                    com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
             }
         }
     }
 
-    boolean bodyIsSLide;// INdica el si el cuarpo que tiene ahorita es sliding;
-    boolean recreateFixture = false;
-
-    private void updatePersonaje(float delta, Body body, boolean didJump, boolean isJumpPressed, boolean dash, boolean didSlide) {
+    private void updatePersonaje(float delta, Body body, boolean didJump, boolean dash, boolean didSlide) {
         oPersonaje.update(delta, body, didJump, false, dash, didSlide);
 
         if (oPersonaje.position.y < -1) {
@@ -304,7 +293,7 @@ public class WorldGame {
         oMascota.update(body, delta, targetPositionX, targetPositionY);
     }
 
-    private void updatePlataforma(float delta, Body body) {
+    private void updatePlataforma(Body body) {
         Plataforma obj = (Plataforma) body.getUserData();
 
         if (obj.position.x < oPersonaje.position.x - 3)
@@ -312,7 +301,7 @@ public class WorldGame {
 
     }
 
-    private void updatePared(float delta, Body body) {
+    private void updatePared(Body body) {
         Pared obj = (Pared) body.getUserData();
 
         if (obj.position.x < oPersonaje.position.x - 3)
@@ -377,9 +366,9 @@ public class WorldGame {
                 beginContactHeroOtraCosa(b, a);
 
             if (a.getBody().getUserData() instanceof Mascota)
-                beginContactMascotaOtraCosa(a, b);
+                beginContactMascotaOtraCosa(b);
             else if (b.getBody().getUserData() instanceof Mascota)
-                beginContactMascotaOtraCosa(b, a);
+                beginContactMascotaOtraCosa(a);
 
         }
 
@@ -404,7 +393,7 @@ public class WorldGame {
                     } else if (obj instanceof ItemMagnet) {
                         oPersonaje.setPickUpMagnet();
                     } else if (obj instanceof ItemEnergy) {
-                        // oPersonaje.shield++;
+                        //todo oPersonaje.shield++;
                     } else if (obj instanceof ItemHearth) {
                         oPersonaje.vidas++;
                     } else if (obj instanceof ItemCandyJelly) {
@@ -441,7 +430,7 @@ public class WorldGame {
 
         }
 
-        public void beginContactMascotaOtraCosa(Fixture fixMascota, Fixture otraCosa) {
+        public void beginContactMascotaOtraCosa(Fixture otraCosa) {
             Object oOtraCosa = otraCosa.getBody().getUserData();
 
             if (oOtraCosa instanceof Pared && oPersonaje.isDash) {

@@ -2,18 +2,12 @@ package com.nopalsoft.ninjarunner.handlers;
 
 public interface FacebookHandler {
 
-    public void facebookSignIn();
+    void facebookSignIn();
 
-    public void facebookSignOut();
+    boolean facebookIsSignedIn();
 
-    public boolean facebookIsSignedIn();
+    void facebookGetScores();
 
-    public void facebookGetScores();
-
-    public void facebookSubmitScore(final long score);
-
-//	public void showFacebook();
-
-    public void facebookInviteFriends(final String message);
+    void facebookSubmitScore(final long score);
 
 }

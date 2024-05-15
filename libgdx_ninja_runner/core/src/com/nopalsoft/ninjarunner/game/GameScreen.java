@@ -99,7 +99,7 @@ public class GameScreen extends Screens {
         } else if (state == STATE_RUNNING) {
             boolean isJumpPressed = false;
 
-            oWorld.update(delta, gameUI.didJump, isJumpPressed, gameUI.didDash, gameUI.didSlide);
+            oWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide);
 
             gameUI.didJump = false;
             gameUI.didDash = false;

@@ -8,24 +8,8 @@ public interface RequestHandler {
      */
     void loadInterstitial();
 
-    void showInterstitial();
-
     void showMoreGames();
 
-    void removeAds();
-
-    void showAdBanner();
-
-    void hideAdBanner();
-
     void shareApp();
-
-    void buy5milCoins();
-
-    void buy15milCoins();
-
-    void buy30milCoins();
-
-    void buy50milCoins();
 
 }
