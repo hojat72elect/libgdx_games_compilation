@@ -79,7 +79,7 @@ public class UpgradesSubMenu {
                 agregarPersonajeTabla(idiomas.get("upgradeMagnet"), lbPrecioMagnet, Assets.magnet, 35, 35, idiomas.get("magnetDescription"),
                         arrMagnet, btUpgradeMagnet)).row();
         contenedor.add(
-                agregarPersonajeTabla("Upgrade Life", lbPrecioLife, Assets.hearth, 38, 29, idiomas.get("bombDescription"), arrLife, btUpgradeLife))
+                        agregarPersonajeTabla("Upgrade Life", lbPrecioLife, Assets.hearth, 38, 29, idiomas.get("bombDescription"), arrLife, btUpgradeLife))
                 .row();
         contenedor.add(
                 agregarPersonajeTabla("Upgrade Eneergy", lbPrecioEnergy, Assets.energy, 25, 35, idiomas.get("bombDescription"), arrEnergy,

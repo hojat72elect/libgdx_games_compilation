@@ -2,8 +2,13 @@ package com.nopalsoft.ninjarunner.shop;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
@@ -120,10 +125,6 @@ public class ShopScreen extends Screens {
         });
 
         btNoAds.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-            }
         });
 
         btMore.addListener(new ClickListener() {
@@ -133,7 +134,7 @@ public class ShopScreen extends Screens {
             }
         });
 
-        ButtonGroup<Button> radioGroup = new ButtonGroup<Button>();
+        ButtonGroup<Button> radioGroup = new ButtonGroup<>();
         radioGroup.add(btPersonajes, btMascota, btUpgrades, btNoAds);
 
     }

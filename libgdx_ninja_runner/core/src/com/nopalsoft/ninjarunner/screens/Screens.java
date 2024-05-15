@@ -1,25 +1,22 @@
 package com.nopalsoft.ninjarunner.screens;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.game.GameScreen;
-import com.nopalsoft.ninjarunner.shop.ShopScreen;
-
-import java.util.Random;
 
 public abstract class Screens extends InputAdapter implements Screen, GestureListener {
     public static final int SCREEN_WIDTH = 800;
@@ -33,7 +30,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
     public SpriteBatch batcher;
     public Stage stage;
 
-    Random oRan;
+    Image blackFadeOut;
 
     public Screens(final Game _game) {
         this.game = (MainGame) _game;
@@ -69,43 +66,22 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     }
 
-    Image blackFadeOut;
-
     public void changeScreenWithFadeOut(final Class<?> newScreen, final MainGame game) {
         blackFadeOut = new Image(Assets.pixelNegro);
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
-        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                if (newScreen == GameScreen.class) {
-                    game.setScreen(new GameScreen(game, true));
-                } else if (newScreen == SettingsScreen.class)
-                    game.setScreen(new SettingsScreen(game));
-                else if (newScreen == ShopScreen.class)
-                    game.setScreen(new ShopScreen(game));
+        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
+            if (newScreen == com.nopalsoft.ninjarunner.game.GameScreen.class) {
+                game.setScreen(new com.nopalsoft.ninjarunner.game.GameScreen(game, true));
+            } else if (newScreen == com.nopalsoft.ninjarunner.screens.SettingsScreen.class)
+                game.setScreen(new com.nopalsoft.ninjarunner.screens.SettingsScreen(game));
+            else if (newScreen == com.nopalsoft.ninjarunner.shop.ShopScreen.class)
+                game.setScreen(new com.nopalsoft.ninjarunner.shop.ShopScreen(game));
 
-                // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-                // blackFadeout.remove();
-            }
+            // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
+            // blackFadeout.remove();
         })));
         stage.addActor(blackFadeOut);
-    }
-
-    public void addEfectoPress(final Actor actor) {
-        actor.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() - 5);
-                event.stop();
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() + 5);
-            }
-        });
     }
 
     public abstract void draw(float delta);

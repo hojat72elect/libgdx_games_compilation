@@ -3,7 +3,11 @@ package com.nopalsoft.ninjarunner.shop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -15,39 +19,28 @@ import com.nopalsoft.ninjarunner.Settings;
 import com.nopalsoft.ninjarunner.objetos.Mascota;
 import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 
-import java.util.Iterator;
-
 public class MascotasSubMenu {
 
-    final int PRECIO_BOMB = 5000;
-
-    boolean didBuyBomb;
-
-    Label lblPrecioBird, lblPrecioBomb;
-
-    TextButton btBuySelectBird, btBuyBomb;
-    Array<TextButton> arrBotones;
-
+    private final static Preferences pref = Gdx.app.getPreferences("com.tiar.shantirunner.shop");
     public final int MAX_LEVEL = 6;
+    final int PRECIO_BOMB = 5000;
     final int PRECIO_NIVEL_1 = 350;
     final int PRECIO_NIVEL_2 = 1000;
     final int PRECIO_NIVEL_3 = 3000;
     final int PRECIO_NIVEL_4 = 4500;
     final int PRECIO_NIVEL_5 = 5000;
     final int PRECIO_NIVEL_6 = 7500;
-
+    boolean didBuyBomb;
+    Label lblPrecioBird, lblPrecioBomb;
+    TextButton btBuySelectBird, btBuyBomb;
+    Array<TextButton> arrBotones;
     Button btUpgradeBird, btUpgradeBomb;
-
     Image[] arrBird;
     Image[] arrBomb;
-
     Table contenedor;
     I18NBundle idiomas;
-
     String textBuy;
     String textSelect;
-
-    private final static Preferences pref = Gdx.app.getPreferences("com.tiar.shantirunner.shop");
 
     public MascotasSubMenu(Table contenedor, MainGame game) {
         idiomas = game.idiomas;
@@ -80,7 +73,7 @@ public class MascotasSubMenu {
                 agregarMascota("Chicken", lblPrecioBird, Assets.Mascota1Fly, 60, 54, idiomas.get("pinkChikenDescription"), btBuySelectBird, arrBird,
                         btUpgradeBird)).row();
         contenedor.add(
-                agregarMascota("Bomb", lblPrecioBomb, Assets.MascotaBombFly, 53, 64, idiomas.get("bombDescription"), btBuyBomb, arrBomb, btUpgradeBomb))
+                        agregarMascota("Bomb", lblPrecioBomb, Assets.MascotaBombFly, 53, 64, idiomas.get("bombDescription"), btBuyBomb, arrBomb, btUpgradeBomb))
                 .row();
 
         setArrays();
@@ -133,7 +126,7 @@ public class MascotasSubMenu {
     }
 
     private void inicializarBotones() {
-        arrBotones = new Array<TextButton>();
+        arrBotones = new Array<>();
 
         {// DEFAULT
             {// BUY
@@ -235,9 +228,8 @@ public class MascotasSubMenu {
 
     private void setSelected(TextButton boton) {
         // Pongo todos visibles y al final el boton seleccionado en invisible
-        Iterator<TextButton> i = arrBotones.iterator();
-        while (i.hasNext()) {
-            i.next().setVisible(true);
+        for (com.badlogic.gdx.scenes.scene2d.ui.TextButton arrBotone : arrBotones) {
+            arrBotone.setVisible(true);
         }
         boton.setVisible(false);
     }

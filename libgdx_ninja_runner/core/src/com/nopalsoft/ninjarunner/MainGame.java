@@ -15,17 +15,12 @@ import com.nopalsoft.ninjarunner.leaderboard.LeaderboardScreen;
 import com.nopalsoft.ninjarunner.leaderboard.Person;
 import com.nopalsoft.ninjarunner.screens.Screens;
 
-import java.util.Iterator;
-
 public class MainGame extends Game {
-
-    public Array<Person> arrPerson = new Array<>();
 
     public final GameServicesHandler gameServiceHandler;
     public final RequestHandler reqHandler;
     public final FacebookHandler facebookHandler;
-
-
+    public Array<Person> arrPerson = new Array<>();
     public Stage stage;
     public SpriteBatch batcher;
     public I18NBundle idiomas;
@@ -78,27 +73,4 @@ public class MainGame extends Game {
         }
     }
 
-    /**
-     * p
-     * Se manda llamar cuando se cierra la sesion en facebook, quita de la tabla todos los usuario de facebook
-     */
-    public void removeFromArray(Person.TipoCuenta cuenta) {
-        if (arrPerson == null)
-            return;
-
-        Iterator<Person> i = arrPerson.iterator();
-        while (i.hasNext()) {
-            Person obj = i.next();
-            if (obj.tipoCuenta == cuenta)
-                i.remove();
-        }
-
-        arrPerson.sort();// Acomoda de mayor a menor
-
-        //Si estoy en la tabla pues actalizo la tabla
-        if (getScreen() instanceof LeaderboardScreen) {
-            LeaderboardScreen oScreen = (LeaderboardScreen) getScreen();
-            oScreen.updateLeaderboard();
-        }
-    }
 }

@@ -10,11 +10,10 @@ import com.nopalsoft.ninjarunner.objetos.Personaje;
  */
 public class Settings {
 
+    private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings");
     public static boolean isSoundEnabled = false;
     public static boolean isMusicEnabled = false;
-
     public static int skinSeleccionada = Personaje.TIPO_NINJA;
-    protected static boolean seCalificoApp;
     public static int monedasTotal = 1500000;
     public static Mascota.Tipo skinMascotaSeleccionada = Mascota.Tipo.GALLINA_ROSA;
 
@@ -26,9 +25,6 @@ public class Settings {
     public static int LEVEL_ENERGY;
     public static int LEVEL_COINS;
     public static int LEVEL_TREASURE_CHEST;
-
-    private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings");
-
     public static long bestScore;
 
     public static void load() {

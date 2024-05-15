@@ -4,7 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -212,7 +217,7 @@ public class Assets {
         cajasEffect.load(Gdx.files.internal("data/Particulas/Cajas"), atlas);
         cajasEffectPool = new ParticleEffectPool(cajasEffect, 1, 10);
 
-        /** entre mas chico el numero mas atras */
+        /* entre mas chico el numero mas atras */
         ParallaxLayer sol = new ParallaxLayer(atlas.findRegion("Background/sol"), new Vector2(.5f, 0), new Vector2(600, 300), new Vector2(800, 800),
                 170, 170);
 

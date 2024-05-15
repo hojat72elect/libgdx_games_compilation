@@ -17,26 +17,18 @@ import com.nopalsoft.ninjarunner.Settings;
 import com.nopalsoft.ninjarunner.objetos.Personaje;
 import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 
-import java.util.Iterator;
-
 public class PersonajesSubMenu {
 
+    private final static Preferences pref = Gdx.app.getPreferences("com.tiar.shantirunner.shop");
     final int PRECIO_NINJA = 1000;
-
     boolean didBuyNinja;
-
     Label lbPrecioNinja;
-
     TextButton btSelectShanti, btBuyNinja;
     Array<TextButton> arrBotones;
-
     Table contenedor;
     I18NBundle idiomas;
-
     String textBuy;
     String textSelect;
-
-    private final static Preferences pref = Gdx.app.getPreferences("com.tiar.shantirunner.shop");
 
     public PersonajesSubMenu(Table contenedor, MainGame game) {
         idiomas = game.idiomas;
@@ -98,7 +90,7 @@ public class PersonajesSubMenu {
     }
 
     private void inicializarBotones() {
-        arrBotones = new Array<TextButton>();
+        arrBotones = new Array<>();
 
         // DEFAULT
         btSelectShanti = new TextButton(textSelect, Assets.styleTextButtonPurchased);
@@ -162,9 +154,8 @@ public class PersonajesSubMenu {
 
     private void setSelected(TextButton boton) {
         // Pongo todos visibles y al final el boton seleccionado en invisible
-        Iterator<TextButton> i = arrBotones.iterator();
-        while (i.hasNext()) {
-            i.next().setVisible(true);
+        for (com.badlogic.gdx.scenes.scene2d.ui.TextButton arrBotone : arrBotones) {
+            arrBotone.setVisible(true);
         }
         boton.setVisible(false);
     }
