@@ -7,70 +7,65 @@ import com.nopalsoft.ninjarunner.Assets;
 
 
 public class Item implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DESTROY = 1;
-	public int state;
+    public final static int STATE_NORMAL = 0;
+    public final static int STATE_DESTROY = 1;
+    public final static float DURATION_PICK = Assets.pick.animationDuration + .1f;
+    public final float WIDTH;
+    public final float HEIGHT;
+    public final Vector2 position;
+    public int state;
+    public Vector2 velocity;
+    public float stateTime;
 
-	public final static float DURATION_PICK = Assets.pick.animationDuration + .1f;
+    public Item(float width, float height) {
+        position = new Vector2();
+        velocity = new Vector2();
+        this.WIDTH = width;
+        this.HEIGHT = height;
 
-	public final float WIDTH;
-	public final float HEIGHT;
+    }
 
-	public Vector2 velocity;
-	public final Vector2 position;
-	public float stateTime;
+    public void init(float x, float y) {
+        position.set(x, y);
+        velocity.set(0, 0);
+        state = STATE_NORMAL;
+        stateTime = 0;
 
-	public Item(float width, float height) {
-		position = new Vector2();
-		velocity = new Vector2();
-		this.WIDTH = width;
-		this.HEIGHT = height;
+    }
 
-	}
+    public void update(float delta, Body body, Mascota oMascota, Personaje oPersonaje) {
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		velocity.set(0, 0);
-		state = STATE_NORMAL;
-		stateTime = 0;
+        if (state == STATE_NORMAL) {
+            position.x = body.getPosition().x;
+            position.y = body.getPosition().y;
 
-	}
+            /* Primero checo si se atraen al personaje */
+            if (oPersonaje.isMagnetEnabled && position.dst(oPersonaje.position) <= 5f) {
+                moveCoinsMagenet(body, oPersonaje.position);
 
-	public void update(float delta, Body body, Mascota oMascota, Personaje oPersonaje) {
+            } else if (oMascota != null && position.dst(oMascota.position) <= 2f) {
+                // moveCoinsMagenet(body, oMascota.position);
+            } else
+                body.setLinearVelocity(0, 0);
+        }
 
-		if (state == STATE_NORMAL) {
-			position.x = body.getPosition().x;
-			position.y = body.getPosition().y;
+        stateTime += delta;
+    }
 
-			/** Primero checo si se atraen al personaje */
-			if (oPersonaje.isMagnetEnabled && position.dst(oPersonaje.position) <= 5f) {
-				moveCoinsMagenet(body, oPersonaje.position);
+    private void moveCoinsMagenet(Body body, Vector2 targetPosition) {
+        velocity = body.getLinearVelocity();
+        velocity.set(targetPosition).sub(position).scl(Personaje.VELOCIDAD_DASH + 3);
+        body.setLinearVelocity(velocity);
+    }
 
-			}
-			else if (oMascota != null && position.dst(oMascota.position) <= 2f) {
-				// moveCoinsMagenet(body, oMascota.position);
-			}
-			else
-				body.setLinearVelocity(0, 0);
-		}
+    public void setPicked() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DESTROY;
+            stateTime = 0;
+        }
+    }
 
-		stateTime += delta;
-	}
-
-	private void moveCoinsMagenet(Body body, Vector2 targetPosition) {
-		velocity = body.getLinearVelocity();
-		velocity.set(targetPosition).sub(position).scl(Personaje.VELOCIDAD_DASH + 3);
-		body.setLinearVelocity(velocity);
-	}
-
-	public void setPicked() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DESTROY;
-			stateTime = 0;
-		}
-	}
-
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 }

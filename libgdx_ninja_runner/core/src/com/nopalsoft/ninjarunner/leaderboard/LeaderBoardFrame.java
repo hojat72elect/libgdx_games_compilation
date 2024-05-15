@@ -10,16 +10,13 @@ import com.nopalsoft.ninjarunner.Assets;
 
 public class LeaderBoardFrame extends Table {
     Person oPersona;
+    Label lbNombre;
+    Label lbScore;
+    Table tbAux;//Es necesaria porque del lado izq va una foto y del lado derecho varios textField en renglones
     /**
      * uso un image button porque puede tener fondo y una imagen
      */
     private ImageButton imagenPersona;
-    private Image imagenCuenta;
-
-    Label lbNombre;
-    Label lbScore;
-
-    Table tbAux;//Es necesaria porque del lado izq va una foto y del lado derecho varios textField en renglones
 
     public LeaderBoardFrame(Person persona) {
         setBackground(Assets.backgroundItemShop);

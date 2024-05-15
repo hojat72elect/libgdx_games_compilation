@@ -96,9 +96,6 @@ public class LeaderboardScreen extends Screens {
         btInviteFriend = new Button(Assets.btSettings, Assets.btSettingsPress, Assets.btLeaderboardPress);
 
         btLeaderboard.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-            }
 
         });
 
@@ -122,13 +119,9 @@ public class LeaderboardScreen extends Screens {
         });
 
         btInviteFriend.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-            }
         });
 
-        ButtonGroup<Button> radioGroup = new ButtonGroup<Button>();
+        ButtonGroup<Button> radioGroup = new ButtonGroup<>();
         radioGroup.add(btLeaderboard, btFacebook, btGoogle, btInviteFriend);
 
     }

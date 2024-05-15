@@ -10,267 +10,234 @@ import com.nopalsoft.ninjarunner.Settings;
  * Created by Yayo on 21/Jan/2015.
  */
 public class Personaje {
-	public final static int STATE_NORMAL = 0;// NORMAL APLICA PARA RUN,DASH,SLIDE,JUMP
-	public final static int STATE_HURT = 1;
-	public final static int STATE_DIZZY = 2;
-	public final static int STATE_DEAD = 3;
-	public final static int STATE_REVIVE = 4;
-	public int state;
+    public final static int STATE_NORMAL = 0;// NORMAL APLICA PARA RUN,DASH,SLIDE,JUMP
+    public final static int STATE_HURT = 1;
+    public final static int STATE_DIZZY = 2;
+    public final static int STATE_DEAD = 3;
+    public final static int STATE_REVIVE = 4;
+    public final static int TIPO_GIRL = 0;
+    public final static int TIPO_BOY = 1;
+    public final static int TIPO_NINJA = 2;
+    public final static float DRAW_WIDTH = 1.27f;
+    public final static float DRAW_HEIGHT = 1.05f;
+    public final static float WIDTH = .55f;
+    public final static float HEIGHT = 1f;
+    public final static float HEIGHT_SLIDE = .45f;
+    public static final float VELOCIDAD_RUN = 3;
+    public static final float VELOCIDAD_DASH = 7;
+    public final static float DURATION_DEAD = Assets.personajeDead.animationDuration + .5f;
+    public final static float DURATION_HURT = Assets.personajeHurt.animationDuration + .1f;
+    public final static float DURATION_DIZZY = 1.25f;
+    public static float VELOCIDAD_JUMP = 5;
+    public final int tipo;
+    public final float VELOCIDAD_SECOND_JUMP = 4;
+    public final int MAX_VIDAS = Settings.LEVEL_LIFE + 5;
+    final float DURATION_MAGNET;
+    final float DURATION_DASH = 5;
+    final Vector2 initialPosition;
+    public int state;
+    public Vector2 position;
+    public float stateTime;
+    public boolean isJumping;// To know if i can draw the jumping animation
+    public int numPisosEnContacto;// Pisos que esta tocando actualmente si es ==0 no puede saltar
+    public boolean didGetHurtAtLeastOnce;
+    /**
+     * Verdadero si toca las escaleras
+     */
 
-	public final static int TIPO_GIRL = 0;
-	public final static int TIPO_BOY = 1;
-	public final static int TIPO_NINJA = 2;
-	public final int tipo;
+    public int vidas;
+    public boolean isDash;
+    public boolean isSlide;
+    public boolean isIdle;
+    /**
+     * Power
+     **/
+    public boolean isMagnetEnabled = false;
+    float durationMagnet;
+    float durationDash;
+    private boolean canJump;
+    private boolean canDoubleJump;
 
-	public final static float DRAW_WIDTH = 1.27f;
-	public final static float DRAW_HEIGHT = 1.05f;
+    public Personaje(float x, float y, int tipo) {
+        position = new Vector2(x, y);
+        initialPosition = new Vector2(x, y);
+        state = STATE_NORMAL;
+        stateTime = 0;
+        this.tipo = tipo;
+        canJump = true;
+        canDoubleJump = true;
+        didGetHurtAtLeastOnce = false;
+        isIdle = true;
 
-	public final static float WIDTH = .55f;
-	public final static float HEIGHT = 1f;
+        vidas = MAX_VIDAS;
+        DURATION_MAGNET = 10;
 
-	public final static float HEIGHT_SLIDE = .45f;
+    }
 
-	public static final float VELOCIDAD_RUN = 3;
-	public static final float VELOCIDAD_DASH = 7;
+    public void update(float delta, Body body, boolean didJump, boolean isJumpPressed, boolean dash, boolean didSlide) {
+        position.x = body.getPosition().x;
+        position.y = body.getPosition().y;
 
-	public static float VELOCIDAD_JUMP = 5;
-	public final float VELOCIDAD_SECOND_JUMP = 4;
+        isIdle = false;
 
-	public final static float DURATION_DEAD = Assets.personajeDead.animationDuration + .5f;
-	public final static float DURATION_HURT = Assets.personajeHurt.animationDuration + .1f;
-	public final static float DURATION_DIZZY = 1.25f;
+        // No importa si esta vivo/dizzy/ o lo que sea se le quita el tiempo
+        if (isMagnetEnabled) {
+            durationMagnet += delta;
+            if (durationMagnet >= DURATION_MAGNET) {
+                durationMagnet = 0;
+                isMagnetEnabled = false;
+            }
+        }
 
-	final float DURATION_MAGNET;
-	float durationMagnet;
+        if (state == STATE_REVIVE) {
+            state = STATE_NORMAL;
+            canJump = true;
+            isJumping = false;
+            canDoubleJump = true;
+            stateTime = 0;
+            vidas = MAX_VIDAS;
+            initialPosition.y = 3;
+            position.x = initialPosition.x;
+            position.y = initialPosition.y;
+            body.setTransform(initialPosition, 0);
+            body.setLinearVelocity(0, 0);
 
-	final float DURATION_DASH = 5;
-	float durationDash;
+        } else if (state == STATE_HURT) {
+            stateTime += delta;
+            if (stateTime >= DURATION_HURT) {
+                state = STATE_NORMAL;
+                stateTime = 0;
+            }
+        } else if (state == STATE_DIZZY) {
+            stateTime += delta;
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+            if (stateTime >= DURATION_DIZZY) {
+                state = STATE_NORMAL;
+                stateTime = 0;
+            }
+            return;
+        } else if (state == STATE_DEAD) {
+            stateTime += delta;
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+            return;
+        }
 
-	final Vector2 initialPosition;
-	public Vector2 position;
-	public float stateTime;
+        Vector2 velocity = body.getLinearVelocity();
 
-	public boolean isJumping;// To know if i can draw the jumping animation
+        if (didJump && (canJump || canDoubleJump)) {
+            velocity.y = VELOCIDAD_JUMP;
 
-	public int numPisosEnContacto;// Pisos que esta tocando actualmente si es ==0 no puede saltar
+            if (!canJump) {
+                canDoubleJump = false;
+                velocity.y = VELOCIDAD_SECOND_JUMP;
+            }
 
-	private boolean canJump;
-	private boolean canDoubleJump;
+            canJump = false;
+            isJumping = true;
+            stateTime = 0;
 
-	public boolean didGetHurtAtLeastOnce;
+            isSlide = false;
 
-	/**
-	 * Verdadero si toca las escaleras
-	 */
+            body.setGravityScale(.9f);
+            Assets.playSound(Assets.jump, 1);// FIXME Arreglar el sonido
 
-	public int vidas;
-	public final int MAX_VIDAS = Settings.LEVEL_LIFE + 5;
+        }
+        if (!isJumpPressed)
+            body.setGravityScale(1);
 
-	public boolean isDash;
-	public boolean isSlide;
-	public boolean isIdle;
+        if (!isJumping) {
+            isSlide = didSlide;
+        }
 
-	/** Power **/
-	public boolean isMagnetEnabled = false;
+        // DASH
+        if (dash) {
+            isDash = true;
+            durationDash = 0;
+        }
 
-	public Personaje(float x, float y, int tipo) {
-		position = new Vector2(x, y);
-		initialPosition = new Vector2(x, y);
-		state = STATE_NORMAL;
-		stateTime = 0;
-		this.tipo = tipo;
-		canJump = true;
-		canDoubleJump = true;
-		didGetHurtAtLeastOnce = false;
-		isIdle = true;
+        if (isDash) {
+            durationDash += delta;
+            velocity.x = VELOCIDAD_DASH;
+            if (durationDash >= DURATION_DASH) {
+                isDash = false;
+                stateTime = 0;
+                velocity.x = VELOCIDAD_RUN;
+            }
+        } else {
+            velocity.x = VELOCIDAD_RUN;
+        }
+        stateTime += delta;
 
-		vidas = MAX_VIDAS;
-		DURATION_MAGNET = 10;
+        body.setLinearVelocity(velocity);
 
-	}
+    }
 
-	public void update(float delta, Body body, boolean didJump, boolean isJumpPressed, boolean dash, boolean didSlide) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
+    public void getHurt() {
+        if (state != STATE_NORMAL)
+            return;
 
-		isIdle = false;
+        vidas--;
+        if (vidas > 0) {
+            state = STATE_HURT;
+        } else {
+            state = STATE_DEAD;
+        }
+        stateTime = 0;
+        didGetHurtAtLeastOnce = true;
+    }
 
-		// No importa si esta vivo/dizzy/ o lo que sea se le quita el tiempo
-		if (isMagnetEnabled) {
-			durationMagnet += delta;
-			if (durationMagnet >= DURATION_MAGNET) {
-				durationMagnet = 0;
-				isMagnetEnabled = false;
-			}
-		}
+    public void getDizzy() {
+        if (state != STATE_NORMAL)
+            return;
 
-		if (state == STATE_REVIVE) {
-			state = STATE_NORMAL;
-			canJump = true;
-			isJumping = false;
-			canDoubleJump = true;
-			stateTime = 0;
-			vidas = MAX_VIDAS;
-			initialPosition.y = 3;
-			position.x = initialPosition.x;
-			position.y = initialPosition.y;
-			body.setTransform(initialPosition, 0);
-			body.setLinearVelocity(0, 0);
+        vidas--;
+        if (vidas > 0) {
+            state = STATE_DIZZY;
+        } else {
+            state = STATE_DEAD;
+        }
+        stateTime = 0;
+        didGetHurtAtLeastOnce = true;
+    }
 
-		}
-		else if (state == STATE_HURT) {
-			stateTime += delta;
-			if (stateTime >= DURATION_HURT) {
-				state = STATE_NORMAL;
-				stateTime = 0;
-			}
-		}
-		else if (state == STATE_DIZZY) {
-			stateTime += delta;
-			body.setLinearVelocity(0, body.getLinearVelocity().y);
-			if (stateTime >= DURATION_DIZZY) {
-				state = STATE_NORMAL;
-				stateTime = 0;
-			}
-			return;
-		}
-		else if (state == STATE_DEAD) {
-			stateTime += delta;
-			body.setLinearVelocity(0, body.getLinearVelocity().y);
-			return;
-		}
+    public void die() {
+        if (state != STATE_DEAD) {
+            vidas = 0;
 
-		Vector2 velocity = body.getLinearVelocity();
+            state = STATE_DEAD;
+            stateTime = 0;
+        }
+    }
 
-		if (didJump && (canJump || canDoubleJump)) {
-			velocity.y = VELOCIDAD_JUMP;
+    public void touchFloor() {
+        numPisosEnContacto++;
 
-			if (!canJump) {
-				canDoubleJump = false;
-				velocity.y = VELOCIDAD_SECOND_JUMP;
-			}
+        canJump = true;
+        isJumping = false;
+        canDoubleJump = true;
+        if (state == STATE_NORMAL)
+            stateTime = 0;
+    }
 
-			canJump = false;
-			isJumping = true;
-			stateTime = 0;
+    public void endTouchFloor() {
+        numPisosEnContacto--;
+        if (numPisosEnContacto == 0) {
+            canJump = false;
 
-			isSlide = false;
+            // Si dejo de tocar el piso porque salto todavia puede saltar otra vez
+            if (!isJumping)
+                canDoubleJump = false;
+        }
 
-			body.setGravityScale(.9f);
-			Assets.playSound(Assets.jump, 1);// FIXME Arreglar el sonido
+    }
 
-		}
-		if (!isJumpPressed)
-			body.setGravityScale(1);
+    public void updateStateTime(float delta) {
+        stateTime += delta;
+    }
 
-		if (!isJumping) {
-			isSlide = didSlide;
-		}
+    public void setPickUpMagnet() {
+        durationMagnet = 0;
+        isMagnetEnabled = true;
 
-		// DASH
-		if (dash) {
-			isDash = true;
-			durationDash = 0;
-		}
-
-		if (isDash) {
-			durationDash += delta;
-			velocity.x = VELOCIDAD_DASH;
-			if (durationDash >= DURATION_DASH) {
-				isDash = false;
-				stateTime = 0;
-				velocity.x = VELOCIDAD_RUN;
-			}
-		}
-		else {
-			velocity.x = VELOCIDAD_RUN;
-		}
-		stateTime += delta;
-
-		body.setLinearVelocity(velocity);
-
-	}
-
-	public void getHurt() {
-		if (state != STATE_NORMAL)
-			return;
-
-		vidas--;
-		if (vidas > 0) {
-			state = STATE_HURT;
-		}
-		else {
-			state = STATE_DEAD;
-		}
-		stateTime = 0;
-		didGetHurtAtLeastOnce = true;
-	}
-
-	public void getDizzy() {
-		if (state != STATE_NORMAL)
-			return;
-
-		vidas--;
-		if (vidas > 0) {
-			state = STATE_DIZZY;
-		}
-		else {
-			state = STATE_DEAD;
-		}
-		stateTime = 0;
-		didGetHurtAtLeastOnce = true;
-	}
-
-	public void getHearth() {
-		vidas += 1;
-		if (vidas > MAX_VIDAS)
-			vidas = MAX_VIDAS;
-	}
-
-	public void die() {
-		if (state != STATE_DEAD) {
-			vidas = 0;
-
-			state = STATE_DEAD;
-			stateTime = 0;
-		}
-	}
-
-	public void touchFloor() {
-		numPisosEnContacto++;
-
-		canJump = true;
-		isJumping = false;
-		canDoubleJump = true;
-		if (state == STATE_NORMAL)
-			stateTime = 0;
-	}
-
-	public void endTouchFloor() {
-		numPisosEnContacto--;
-		if (numPisosEnContacto == 0) {
-			canJump = false;
-
-			// Si dejo de tocar el piso porque salto todavia puede saltar otra vez
-			if (!isJumping)
-				canDoubleJump = false;
-		}
-
-	}
-
-	public void revive() {
-		state = STATE_REVIVE;
-		stateTime = 0;
-
-	}
-
-	public void updateStateTime(float delta) {
-		stateTime += delta;
-	}
-
-	public void setPickUpMagnet() {
-		durationMagnet = 0;
-		isMagnetEnabled = true;
-
-	}
+    }
 }
