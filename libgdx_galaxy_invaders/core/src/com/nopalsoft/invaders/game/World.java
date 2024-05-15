@@ -194,10 +194,10 @@ public class World {
         Iterator<Missile> it = missiles.iterator();
         while (it.hasNext()) {
             Missile oMissile = it.next();
-            if (oMissile.position.y > HEIGHT + 2 && oMissile.state != Missile.STATE_EXPLOTANDO)
+            if (oMissile.position.y > HEIGHT + 2 && oMissile.state != Missile.STATE_EXPLODING)
                 oMissile.hitTarget();
             oMissile.update(deltaTime);
-            if (oMissile.state == Missile.STATE_EXPLOTANDO && oMissile.stateTime > Missile.TIEMPO_EXPLODE) {
+            if (oMissile.state == Missile.STATE_EXPLODING && oMissile.stateTime > Missile.EXPLODE_TIME) {
                 it.remove();
 
             }
@@ -256,7 +256,7 @@ public class World {
     private void checkColisionAlienMissil() {
         for (Missile oMissile : missiles) {
             for (AlienShip oAlien : alienShips) {
-                if (oMissile.state == Missile.STATE_DISPARADO && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsRectangle) && oAlien.state != AlienShip.EXPLOTING) {
+                if (oMissile.state == Missile.STATE_TRIGGERED && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsRectangle) && oAlien.state != AlienShip.EXPLOTING) {
                     oMissile.hitTarget();
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
@@ -266,7 +266,7 @@ public class World {
                     }
                 }
                 // Checo con el radio de la explosion
-                if (oMissile.state == Missile.STATE_EXPLOTANDO && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsCircle) && oAlien.state != AlienShip.EXPLOTING) {
+                if (oMissile.state == Missile.STATE_EXPLODING && Intersector.overlaps(oAlien.boundsCircle, oMissile.boundsCircle) && oAlien.state != AlienShip.EXPLOTING) {
                     oAlien.beingHit();
                     if (oAlien.state == AlienShip.EXPLOTING) {// Solo aumenta la puntuacion y agrego boost si ya esta exlotando, no si disminuyo su vida
                         score += oAlien.punctuation;// Actualizo la puntuacion

@@ -1,19 +1,16 @@
-package com.nopalsoft.invaders.frame;
+package com.nopalsoft.invaders.frame
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector2
 
-public class DynamicGameObject extends GameObject {
-    public final Vector2 velocity;
+open class DynamicGameObject : GameObject {
+    @JvmField
+    val velocity: Vector2
 
-    public DynamicGameObject(float x, float y, float width, float height) {
-        super(x, y, width, height);
-        velocity = new Vector2();
+    constructor(x: Float, y: Float, width: Float, height: Float) : super(x, y, width, height) {
+        velocity = Vector2()
     }
 
-    public DynamicGameObject(float x, float y, float radio) {
-        super(x, y, radio);
-        velocity = new Vector2();
+    constructor(x: Float, y: Float, radio: Float) : super(x, y, radio) {
+        velocity = Vector2()
     }
-
-
 }

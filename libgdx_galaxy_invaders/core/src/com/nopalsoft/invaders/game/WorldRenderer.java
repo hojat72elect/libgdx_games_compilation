@@ -149,13 +149,13 @@ public class WorldRenderer {
             float widht, heigth;
             TextureRegion keyFrame;
             switch (oMissile.state) {
-                case Missile.STATE_DISPARADO:
+                case Missile.STATE_TRIGGERED:
                     keyFrame = Assets.missile.getKeyFrame(oMissile.stateTime, true);
                     widht = .8f;
                     heigth = 2.5f;
                     break;
                 default:
-                case Missile.STATE_EXPLOTANDO:
+                case Missile.STATE_EXPLODING:
                     keyFrame = Assets.explosionFuego.getKeyFrame(oMissile.stateTime, false);
                     widht = heigth = 15.0f;
                     break;

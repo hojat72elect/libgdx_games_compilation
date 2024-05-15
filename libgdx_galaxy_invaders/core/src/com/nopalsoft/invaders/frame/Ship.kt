@@ -1,81 +1,85 @@
-package com.nopalsoft.invaders.frame;
+package com.nopalsoft.invaders.frame
 
-import com.badlogic.gdx.Gdx;
-import com.nopalsoft.invaders.game.World;
+import com.badlogic.gdx.Gdx
+import com.nopalsoft.invaders.game.World
 
-public class Ship extends DynamicGameObject {
+class Ship(x: Float, y: Float) : DynamicGameObject(x, y, WIDTH, HEIGHT) {
+    @JvmField
+    var livesShield: Int = 1
 
-    public static final float DRAW_WIDTH = 4.5f;
-    public static final float DRAW_HEIGHT = 3.6f;
+    @JvmField
+    var lives: Int = 3
 
-    public static final float WIDTH = 4f;
-    public static final float HEIGHT = 2.5f;
+    @JvmField
+    var state: Int
 
-    public static final float NAVE_MOVE_SPEED = 50;
+    @JvmField
+    var stateTime: Float = 0f
 
-    public static final int NAVE_STATE_NORMAL = 0;
-    public static final int NAVE_STATE_EXPLODE = 1;
-    public static final int NAVE_STATE_BEING_HIT = 2;
-
-    public static final float EXPLODE_TIME = 0.05f * 19;
-    public static final float HIT_TIME = 0.05f * 21; // uno mas pa que tenga tantillo tiempo de pensar jaja
-
-    public int livesShield;
-    public int lives;
-    public int state;
-    public float stateTime;
-
-    public Ship(float x, float y) {
-        super(x, y, WIDTH, HEIGHT);
-        lives = 3;
-        livesShield = 1;// empizas con 1 de shield por si los putos te pegan
-        state = NAVE_STATE_NORMAL;
-        Gdx.app.log("Estado", "Se creo la nave");
+    init {
+        // empizas con 1 de shield por si los putos te pegan
+        state = NAVE_STATE_NORMAL
+        Gdx.app.log("Estado", "Se creo la nave")
     }
 
-    public void update(float deltaTime) {
-        position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-        boundsRectangle.x = position.x - boundsRectangle.width / 2;
-        boundsRectangle.y = position.y - boundsRectangle.height / 2;
+    fun update(deltaTime: Float) {
+        position.add(velocity.x * deltaTime, velocity.y * deltaTime)
+        boundsRectangle!!.x = position.x - boundsRectangle.width / 2
+        boundsRectangle.y = position.y - boundsRectangle.height / 2
 
         if (state == NAVE_STATE_BEING_HIT && stateTime > HIT_TIME) {
-            state = NAVE_STATE_NORMAL;
-            stateTime = 0;
-            Gdx.app.log("Estado", "Se cambio a normal");
+            state = NAVE_STATE_NORMAL
+            stateTime = 0f
+            Gdx.app.log("Estado", "Se cambio a normal")
         }
 
-        if (position.x < WIDTH / 2)
-            position.x = WIDTH / 2;
-        if (position.x > World.WIDTH - WIDTH / 2)
-            position.x = World.WIDTH - WIDTH / 2;
-        stateTime += deltaTime;
+        if (position.x < WIDTH / 2) position.x = WIDTH / 2
+        if (position.x > World.WIDTH - WIDTH / 2) position.x = World.WIDTH - WIDTH / 2
+        stateTime += deltaTime
     }
 
-    public void beingHit() {
+    fun beingHit() {
         if (livesShield > 0) {
-            livesShield--;
+            livesShield--
         } else {
-            lives--;
+            lives--
             if (lives <= 0) {
-                state = NAVE_STATE_EXPLODE;
-                stateTime = 0;
-                velocity.set(0, 0);
+                state = NAVE_STATE_EXPLODE
+                stateTime = 0f
+                velocity[0f] = 0f
             } else {
-                state = NAVE_STATE_BEING_HIT;
-                stateTime = 0;
+                state = NAVE_STATE_BEING_HIT
+                stateTime = 0f
             }
         }
     }
 
-    public void hitExtraLife() {
+    fun hitExtraLife() {
         if (lives < 99) {
-            lives++;
+            lives++
         }
     }
 
-    public void hitShield() {
-        stateTime = 0;
-        livesShield = 3;
+    fun hitShield() {
+        stateTime = 0f
+        livesShield = 3
     }
 
+    companion object {
+        const val DRAW_WIDTH: Float = 4.5f
+        const val DRAW_HEIGHT: Float = 3.6f
+
+        const val WIDTH: Float = 4f
+        const val HEIGHT: Float = 2.5f
+
+        const val NAVE_MOVE_SPEED: Float = 50f
+
+        const val NAVE_STATE_NORMAL: Int = 0
+        const val NAVE_STATE_EXPLODE: Int = 1
+        const val NAVE_STATE_BEING_HIT: Int = 2
+
+        const val EXPLODE_TIME: Float = 0.05f * 19
+        const val HIT_TIME: Float =
+            0.05f * 21 // uno mas pa que tenga tantillo tiempo de pensar jaja
+    }
 }
