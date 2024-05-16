@@ -49,18 +49,18 @@ public class Character extends Tiles {
         TextureRegion keyFrame;
         if (Settings.getAnimationWalkIsON()) {
             if (state == STATE_DOWN) {
-                keyFrame = Assets.personajeDown.getKeyFrame(stateTime, true);
+                keyFrame = Assets.characterGoingDown.getKeyFrame(stateTime, true);
             } else if (state == STATE_UP) {
-                keyFrame = Assets.personajeUp.getKeyFrame(stateTime, true);
+                keyFrame = Assets.characterGoingUp.getKeyFrame(stateTime, true);
             } else if (state == STATE_LEFT) {
-                keyFrame = Assets.personajeLeft.getKeyFrame(stateTime, true);
+                keyFrame = Assets.characterGoingLeft.getKeyFrame(stateTime, true);
             } else if (state == STATE_RIGHT) {
-                keyFrame = Assets.personajeRight.getKeyFrame(stateTime, true);
+                keyFrame = Assets.characterGoingRight.getKeyFrame(stateTime, true);
             } else {
-                keyFrame = Assets.personajeStand;
+                keyFrame = Assets.characterStand;
             }
         } else {
-            keyFrame = Assets.personajeStand;
+            keyFrame = Assets.characterStand;
         }
 
         batch.draw(keyFrame, getX(), getY(), SIZE, SIZE);

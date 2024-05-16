@@ -66,7 +66,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
     }
 
     public void changeScreenWithFadeOut(final Class<?> newScreen, final int level, final MainSokoban game) {
-        blackFadeOut = new Image(Assets.pixelNegro);
+        blackFadeOut = new Image(Assets.blackPixel);
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {

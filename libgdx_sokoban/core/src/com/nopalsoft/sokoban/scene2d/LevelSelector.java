@@ -45,7 +45,7 @@ public class LevelSelector extends Group {
         game = currentScreen.game;
         idiomas = game.languages;
 
-        setBackGround(Assets.backgroundVentana);
+        setBackGround(Assets.backgroundWindow);
 
         vtLevel = new WindowLevel(currentScreen);
 

@@ -27,7 +27,7 @@ public class WindowPause extends Window {
         Table tbMenu = new Table();
         tbMenu.setFillParent(true);
 
-        btHome = new Button(Assets.btHome, Assets.btHomePress);
+        btHome = new Button(Assets.buttonHome, Assets.buttonHomePressed);
         btHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -35,7 +35,7 @@ public class WindowPause extends Window {
             }
         });
 
-        btRefresh = new Button(Assets.btRefresh, Assets.btRefreshPress);
+        btRefresh = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
         btRefresh.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -43,7 +43,7 @@ public class WindowPause extends Window {
             }
         });
 
-        final Button btAnimations = new Button(Assets.btOff, Assets.btOn, Assets.btOn);
+        final Button btAnimations = new Button(Assets.buttonOff, Assets.buttonOn, Assets.buttonOn);
         btAnimations.setChecked(Settings.getAnimationWalkIsON());
 
         tbAnimations = new Table();

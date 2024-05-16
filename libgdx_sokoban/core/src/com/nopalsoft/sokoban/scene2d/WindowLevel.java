@@ -27,10 +27,10 @@ public class WindowLevel extends Window {
         Table tbMenu = new Table();
         tbMenu.setFillParent(true);
 
-        btPlay = new Button(Assets.btPlay, Assets.btPlayPress);
+        btPlay = new Button(Assets.buttonPlay, Assets.buttonPlayPressed);
 
         Image imgClock = new Image(Assets.clock);
-        Image imgMoves = new Image(Assets.personajeStand);
+        Image imgMoves = new Image(Assets.characterStand);
 
         lbBestMoves = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
         lbBestTime = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));

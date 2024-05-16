@@ -29,15 +29,15 @@ public class Window extends Group {
         setSize(width, height);
         setY(positionY);
 
-        dim = new Image(Assets.pixelNegro);
+        dim = new Image(Assets.blackPixel);
         dim.setSize(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT);
 
-        setBackGround(Assets.backgroundVentana);
+        setBackGround(Assets.backgroundWindow);
 
     }
 
     protected void setCloseButton() {
-        Button btClose = new Button(Assets.btClose, Assets.btClosePress);
+        Button btClose = new Button(Assets.buttonClose, Assets.buttonClosePressed);
         btClose.setSize((float) 60, (float) 60);
         btClose.setPosition((float) 290, (float) 250);
         btClose.addListener(new ClickListener() {

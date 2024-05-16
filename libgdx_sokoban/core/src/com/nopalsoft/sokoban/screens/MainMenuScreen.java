@@ -23,7 +23,7 @@ public class MainMenuScreen extends Screens {
 
         lvlSelector = new LevelSelector(this);
 
-        btPreviousPage = new Button(Assets.btIzq, Assets.btIzqPress);
+        btPreviousPage = new Button(Assets.buttonLeft, Assets.buttonLeftPressed);
         btPreviousPage.setSize(75, 75);
         btPreviousPage.setPosition(65, 220);
         btPreviousPage.addListener(new ClickListener() {
@@ -33,7 +33,7 @@ public class MainMenuScreen extends Screens {
             }
 
         });
-        btNextPage = new Button(Assets.btDer, Assets.btDerPress);
+        btNextPage = new Button(Assets.buttonRight, Assets.buttonRightPressed);
         btNextPage.setSize(75, 75);
         btNextPage.setPosition(660, 220);
         btNextPage.addListener(new ClickListener() {
@@ -43,27 +43,27 @@ public class MainMenuScreen extends Screens {
             }
         });
 
-        btLeaderboard = new Button(Assets.btLeaderboard, Assets.btLeaderboardPress);
+        btLeaderboard = new Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed);
         btLeaderboard.addListener(new ClickListener() {
 
         });
 
-        btAchievements = new Button(Assets.btAchievement, Assets.btAchievementPress);
+        btAchievements = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed);
         btAchievements.addListener(new ClickListener() {
 
         });
 
-        btFacebook = new Button(Assets.btFacebook, Assets.btFacebookPress);
+        btFacebook = new Button(Assets.buttonFacebook, Assets.buttonFacebookPressed);
         btFacebook.addListener(new ClickListener() {
 
         });
 
-        btSettings = new Button(Assets.btSettings, Assets.btSettingsPress);
+        btSettings = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed);
         btSettings.addListener(new ClickListener() {
 
         });
 
-        btMore = new Button(Assets.btMas, Assets.btMasPress);
+        btMore = new Button(Assets.buttonMore, Assets.buttonMorePressed);
         btMore.addListener(new ClickListener() {
 
         });

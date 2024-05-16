@@ -23,65 +23,65 @@ public class Assets {
     public static BitmapFont fontRed;
 
     public static ParallaxBackground background;
-    public static NinePatchDrawable pixelNegro;
+    public static NinePatchDrawable blackPixel;
 
     public static TiledMap map;
 
     public static TextureRegionDrawable backgroundMoves;
     public static TextureRegionDrawable backgroundTime;
 
-    public static TextureRegionDrawable btDer;
-    public static TextureRegionDrawable btDerPress;
-    public static TextureRegionDrawable btIzq;
-    public static TextureRegionDrawable btIzqPress;
-    public static TextureRegionDrawable btUp;
-    public static TextureRegionDrawable btUpPress;
-    public static TextureRegionDrawable btDown;
-    public static TextureRegionDrawable btDownPress;
-    public static TextureRegionDrawable btRefresh;
-    public static TextureRegionDrawable btRefreshPress;
-    public static TextureRegionDrawable btPausa;
-    public static TextureRegionDrawable btPausaPress;
-    public static TextureRegionDrawable btLeaderboard;
-    public static TextureRegionDrawable btLeaderboardPress;
-    public static TextureRegionDrawable btAchievement;
-    public static TextureRegionDrawable btAchievementPress;
-    public static TextureRegionDrawable btFacebook;
-    public static TextureRegionDrawable btFacebookPress;
-    public static TextureRegionDrawable btSettings;
-    public static TextureRegionDrawable btSettingsPress;
-    public static TextureRegionDrawable btMas;
-    public static TextureRegionDrawable btMasPress;
-    public static TextureRegionDrawable btClose;
-    public static TextureRegionDrawable btClosePress;
-    public static TextureRegionDrawable btHome;
-    public static TextureRegionDrawable btHomePress;
-    public static TextureRegionDrawable btOff;
-    public static TextureRegionDrawable btOn;
-    public static TextureRegionDrawable btPlay;
-    public static TextureRegionDrawable btPlayPress;
+    public static TextureRegionDrawable buttonRight;
+    public static TextureRegionDrawable buttonRightPressed;
+    public static TextureRegionDrawable buttonLeft;
+    public static TextureRegionDrawable buttonLeftPressed;
+    public static TextureRegionDrawable buttonUp;
+    public static TextureRegionDrawable buttonUpPressed;
+    public static TextureRegionDrawable buttonDown;
+    public static TextureRegionDrawable buttonDownPressed;
+    public static TextureRegionDrawable buttonRefresh;
+    public static TextureRegionDrawable buttonRefreshPressed;
+    public static TextureRegionDrawable buttonPause;
+    public static TextureRegionDrawable buttonPausePressed;
+    public static TextureRegionDrawable buttonLeaderboard;
+    public static TextureRegionDrawable buttonLeaderboardPressed;
+    public static TextureRegionDrawable buttonAchievement;
+    public static TextureRegionDrawable buttonAchievementPressed;
+    public static TextureRegionDrawable buttonFacebook;
+    public static TextureRegionDrawable buttonFacebookPressed;
+    public static TextureRegionDrawable buttonSettings;
+    public static TextureRegionDrawable buttonSettingsPressed;
+    public static TextureRegionDrawable buttonMore;
+    public static TextureRegionDrawable buttonMorePressed;
+    public static TextureRegionDrawable buttonClose;
+    public static TextureRegionDrawable buttonClosePressed;
+    public static TextureRegionDrawable buttonHome;
+    public static TextureRegionDrawable buttonHomePressed;
+    public static TextureRegionDrawable buttonOff;
+    public static TextureRegionDrawable buttonOn;
+    public static TextureRegionDrawable buttonPlay;
+    public static TextureRegionDrawable buttonPlayPressed;
 
     public static TextureRegionDrawable levelOff;
     public static TextureRegionDrawable levelStar;
 
     public static TextureRegionDrawable clock;
 
-    public static AtlasRegion cajaBeige;
-    public static AtlasRegion cajaDarkBeige;
-    public static AtlasRegion cajaBlack;
-    public static AtlasRegion cajaDarkBlack;
-    public static AtlasRegion cajaBlue;
-    public static AtlasRegion cajaDarkBlue;
-    public static AtlasRegion cajaBrown;
-    public static AtlasRegion cajaDarkBrown;
-    public static AtlasRegion cajaGray;
-    public static AtlasRegion cajaDarkGray;
-    public static AtlasRegion cajaPurple;
-    public static AtlasRegion cajaDarkPurple;
-    public static AtlasRegion cajaRed;
-    public static AtlasRegion cajaDarkRed;
-    public static AtlasRegion cajaYellow;
-    public static AtlasRegion cajaDarkYellow;
+    public static AtlasRegion beigeBox;
+    public static AtlasRegion darkBeigeBox;
+    public static AtlasRegion blackBox;
+    public static AtlasRegion darkBlackBox;
+    public static AtlasRegion blueBox;
+    public static AtlasRegion darkBlueBox;
+    public static AtlasRegion brownBox;
+    public static AtlasRegion darkBrownBox;
+    public static AtlasRegion grayBox;
+    public static AtlasRegion darkGrayBox;
+    public static AtlasRegion purpleBox;
+    public static AtlasRegion darkPurpleBox;
+    public static AtlasRegion redBox;
+    public static AtlasRegion darkRedBox;
+    public static AtlasRegion yellowBox;
+    public static AtlasRegion darkYellowBox;
 
     public static AtlasRegion endPointBeige;
     public static AtlasRegion endPointBlack;
@@ -92,12 +92,12 @@ public class Assets {
     public static AtlasRegion endPointRed;
     public static AtlasRegion endPointYellow;
 
-    public static Animation<TextureRegion> personajeUp;
-    public static Animation<TextureRegion> personajeDown;
-    public static Animation<TextureRegion> personajeLeft;
-    public static Animation<TextureRegion> personajeRight;
-    public static AtlasRegion personajeStand;
-    public static TextureRegionDrawable backgroundVentana;
+    public static Animation<TextureRegion> characterGoingUp;
+    public static Animation<TextureRegion> characterGoingDown;
+    public static Animation<TextureRegion> characterGoingLeft;
+    public static Animation<TextureRegion> characterGoingRight;
+    public static AtlasRegion characterStand;
+    public static TextureRegionDrawable backgroundWindow;
     public static TextButtonStyle styleTextButtonLevel;
     public static TextButtonStyle styleTextButtonLevelLocked;
     static TextureAtlas atlas;
@@ -110,26 +110,26 @@ public class Assets {
 
         loadUI();
 
-        pixelNegro = new NinePatchDrawable(new NinePatch(atlas.findRegion("pixelNegro"), 1, 1, 0, 0));
+        blackPixel = new NinePatchDrawable(new NinePatch(atlas.findRegion("pixelNegro"), 1, 1, 0, 0));
 
-        backgroundVentana = new TextureRegionDrawable(atlas.findRegion("UI/backgroundVentana"));
+        backgroundWindow = new TextureRegionDrawable(atlas.findRegion("UI/backgroundVentana"));
 
-        cajaBeige = atlas.findRegion("cajaBeige");
-        cajaDarkBeige = atlas.findRegion("cajaDarkBeige");
-        cajaBlack = atlas.findRegion("cajaBlack");
-        cajaDarkBlack = atlas.findRegion("cajaDarkBlack");
-        cajaBlue = atlas.findRegion("cajaBlue");
-        cajaDarkBlue = atlas.findRegion("cajaDarkBlue");
-        cajaBrown = atlas.findRegion("cajaBrown");
-        cajaDarkBrown = atlas.findRegion("cajaDarkBrown");
-        cajaGray = atlas.findRegion("cajaGray");
-        cajaDarkGray = atlas.findRegion("cajaDarkGray");
-        cajaPurple = atlas.findRegion("cajaPurple");
-        cajaDarkPurple = atlas.findRegion("cajaDarkPurple");
-        cajaRed = atlas.findRegion("cajaRed");
-        cajaDarkRed = atlas.findRegion("cajaDarkRed");
-        cajaYellow = atlas.findRegion("cajaYellow");
-        cajaDarkYellow = atlas.findRegion("cajaDarkYellow");
+        beigeBox = atlas.findRegion("cajaBeige");
+        darkBeigeBox = atlas.findRegion("cajaDarkBeige");
+        blackBox = atlas.findRegion("cajaBlack");
+        darkBlackBox = atlas.findRegion("cajaDarkBlack");
+        blueBox = atlas.findRegion("cajaBlue");
+        darkBlueBox = atlas.findRegion("cajaDarkBlue");
+        brownBox = atlas.findRegion("cajaBrown");
+        darkBrownBox = atlas.findRegion("cajaDarkBrown");
+        grayBox = atlas.findRegion("cajaGray");
+        darkGrayBox = atlas.findRegion("cajaDarkGray");
+        purpleBox = atlas.findRegion("cajaPurple");
+        darkPurpleBox = atlas.findRegion("cajaDarkPurple");
+        redBox = atlas.findRegion("cajaRed");
+        darkRedBox = atlas.findRegion("cajaDarkRed");
+        yellowBox = atlas.findRegion("cajaYellow");
+        darkYellowBox = atlas.findRegion("cajaDarkYellow");
 
         endPointBeige = atlas.findRegion("endPointBeige");
         endPointBlack = atlas.findRegion("endPointBlack");
@@ -140,66 +140,66 @@ public class Assets {
         endPointRed = atlas.findRegion("endPointRed");
         endPointYellow = atlas.findRegion("endPointYellow");
 
-        personajeStand = atlas.findRegion("Character4");
+        characterStand = atlas.findRegion("Character4");
 
         AtlasRegion up1 = atlas.findRegion("Character7");
         AtlasRegion up2 = atlas.findRegion("Character8");
         AtlasRegion up3 = atlas.findRegion("Character9");
-        personajeUp = new Animation<>(.09f, up2, up3, up1);
+        characterGoingUp = new Animation<>(.09f, up2, up3, up1);
 
         AtlasRegion down1 = atlas.findRegion("Character4");
         AtlasRegion down2 = atlas.findRegion("Character5");
         AtlasRegion down3 = atlas.findRegion("Character6");
-        personajeDown = new Animation<>(.09f, down2, down3, down1);
+        characterGoingDown = new Animation<>(.09f, down2, down3, down1);
 
         AtlasRegion right1 = atlas.findRegion("Character2");
         AtlasRegion right2 = atlas.findRegion("Character3");
-        personajeRight = new Animation<>(.09f, right1, right2, right1);
+        characterGoingRight = new Animation<>(.09f, right1, right2, right1);
 
         AtlasRegion left1 = atlas.findRegion("Character1");
         AtlasRegion left2 = atlas.findRegion("Character10");
-        personajeLeft = new Animation<>(.09f, left1, left2, left1);
+        characterGoingLeft = new Animation<>(.09f, left1, left2, left1);
 
-        AtlasRegion regioFondoFlip = atlas.findRegion("backgroundFlip");
-        regioFondoFlip.flip(true, false);
-        ParallaxLayer fondo = new ParallaxLayer(atlas.findRegion("background"), new Vector2(1, 0), new Vector2(0, 0), new Vector2(798, 480), 800, 480);
-        ParallaxLayer fondoFlip = new ParallaxLayer(regioFondoFlip, new Vector2(1, 0), new Vector2(799, 0), new Vector2(798, 480), 800, 480);
-        background = new ParallaxBackground(new ParallaxLayer[]{fondo, fondoFlip}, 800, 480, new Vector2(20, 0));
+        AtlasRegion royalBackgroundFlip = atlas.findRegion("backgroundFlip");
+        royalBackgroundFlip.flip(true, false);
+        ParallaxLayer background = new ParallaxLayer(atlas.findRegion("background"), new Vector2(1, 0), new Vector2(0, 0), new Vector2(798, 480), 800, 480);
+        ParallaxLayer backgroundFlip = new ParallaxLayer(royalBackgroundFlip, new Vector2(1, 0), new Vector2(799, 0), new Vector2(798, 480), 800, 480);
+        Assets.background = new ParallaxBackground(new ParallaxLayer[]{background, backgroundFlip}, 800, 480, new Vector2(20, 0));
 
     }
 
     private static void loadUI() {
-        btDer = new TextureRegionDrawable(atlas.findRegion("UI/btDer"));
-        btDerPress = new TextureRegionDrawable(atlas.findRegion("UI/btDerPress"));
-        btIzq = new TextureRegionDrawable(atlas.findRegion("UI/btIzq"));
-        btIzqPress = new TextureRegionDrawable(atlas.findRegion("UI/btIzqPress"));
-        btUp = new TextureRegionDrawable(atlas.findRegion("UI/btUp"));
-        btUpPress = new TextureRegionDrawable(atlas.findRegion("UI/btUpPress"));
-        btDown = new TextureRegionDrawable(atlas.findRegion("UI/btDown"));
-        btDownPress = new TextureRegionDrawable(atlas.findRegion("UI/btDownPress"));
-        btRefresh = new TextureRegionDrawable(atlas.findRegion("UI/btRefresh"));
-        btRefreshPress = new TextureRegionDrawable(atlas.findRegion("UI/btRefreshPress"));
-        btPausa = new TextureRegionDrawable(atlas.findRegion("UI/btPausa"));
-        btPausaPress = new TextureRegionDrawable(atlas.findRegion("UI/btPausaPress"));
-        btLeaderboard = new TextureRegionDrawable(atlas.findRegion("UI/btLeaderboard"));
-        btLeaderboardPress = new TextureRegionDrawable(atlas.findRegion("UI/btLeaderboardPress"));
-        btAchievement = new TextureRegionDrawable(atlas.findRegion("UI/btAchievement"));
-        btAchievementPress = new TextureRegionDrawable(atlas.findRegion("UI/btAchievementPress"));
-        btFacebook = new TextureRegionDrawable(atlas.findRegion("UI/btFacebook"));
-        btFacebookPress = new TextureRegionDrawable(atlas.findRegion("UI/btFacebookPress"));
-        btSettings = new TextureRegionDrawable(atlas.findRegion("UI/btSettings"));
-        btSettingsPress = new TextureRegionDrawable(atlas.findRegion("UI/btSettingsPress"));
-        btMas = new TextureRegionDrawable(atlas.findRegion("UI/btMas"));
-        btMasPress = new TextureRegionDrawable(atlas.findRegion("UI/btMasPress"));
-        btClose = new TextureRegionDrawable(atlas.findRegion("UI/btClose"));
-        btClosePress = new TextureRegionDrawable(atlas.findRegion("UI/btClosePress"));
-        btHome = new TextureRegionDrawable(atlas.findRegion("UI/btHome"));
-        btHomePress = new TextureRegionDrawable(atlas.findRegion("UI/btHomePress"));
-        btOff = new TextureRegionDrawable(atlas.findRegion("UI/btOff"));
-        btOn = new TextureRegionDrawable(atlas.findRegion("UI/btOn"));
+        buttonRight = new TextureRegionDrawable(atlas.findRegion("UI/btDer"));
+        buttonRightPressed = new TextureRegionDrawable(atlas.findRegion("UI/btDerPress"));
+        buttonLeft = new TextureRegionDrawable(atlas.findRegion("UI/btIzq"));
+        buttonLeftPressed = new TextureRegionDrawable(atlas.findRegion("UI/btIzqPress"));
+        buttonUp = new TextureRegionDrawable(atlas.findRegion("UI/btUp"));
+        buttonUpPressed = new TextureRegionDrawable(atlas.findRegion("UI/btUpPress"));
+        buttonDown = new TextureRegionDrawable(atlas.findRegion("UI/btDown"));
+        buttonDownPressed = new TextureRegionDrawable(atlas.findRegion("UI/btDownPress"));
+        buttonRefresh = new TextureRegionDrawable(atlas.findRegion("UI/btRefresh"));
+        buttonRefreshPressed = new TextureRegionDrawable(atlas.findRegion("UI/btRefreshPress"));
+        buttonPause = new TextureRegionDrawable(atlas.findRegion("UI/btPausa"));
+        buttonPausePressed = new TextureRegionDrawable(atlas.findRegion("UI/btPausaPress"));
+        buttonLeaderboard = new TextureRegionDrawable(atlas.findRegion("UI/btLeaderboard"));
+        buttonLeaderboardPressed = new TextureRegionDrawable(atlas.findRegion("UI/btLeaderboardPress"));
+        buttonAchievement = new TextureRegionDrawable(atlas.findRegion("UI/btAchievement"));
+        buttonAchievementPressed = new TextureRegionDrawable(atlas.findRegion("UI/btAchievementPress"));
+        buttonFacebook = new TextureRegionDrawable(atlas.findRegion("UI/btFacebook"));
+        buttonFacebookPressed = new TextureRegionDrawable(atlas.findRegion("UI/btFacebookPress"));
+        buttonSettings = new TextureRegionDrawable(atlas.findRegion("UI/btSettings"));
+        buttonSettingsPressed = new TextureRegionDrawable(atlas.findRegion("UI/btSettingsPress"));
+        buttonMore = new TextureRegionDrawable(atlas.findRegion("UI/btMas"));
+        buttonMorePressed = new TextureRegionDrawable(atlas.findRegion("UI/btMasPress"));
+        buttonClose = new TextureRegionDrawable(atlas.findRegion("UI/btClose"));
+        buttonClosePressed = new TextureRegionDrawable(atlas.findRegion("UI/btClosePress"));
+        buttonHome = new TextureRegionDrawable(atlas.findRegion("UI/btHome"));
+        buttonHomePressed = new TextureRegionDrawable(atlas.findRegion("UI/btHomePress"));
+        buttonOff = new TextureRegionDrawable(atlas.findRegion("UI/btOff"));
+        buttonOn = new TextureRegionDrawable(atlas.findRegion("UI/btOn"));
 
-        btPlay = new TextureRegionDrawable(atlas.findRegion("UI/btPlay"));
-        btPlayPress = new TextureRegionDrawable(atlas.findRegion("UI/btPlayPress"));
+        buttonPlay = new TextureRegionDrawable(atlas.findRegion("UI/btPlay"));
+        buttonPlayPressed = new TextureRegionDrawable(atlas.findRegion("UI/btPlayPress"));
         clock = new TextureRegionDrawable(atlas.findRegion("UI/clock"));
 
         levelOff = new TextureRegionDrawable(atlas.findRegion("UI/levelOff"));

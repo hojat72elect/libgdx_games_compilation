@@ -54,7 +54,7 @@ public class GameScreen extends Screens {
         lbNivel.setPosition(5, 330);
         lbNivel.setAlignment(Align.center);
 
-        btUndo = new Button(Assets.btRefresh, Assets.btRefreshPress);
+        btUndo = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
         btUndo.setSize(80, 80);
         btUndo.setPosition(700, 20);
         btUndo.getColor().a = oControl.getColor().a;// Que tengan el mismo color de alpha
@@ -65,7 +65,7 @@ public class GameScreen extends Screens {
             }
         });
 
-        btPausa = new Button(Assets.btPausa, Assets.btPausaPress);
+        btPausa = new Button(Assets.buttonPause, Assets.buttonPausePressed);
         btPausa.setSize(60, 60);
         btPausa.setPosition(730, 410);
         // btPausa.getColor().a = oControl.getColor().a;// Que tengan el mismo color de alpha
