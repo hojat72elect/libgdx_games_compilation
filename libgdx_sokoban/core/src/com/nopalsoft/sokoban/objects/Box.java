@@ -25,8 +25,8 @@ public class Box extends Tiles {
     int numColor;
     AtlasRegion keyFrame;
 
-    public Box(int posicion, String color) {
-        super(posicion);
+    public Box(int position, String color) {
+        super(position);
 
         isInRightEndPoint = false;
 

@@ -49,14 +49,14 @@ public class LevelSelector extends Group {
 
         vtLevel = new WindowLevel(currentScreen);
 
-        Table tbTitulo;
-        tbTitulo = new Table();
+        Table tableTitle;
+        tableTitle = new Table();
 
-        tbTitulo.setSize(300, 50);
-        tbTitulo.setPosition(getWidth() / 2f - tbTitulo.getWidth() / 2f, 324);
+        tableTitle.setSize(300, 50);
+        tableTitle.setPosition(getWidth() / 2f - tableTitle.getWidth() / 2f, 324);
 
         lbTitulo = new Label("Niveles", new LabelStyle(Assets.font, Color.WHITE));
-        tbTitulo.add(lbTitulo);
+        tableTitle.add(lbTitulo);
 
         contenedor = new Table();
         scrollPane = new ScrollPane(contenedor);
@@ -72,17 +72,17 @@ public class LevelSelector extends Group {
         }
         totalStars += 2;// By default I already have 3 stars
 
-        int numeroPages = (int) (Settings.getNUM_MAPS() / 15f);
+        int numberOfPages = (int) (Settings.getNUM_MAPS() / 15f);
         if (Settings.getNUM_MAPS() % 15f != 0)
-            numeroPages++;
+            numberOfPages++;
 
-        for (int col = 0; col < numeroPages; col++) {
+        for (int col = 0; col < numberOfPages; col++) {
             contenedor.add(getListLevel(col));
         }
 
         actualPage = 0;
 
-        addActor(tbTitulo);
+        addActor(tableTitle);
         addActor(scrollPane);
 
         scrollToPage(0);
