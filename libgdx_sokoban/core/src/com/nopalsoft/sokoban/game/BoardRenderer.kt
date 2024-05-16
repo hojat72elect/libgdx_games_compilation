@@ -16,7 +16,7 @@ class BoardRenderer {
         Assets.map,
         Board.UNIT_SCALE
     )
-    private val mapStaticLayer = tiledRender.map.layers["StaticMap"] as TiledMapTileLayer;
+    private val mapStaticLayer = tiledRender.map.layers["StaticMap"] as TiledMapTileLayer
 
 
     init {
