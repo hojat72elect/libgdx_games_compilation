@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.objetos.Box;
 import com.nopalsoft.sokoban.objetos.EndPoint;
-import com.nopalsoft.sokoban.objetos.Pared;
 import com.nopalsoft.sokoban.objetos.Tiles;
 
 public class Board extends Group {
@@ -44,7 +43,7 @@ public class Board extends Group {
         initializeMap("Objetos");
 
         // DESPUES de inicializar los objetos los agrego al Board en orden para que se dibujen unos primero que otros
-        agregarAlTablero(Pared.class);
+        agregarAlTablero(com.nopalsoft.sokoban.objetos.Wall.class);
         agregarAlTablero(EndPoint.class);
         agregarAlTablero(Box.class);
         agregarAlTablero(com.nopalsoft.sokoban.objetos.Character.class);
@@ -109,7 +108,7 @@ public class Board extends Group {
     }
 
     private void crearPared(int posTile) {
-        Pared obj = new Pared(posTile);
+        com.nopalsoft.sokoban.objetos.Wall obj = new com.nopalsoft.sokoban.objetos.Wall(posTile);
         arrTiles.add(obj);
 
     }

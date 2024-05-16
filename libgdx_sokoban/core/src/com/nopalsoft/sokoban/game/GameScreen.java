@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.MainSokoban;
 import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.scene2d.ContadorBar;
 import com.nopalsoft.sokoban.scene2d.ControlesNoPad;
-import com.nopalsoft.sokoban.scene2d.VentanaPause;
 import com.nopalsoft.sokoban.screens.Screens;
 
 public class GameScreen extends Screens {
@@ -31,9 +29,9 @@ public class GameScreen extends Screens {
     ControlesNoPad oControl;
     Button btUndo;
     Button btPausa;
-    ContadorBar barTime;
-    ContadorBar barMoves;
-    VentanaPause vtPause;
+    com.nopalsoft.sokoban.scene2d.CounterBar barTime;
+    com.nopalsoft.sokoban.scene2d.CounterBar barMoves;
+    com.nopalsoft.sokoban.scene2d.WindowPause vtPause;
 
     public GameScreen(final MainSokoban game, int level) {
         super(game);
@@ -46,10 +44,10 @@ public class GameScreen extends Screens {
 
         oControl = new ControlesNoPad(this);
 
-        barTime = new ContadorBar(Assets.backgroundTime, 5, 430);
-        barMoves = new ContadorBar(Assets.backgroundMoves, 5, 380);
+        barTime = new com.nopalsoft.sokoban.scene2d.CounterBar(Assets.backgroundTime, 5, 430);
+        barMoves = new com.nopalsoft.sokoban.scene2d.CounterBar(Assets.backgroundMoves, 5, 380);
 
-        vtPause = new VentanaPause(this);
+        vtPause = new com.nopalsoft.sokoban.scene2d.WindowPause(this);
 
         Label lbNivel = new Label("Level " + (level + 1), new LabelStyle(Assets.fontRed, Color.WHITE));
         lbNivel.setWidth(barTime.getWidth());

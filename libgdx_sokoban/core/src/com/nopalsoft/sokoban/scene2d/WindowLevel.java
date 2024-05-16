@@ -13,12 +13,12 @@ import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.game.GameScreen;
 import com.nopalsoft.sokoban.screens.Screens;
 
-public class VentanaLevel extends Ventana {
+public class WindowLevel extends Window {
 
     Button btPlay;
     Label lbBestMoves, lbBestTime;
 
-    public VentanaLevel(Screens currentScreen) {
+    public WindowLevel(Screens currentScreen) {
         super(currentScreen, 350, 300, 100);
 
         setCloseButton();

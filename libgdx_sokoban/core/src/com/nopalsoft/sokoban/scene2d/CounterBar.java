@@ -7,20 +7,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.sokoban.Assets;
 
-public class ContadorBar extends Table {
+public class CounterBar extends Table {
     float WIDTH = 125;
     float HEIGHT = 42;
 
-    Label lblDisplay;
+    Label labelDisplay;
 
-    public ContadorBar(TextureRegionDrawable fondo, float x, float y) {
+    public CounterBar(TextureRegionDrawable fondo, float x, float y) {
 
         this.setBounds(x, y, WIDTH, HEIGHT);
         setBackground(fondo);
 
-        lblDisplay = new Label("", new LabelStyle(Assets.fontRed, Color.WHITE));
-        lblDisplay.setFontScale(.8f);
-        add(lblDisplay);
+        labelDisplay = new Label("", new LabelStyle(Assets.fontRed, Color.WHITE));
+        labelDisplay.setFontScale(.8f);
+        add(labelDisplay);
 
         center();
         padLeft(25);
@@ -28,7 +28,7 @@ public class ContadorBar extends Table {
     }
 
     public void updateActualNum(int actualNum) {
-        lblDisplay.setText(actualNum + "");
+        labelDisplay.setText(actualNum + "");
     }
 
 }
