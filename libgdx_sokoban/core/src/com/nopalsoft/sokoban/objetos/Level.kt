@@ -1,9 +1,10 @@
-package com.nopalsoft.sokoban.objetos;
+package com.nopalsoft.sokoban.objetos
 
-public class Level {
-
-    public int numStars;
-    public int bestTime;
-    public int bestMoves;
-
-}
+data class Level(
+    @JvmField
+    var numStars: Int = 0,
+    @JvmField
+    var bestTime: Int = 0,
+    @JvmField
+    var bestMoves: Int = 0,
+)
