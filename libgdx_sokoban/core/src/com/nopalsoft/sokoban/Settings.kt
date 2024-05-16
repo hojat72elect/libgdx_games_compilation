@@ -1,49 +1,59 @@
-package com.nopalsoft.sokoban;
+package com.nopalsoft.sokoban
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.nopalsoft.sokoban.objetos.Level;
+import com.badlogic.gdx.Gdx
+import com.nopalsoft.sokoban.objetos.Level
 
-public class Settings {
+object Settings {
 
-    private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.sokoban");
-    public static boolean isTest = true;
-    public static boolean animationWalkIsON;
-    public static int NUM_MAPS = 62;
-    public static Level[] arrLevel;// Cada posicion es un nivel
+    private val pref = Gdx.app.getPreferences("com.nopalsoft.sokoban")
 
-    public static void load() {
-        arrLevel = new Level[NUM_MAPS];
+    @JvmStatic
+    var isTest = true
 
-        animationWalkIsON = pref.getBoolean("animationWalkIsON", false);
+    @JvmStatic
+    var animationWalkIsON = false
 
-        for (int i = 0; i < NUM_MAPS; i++) {
-            arrLevel[i] = new Level();
-            arrLevel[i].numStars = pref.getInteger("numStars" + i, 0);
-            arrLevel[i].bestMoves = pref.getInteger("bestMoves" + i, 0);
-            arrLevel[i].bestTime = pref.getInteger("bestTime" + i, 0);
+    @JvmStatic
+    var NUM_MAPS = 62
+
+    lateinit var arrayLevel: Array<Level?> // Each position is a level
+
+    @JvmStatic
+    fun load() {
+        arrayLevel = arrayOfNulls(NUM_MAPS)
+
+        animationWalkIsON = pref.getBoolean("animationWalkIsON", false)
+
+        for (i in 0 until NUM_MAPS) {
+            arrayLevel[i] = Level()
+            arrayLevel[i]?.numStars = pref.getInteger(
+                "numStars$i", 0
+            )
+            arrayLevel[i]?.bestMoves = pref.getInteger(
+                "bestMoves$i", 0
+            )
+            arrayLevel[i]?.bestTime = pref.getInteger(
+                "bestTime$i", 0
+            )
         }
-
     }
 
-    public static void save() {
-
-        pref.putBoolean("animationWalkIsON", animationWalkIsON);
-        pref.flush();
-
+    @JvmStatic
+    fun save() {
+        pref.putBoolean("animationWalkIsON", animationWalkIsON)
+        pref.flush()
     }
 
-    public static void levelCompeted(int level, int moves, int time) {
+    @JvmStatic
+    fun levelCompeted(level: Int, moves: Int, time: Int) {
+        arrayLevel[level]?.numStars = 1
+        arrayLevel[level]?.bestMoves = moves
+        arrayLevel[level]?.bestTime = time
 
-        arrLevel[level].numStars = 1;
-        arrLevel[level].bestMoves = moves;
-        arrLevel[level].bestTime = time;
+        pref.putInteger("numStars$level", arrayLevel[level]!!.numStars)
+        pref.putInteger("bestMoves$level", arrayLevel[level]!!.bestMoves)
+        pref.putInteger("bestTime$level", arrayLevel[level]!!.bestTime)
 
-        pref.putInteger("numStars" + level, arrLevel[level].numStars);
-        pref.putInteger("bestMoves" + level, arrLevel[level].bestMoves);
-        pref.putInteger("bestTime" + level, arrLevel[level].bestTime);
-
-        pref.flush();
+        pref.flush()
     }
-
 }

@@ -45,7 +45,7 @@ public class Tiles extends Actor {
      */
     public void moveToPosition(int pos, boolean undo) {
         float time = .05f;
-        if (Settings.animationWalkIsON && !undo)
+        if (Settings.getAnimationWalkIsON() && !undo)
             time = .45f;
         this.posicion = pos;
         addAction(Actions.sequence(Actions.moveTo(mapPosiciones.get(posicion).x, mapPosiciones.get(posicion).y, time), Actions.run(this::endMovingToPosition)));

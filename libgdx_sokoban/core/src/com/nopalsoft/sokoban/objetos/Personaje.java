@@ -47,7 +47,7 @@ public class Personaje extends Tiles {
     public void draw(Batch batch, float parentAlpha) {
 
         TextureRegion keyFrame;
-        if (Settings.animationWalkIsON) {
+        if (Settings.getAnimationWalkIsON()) {
             if (state == STATE_DOWN) {
                 keyFrame = Assets.personajeDown.getKeyFrame(stateTime, true);
             } else if (state == STATE_UP) {

@@ -17,7 +17,6 @@ import com.nopalsoft.sokoban.Settings;
 import com.nopalsoft.sokoban.scene2d.ContadorBar;
 import com.nopalsoft.sokoban.scene2d.ControlesNoPad;
 import com.nopalsoft.sokoban.scene2d.VentanaPause;
-import com.nopalsoft.sokoban.screens.MainMenuScreen;
 import com.nopalsoft.sokoban.screens.Screens;
 
 public class GameScreen extends Screens {
@@ -127,17 +126,14 @@ public class GameScreen extends Screens {
 	private void setGameover() {
 		state = STATE_GAME_OVER;
 		Settings.levelCompeted(level, oTablero.moves, (int) oTablero.time);
-		stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run(new Runnable() {
-			@Override
-			public void run() {
-				level += 1;
-				if (level >= Settings.NUM_MAPS)
-					changeScreenWithFadeOut(MainMenuScreen.class, game);
-				else
-					changeScreenWithFadeOut(GameScreen.class, level, game);
+		stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run(() -> {
+            level += 1;
+            if (level >= com.nopalsoft.sokoban.Settings.getNUM_MAPS())
+                changeScreenWithFadeOut(com.nopalsoft.sokoban.screens.MainMenuScreen.class, game);
+            else
+                changeScreenWithFadeOut(com.nopalsoft.sokoban.game.GameScreen.class, level, game);
 
-			}
-		})));
+        })));
 	}
 
 	public void setRunning() {

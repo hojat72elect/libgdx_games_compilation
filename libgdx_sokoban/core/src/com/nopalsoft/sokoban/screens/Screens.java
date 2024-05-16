@@ -124,13 +124,11 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     @Override
     public void pause() {
-        // Assets.pauseMusic();
 
     }
 
     @Override
     public void resume() {
-        // Assets.playMusic();
 
     }
 

@@ -44,14 +44,16 @@ public class VentanaPause extends Ventana {
         });
 
         final Button btAnimations = new Button(Assets.btOff, Assets.btOn, Assets.btOn);
-        btAnimations.setChecked(Settings.animationWalkIsON);
+        btAnimations.setChecked(Settings.getAnimationWalkIsON());
 
         tbAnimations = new Table();
         tbAnimations.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Settings.animationWalkIsON = !Settings.animationWalkIsON;
-                btAnimations.setChecked(Settings.animationWalkIsON);
+
+                Settings.setAnimationWalkIsON(!Settings.getAnimationWalkIsON());
+
+                btAnimations.setChecked(Settings.getAnimationWalkIsON());
                 Settings.save();
             }
         });

@@ -223,7 +223,7 @@ public class Assets {
             map.dispose();
             map = null;
         }
-        if (Settings.isTest) {
+        if (Settings.isTest()) {
             map = new TmxMapLoader().load("data/mapsTest/map" + numMap + ".tmx");
         } else {
             map = new AtlasTmxMapLoader().load("data/maps/map" + numMap + ".tmx");
