@@ -1,69 +1,64 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.game.GameScreen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.game.GameScreen
 
-public class ControlsNoPad extends Table {
 
-    GameScreen gameScreen;
+class ControlsNoPad(oScreen: GameScreen) : Table() {
 
-    Button btUp, btDown, btLeft, btRight;
+    private val gameScreen = oScreen
+    private lateinit var buttonUp: Button
+    private lateinit var buttonDown: Button
+    private lateinit var buttonLeft: Button
+    private lateinit var buttonRight: Button
 
-    public ControlsNoPad(GameScreen oScreen) {
-        gameScreen = oScreen;
-
-        getColor().a = .4f;
-        init();
-
-        int buttonSize = 75;
-        defaults().size(buttonSize);
-
-        add(btUp).colspan(2).center();
-        row();
-        add(btLeft).left();
-        add(btRight).right().padLeft(buttonSize / 1.15f);
-        row();
-        add(btDown).colspan(2).center();
-        pack();
+    init {
+        color.a = .4f
+        initialize()
+        val buttonSize = 75
+        defaults().size(buttonSize.toFloat())
+        add(buttonUp).colspan(2).center()
+        row()
+        add(buttonLeft).left()
+        add(buttonRight).right().padLeft(buttonSize / 1.15f)
+        row()
+        add(buttonDown).colspan(2).center()
+        pack()
     }
 
-    private void init() {
-        btUp = new Button(Assets.buttonUp, Assets.buttonUpPressed);
-        btUp.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.up();
-            }
-        });
+    private fun initialize() {
 
-        btDown = new Button(Assets.buttonDown, Assets.buttonDownPressed);
-        btDown.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.down();
+        buttonUp = Button(Assets.buttonUp, Assets.buttonUpPressed)
+        buttonUp.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                gameScreen.up()
             }
-        });
+        })
 
-        btLeft = new Button(Assets.buttonLeft, Assets.buttonLeftPressed);
-        btLeft.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.left();
+        buttonDown = Button(Assets.buttonDown, Assets.buttonDownPressed)
+        buttonDown.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                gameScreen.down()
             }
-        });
+        })
 
-        btRight = new Button(Assets.buttonRight, Assets.buttonRightPressed);
-        btRight.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.right();
+        buttonLeft = Button(Assets.buttonLeft, Assets.buttonLeftPressed)
+        buttonLeft.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                gameScreen.left()
             }
-        });
+        })
+
+        buttonRight = Button(Assets.buttonRight, Assets.buttonRightPressed)
+        buttonRight.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                gameScreen.right()
+            }
+        })
 
     }
-
 }
