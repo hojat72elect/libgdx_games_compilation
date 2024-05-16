@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.Settings;
 
-public class Personaje extends Tiles {
+public class Character extends Tiles {
     public static int STATE_LEFT = 0;
     public static int STATE_UP = 1;
     public static int STATE_DOWN = 2;
@@ -15,7 +15,7 @@ public class Personaje extends Tiles {
 
     float stateTime;
 
-    public Personaje(int posicion) {
+    public Character(int posicion) {
         super(posicion);
         state = STATE_STAND;
         stateTime = 0;

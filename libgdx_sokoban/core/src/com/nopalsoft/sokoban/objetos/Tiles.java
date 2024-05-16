@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.game.Tablero;
 
 import java.util.LinkedHashMap;
 
@@ -22,14 +21,14 @@ public class Tiles extends Actor {
         int posicionTile = 0;
         for (int y = 0; y < 15; y++) {
             for (int x = 0; x < 25; x++) {
-                mapPosiciones.put(posicionTile, new Vector2(x * 32 * Tablero.UNIT_SCALE, y * 32 * Tablero.UNIT_SCALE));
+                mapPosiciones.put(posicionTile, new Vector2(x * 32 * com.nopalsoft.sokoban.game.Board.UNIT_SCALE, y * 32 * com.nopalsoft.sokoban.game.Board.UNIT_SCALE));
                 posicionTile++;
             }
         }
     }
 
     // TODOS LOS MAPAS SON DE 25x15 Tiles de 32px lo que da una resolucion de 800x480
-    final float SIZE = 32 * Tablero.UNIT_SCALE;// Tamano de la ficha
+    final float SIZE = 32 * com.nopalsoft.sokoban.game.Board.UNIT_SCALE;// Tamano de la ficha
 
     public int posicion;
 

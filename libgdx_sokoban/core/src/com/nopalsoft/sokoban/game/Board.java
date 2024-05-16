@@ -12,10 +12,9 @@ import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.objetos.Box;
 import com.nopalsoft.sokoban.objetos.EndPoint;
 import com.nopalsoft.sokoban.objetos.Pared;
-import com.nopalsoft.sokoban.objetos.Personaje;
 import com.nopalsoft.sokoban.objetos.Tiles;
 
-public class Tablero extends Group {
+public class Board extends Group {
     public static final float UNIT_SCALE = 1f;
 
     static public final int STATE_RUNNING = 1;
@@ -23,34 +22,32 @@ public class Tablero extends Group {
     public int state;
     public boolean moveUp, moveDown, moveLeft, moveRight;
     public boolean undo;
+    // X previous position, Y current position.
+    Array<Vector2> arrayOfCharacterMoves;
     /**
-     * X posicion anterior, Y posicion actual
-     */
-    Array<Vector2> arrMovesPersonaje;
-    /**
-     * X posicion anterior, Y posicion actual
+     * X previous position, Y current position.
      */
     Array<Vector2> arrMovesCaja;
     Array<Tiles> arrTiles;
     int moves;
     float time;
-    private Personaje personaje;
+    private com.nopalsoft.sokoban.objetos.Character character;
 
-    public Tablero() {
+    public Board() {
         setSize(800, 480);
 
         arrTiles = new Array<>(25 * 15);
-        arrMovesPersonaje = new Array<>();
+        arrayOfCharacterMoves = new Array<>();
         arrMovesCaja = new Array<>();
 
         initializeMap("StaticMap");
         initializeMap("Objetos");
 
-        // DESPUES de inicializar los objetos los agrego al Tablero en orden para que se dibujen unos primero que otros
+        // DESPUES de inicializar los objetos los agrego al Board en orden para que se dibujen unos primero que otros
         agregarAlTablero(Pared.class);
         agregarAlTablero(EndPoint.class);
         agregarAlTablero(Box.class);
-        agregarAlTablero(Personaje.class);
+        agregarAlTablero(com.nopalsoft.sokoban.objetos.Character.class);
 
         state = STATE_RUNNING;
 
@@ -105,9 +102,9 @@ public class Tablero extends Group {
     }
 
     private void crearPersonaje(int posTile) {
-        Personaje obj = new Personaje(posTile);
+        com.nopalsoft.sokoban.objetos.Character obj = new com.nopalsoft.sokoban.objetos.Character(posTile);
         arrTiles.add(obj);
-        personaje = obj;
+        character = obj;
 
     }
 
@@ -150,13 +147,13 @@ public class Tablero extends Group {
                     auxMoves = 1;
                 }
 
-                if (personaje.canMove() && (moveDown || moveLeft || moveRight || moveUp)) {
-                    int nextPos = personaje.posicion + auxMoves;
+                if (character.canMove() && (moveDown || moveLeft || moveRight || moveUp)) {
+                    int nextPos = character.posicion + auxMoves;
 
                     if (checarEspacioVacio(nextPos) || (!checarIsBoxInPosition(nextPos) && checarIsEndInPosition(nextPos))) {
-                        arrMovesPersonaje.add(new Vector2(personaje.posicion, nextPos));
+                        arrayOfCharacterMoves.add(new Vector2(character.posicion, nextPos));
                         arrMovesCaja.add(null);
-                        personaje.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
+                        character.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
                         moves++;
                     } else {
                         if (checarIsBoxInPosition(nextPos)) {
@@ -164,12 +161,12 @@ public class Tablero extends Group {
                             if (checarEspacioVacio(boxNextPos) || (!checarIsBoxInPosition(boxNextPos) && checarIsEndInPosition(boxNextPos))) {
                                 Box oBox = getBoxInPosition(nextPos);
 
-                                arrMovesPersonaje.add(new Vector2(personaje.posicion, nextPos));
+                                arrayOfCharacterMoves.add(new Vector2(character.posicion, nextPos));
                                 arrMovesCaja.add(new Vector2(oBox.posicion, boxNextPos));
                                 moves++;
 
                                 oBox.moveToPosition(boxNextPos, false);
-                                personaje.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
+                                character.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
                                 oBox.setIsInEndPoint(getEndPointInPosition(boxNextPos));
 
                             }
@@ -190,9 +187,9 @@ public class Tablero extends Group {
     }
 
     private void undo() {
-        if (arrMovesPersonaje.size >= moves) {
-            Vector2 posAntPersonaje = arrMovesPersonaje.removeIndex(moves - 1);
-            personaje.moveToPosition((int) posAntPersonaje.x, true);
+        if (arrayOfCharacterMoves.size >= moves) {
+            Vector2 posAntPersonaje = arrayOfCharacterMoves.removeIndex(moves - 1);
+            character.moveToPosition((int) posAntPersonaje.x, true);
         }
         if (arrMovesCaja.size >= moves) {
             Vector2 posAntBox = arrMovesCaja.removeIndex(moves - 1);
