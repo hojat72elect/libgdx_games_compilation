@@ -1,84 +1,75 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.game.GameScreen;
-import com.nopalsoft.sokoban.screens.MainMenuScreen;
-import com.nopalsoft.sokoban.screens.Screens;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.Settings
+import com.nopalsoft.sokoban.game.GameScreen
+import com.nopalsoft.sokoban.screens.MainMenuScreen
+import com.nopalsoft.sokoban.screens.Screens
 
-public class WindowPause extends Window {
+class WindowPause(currentScreen: Screens) : Window(currentScreen, 350F, 300F, 100F) {
 
-    Button buttonHome, buttonRefresh;
-    Table tableAnimations;
+    private val buttonHome = Button(Assets.buttonHome, Assets.buttonHomePressed)
+    private val buttonRefresh = Button(Assets.buttonRefresh, Assets.buttonRefreshPressed)
+    private val tableAnimations = Table()
 
-    public WindowPause(Screens currentScreen) {
-        super(currentScreen, 350, 300, 100);
 
-        setCloseButton();
-        setTitle("Paused", 1);
+    init {
+        setCloseButton()
+        setTitle("Paused", 1f)
 
-        Table menuTable = new Table();
-        menuTable.setFillParent(true);
+        val menuTable = Table()
+        menuTable.setFillParent(true)
 
-        buttonHome = new Button(Assets.buttonHome, Assets.buttonHomePressed);
-        buttonHome.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                screen.changeScreenWithFadeOut(MainMenuScreen.class, screen.game);
+        buttonHome.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                screen.changeScreenWithFadeOut(MainMenuScreen::class.java, screen.game)
             }
-        });
-
-        buttonRefresh = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
-        buttonRefresh.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                screen.changeScreenWithFadeOut(GameScreen.class, ((GameScreen) screen).level, screen.game);
+        })
+        buttonRefresh.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                screen.changeScreenWithFadeOut(
+                    GameScreen::class.java,
+                    (screen as GameScreen).level,
+                    screen.game
+                )
             }
-        });
+        })
 
-        final Button btAnimations = new Button(Assets.buttonOff, Assets.buttonOn, Assets.buttonOn);
-        btAnimations.setChecked(Settings.getAnimationWalkIsON());
+        val btAnimations = Button(Assets.buttonOff, Assets.buttonOn, Assets.buttonOn)
+        btAnimations.isChecked = Settings.animationWalkIsON
 
-        tableAnimations = new Table();
-        tableAnimations.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        tableAnimations.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                Settings.animationWalkIsON = !Settings.animationWalkIsON
 
-                Settings.setAnimationWalkIsON(!Settings.getAnimationWalkIsON());
-
-                btAnimations.setChecked(Settings.getAnimationWalkIsON());
-                Settings.save();
+                btAnimations.isChecked = Settings.animationWalkIsON
+                Settings.save()
             }
-        });
+        })
 
-        menuTable.defaults().expandX();
+        menuTable.defaults().expandX()
+        menuTable.pad(30f).padTop(55f)
+        menuTable.add(buttonHome)
+        menuTable.add(buttonRefresh)
+        menuTable.row()
 
-        menuTable.pad(30).padTop(55);
-        menuTable.add(buttonHome);
-        menuTable.add(buttonRefresh);
-        menuTable.row();
+        val lbAnimatons = Label("Animations", LabelStyle(Assets.fontRed, Color.WHITE))
+        tableAnimations.add(lbAnimatons)
+        tableAnimations.add(btAnimations).padLeft(15f)
 
-        Label lbAnimatons = new Label("Animations", new LabelStyle(Assets.fontRed, Color.WHITE));
-        tableAnimations.add(lbAnimatons);
-        tableAnimations.add(btAnimations).padLeft(15);
+        menuTable.add(tableAnimations).colspan(2).padTop(10f)
 
-        menuTable.add(tableAnimations).colspan(2).padTop(10);
-
-        addActor(menuTable);
-
+        addActor(menuTable)
     }
 
-    @Override
-    public void hideCompleted() {
-        ((GameScreen) screen).setRunning();
-
+    override fun hideCompleted() {
+        (screen as GameScreen).setRunning()
     }
-
 }
