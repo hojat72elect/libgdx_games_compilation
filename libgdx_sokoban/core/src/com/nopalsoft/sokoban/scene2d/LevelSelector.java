@@ -43,7 +43,7 @@ public class LevelSelector extends Group {
         setPosition(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f, 70);
         menuScreen = (MainMenuScreen) currentScreen;
         game = currentScreen.game;
-        idiomas = game.idiomas;
+        idiomas = game.languages;
 
         setBackGround(Assets.backgroundVentana);
 

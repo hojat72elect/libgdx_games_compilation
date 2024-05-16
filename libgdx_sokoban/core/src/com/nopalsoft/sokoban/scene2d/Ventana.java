@@ -25,7 +25,7 @@ public class Ventana extends Group {
 
     public Ventana(Screens currentScreen, float width, float height, float positionY) {
         screen = currentScreen;
-        idiomas = currentScreen.game.idiomas;
+        idiomas = currentScreen.game.languages;
         setSize(width, height);
         setY(positionY);
 
