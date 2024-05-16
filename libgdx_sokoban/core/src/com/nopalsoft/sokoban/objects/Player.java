@@ -1,11 +1,11 @@
-package com.nopalsoft.sokoban.objetos;
+package com.nopalsoft.sokoban.objects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.Settings;
 
-public class Character extends Tiles {
+public class Player extends Tiles {
     public static int STATE_LEFT = 0;
     public static int STATE_UP = 1;
     public static int STATE_DOWN = 2;
@@ -15,7 +15,7 @@ public class Character extends Tiles {
 
     float stateTime;
 
-    public Character(int posicion) {
+    public Player(int posicion) {
         super(posicion);
         state = STATE_STAND;
         stateTime = 0;

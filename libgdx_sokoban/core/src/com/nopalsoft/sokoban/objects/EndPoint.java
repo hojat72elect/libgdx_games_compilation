@@ -1,4 +1,4 @@
-package com.nopalsoft.sokoban.objetos;
+package com.nopalsoft.sokoban.objects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -14,28 +14,28 @@ public class EndPoint extends Tiles {
 
         switch (color) {
             case "brown":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_BROWN;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_BROWN;
                 break;
             case "gray":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_GRAY;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_GRAY;
                 break;
             case "purple":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_PURPLE;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_PURPLE;
                 break;
             case "blue":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_BLUE;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_BLUE;
                 break;
             case "black":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_BLACK;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_BLACK;
                 break;
             case "beige":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_BEIGE;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_BEIGE;
                 break;
             case "yellow":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_YELLOW;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_YELLOW;
                 break;
             case "red":
-                numColor = com.nopalsoft.sokoban.objetos.Box.COLOR_RED;
+                numColor = com.nopalsoft.sokoban.objects.Box.COLOR_RED;
                 break;
         }
 

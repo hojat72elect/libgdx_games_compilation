@@ -1,4 +1,4 @@
-package com.nopalsoft.sokoban.objetos;
+package com.nopalsoft.sokoban.objects;
 
 public class Wall extends Tiles {
 

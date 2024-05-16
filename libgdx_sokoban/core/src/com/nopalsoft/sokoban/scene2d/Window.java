@@ -51,16 +51,16 @@ public class Window extends Group {
     }
 
     protected void setTitle(String text, float fontScale) {
-        Table tbTitulo;
-        tbTitulo = new Table();
+        Table tableTitle;
+        tableTitle = new Table();
 
-        tbTitulo.setSize((float) 180, (float) 50);
-        tbTitulo.setPosition(getWidth() / 2f - tbTitulo.getWidth() / 2f, getHeight() - tbTitulo.getHeight());
+        tableTitle.setSize((float) 180, (float) 50);
+        tableTitle.setPosition(getWidth() / 2f - tableTitle.getWidth() / 2f, getHeight() - tableTitle.getHeight());
 
-        Label lbTitulo = new Label(text, new LabelStyle(Assets.font, Color.WHITE));
-        lbTitulo.setFontScale(fontScale);
-        tbTitulo.add(lbTitulo);
-        addActor(tbTitulo);
+        Label labelTitle = new Label(text, new LabelStyle(Assets.font, Color.WHITE));
+        labelTitle.setFontScale(fontScale);
+        tableTitle.add(labelTitle);
+        addActor(tableTitle);
 
     }
 

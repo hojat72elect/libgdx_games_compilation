@@ -1,4 +1,4 @@
-package com.nopalsoft.sokoban.objetos;
+package com.nopalsoft.sokoban.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,12 +28,12 @@ public class Tiles extends Actor {
     // ALL MAPS ARE 25x15 Tiles of 32px which gives a resolution of 800x480
     final float SIZE = 32 * com.nopalsoft.sokoban.game.Board.UNIT_SCALE;// Token size
 
-    public int posicion;
+    public int position;
 
-    public Tiles(int posicion) {
-        this.posicion = posicion;
+    public Tiles(int position) {
+        this.position = position;
         setSize(SIZE, SIZE);
-        setPosition(mapPositions.get(posicion).x, mapPositions.get(posicion).y);
+        setPosition(mapPositions.get(position).x, mapPositions.get(position).y);
 
     }
 
@@ -44,8 +44,8 @@ public class Tiles extends Actor {
         float time = .05f;
         if (Settings.getAnimationWalkIsON() && !undo)
             time = .45f;
-        this.posicion = pos;
-        addAction(Actions.sequence(Actions.moveTo(mapPositions.get(posicion).x, mapPositions.get(posicion).y, time), Actions.run(this::endMovingToPosition)));
+        this.position = pos;
+        addAction(Actions.sequence(Actions.moveTo(mapPositions.get(position).x, mapPositions.get(position).y, time), Actions.run(this::endMovingToPosition)));
     }
 
     /**
