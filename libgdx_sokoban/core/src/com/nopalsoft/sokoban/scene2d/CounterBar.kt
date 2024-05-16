@@ -1,34 +1,33 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.sokoban.Assets;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.sokoban.Assets
 
-public class CounterBar extends Table {
-    float WIDTH = 125;
-    float HEIGHT = 42;
+class CounterBar(background: TextureRegionDrawable, x: Float, y: Float) : Table() {
 
-    Label labelDisplay;
+    private val labelDisplay = Label("", LabelStyle(Assets.fontRed, Color.WHITE));
 
-    public CounterBar(TextureRegionDrawable fondo, float x, float y) {
-
-        this.setBounds(x, y, WIDTH, HEIGHT);
-        setBackground(fondo);
-
-        labelDisplay = new Label("", new LabelStyle(Assets.fontRed, Color.WHITE));
-        labelDisplay.setFontScale(.8f);
-        add(labelDisplay);
-
-        center();
-        padLeft(25);
-        padBottom(5);
+    init {
+        this.setBounds(x, y, WIDTH, HEIGHT)
+        setBackground(background)
+        labelDisplay.setFontScale(.8f)
+        add(labelDisplay)
+        center()
+        padLeft(25f)
+        padBottom(5f)
     }
 
-    public void updateActualNum(int actualNum) {
-        labelDisplay.setText(actualNum + "");
+    fun updateActualNum(actualNum: Int) {
+        labelDisplay.setText(actualNum.toString())
     }
 
+
+    companion object {
+        private val WIDTH = 125f
+        private val HEIGHT = 42f
+    }
 }

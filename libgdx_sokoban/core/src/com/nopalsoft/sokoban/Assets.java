@@ -205,11 +205,11 @@ public class Assets {
         levelOff = new TextureRegionDrawable(atlas.findRegion("UI/levelOff"));
         levelStar = new TextureRegionDrawable(atlas.findRegion("UI/levelStar"));
 
-        /* Button level */
+        // Button level
         TextureRegionDrawable btLevel = new TextureRegionDrawable(atlas.findRegion("UI/btLevel"));
         styleTextButtonLevel = new TextButtonStyle(btLevel, null, null, font);
 
-        /* Button level */
+        // Button level
         TextureRegionDrawable btLevelLocked = new TextureRegionDrawable(atlas.findRegion("UI/btLevelLocked"));
         styleTextButtonLevelLocked = new TextButtonStyle(btLevelLocked, null, null, font);
 

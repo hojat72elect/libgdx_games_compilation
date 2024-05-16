@@ -14,7 +14,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.MainSokoban;
 import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.scene2d.ControlesNoPad;
+import com.nopalsoft.sokoban.scene2d.ControlsNoPad;
+import com.nopalsoft.sokoban.scene2d.CounterBar;
+import com.nopalsoft.sokoban.scene2d.WindowPause;
 import com.nopalsoft.sokoban.screens.Screens;
 
 public class GameScreen extends Screens {
@@ -25,51 +27,51 @@ public class GameScreen extends Screens {
     public int state;
     public int level;
     BoardRenderer renderer;
-    Board oBoard;
-    ControlesNoPad oControl;
-    Button btUndo;
-    Button btPausa;
-    com.nopalsoft.sokoban.scene2d.CounterBar barTime;
-    com.nopalsoft.sokoban.scene2d.CounterBar barMoves;
-    com.nopalsoft.sokoban.scene2d.WindowPause vtPause;
+    Board myBoard;
+    ControlsNoPad myControl;
+    Button buttonUndo;
+    Button buttonPause;
+    CounterBar barTime;
+    CounterBar barMoves;
+    WindowPause myWindowPause;
 
     public GameScreen(final MainSokoban game, int level) {
         super(game);
         this.level = level;
 
         stageGame = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
-        oBoard = new Board();
+        myBoard = new Board();
 
         renderer = new BoardRenderer();
 
-        oControl = new ControlesNoPad(this);
+        myControl = new ControlsNoPad(this);
 
-        barTime = new com.nopalsoft.sokoban.scene2d.CounterBar(Assets.backgroundTime, 5, 430);
-        barMoves = new com.nopalsoft.sokoban.scene2d.CounterBar(Assets.backgroundMoves, 5, 380);
+        barTime = new CounterBar(Assets.backgroundTime, 5, 430);
+        barMoves = new CounterBar(Assets.backgroundMoves, 5, 380);
 
-        vtPause = new com.nopalsoft.sokoban.scene2d.WindowPause(this);
+        myWindowPause = new WindowPause(this);
 
         Label lbNivel = new Label("Level " + (level + 1), new LabelStyle(Assets.fontRed, Color.WHITE));
         lbNivel.setWidth(barTime.getWidth());
         lbNivel.setPosition(5, 330);
         lbNivel.setAlignment(Align.center);
 
-        btUndo = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
-        btUndo.setSize(80, 80);
-        btUndo.setPosition(700, 20);
-        btUndo.getColor().a = oControl.getColor().a;// Que tengan el mismo color de alpha
-        btUndo.addListener(new ClickListener() {
+        buttonUndo = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
+        buttonUndo.setSize(80, 80);
+        buttonUndo.setPosition(700, 20);
+        buttonUndo.getColor().a = myControl.getColor().a;// Have the same alpha color
+        buttonUndo.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                oBoard.undo = true;
+                myBoard.undo = true;
             }
         });
 
-        btPausa = new Button(Assets.buttonPause, Assets.buttonPausePressed);
-        btPausa.setSize(60, 60);
-        btPausa.setPosition(730, 410);
-        // btPausa.getColor().a = oControl.getColor().a;// Que tengan el mismo color de alpha
-        btPausa.addListener(new ClickListener() {
+        buttonPause = new Button(Assets.buttonPause, Assets.buttonPausePressed);
+        buttonPause.setSize(60, 60);
+        buttonPause.setPosition(730, 410);
+
+        buttonPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setPause();
@@ -77,13 +79,13 @@ public class GameScreen extends Screens {
 
         });
 
-        stageGame.addActor(oBoard);
+        stageGame.addActor(myBoard);
         stageGame.addActor(barTime);
         stageGame.addActor(barMoves);
         stage.addActor(lbNivel);
-        stage.addActor(oControl);
-        stage.addActor(btUndo);
-        stage.addActor(btPausa);
+        stage.addActor(myControl);
+        stage.addActor(buttonUndo);
+        stage.addActor(buttonPause);
 
         setRunning();
     }
@@ -105,10 +107,10 @@ public class GameScreen extends Screens {
 
         if (state != STATE_PAUSED) {
             stageGame.act(delta);
-            barMoves.updateActualNum(oBoard.moves);
-            barTime.updateActualNum((int) oBoard.time);
+            barMoves.updateActualNum(myBoard.moves);
+            barTime.updateActualNum((int) myBoard.time);
 
-            if (state == STATE_RUNNING && oBoard.state == Board.STATE_GAMEOVER) {
+            if (state == STATE_RUNNING && myBoard.state == Board.STATE_GAMEOVER) {
                 setGameover();
             }
         }
@@ -117,13 +119,13 @@ public class GameScreen extends Screens {
 
     private void setGameover() {
         state = STATE_GAME_OVER;
-        Settings.levelCompeted(level, oBoard.moves, (int) oBoard.time);
+        Settings.levelCompeted(level, myBoard.moves, (int) myBoard.time);
         stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run(() -> {
             level += 1;
-            if (level >= com.nopalsoft.sokoban.Settings.getNUM_MAPS())
+            if (level >= Settings.getNUM_MAPS())
                 changeScreenWithFadeOut(com.nopalsoft.sokoban.screens.MainMenuScreen.class, game);
             else
-                changeScreenWithFadeOut(com.nopalsoft.sokoban.game.GameScreen.class, level, game);
+                changeScreenWithFadeOut(GameScreen.class, level, game);
 
         })));
     }
@@ -137,31 +139,31 @@ public class GameScreen extends Screens {
     private void setPause() {
         if (state == STATE_RUNNING) {
             state = STATE_PAUSED;
-            vtPause.show(stage);
+            myWindowPause.show(stage);
         }
     }
 
     @Override
     public void up() {
-        oBoard.moveUp = true;
+        myBoard.moveUp = true;
         super.up();
     }
 
     @Override
     public void down() {
-        oBoard.moveDown = true;
+        myBoard.moveDown = true;
         super.down();
     }
 
     @Override
     public void right() {
-        oBoard.moveRight = true;
+        myBoard.moveRight = true;
         super.right();
     }
 
     @Override
     public void left() {
-        oBoard.moveLeft = true;
+        myBoard.moveLeft = true;
         super.left();
     }
 
@@ -169,26 +171,26 @@ public class GameScreen extends Screens {
     public boolean keyDown(int keycode) {
         if (state == STATE_RUNNING) {
             if (keycode == Keys.LEFT || keycode == Keys.A) {
-                oBoard.moveLeft = true;
+                myBoard.moveLeft = true;
 
             } else if (keycode == Keys.RIGHT || keycode == Keys.D) {
-                oBoard.moveRight = true;
+                myBoard.moveRight = true;
 
             } else if (keycode == Keys.UP || keycode == Keys.W) {
-                oBoard.moveUp = true;
+                myBoard.moveUp = true;
 
             } else if (keycode == Keys.DOWN || keycode == Keys.S) {
-                oBoard.moveDown = true;
+                myBoard.moveDown = true;
 
             } else if (keycode == Keys.Z) {
-                oBoard.undo = true;
+                myBoard.undo = true;
 
             } else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
                 setPause();
             }
         } else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-            if (vtPause.isShown())
-                vtPause.hide();
+            if (myWindowPause.isShown())
+                myWindowPause.hide();
         }
 
         return true;

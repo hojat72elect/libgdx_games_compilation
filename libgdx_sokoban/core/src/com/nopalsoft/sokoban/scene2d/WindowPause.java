@@ -15,8 +15,8 @@ import com.nopalsoft.sokoban.screens.Screens;
 
 public class WindowPause extends Window {
 
-    Button btHome, btRefresh;
-    Table tbAnimations;
+    Button buttonHome, buttonRefresh;
+    Table tableAnimations;
 
     public WindowPause(Screens currentScreen) {
         super(currentScreen, 350, 300, 100);
@@ -24,19 +24,19 @@ public class WindowPause extends Window {
         setCloseButton();
         setTitle("Paused", 1);
 
-        Table tbMenu = new Table();
-        tbMenu.setFillParent(true);
+        Table menuTable = new Table();
+        menuTable.setFillParent(true);
 
-        btHome = new Button(Assets.buttonHome, Assets.buttonHomePressed);
-        btHome.addListener(new ClickListener() {
+        buttonHome = new Button(Assets.buttonHome, Assets.buttonHomePressed);
+        buttonHome.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 screen.changeScreenWithFadeOut(MainMenuScreen.class, screen.game);
             }
         });
 
-        btRefresh = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
-        btRefresh.addListener(new ClickListener() {
+        buttonRefresh = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
+        buttonRefresh.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 screen.changeScreenWithFadeOut(GameScreen.class, ((GameScreen) screen).level, screen.game);
@@ -46,8 +46,8 @@ public class WindowPause extends Window {
         final Button btAnimations = new Button(Assets.buttonOff, Assets.buttonOn, Assets.buttonOn);
         btAnimations.setChecked(Settings.getAnimationWalkIsON());
 
-        tbAnimations = new Table();
-        tbAnimations.addListener(new ClickListener() {
+        tableAnimations = new Table();
+        tableAnimations.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -58,20 +58,20 @@ public class WindowPause extends Window {
             }
         });
 
-        tbMenu.defaults().expandX();
+        menuTable.defaults().expandX();
 
-        tbMenu.pad(30).padTop(55);
-        tbMenu.add(btHome);
-        tbMenu.add(btRefresh);
-        tbMenu.row();
+        menuTable.pad(30).padTop(55);
+        menuTable.add(buttonHome);
+        menuTable.add(buttonRefresh);
+        menuTable.row();
 
         Label lbAnimatons = new Label("Animations", new LabelStyle(Assets.fontRed, Color.WHITE));
-        tbAnimations.add(lbAnimatons);
-        tbAnimations.add(btAnimations).padLeft(15);
+        tableAnimations.add(lbAnimatons);
+        tableAnimations.add(btAnimations).padLeft(15);
 
-        tbMenu.add(tbAnimations).colspan(2).padTop(10);
+        menuTable.add(tableAnimations).colspan(2).padTop(10);
 
-        addActor(tbMenu);
+        addActor(menuTable);
 
     }
 
