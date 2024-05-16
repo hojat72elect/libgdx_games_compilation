@@ -1,7 +1,5 @@
 package com.nopalsoft.sokoban.screens;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
@@ -21,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.MainSokoban;
 import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.game.GameScreen;
 
 public abstract class Screens extends InputAdapter implements Screen, GestureListener {
     public static final int SCREEN_WIDTH = 800;
@@ -33,7 +30,8 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
     public SpriteBatch batcher;
     public Stage stage;
 
-    Random oRan;
+
+    Image blackFadeOut;
 
     public Screens(final MainSokoban game) {
         this.stage = game.stage;
@@ -67,26 +65,21 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     }
 
-    Image blackFadeOut;
-
     public void changeScreenWithFadeOut(final Class<?> newScreen, final int level, final MainSokoban game) {
         blackFadeOut = new Image(Assets.pixelNegro);
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
-        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                if (newScreen == GameScreen.class) {
-                    Assets.loadTiledMap(level);
-                    game.setScreen(new GameScreen(game, level));
-                } else if (newScreen == MainMenuScreen.class)
-                    game.setScreen(new MainMenuScreen(game));
-                // else if (newScreen == HelpScreen.class)
-                // game.setScreen(new HelpScreen(game));
+        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
+            if (newScreen == com.nopalsoft.sokoban.game.GameScreen.class) {
+                com.nopalsoft.sokoban.Assets.loadTiledMap(level);
+                game.setScreen(new com.nopalsoft.sokoban.game.GameScreen(game, level));
+            } else if (newScreen == com.nopalsoft.sokoban.screens.MainMenuScreen.class)
+                game.setScreen(new com.nopalsoft.sokoban.screens.MainMenuScreen(game));
+            // else if (newScreen == HelpScreen.class)
+            // game.setScreen(new HelpScreen(game));
 
-                // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-                // blackFadeout.remove();
-            }
+            // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
+            // blackFadeout.remove();
         })));
         stage.addActor(blackFadeOut);
     }

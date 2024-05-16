@@ -6,47 +6,44 @@ import com.nopalsoft.sokoban.objetos.Level;
 
 public class Settings {
 
-	public static boolean isTest = true;
+    private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.sokoban");
+    public static boolean isTest = true;
+    public static boolean animationWalkIsON;
+    public static int NUM_MAPS = 62;
+    public static Level[] arrLevel;// Cada posicion es un nivel
 
-	public static boolean animationWalkIsON;
+    public static void load() {
+        arrLevel = new Level[NUM_MAPS];
 
-	public static int NUM_MAPS = 62;
-	public static Level[] arrLevel;// Cada posicion es un nivel
+        animationWalkIsON = pref.getBoolean("animationWalkIsON", false);
 
-	private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.sokoban");
+        for (int i = 0; i < NUM_MAPS; i++) {
+            arrLevel[i] = new Level();
+            arrLevel[i].numStars = pref.getInteger("numStars" + i, 0);
+            arrLevel[i].bestMoves = pref.getInteger("bestMoves" + i, 0);
+            arrLevel[i].bestTime = pref.getInteger("bestTime" + i, 0);
+        }
 
-	public static void load() {
-		arrLevel = new Level[NUM_MAPS];
+    }
 
-		animationWalkIsON = pref.getBoolean("animationWalkIsON", false);
+    public static void save() {
 
-		for (int i = 0; i < NUM_MAPS; i++) {
-			arrLevel[i] = new Level();
-			arrLevel[i].numStars = pref.getInteger("numStars" + i, 0);
-			arrLevel[i].bestMoves = pref.getInteger("bestMoves" + i, 0);
-			arrLevel[i].bestTime = pref.getInteger("bestTime" + i, 0);
-		}
+        pref.putBoolean("animationWalkIsON", animationWalkIsON);
+        pref.flush();
 
-	}
+    }
 
-	public static void save() {
+    public static void levelCompeted(int level, int moves, int time) {
 
-		pref.putBoolean("animationWalkIsON", animationWalkIsON);
-		pref.flush();
+        arrLevel[level].numStars = 1;
+        arrLevel[level].bestMoves = moves;
+        arrLevel[level].bestTime = time;
 
-	}
+        pref.putInteger("numStars" + level, arrLevel[level].numStars);
+        pref.putInteger("bestMoves" + level, arrLevel[level].bestMoves);
+        pref.putInteger("bestTime" + level, arrLevel[level].bestTime);
 
-	public static void levelCompeted(int level, int moves, int time) {
-
-		arrLevel[level].numStars = 1;
-		arrLevel[level].bestMoves = moves;
-		arrLevel[level].bestTime = time;
-
-		pref.putInteger("numStars" + level, arrLevel[level].numStars);
-		pref.putInteger("bestMoves" + level, arrLevel[level].bestMoves);
-		pref.putInteger("bestTime" + level, arrLevel[level].bestTime);
-
-		pref.flush();
-	}
+        pref.flush();
+    }
 
 }

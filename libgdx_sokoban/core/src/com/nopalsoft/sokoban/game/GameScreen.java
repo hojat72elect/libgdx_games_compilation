@@ -102,7 +102,7 @@ public class GameScreen extends Screens {
 		Assets.background.render(delta);
 
 		// Render el tileMap
-		renderer.render(delta);
+		renderer.render();
 
 		// Render el tablero
 		stageGame.draw();
