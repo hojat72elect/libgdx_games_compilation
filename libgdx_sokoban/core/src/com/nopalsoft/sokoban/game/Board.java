@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.objects.Box;
 import com.nopalsoft.sokoban.objects.EndPoint;
+import com.nopalsoft.sokoban.objects.Player;
 import com.nopalsoft.sokoban.objects.Tiles;
+import com.nopalsoft.sokoban.objects.Wall;
 
 public class Board extends Group {
     public static final float UNIT_SCALE = 1f;
@@ -23,14 +25,12 @@ public class Board extends Group {
     public boolean undo;
     // X previous position, Y current position.
     Array<Vector2> arrayOfCharacterMoves;
-    /**
-     * X previous position, Y current position.
-     */
+    // X previous position, Y current position.
     Array<Vector2> arrayMovesBox;
     Array<Tiles> arrayTiles;
     int moves;
     float time;
-    private com.nopalsoft.sokoban.objects.Player player;
+    private Player player;
 
     public Board() {
         setSize(800, 480);
@@ -42,20 +42,20 @@ public class Board extends Group {
         initializeMap("StaticMap");
         initializeMap("Objetos");
 
-        // AFTER initializing the objects I add them to the Board in order so that some are drawn first than others.
-        addToBoard(com.nopalsoft.sokoban.objects.Wall.class);
+        // AFTER initializing the objects I add them to the Board in order so that some
+        // are drawn before others.
+        addToBoard(Wall.class);
         addToBoard(EndPoint.class);
         addToBoard(Box.class);
-        addToBoard(com.nopalsoft.sokoban.objects.Player.class);
+        addToBoard(Player.class);
 
         state = STATE_RUNNING;
-
         time = moves = 0;
     }
 
-    private void addToBoard(Class<?> tipo) {
+    private void addToBoard(Class<?> type) {
         for (Tiles obj : arrayTiles) {
-            if (obj.getClass() == tipo) {
+            if (obj.getClass() == type) {
                 addActor(obj);
             }
 
@@ -66,7 +66,7 @@ public class Board extends Group {
         TiledMapTileLayer layer = (TiledMapTileLayer) Assets.map.getLayers().get(layerName);
         if (layer != null) {
 
-            int posTile = 0;
+            int tilePosition = 0;
             for (int y = 0; y < 15; y++) {
                 for (int x = 0; x < 25; x++) {
                     Cell cell = layer.getCell(x, y);
@@ -78,48 +78,48 @@ public class Board extends Group {
 
                                 switch (tipo) {
                                     case "startPoint":
-                                        crearPersonaje(posTile);
+                                        createPerson(tilePosition);
                                         break;
                                     case "pared":
-                                        crearPared(posTile);
+                                        createWall(tilePosition);
                                         break;
                                     case "caja":
-                                        crearCaja(posTile, tile.getProperties().get("color").toString());
+                                        createBox(tilePosition, tile.getProperties().get("color").toString());
                                         break;
                                     case "endPoint":
-                                        crearEndPoint(posTile, tile.getProperties().get("color").toString());
+                                        createEndPoint(tilePosition, tile.getProperties().get("color").toString());
                                         break;
                                 }
 
                             }
                         }
                     }
-                    posTile++;
+                    tilePosition++;
                 }
             }
         }
     }
 
-    private void crearPersonaje(int posTile) {
-        com.nopalsoft.sokoban.objects.Player obj = new com.nopalsoft.sokoban.objects.Player(posTile);
+    private void createPerson(int tilePosition) {
+        Player obj = new Player(tilePosition);
         arrayTiles.add(obj);
         player = obj;
 
     }
 
-    private void crearPared(int posTile) {
-        com.nopalsoft.sokoban.objects.Wall obj = new com.nopalsoft.sokoban.objects.Wall(posTile);
+    private void createWall(int tilePosition) {
+        Wall obj = new Wall(tilePosition);
         arrayTiles.add(obj);
 
     }
 
-    private void crearCaja(int posTile, String color) {
-        Box obj = new Box(posTile, color);
+    private void createBox(int tilePosition, String color) {
+        Box obj = new Box(tilePosition, color);
         arrayTiles.add(obj);
     }
 
-    private void crearEndPoint(int posTile, String color) {
-        EndPoint obj = new EndPoint(posTile, color);
+    private void createEndPoint(int tilePosition, String color) {
+        EndPoint obj = new EndPoint(tilePosition, color);
         arrayTiles.add(obj);
     }
 
@@ -149,15 +149,15 @@ public class Board extends Group {
                 if (player.canMove() && (moveDown || moveLeft || moveRight || moveUp)) {
                     int nextPos = player.position + auxMoves;
 
-                    if (checarEspacioVacio(nextPos) || (!checarIsBoxInPosition(nextPos) && checarIsEndInPosition(nextPos))) {
+                    if (checkIfIsEmptySpace(nextPos) || (!checkIsBoxInPosition(nextPos) && checkIsEndpointInPosition(nextPos))) {
                         arrayOfCharacterMoves.add(new Vector2(player.position, nextPos));
                         arrayMovesBox.add(null);
                         player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
                         moves++;
                     } else {
-                        if (checarIsBoxInPosition(nextPos)) {
+                        if (checkIsBoxInPosition(nextPos)) {
                             int boxNextPos = nextPos + auxMoves;
-                            if (checarEspacioVacio(boxNextPos) || (!checarIsBoxInPosition(boxNextPos) && checarIsEndInPosition(boxNextPos))) {
+                            if (checkIfIsEmptySpace(boxNextPos) || (!checkIsBoxInPosition(boxNextPos) && checkIsEndpointInPosition(boxNextPos))) {
                                 Box oBox = getBoxInPosition(nextPos);
 
                                 arrayOfCharacterMoves.add(new Vector2(player.position, nextPos));
@@ -206,23 +206,23 @@ public class Board extends Group {
         undo = false;
     }
 
-    private boolean checarEspacioVacio(int pos) {
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
-        while (ite.hasNext()) {
-            if (ite.next().position == pos)
+    private boolean checkIfIsEmptySpace(int pos) {
+        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+        while (tilesIterator.hasNext()) {
+            if (tilesIterator.next().position == pos)
                 return false;
         }
         return true;
     }
 
     /**
-     * Indica si el objeto en la posicion es una caja
+     * Indicates if the object in the position is a box
      */
-    private boolean checarIsBoxInPosition(int pos) {
+    private boolean checkIsBoxInPosition(int pos) {
         boolean isBoxInPosition = false;
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
-        while (ite.hasNext()) {
-            Tiles obj = ite.next();
+        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+        while (tilesIterator.hasNext()) {
+            Tiles obj = tilesIterator.next();
             if (obj.position == pos && obj instanceof Box)
                 isBoxInPosition = true;
         }
@@ -231,13 +231,13 @@ public class Board extends Group {
     }
 
     /**
-     * Indica si el objeto en la posicion es endPoint
+     * Indicates if the object at the position is an endPoint.
      */
-    private boolean checarIsEndInPosition(int pos) {
+    private boolean checkIsEndpointInPosition(int pos) {
         boolean isEndPointInPosition = false;
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
-        while (ite.hasNext()) {
-            Tiles obj = ite.next();
+        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+        while (tilesIterator.hasNext()) {
+            Tiles obj = tilesIterator.next();
             if (obj.position == pos && obj instanceof EndPoint)
                 isEndPointInPosition = true;
         }
@@ -246,7 +246,7 @@ public class Board extends Group {
     }
 
     private Box getBoxInPosition(int pos) {
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
+        ArrayIterator<Tiles> ite = new ArrayIterator<>(arrayTiles);
         while (ite.hasNext()) {
             Tiles obj = ite.next();
             if (obj.position == pos && obj instanceof Box)
@@ -256,9 +256,9 @@ public class Board extends Group {
     }
 
     private EndPoint getEndPointInPosition(int pos) {
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
-        while (ite.hasNext()) {
-            Tiles obj = ite.next();
+        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+        while (tilesIterator.hasNext()) {
+            Tiles obj = tilesIterator.next();
             if (obj.position == pos && obj instanceof EndPoint)
                 return (EndPoint) obj;
         }
@@ -267,9 +267,9 @@ public class Board extends Group {
 
     private int checkBoxesMissingTheRightEndPoint() {
         int numBox = 0;
-        ArrayIterator<Tiles> ite = new ArrayIterator<Tiles>(arrayTiles);
-        while (ite.hasNext()) {
-            Tiles obj = ite.next();
+        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+        while (tilesIterator.hasNext()) {
+            Tiles obj = tilesIterator.next();
             if (obj instanceof Box) {
                 Box oBox = (Box) obj;
                 if (!oBox.isInRightEndPoint)
