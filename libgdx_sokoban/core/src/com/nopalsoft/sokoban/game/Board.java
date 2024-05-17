@@ -199,7 +199,9 @@ public class Board extends Group {
             if (posAntBox != null) {
                 Box oBox = getBoxInPosition((int) posAntBox.y);
                 oBox.moveToPosition((int) posAntBox.x, true);
-                oBox.setIsInEndPoint(getEndPointInPosition(oBox.position));
+                EndPoint endPointInPosition = getEndPointInPosition(oBox.position);
+                if (endPointInPosition != null)
+                    oBox.setIsInEndPoint(endPointInPosition);
             }
         }
         moves--;
