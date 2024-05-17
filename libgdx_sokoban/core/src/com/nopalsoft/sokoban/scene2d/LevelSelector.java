@@ -22,32 +22,30 @@ import com.nopalsoft.sokoban.screens.Screens;
 public class LevelSelector extends Group {
 
     protected MainMenuScreen menuScreen;
-    protected I18NBundle idiomas;
+    protected I18NBundle languages;
     protected MainSokoban game;
 
-    Label lbTitulo;
+    Label labelTitle;
 
     ScrollPane scrollPane;
-    Table contenedor;
+    Table container;
 
-    /**
-     * Current page (each page has 15 levels).
-     */
+    // Current page (each page has 15 levels).
     int actualPage;
     int totalStars;
 
-    WindowLevel vtLevel;
+    WindowLevel windowLevel;
 
     public LevelSelector(Screens currentScreen) {
         setSize(600, 385);
         setPosition(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f, 70);
         menuScreen = (MainMenuScreen) currentScreen;
         game = currentScreen.game;
-        idiomas = game.languages;
+        languages = game.languages;
 
         setBackGround(Assets.backgroundWindow);
 
-        vtLevel = new WindowLevel(currentScreen);
+        windowLevel = new WindowLevel(currentScreen);
 
         Table tableTitle;
         tableTitle = new Table();
@@ -55,17 +53,16 @@ public class LevelSelector extends Group {
         tableTitle.setSize(300, 50);
         tableTitle.setPosition(getWidth() / 2f - tableTitle.getWidth() / 2f, 324);
 
-        lbTitulo = new Label("Niveles", new LabelStyle(Assets.font, Color.WHITE));
-        tableTitle.add(lbTitulo);
+        labelTitle = new Label("Niveles", new LabelStyle(Assets.font, Color.WHITE));
+        tableTitle.add(labelTitle);
 
-        contenedor = new Table();
-        scrollPane = new ScrollPane(contenedor);
+        container = new Table();
+        scrollPane = new ScrollPane(container);
         scrollPane.setSize(getWidth() - 100, getHeight() - 100);
         scrollPane.setPosition(getWidth() / 2f - scrollPane.getWidth() / 2f, 30);
         scrollPane.setScrollingDisabled(false, true);
-        //
 
-        contenedor.defaults().padLeft(5).padRight(5);
+        container.defaults().padLeft(5).padRight(5);
 
         for (int i = 0; i < Settings.arrayLevel.length; i++) {
             totalStars += Settings.arrayLevel[i].numStars;
@@ -76,8 +73,8 @@ public class LevelSelector extends Group {
         if (Settings.getNUM_MAPS() % 15f != 0)
             numberOfPages++;
 
-        for (int col = 0; col < numberOfPages; col++) {
-            contenedor.add(getListLevel(col));
+        for (int column = 0; column < numberOfPages; column++) {
+            container.add(getListLevel(column));
         }
 
         actualPage = 0;
@@ -123,15 +120,15 @@ public class LevelSelector extends Group {
 
     private void scrollToPage(int page) {
 
-        Table tabToScrollTo = (Table) contenedor.getChildren().get(page);
+        Table tabToScrollTo = (Table) container.getChildren().get(page);
         scrollPane.scrollTo(tabToScrollTo.getX(), tabToScrollTo.getY(), tabToScrollTo.getWidth(), tabToScrollTo.getHeight());
 
     }
 
     public void nextPage() {
         actualPage++;
-        if (actualPage >= contenedor.getChildren().size)
-            actualPage = contenedor.getChildren().size - 1;
+        if (actualPage >= container.getChildren().size)
+            actualPage = container.getChildren().size - 1;
         scrollToPage(actualPage);
     }
 
@@ -177,7 +174,7 @@ public class LevelSelector extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!button.isDisabled()) {
-                    vtLevel.show(getStage(), level, Settings.arrayLevel[level].bestMoves, Settings.arrayLevel[level].bestTime);
+                    windowLevel.show(getStage(), level, Settings.arrayLevel[level].bestMoves, Settings.arrayLevel[level].bestTime);
 
                 }
             }
