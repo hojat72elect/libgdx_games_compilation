@@ -1,70 +1,60 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.game.GameScreen;
-import com.nopalsoft.sokoban.screens.Screens;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.game.GameScreen
+import com.nopalsoft.sokoban.screens.Screens
 
-public class WindowLevel extends Window {
+class WindowLevel(currentScreen: Screens) : Window(currentScreen, 350f, 300f, 100f) {
 
-    Button buttonPlay;
-    Label labelBestMoves, labelBestTime;
+    private val buttonPlay = Button(Assets.buttonPlay, Assets.buttonPlayPressed)
+    private val labelBestMoves = Label("0", LabelStyle(Assets.fontRed, Color.WHITE))
+    private val labelBestTime = Label("0", LabelStyle(Assets.fontRed, Color.WHITE))
 
-    public WindowLevel(Screens currentScreen) {
-        super(currentScreen, 350, 300, 100);
 
-        setCloseButton();
-        setTitle("Puntuaciones", .75f);
+    init {
+        setCloseButton()
+        setTitle("Puntuaciones", .75f)
+        val tableMenu = Table()
+        tableMenu.setFillParent(true)
+        val imgClock = Image(Assets.clock)
+        val imgMoves = Image(Assets.characterStand)
 
-        Table tableMenu = new Table();
-        tableMenu.setFillParent(true);
+        tableMenu.defaults().expandX()
+        tableMenu.padLeft(30f).padRight(30f).padBottom(20f).padTop(50f)
+        tableMenu.add(imgMoves).size(45f)
+        tableMenu.add(labelBestMoves)
 
-        buttonPlay = new Button(Assets.buttonPlay, Assets.buttonPlayPressed);
+        tableMenu.row().padTop(10f)
+        tableMenu.add(imgClock).size(45f)
+        tableMenu.add(labelBestTime)
 
-        Image imgClock = new Image(Assets.clock);
-        Image imgMoves = new Image(Assets.characterStand);
+        tableMenu.row().padTop(10f)
+        tableMenu.add(buttonPlay).colspan(2).size(60f)
 
-        labelBestMoves = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
-        labelBestTime = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
-
-        tableMenu.defaults().expandX();
-
-        tableMenu.padLeft(30).padRight(30).padBottom(20).padTop(50);
-        tableMenu.add(imgMoves).size(45);
-        tableMenu.add(labelBestMoves);
-
-        tableMenu.row().padTop(10);
-        tableMenu.add(imgClock).size(45);
-        tableMenu.add(labelBestTime);
-
-        tableMenu.row().padTop(10);
-        tableMenu.add(buttonPlay).colspan(2).size(60);
-
-        addActor(tableMenu);
-
+        addActor(tableMenu)
     }
 
-    public void show(Stage stage, final int level, int bestMoves, int bestTime) {
-        labelBestMoves.setText(bestMoves + "");
-        labelBestTime.setText(bestTime + "");
 
-        buttonPlay.clear();
-        buttonPlay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                screen.changeScreenWithFadeOut(GameScreen.class, level, screen.game);
+    fun show(stage: Stage, level: Int, bestMoves: Int, bestTime: Int) {
+        labelBestMoves.setText(bestMoves.toString())
+        labelBestTime.setText(bestTime.toString())
+
+        buttonPlay.clear()
+        buttonPlay.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                screen.changeScreenWithFadeOut(GameScreen::class.java, level, screen.game)
             }
-        });
+        })
 
-        super.show(stage);
+        super.show(stage)
     }
-
 }
