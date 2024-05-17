@@ -14,8 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.sokoban.parallax.ParallaxBackground;
 import com.nopalsoft.sokoban.parallax.ParallaxLayer;
+import com.nopalsoft.sokoban.parallax.ParallaxBackground;
 
 public class Assets {
 
