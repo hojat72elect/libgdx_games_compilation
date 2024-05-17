@@ -46,16 +46,16 @@ public class GameScreen extends Screens {
         Runnable runAfterHideMenu = () -> {
             Runnable run = () -> {
                 state = STATE_RUNNING;
-                if (com.nopalsoft.ninjarunner.Settings.isMusicEnabled) {
-                    com.nopalsoft.ninjarunner.Assets.music1.play();
+                if (Settings.isMusicEnabled) {
+                    Assets.music1.play();
                 }
 
-                nextGoalFrame = new com.nopalsoft.ninjarunner.leaderboard.NextGoalFrame(SCREEN_WIDTH, 400);
+                nextGoalFrame = new NextGoalFrame(SCREEN_WIDTH, 400);
                 setNextGoalFrame(0);
 
 
             };
-            gameUI.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence(com.badlogic.gdx.scenes.scene2d.actions.Actions.delay(com.nopalsoft.ninjarunner.scene2d.GameUI.ANIMATION_TIME), com.badlogic.gdx.scenes.scene2d.actions.Actions.run(run)));
+            gameUI.addAction(Actions.sequence(Actions.delay(GameUI.ANIMATION_TIME), Actions.run(run)));
             gameUI.show(stage);
         };
 
@@ -134,7 +134,7 @@ public class GameScreen extends Screens {
 
         Runnable run = () -> {
             nextGoalFrame.updatePersona(oPersona);
-            nextGoalFrame.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence(com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo(SCREEN_WIDTH - com.nopalsoft.ninjarunner.leaderboard.NextGoalFrame.WIDTH, nextGoalFrame.getY(), 1)));
+            nextGoalFrame.addAction(Actions.sequence(Actions.moveTo(SCREEN_WIDTH - NextGoalFrame.WIDTH, nextGoalFrame.getY(), 1)));
 
         };
 
@@ -170,11 +170,11 @@ public class GameScreen extends Screens {
 
         renderer.render(delta);
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.begin();
-        Assets.fontSmall.draw(batcher, "FPS GERA" + com.badlogic.gdx.Gdx.graphics.getFramesPerSecond(), 5, 20);
+        Assets.fontSmall.draw(batcher, "FPS GERA" + Gdx.graphics.getFramesPerSecond(), 5, 20);
         Assets.fontSmall.draw(batcher, "Bodies " + oWorld.oWorldBox.getBodyCount(), 5, 40);
         Assets.fontSmall.draw(batcher, "Vidas " + oWorld.oPersonaje.vidas, 5, 60);
         Assets.fontSmall.draw(batcher, "Monedas " + oWorld.monedasTomadas, 5, 80);

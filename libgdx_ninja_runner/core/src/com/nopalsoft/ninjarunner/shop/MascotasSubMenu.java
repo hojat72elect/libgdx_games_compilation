@@ -92,17 +92,17 @@ public class MascotasSubMenu {
         tbBarraTitulo.add(moneda).right().size(20);
         tbBarraTitulo.add(lblPrecio).right().padRight(10);
 
-        Table tbContent = new Table();
-        tbContent.setBackground(Assets.backgroundItemShop);
-        tbContent.pad(5);
+        Table tableContent = new Table();
+        tableContent.setBackground(Assets.backgroundItemShop);
+        tableContent.pad(5);
 
-        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2);
-        tbContent.row();
+        tableContent.add(tbBarraTitulo).expandX().fill().colspan(2);
+        tableContent.row();
 
-        tbContent.add(imgPersonaje).size(imagenWidth, imagenHeight);
+        tableContent.add(imgPersonaje).size(imagenWidth, imagenHeight);
         Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
         lblDescripcion.setWrap(true);
-        tbContent.add(lblDescripcion).expand().fill();
+        tableContent.add(lblDescripcion).expand().fill();
 
         Table auxTab = new Table();
         auxTab.setBackground(Assets.backgroundUpgradeBar);
@@ -113,15 +113,15 @@ public class MascotasSubMenu {
             auxTab.add(arrLevel[i]).size(15);
         }
 
-        tbContent.row();
-        tbContent.add(auxTab);
-        tbContent.add(btUpgrade).left().size(40);
+        tableContent.row();
+        tableContent.add(auxTab);
+        tableContent.add(btUpgrade).left().size(40);
 
-        tbContent.row().colspan(2);
-        tbContent.add(btBuy).expandX().right().size(120, 45);
-        tbContent.row().colspan(2);
+        tableContent.row().colspan(2);
+        tableContent.add(btBuy).expandX().right().size(120, 45);
+        tableContent.row().colspan(2);
 
-        return tbContent;
+        return tableContent;
 
     }
 

@@ -34,7 +34,6 @@ public class LeaderboardScreen extends Screens {
         tbTitle.setPosition(SCREEN_WIDTH / 2f - tbTitle.getWidth() / 2f, SCREEN_HEIGHT - tbTitle.getHeight());
         tbTitle.setBackground(Assets.backgroundTitleShop);
         tbTitle.padTop(20).padBottom(5);
-        // tbTitle.debugAll();
 
         tbTitle.row().colspan(2);
         tbTitle.add(lbShop).expand();

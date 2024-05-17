@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
 import com.nopalsoft.ninjarunner.Settings;
+import com.nopalsoft.ninjarunner.shop.ShopScreen;
+import com.nopalsoft.ninjarunner.game.GameScreen;
 
 public abstract class Screens extends InputAdapter implements Screen, GestureListener {
     public static final int SCREEN_WIDTH = 800;
@@ -26,7 +28,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     public MainGame game;
 
-    public OrthographicCamera oCam;
+    public OrthographicCamera myCamera;
     public SpriteBatch batcher;
     public Stage stage;
 
@@ -39,8 +41,8 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
         this.batcher = game.batcher;
 
 
-        oCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        oCam.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        myCamera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+        myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
 
         GestureDetector detector = new GestureDetector(20, .5f, 2, .15f, this);
 
@@ -53,12 +55,11 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
     public void render(float delta) {
         update(delta);
 
-        // Gdx.gl.glClearColor(0, 0, 0, 1);//NEgro
         Gdx.gl.glClearColor(.191f, .703f, .996f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
         draw(delta);
 
         stage.act(delta);
@@ -71,15 +72,12 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
-            if (newScreen == com.nopalsoft.ninjarunner.game.GameScreen.class) {
-                game.setScreen(new com.nopalsoft.ninjarunner.game.GameScreen(game, true));
-            } else if (newScreen == com.nopalsoft.ninjarunner.screens.SettingsScreen.class)
-                game.setScreen(new com.nopalsoft.ninjarunner.screens.SettingsScreen(game));
-            else if (newScreen == com.nopalsoft.ninjarunner.shop.ShopScreen.class)
-                game.setScreen(new com.nopalsoft.ninjarunner.shop.ShopScreen(game));
-
-            // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-            // blackFadeout.remove();
+            if (newScreen == GameScreen.class) {
+                game.setScreen(new GameScreen(game, true));
+            } else if (newScreen == SettingsScreen.class)
+                game.setScreen(new SettingsScreen(game));
+            else if (newScreen == ShopScreen.class)
+                game.setScreen(new ShopScreen(game));
         })));
         stage.addActor(blackFadeOut);
     }
@@ -104,13 +102,10 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     @Override
     public void pause() {
-        // Assets.pauseMusic();
-
     }
 
     @Override
     public void resume() {
-        // Assets.playMusic();
 
     }
 

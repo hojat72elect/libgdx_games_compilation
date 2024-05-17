@@ -17,15 +17,15 @@ public class GameUI extends Group {
     public static final float ANIMATION_TIME = .35f;
     public boolean didJump, didSlide, didDash;
     GameScreen gameScreen;
-    WorldGame oWorld;
-    Table tbHeader;
-    Label lbPuntuacion;
-    Button btJump, btSlide;
+    WorldGame myWorld;
+    Table tableHeader;
+    Label labelScore;
+    Button buttonJump, buttonSlide;
 
-    public GameUI(final GameScreen gameScreen, WorldGame oWorld) {
+    public GameUI(final GameScreen gameScreen, WorldGame myWorld) {
         setBounds(0, 0, Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT);
         this.gameScreen = gameScreen;
-        this.oWorld = oWorld;
+        this.myWorld = myWorld;
 
         init();
 
@@ -33,10 +33,10 @@ public class GameUI extends Group {
 
     private void init() {
 
-        btJump = new Button(new ButtonStyle(null, null, null));
-        btJump.setSize(getWidth() / 2f, getHeight());
-        btJump.setPosition(0, 0);
-        btJump.addListener(new ClickListener() {
+        buttonJump = new Button(new ButtonStyle(null, null, null));
+        buttonJump.setSize(getWidth() / 2f, getHeight());
+        buttonJump.setPosition(0, 0);
+        buttonJump.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 didJump = true;
@@ -45,10 +45,10 @@ public class GameUI extends Group {
             }
         });
 
-        btSlide = new Button(new ButtonStyle(null, null, null));
-        btSlide.setSize(getWidth() / 2f, getHeight());
-        btSlide.setPosition(getWidth() / 2f + 1, 0);
-        btSlide.addListener(new ClickListener() {
+        buttonSlide = new Button(new ButtonStyle(null, null, null));
+        buttonSlide.setSize(getWidth() / 2f, getHeight());
+        buttonSlide.setPosition(getWidth() / 2f + 1, 0);
+        buttonSlide.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 didSlide = true;
@@ -62,17 +62,17 @@ public class GameUI extends Group {
             }
         });
 
-        tbHeader = new Table();
-        tbHeader.setSize(Screens.SCREEN_WIDTH, 50);
-        tbHeader.setPosition(0, Screens.SCREEN_HEIGHT - tbHeader.getHeight());
+        tableHeader = new Table();
+        tableHeader.setSize(Screens.SCREEN_WIDTH, 50);
+        tableHeader.setPosition(0, Screens.SCREEN_HEIGHT - tableHeader.getHeight());
 
-        lbPuntuacion = new Label("0", Assets.labelStyleSmall);
-        tbHeader.add(lbPuntuacion).fill();
+        labelScore = new Label("0", Assets.labelStyleSmall);
+        tableHeader.add(labelScore).fill();
 
-        addActor(tbHeader);
+        addActor(tableHeader);
 
-        addActor(btJump);
-        addActor(btSlide);
+        addActor(buttonJump);
+        addActor(buttonSlide);
 
 
     }
