@@ -1,86 +1,43 @@
-package com.nopalsoft.sokoban.objects;
+package com.nopalsoft.sokoban.objects
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.nopalsoft.sokoban.Assets;
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.nopalsoft.sokoban.Assets
 
-public class EndPoint extends Tiles {
-    int numColor;
+class EndPoint(position: Int, color: String) : Tiles(position) {
+    @JvmField
+    var numColor: Int = 0
 
-    AtlasRegion keyFrame;
+    private lateinit var keyFrame: AtlasRegion
 
-    public EndPoint(int position, String color) {
-        super(position);
-
-        switch (color) {
-            case "brown":
-                numColor = Box.COLOR_BROWN;
-                break;
-            case "gray":
-                numColor = Box.COLOR_GRAY;
-                break;
-            case "purple":
-                numColor = Box.COLOR_PURPLE;
-                break;
-            case "blue":
-                numColor = Box.COLOR_BLUE;
-                break;
-            case "black":
-                numColor = Box.COLOR_BLACK;
-                break;
-            case "beige":
-                numColor = Box.COLOR_BEIGE;
-                break;
-            case "yellow":
-                numColor = Box.COLOR_YELLOW;
-                break;
-            case "red":
-                numColor = Box.COLOR_RED;
-                break;
+    init {
+        when (color) {
+            "brown" -> numColor = Box.COLOR_BROWN
+            "gray" -> numColor = Box.COLOR_GRAY
+            "purple" -> numColor = Box.COLOR_PURPLE
+            "blue" -> numColor = Box.COLOR_BLUE
+            "black" -> numColor = Box.COLOR_BLACK
+            "beige" -> numColor = Box.COLOR_BEIGE
+            "yellow" -> numColor = Box.COLOR_YELLOW
+            "red" -> numColor = Box.COLOR_RED
         }
-
-        setTextureColor(numColor);
+        setTextureColor(numColor)
     }
 
-    private void setTextureColor(int numColor) {
-        switch (numColor) {
-            case Box.COLOR_BEIGE:
-                keyFrame = Assets.endPointBeige;
-                break;
-
-            case Box.COLOR_BLACK:
-                keyFrame = Assets.endPointBlack;
-                break;
-
-            case Box.COLOR_BLUE:
-                keyFrame = Assets.endPointBlue;
-                break;
-
-            case Box.COLOR_BROWN:
-                keyFrame = Assets.endPointBrown;
-                break;
-
-            case Box.COLOR_GRAY:
-                keyFrame = Assets.endPointGray;
-                break;
-
-            case Box.COLOR_RED:
-                keyFrame = Assets.endPointRed;
-                break;
-
-            case Box.COLOR_YELLOW:
-                keyFrame = Assets.endPointYellow;
-                break;
-
-            case Box.COLOR_PURPLE:
-                keyFrame = Assets.endPointPurple;
-                break;
-
+    private fun setTextureColor(numColor: Int) {
+        when (numColor) {
+            Box.COLOR_BEIGE -> keyFrame = Assets.endPointBeige
+            Box.COLOR_BLACK -> keyFrame = Assets.endPointBlack
+            Box.COLOR_BLUE -> keyFrame = Assets.endPointBlue
+            Box.COLOR_BROWN -> keyFrame = Assets.endPointBrown
+            Box.COLOR_GRAY -> keyFrame = Assets.endPointGray
+            Box.COLOR_RED -> keyFrame = Assets.endPointRed
+            Box.COLOR_YELLOW -> keyFrame = Assets.endPointYellow
+            Box.COLOR_PURPLE -> keyFrame = Assets.endPointPurple
         }
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(keyFrame, getX(), getY(), SIZE, SIZE);
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        batch.draw(keyFrame, x, y, SIZE, SIZE)
     }
 }
