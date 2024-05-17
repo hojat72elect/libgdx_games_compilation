@@ -4,58 +4,58 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.ninjarunner.Assets;
-
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 
 public class NextGoalFrame extends Group {
 
     public static final float WIDTH = 170;
     public static final float HEIGHT = 80;
-    public Person oPersona;
-    Label lbNombre;
-    Label lbScorePersona;
-    Label lbPuntosRestantesParaSuperar;
+    public Person myPerson;
+    Label labelName;
+    Label labelPersonScore;
+    Label labelRemainingPointsToOvercome;
 
 
     public NextGoalFrame(float x, float y) {
         setBounds(x, y, WIDTH, HEIGHT);
 
-        lbNombre = new Label("", Assets.labelStyleChico);
-        lbNombre.setFontScale(.5f);
-        lbNombre.setPosition(60, 60);
+        labelName = new Label("", Assets.labelStyleSmall);
+        labelName.setFontScale(.5f);
+        labelName.setPosition(60, 60);
 
-        lbScorePersona = new Label("", Assets.labelStyleChico);
-        lbScorePersona.setFontScale(.5f);
-        lbScorePersona.setPosition(60, 40);
+        labelPersonScore = new Label("", Assets.labelStyleSmall);
+        labelPersonScore.setFontScale(.5f);
+        labelPersonScore.setPosition(60, 40);
 
-        lbPuntosRestantesParaSuperar = new Label("", Assets.labelStyleChico);
-        lbPuntosRestantesParaSuperar.setFontScale(.5f);
-        lbPuntosRestantesParaSuperar.setPosition(60, 20);
+        labelRemainingPointsToOvercome = new Label("", Assets.labelStyleSmall);
+        labelRemainingPointsToOvercome.setFontScale(.5f);
+        labelRemainingPointsToOvercome.setPosition(60, 20);
 
-        addActor(lbNombre);
-        addActor(lbScorePersona);
-        addActor(lbPuntosRestantesParaSuperar);
+        addActor(labelName);
+        addActor(labelPersonScore);
+        addActor(labelRemainingPointsToOvercome);
 
 
         debug();
     }
 
     /**
-     * Pone una persona nueva en el frame.
+     * Puts a new person in the frame.
      */
     public void updatePersona(Person persona) {
-        this.oPersona = persona;
+        this.myPerson = persona;
 
-        lbNombre.setText(oPersona.name);
-        lbScorePersona.setText(oPersona.getScoreWithFormat());
+        labelName.setText(myPerson.name);
+        labelPersonScore.setText(myPerson.getScoreWithFormat());
 
 
-        if (oPersona.imagen != null)
-            setPicture(oPersona.imagen);
+        if (myPerson.imagen != null)
+            setPicture(myPerson.imagen);
         else {
-            oPersona.downloadImage(new Person.DownloadImageCompleteListener() {
+            myPerson.downloadImage(new Person.DownloadImageCompleteListener() {
                 @Override
                 public void imageDownloaded() {
-                    setPicture(oPersona.imagen);
+                    setPicture(myPerson.imagen);
                 }
 
                 @Override
@@ -69,16 +69,17 @@ public class NextGoalFrame extends Group {
 
     private void setPicture(TextureRegionDrawable drawable) {
         /*
-         * uso un image button porque puede tener fondo y una imagen
+         * I use an image button because it can have a background and an image
          */
-        com.badlogic.gdx.scenes.scene2d.ui.ImageButton imagenPersona = new com.badlogic.gdx.scenes.scene2d.ui.ImageButton(new com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle(drawable, null, null, com.nopalsoft.ninjarunner.Assets.photoFrame, null, null));
-        imagenPersona.setSize(50, 50);
-        imagenPersona.getImageCell().size(50);
-        imagenPersona.setPosition(5, HEIGHT / 2f - imagenPersona.getHeight() / 2f);
-        addActor(imagenPersona);
+        ImageButton personImage = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
+        personImage.setSize(50, 50);
+        personImage.getImageCell().size(50);
+        personImage.setPosition(5, HEIGHT / 2f - personImage.getHeight() / 2f);
+        addActor(personImage);
     }
 
-    public void updatePuntuacion(long puntuacion) {
-        lbPuntosRestantesParaSuperar.setText("Pa Ganar" + (oPersona.score - puntuacion));
+    public void updateScore(long score) {
+        if (myPerson != null)
+            labelRemainingPointsToOvercome.setText("Pa Ganar" + (myPerson.score - score));
     }
 }

@@ -11,14 +11,14 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pools;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.objetos.Item;
-import com.nopalsoft.ninjarunner.objetos.Mascota;
-import com.nopalsoft.ninjarunner.objetos.Missil;
-import com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4;
-import com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7;
-import com.nopalsoft.ninjarunner.objetos.Pared;
-import com.nopalsoft.ninjarunner.objetos.Personaje;
-import com.nopalsoft.ninjarunner.objetos.Plataforma;
+import com.nopalsoft.ninjarunner.objects.Item;
+import com.nopalsoft.ninjarunner.objects.Mascota;
+import com.nopalsoft.ninjarunner.objects.Missil;
+import com.nopalsoft.ninjarunner.objects.ObstaculoCajas4;
+import com.nopalsoft.ninjarunner.objects.ObstaculoCajas7;
+import com.nopalsoft.ninjarunner.objects.Pared;
+import com.nopalsoft.ninjarunner.objects.Personaje;
+import com.nopalsoft.ninjarunner.objects.Plataforma;
 
 
 public class ObjectManagerBox2d {
@@ -46,7 +46,7 @@ public class ObjectManagerBox2d {
         oBody.setFixedRotation(true);
         oBody.setUserData(oWorld.oPersonaje);
         oBody.setBullet(true);
-        oBody.setLinearVelocity(Personaje.VELOCIDAD_RUN, 0);
+        oBody.setLinearVelocity(Personaje.VELOCITY_RUN, 0);
 
     }
 

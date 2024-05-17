@@ -12,20 +12,20 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.objetos.Item;
-import com.nopalsoft.ninjarunner.objetos.ItemCandyBean;
-import com.nopalsoft.ninjarunner.objetos.ItemCandyCorn;
-import com.nopalsoft.ninjarunner.objetos.ItemCandyJelly;
-import com.nopalsoft.ninjarunner.objetos.ItemEnergy;
-import com.nopalsoft.ninjarunner.objetos.ItemHearth;
-import com.nopalsoft.ninjarunner.objetos.ItemMagnet;
-import com.nopalsoft.ninjarunner.objetos.ItemMoneda;
-import com.nopalsoft.ninjarunner.objetos.Mascota;
-import com.nopalsoft.ninjarunner.objetos.Missil;
-import com.nopalsoft.ninjarunner.objetos.Obstaculo;
-import com.nopalsoft.ninjarunner.objetos.Pared;
-import com.nopalsoft.ninjarunner.objetos.Personaje;
-import com.nopalsoft.ninjarunner.objetos.Plataforma;
+import com.nopalsoft.ninjarunner.objects.Item;
+import com.nopalsoft.ninjarunner.objects.ItemCandyBean;
+import com.nopalsoft.ninjarunner.objects.ItemCandyCorn;
+import com.nopalsoft.ninjarunner.objects.ItemCandyJelly;
+import com.nopalsoft.ninjarunner.objects.ItemEnergy;
+import com.nopalsoft.ninjarunner.objects.ItemHearth;
+import com.nopalsoft.ninjarunner.objects.ItemMagnet;
+import com.nopalsoft.ninjarunner.objects.ItemMoneda;
+import com.nopalsoft.ninjarunner.objects.Mascota;
+import com.nopalsoft.ninjarunner.objects.Missil;
+import com.nopalsoft.ninjarunner.objects.Obstaculo;
+import com.nopalsoft.ninjarunner.objects.Pared;
+import com.nopalsoft.ninjarunner.objects.Personaje;
+import com.nopalsoft.ninjarunner.objects.Plataforma;
 
 public class WorldGame {
     static final int STATE_GAMEOVER = 1;
@@ -169,19 +169,19 @@ public class WorldGame {
         oWorldBox.getBodies(arrBodies);
 
         for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
-            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Personaje) {
+            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Personaje) {
                 updatePersonaje(delta, body, didJump, dash, didSlide);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Mascota) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Mascota) {
                 updateMascota(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Plataforma) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Plataforma) {
                 updatePlataforma(body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Pared) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Pared) {
                 updatePared(body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Item) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Item) {
                 updateItem(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Obstaculo) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Obstaculo) {
                 updateObstaculos(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Missil) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Missil) {
                 updateMissil(delta, body);
             }
         }
@@ -205,48 +205,48 @@ public class WorldGame {
 
     private void eliminarObjetos() {
         for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
-            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Plataforma) {
-                com.nopalsoft.ninjarunner.objetos.Plataforma obj = (com.nopalsoft.ninjarunner.objetos.Plataforma) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.Plataforma.STATE_DESTROY) {
+            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Plataforma) {
+                com.nopalsoft.ninjarunner.objects.Plataforma obj = (com.nopalsoft.ninjarunner.objects.Plataforma) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objects.Plataforma.STATE_DESTROY) {
                     arrPlataformas.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Pared) {
-                com.nopalsoft.ninjarunner.objetos.Pared obj = (com.nopalsoft.ninjarunner.objetos.Pared) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.Pared.STATE_DESTROY) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Pared) {
+                com.nopalsoft.ninjarunner.objects.Pared obj = (com.nopalsoft.ninjarunner.objects.Pared) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objects.Pared.STATE_DESTROY) {
                     arrPared.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Item) {
-                com.nopalsoft.ninjarunner.objetos.Item obj = (com.nopalsoft.ninjarunner.objetos.Item) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.Item.STATE_DESTROY && obj.stateTime >= com.nopalsoft.ninjarunner.objetos.Item.DURATION_PICK) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Item) {
+                com.nopalsoft.ninjarunner.objects.Item obj = (com.nopalsoft.ninjarunner.objects.Item) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objects.Item.STATE_DESTROY && obj.stateTime >= com.nopalsoft.ninjarunner.objects.Item.DURATION_PICK) {
                     arrItems.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4) {
-                com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4 obj = (com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4) body.getUserData();
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.ObstaculoCajas4) {
+                com.nopalsoft.ninjarunner.objects.ObstaculoCajas4 obj = (com.nopalsoft.ninjarunner.objects.ObstaculoCajas4) body.getUserData();
 
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == com.nopalsoft.ninjarunner.objects.ObstaculoCajas4.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrObstaculos.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7) {
-                com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7 obj = (com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7) body.getUserData();
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.ObstaculoCajas7) {
+                com.nopalsoft.ninjarunner.objects.ObstaculoCajas7 obj = (com.nopalsoft.ninjarunner.objects.ObstaculoCajas7) body.getUserData();
 
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == com.nopalsoft.ninjarunner.objects.ObstaculoCajas7.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrObstaculos.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objetos.Missil) {
-                com.nopalsoft.ninjarunner.objetos.Missil obj = (com.nopalsoft.ninjarunner.objetos.Missil) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objetos.Missil.STATE_DESTROY) {
+            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Missil) {
+                com.nopalsoft.ninjarunner.objects.Missil obj = (com.nopalsoft.ninjarunner.objects.Missil) body.getUserData();
+                if (obj.state == com.nopalsoft.ninjarunner.objects.Missil.STATE_DESTROY) {
                     arrMissiles.removeValue(obj, true);
                     com.badlogic.gdx.utils.Pools.free(obj);
                     oWorldBox.destroyBody(body);

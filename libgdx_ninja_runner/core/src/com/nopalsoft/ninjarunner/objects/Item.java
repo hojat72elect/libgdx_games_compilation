@@ -1,4 +1,4 @@
-package com.nopalsoft.ninjarunner.objetos;
+package com.nopalsoft.ninjarunner.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -39,12 +39,12 @@ public class Item implements Poolable {
             position.x = body.getPosition().x;
             position.y = body.getPosition().y;
 
-            /* Primero checo si se atraen al personaje */
+            // First I check if they are attracted to the character
             if (oPersonaje.isMagnetEnabled && position.dst(oPersonaje.position) <= 5f) {
-                moveCoinsMagenet(body, oPersonaje.position);
+                moveCoinsMagnet(body, oPersonaje.position);
 
             } else if (oMascota != null && position.dst(oMascota.position) <= 2f) {
-                // moveCoinsMagenet(body, oMascota.position);
+                // TODO
             } else
                 body.setLinearVelocity(0, 0);
         }
@@ -52,9 +52,9 @@ public class Item implements Poolable {
         stateTime += delta;
     }
 
-    private void moveCoinsMagenet(Body body, Vector2 targetPosition) {
+    private void moveCoinsMagnet(Body body, Vector2 targetPosition) {
         velocity = body.getLinearVelocity();
-        velocity.set(targetPosition).sub(position).scl(Personaje.VELOCIDAD_DASH + 3);
+        velocity.set(targetPosition).sub(position).scl(Personaje.VELOCITY_DASH + 3);
         body.setLinearVelocity(velocity);
     }
 

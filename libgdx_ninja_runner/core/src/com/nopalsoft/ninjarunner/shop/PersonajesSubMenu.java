@@ -14,7 +14,7 @@ import com.nopalsoft.ninjarunner.AnimationSprite;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.objetos.Personaje;
+import com.nopalsoft.ninjarunner.objects.Personaje;
 import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 
 public class PersonajesSubMenu {
@@ -31,7 +31,7 @@ public class PersonajesSubMenu {
     String textSelect;
 
     public PersonajesSubMenu(Table contenedor, MainGame game) {
-        idiomas = game.idiomas;
+        idiomas = game.languages;
         this.contenedor = contenedor;
         contenedor.clear();
         // TODO QUITAR ESTO PARA BORRAR PREF
@@ -44,7 +44,7 @@ public class PersonajesSubMenu {
         textSelect = idiomas.get("select");
 
         if (!didBuyNinja)
-            lbPrecioNinja = new Label(PRECIO_NINJA + "", Assets.labelStyleChico);
+            lbPrecioNinja = new Label(PRECIO_NINJA + "", Assets.labelStyleSmall);
 
         inicializarBotones();
 
@@ -63,7 +63,7 @@ public class PersonajesSubMenu {
             moneda.setVisible(false);
 
         Table tbBarraTitulo = new Table();
-        tbBarraTitulo.add(new Label(titulo, Assets.labelStyleChico)).expandX().left();
+        tbBarraTitulo.add(new Label(titulo, Assets.labelStyleSmall)).expandX().left();
         tbBarraTitulo.add(moneda).right().size(20);
         tbBarraTitulo.add(lblPrecio).right().padRight(10);
 
@@ -76,7 +76,7 @@ public class PersonajesSubMenu {
         tbContent.row();
 
         tbContent.add(imgPersonaje).size(120, 99);
-        Label lblDescripcion = new Label(descripcion, Assets.labelStyleChico);
+        Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
         lblDescripcion.setWrap(true);
         tbContent.add(lblDescripcion).expand().fill();
 
@@ -94,13 +94,13 @@ public class PersonajesSubMenu {
 
         // DEFAULT
         btSelectShanti = new TextButton(textSelect, Assets.styleTextButtonPurchased);
-        if (Settings.skinSeleccionada == Personaje.TIPO_GIRL)
+        if (Settings.skinSeleccionada == Personaje.TYPE_GIRL)
             btSelectShanti.setVisible(false);
 
         btSelectShanti.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Settings.skinSeleccionada = Personaje.TIPO_GIRL;
+                Settings.skinSeleccionada = Personaje.TYPE_GIRL;
                 setSelected(btSelectShanti);
             }
         });
@@ -111,14 +111,14 @@ public class PersonajesSubMenu {
         else
             btBuyNinja = new TextButton(textBuy, Assets.styleTextButtonBuy);
 
-        if (Settings.skinSeleccionada == Personaje.TIPO_NINJA)
+        if (Settings.skinSeleccionada == Personaje.TYPE_NINJA)
             btBuyNinja.setVisible(false);
 
         btBuyNinja.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (didBuyNinja) {
-                    Settings.skinSeleccionada = Personaje.TIPO_NINJA;
+                    Settings.skinSeleccionada = Personaje.TYPE_NINJA;
                     setSelected(btBuyNinja);
                 } else if (Settings.monedasTotal >= PRECIO_NINJA) {
                     Settings.monedasTotal -= PRECIO_NINJA;

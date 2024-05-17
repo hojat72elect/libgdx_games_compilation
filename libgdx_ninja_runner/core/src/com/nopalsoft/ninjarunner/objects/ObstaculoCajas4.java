@@ -1,4 +1,4 @@
-package com.nopalsoft.ninjarunner.objetos;
+package com.nopalsoft.ninjarunner.objects;
 
 public class ObstaculoCajas4 extends Obstaculo {
     public final static float DRAW_HEIGHT = .76f;

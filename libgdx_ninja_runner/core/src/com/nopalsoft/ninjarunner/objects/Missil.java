@@ -1,4 +1,4 @@
-package com.nopalsoft.ninjarunner.objetos;
+package com.nopalsoft.ninjarunner.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;

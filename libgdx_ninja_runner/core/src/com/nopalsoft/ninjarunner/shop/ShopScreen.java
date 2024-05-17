@@ -29,7 +29,7 @@ public class ShopScreen extends Screens {
     public ShopScreen(MainGame game) {
         super(game);
 
-        Label lbShop = new Label("Shop", Assets.labelStyleGrande);
+        Label lbShop = new Label("Shop", Assets.labelStyleLarge);
 
         Table tbTitle = new Table();
         tbTitle.setSize(400, 100);
@@ -45,7 +45,7 @@ public class ShopScreen extends Screens {
         Image imgGem = new Image(Assets.moneda.getKeyFrame(0));
         imgGem.setSize(20, 20);
 
-        lbCoins = new Label("x0", Assets.labelStyleChico);
+        lbCoins = new Label("x0", Assets.labelStyleSmall);
 
         tbTitle.add(imgGem).size(20).right();
         tbTitle.add(lbCoins).padLeft(5).left();
@@ -96,11 +96,11 @@ public class ShopScreen extends Screens {
     }
 
     void initButtons() {
-        btPersonajes = new Button(Assets.btShop, Assets.btShopPress, Assets.btShopPress);
-        btMascota = new Button(Assets.btLeaderboard, Assets.btLeaderboardPress, Assets.btLeaderboardPress);
-        btUpgrades = new Button(Assets.btAchievement, Assets.btAchievementPress, Assets.btLeaderboardPress);
-        btNoAds = new Button(Assets.btSettings, Assets.btSettingsPress, Assets.btLeaderboardPress);
-        btMore = new Button(Assets.btRate, Assets.btSettingsPress);
+        btPersonajes = new Button(Assets.buttonShop, Assets.buttonShopPressed, Assets.buttonShopPressed);
+        btMascota = new Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed, Assets.buttonLeaderboardPressed);
+        btUpgrades = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed, Assets.buttonLeaderboardPressed);
+        btNoAds = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed, Assets.buttonLeaderboardPressed);
+        btMore = new Button(Assets.buttonRate, Assets.buttonSettingsPressed);
 
         btPersonajes.addListener(new ClickListener() {
             @Override
@@ -130,7 +130,7 @@ public class ShopScreen extends Screens {
         btMore.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.reqHandler.showMoreGames();
+                game.myRequestHandler.showMoreGames();
             }
         });
 

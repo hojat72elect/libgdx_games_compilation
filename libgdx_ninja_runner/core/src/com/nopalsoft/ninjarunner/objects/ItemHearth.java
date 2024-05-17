@@ -1,4 +1,4 @@
-package com.nopalsoft.ninjarunner.objetos;
+package com.nopalsoft.ninjarunner.objects;
 
 public class ItemHearth extends Item {
 

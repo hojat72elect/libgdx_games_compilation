@@ -1,30 +1,26 @@
-package com.nopalsoft.ninjarunner.objetos;
+package com.nopalsoft.ninjarunner.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
 
-
-/**
- * Created by Yayo on 21/Jan/2015.
- */
 public class Personaje {
     public final static int STATE_NORMAL = 0;// NORMAL APLICA PARA RUN,DASH,SLIDE,JUMP
     public final static int STATE_HURT = 1;
     public final static int STATE_DIZZY = 2;
     public final static int STATE_DEAD = 3;
     public final static int STATE_REVIVE = 4;
-    public final static int TIPO_GIRL = 0;
-    public final static int TIPO_BOY = 1;
-    public final static int TIPO_NINJA = 2;
+    public final static int TYPE_GIRL = 0;
+    public final static int TYPE_BOY = 1;
+    public final static int TYPE_NINJA = 2;
     public final static float DRAW_WIDTH = 1.27f;
     public final static float DRAW_HEIGHT = 1.05f;
     public final static float WIDTH = .55f;
     public final static float HEIGHT = 1f;
     public final static float HEIGHT_SLIDE = .45f;
-    public static final float VELOCIDAD_RUN = 3;
-    public static final float VELOCIDAD_DASH = 7;
+    public static final float VELOCITY_RUN = 3;
+    public static final float VELOCITY_DASH = 7;
     public final static float DURATION_DEAD = Assets.personajeDead.animationDuration + .5f;
     public final static float DURATION_HURT = Assets.personajeHurt.animationDuration + .1f;
     public final static float DURATION_DIZZY = 1.25f;
@@ -157,14 +153,14 @@ public class Personaje {
 
         if (isDash) {
             durationDash += delta;
-            velocity.x = VELOCIDAD_DASH;
+            velocity.x = VELOCITY_DASH;
             if (durationDash >= DURATION_DASH) {
                 isDash = false;
                 stateTime = 0;
-                velocity.x = VELOCIDAD_RUN;
+                velocity.x = VELOCITY_RUN;
             }
         } else {
-            velocity.x = VELOCIDAD_RUN;
+            velocity.x = VELOCITY_RUN;
         }
         stateTime += delta;
 

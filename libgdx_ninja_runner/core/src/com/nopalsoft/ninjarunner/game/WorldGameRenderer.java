@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.ninjarunner.AnimationSprite;
 import com.nopalsoft.ninjarunner.Assets;
-import com.nopalsoft.ninjarunner.objetos.Mascota;
-import com.nopalsoft.ninjarunner.objetos.Personaje;
+import com.nopalsoft.ninjarunner.objects.Mascota;
+import com.nopalsoft.ninjarunner.objects.Personaje;
 import com.nopalsoft.ninjarunner.screens.Screens;
 
 public class WorldGameRenderer {
@@ -66,30 +66,30 @@ public class WorldGameRenderer {
 
     private void renderItems() {
 
-        for (com.nopalsoft.ninjarunner.objetos.Item obj : oWorld.arrItems) {
+        for (com.nopalsoft.ninjarunner.objects.Item obj : oWorld.arrItems) {
             com.badlogic.gdx.graphics.g2d.Sprite spriteFrame = null;
 
-            if (obj.state == com.nopalsoft.ninjarunner.objetos.ItemMoneda.STATE_NORMAL) {
-                if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemMoneda) {
+            if (obj.state == com.nopalsoft.ninjarunner.objects.ItemMoneda.STATE_NORMAL) {
+                if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemMoneda) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.moneda.getKeyFrame(obj.stateTime, true);
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemMagnet) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemMagnet) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.magnet;
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemEnergy) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemEnergy) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.energy;
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemHearth) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemHearth) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.hearth;
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemCandyJelly) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemCandyJelly) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.jellyRed;
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemCandyBean) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemCandyBean) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.beanRed;
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemCandyCorn) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemCandyCorn) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.candyCorn;
                 }
 
             } else {
-                if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemCandyJelly) {
+                if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemCandyJelly) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.candyExplosionRed.getKeyFrame(obj.stateTime, false);
-                } else if (obj instanceof com.nopalsoft.ninjarunner.objetos.ItemCandyBean) {
+                } else if (obj instanceof com.nopalsoft.ninjarunner.objects.ItemCandyBean) {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.candyExplosionRed.getKeyFrame(obj.stateTime, false);
                 } else {
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.pick.getKeyFrame(obj.stateTime, false);
@@ -108,13 +108,13 @@ public class WorldGameRenderer {
 
     private void renderPlataformas() {
 
-        for (com.nopalsoft.ninjarunner.objetos.Plataforma obj : oWorld.arrPlataformas) {
+        for (com.nopalsoft.ninjarunner.objects.Plataforma obj : oWorld.arrPlataformas) {
             com.badlogic.gdx.graphics.g2d.Sprite spriteFrame;
 
             spriteFrame = com.nopalsoft.ninjarunner.Assets.plataforma;
 
-            spriteFrame.setPosition(obj.position.x - com.nopalsoft.ninjarunner.objetos.Plataforma.WIDTH / 2f, obj.position.y - com.nopalsoft.ninjarunner.objetos.Plataforma.HEIGHT / 2f);
-            spriteFrame.setSize(com.nopalsoft.ninjarunner.objetos.Plataforma.WIDTH, com.nopalsoft.ninjarunner.objetos.Plataforma.HEIGHT);
+            spriteFrame.setPosition(obj.position.x - com.nopalsoft.ninjarunner.objects.Plataforma.WIDTH / 2f, obj.position.y - com.nopalsoft.ninjarunner.objects.Plataforma.HEIGHT / 2f);
+            spriteFrame.setSize(com.nopalsoft.ninjarunner.objects.Plataforma.WIDTH, com.nopalsoft.ninjarunner.objects.Plataforma.HEIGHT);
             spriteFrame.draw(batcher);
         }
 
@@ -146,30 +146,30 @@ public class WorldGameRenderer {
 
     private void renderPared() {
 
-        for (com.nopalsoft.ninjarunner.objetos.Pared obj : oWorld.arrPared) {
+        for (com.nopalsoft.ninjarunner.objects.Pared obj : oWorld.arrPared) {
             com.badlogic.gdx.graphics.g2d.Sprite spriteFrame = com.nopalsoft.ninjarunner.Assets.pared;
-            spriteFrame.setPosition(obj.position.x - com.nopalsoft.ninjarunner.objetos.Pared.WIDTH / 2f, obj.position.y - com.nopalsoft.ninjarunner.objetos.Pared.HEIGHT / 2f);
-            spriteFrame.setSize(com.nopalsoft.ninjarunner.objetos.Pared.WIDTH, com.nopalsoft.ninjarunner.objetos.Pared.HEIGHT);
+            spriteFrame.setPosition(obj.position.x - com.nopalsoft.ninjarunner.objects.Pared.WIDTH / 2f, obj.position.y - com.nopalsoft.ninjarunner.objects.Pared.HEIGHT / 2f);
+            spriteFrame.setSize(com.nopalsoft.ninjarunner.objects.Pared.WIDTH, com.nopalsoft.ninjarunner.objects.Pared.HEIGHT);
             spriteFrame.draw(batcher);
         }
 
     }
 
     private void renderObstaculos(float delta) {
-        for (com.nopalsoft.ninjarunner.objetos.Obstaculo obj : oWorld.arrObstaculos) {
-            if (obj.state == com.nopalsoft.ninjarunner.objetos.Obstaculo.STATE_NORMAL) {
+        for (com.nopalsoft.ninjarunner.objects.Obstaculo obj : oWorld.arrObstaculos) {
+            if (obj.state == com.nopalsoft.ninjarunner.objects.Obstaculo.STATE_NORMAL) {
 
                 float width, height;
                 com.badlogic.gdx.graphics.g2d.Sprite spriteFrame;
 
-                if (obj instanceof com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4) {
-                    width = com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4.DRAW_WIDTH;
-                    height = com.nopalsoft.ninjarunner.objetos.ObstaculoCajas4.DRAW_HEIGHT;
+                if (obj instanceof com.nopalsoft.ninjarunner.objects.ObstaculoCajas4) {
+                    width = com.nopalsoft.ninjarunner.objects.ObstaculoCajas4.DRAW_WIDTH;
+                    height = com.nopalsoft.ninjarunner.objects.ObstaculoCajas4.DRAW_HEIGHT;
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.cajas4;
 
                 } else {
-                    width = com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7.DRAW_WIDTH;
-                    height = com.nopalsoft.ninjarunner.objetos.ObstaculoCajas7.DRAW_HEIGHT;
+                    width = com.nopalsoft.ninjarunner.objects.ObstaculoCajas7.DRAW_WIDTH;
+                    height = com.nopalsoft.ninjarunner.objects.ObstaculoCajas7.DRAW_HEIGHT;
                     spriteFrame = com.nopalsoft.ninjarunner.Assets.cajas7;
                 }
                 spriteFrame.setPosition(obj.position.x - width / 2f, obj.position.y - height / 2f);
@@ -186,15 +186,15 @@ public class WorldGameRenderer {
     }
 
     private void renderMissil() {
-        for (com.nopalsoft.ninjarunner.objetos.Missil obj : oWorld.arrMissiles) {
+        for (com.nopalsoft.ninjarunner.objects.Missil obj : oWorld.arrMissiles) {
             com.badlogic.gdx.graphics.g2d.Sprite spriteFrame;
             float width, height;
 
-            if (obj.state == com.nopalsoft.ninjarunner.objetos.Missil.STATE_NORMAL) {
-                width = com.nopalsoft.ninjarunner.objetos.Missil.WIDTH;
-                height = com.nopalsoft.ninjarunner.objetos.Missil.HEIGHT;
+            if (obj.state == com.nopalsoft.ninjarunner.objects.Missil.STATE_NORMAL) {
+                width = com.nopalsoft.ninjarunner.objects.Missil.WIDTH;
+                height = com.nopalsoft.ninjarunner.objects.Missil.HEIGHT;
                 spriteFrame = com.nopalsoft.ninjarunner.Assets.missil.getKeyFrame(obj.stateTime, true);
-            } else if (obj.state == com.nopalsoft.ninjarunner.objetos.Missil.STATE_EXPLODE) {
+            } else if (obj.state == com.nopalsoft.ninjarunner.objects.Missil.STATE_EXPLODE) {
                 width = 1f;
                 height = .84f;
                 spriteFrame = com.nopalsoft.ninjarunner.Assets.explosion.getKeyFrame(obj.stateTime, false);
@@ -224,8 +224,8 @@ public class WorldGameRenderer {
         AnimationSprite animDead;
 
         switch (oPer.tipo) {
-            case Personaje.TIPO_GIRL:
-            case Personaje.TIPO_BOY:
+            case Personaje.TYPE_GIRL:
+            case Personaje.TYPE_BOY:
                 animIdle = Assets.personajeIdle;
                 animJump = Assets.personajeJump;
                 animRun = Assets.personajeRun;
@@ -235,7 +235,7 @@ public class WorldGameRenderer {
                 animDizzy = Assets.personajeDizzy;
                 animDead = Assets.personajeDead;
                 break;
-            case Personaje.TIPO_NINJA:
+            case Personaje.TYPE_NINJA:
             default:
                 animIdle = Assets.ninjaIdle;
                 animJump = Assets.ninjaJump;

@@ -2,9 +2,13 @@ package com.nopalsoft.ninjarunner.leaderboard;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.game.GameScreen;
@@ -23,7 +27,7 @@ public class LeaderboardScreen extends Screens {
     public LeaderboardScreen(Game _game) {
         super(_game);
 
-        Label lbShop = new Label("Leaderboards", Assets.labelStyleGrande);
+        Label lbShop = new Label("Leaderboards", Assets.labelStyleLarge);
 
         Table tbTitle = new Table();
         tbTitle.setSize(400, 100);
@@ -80,7 +84,7 @@ public class LeaderboardScreen extends Screens {
         stage.addActor(tbShop);
 
 
-        if (game.arrPerson != null)
+        if (game.arrayOfPersons != null)
             updateLeaderboard();
 
 
@@ -90,32 +94,19 @@ public class LeaderboardScreen extends Screens {
     }
 
     void initButtons() {
-        btLeaderboard = new Button(Assets.btShop, Assets.btShopPress, Assets.btShopPress);
-        btFacebook = new Button(Assets.btFacebook, Assets.btFacebookPress, Assets.btFacebookPress);
-        btGoogle = new Button(Assets.btAchievement, Assets.btAchievementPress, Assets.btLeaderboardPress);
-        btInviteFriend = new Button(Assets.btSettings, Assets.btSettingsPress, Assets.btLeaderboardPress);
+        btLeaderboard = new Button(Assets.buttonShop, Assets.buttonShopPressed, Assets.buttonShopPressed);
+        btFacebook = new Button(Assets.buttonFacebook, Assets.buttonFacebookPressed, Assets.buttonFacebookPressed);
+        btGoogle = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed, Assets.buttonLeaderboardPressed);
+        btInviteFriend = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed, Assets.buttonLeaderboardPressed);
 
         btLeaderboard.addListener(new ClickListener() {
 
         });
 
         btFacebook.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!game.facebookHandler.facebookIsSignedIn())
-                    game.facebookHandler.facebookSignIn();
-            }
         });
 
         btGoogle.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (game.gameServiceHandler.isSignedIn()) {
-                    game.gameServiceHandler.getLeaderboard();
-                } else {
-                    game.gameServiceHandler.signIn();
-                }
-            }
         });
 
         btInviteFriend.addListener(new ClickListener() {
@@ -148,7 +139,7 @@ public class LeaderboardScreen extends Screens {
 
     public void updateLeaderboard() {
         contenedor.clear();
-        for (Person persona : game.arrPerson) {
+        for (Person persona : game.arrayOfPersons) {
             LeaderBoardFrame frame = new LeaderBoardFrame(persona);
             contenedor.add(frame).expandX().fill();
             contenedor.row();

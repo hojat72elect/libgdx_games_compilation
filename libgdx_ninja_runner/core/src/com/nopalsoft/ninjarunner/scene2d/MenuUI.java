@@ -42,7 +42,7 @@ public class MenuUI extends Group {
     }
 
     private void init() {
-        titulo = new Image(Assets.titulo);
+        titulo = new Image(Assets.title);
         titulo.setScale(1f);
         titulo.setPosition(getWidth() / 2f - titulo.getWidth() * titulo.getScaleX() / 2f, Screens.SCREEN_HEIGHT + titulo.getHeight());
 
@@ -81,12 +81,12 @@ public class MenuUI extends Group {
 
     void initButtons() {
 
-        btShop = new Button(Assets.btShop, Assets.btShopPress);
-        btLeaderboard = new Button(Assets.btLeaderboard, Assets.btLeaderboardPress);
-        btAchievements = new Button(Assets.btAchievement, Assets.btAchievementPress);
-        btSettings = new Button(Assets.btSettings, Assets.btSettingsPress);
-        btRate = new Button(Assets.btRate, Assets.btRatePress);
-        btShare = new Button(Assets.btShare, Assets.btSharePress);
+        btShop = new Button(Assets.buttonShop, Assets.buttonShopPressed);
+        btLeaderboard = new Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed);
+        btAchievements = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed);
+        btSettings = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed);
+        btRate = new Button(Assets.buttonRate, Assets.buttonRatePressed);
+        btShare = new Button(Assets.buttonShare, Assets.buttonSharePressed);
 
         btPlay = new Button(new ButtonStyle(null, null, null));
         btPlay.setSize(getWidth() - tbMenu.getWidth(), getHeight());
@@ -113,14 +113,14 @@ public class MenuUI extends Group {
         btRate.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameScreen.game.reqHandler.showRater();
+                gameScreen.game.myRequestHandler.showRater();
             }
         });
 
         btShare.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameScreen.game.reqHandler.shareApp();
+                gameScreen.game.myRequestHandler.shareApp();
 
             }
         });
@@ -138,11 +138,7 @@ public class MenuUI extends Group {
         btAchievements.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameScreen.game.gameServiceHandler.isSignedIn()) {
-                    gameScreen.game.gameServiceHandler.getAchievements();
-                } else {
-                    gameScreen.game.gameServiceHandler.signIn();
-                }
+
             }
         });
 

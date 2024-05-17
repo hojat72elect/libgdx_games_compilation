@@ -2,8 +2,8 @@ package com.nopalsoft.ninjarunner;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.nopalsoft.ninjarunner.objetos.Mascota;
-import com.nopalsoft.ninjarunner.objetos.Personaje;
+import com.nopalsoft.ninjarunner.objects.Mascota;
+import com.nopalsoft.ninjarunner.objects.Personaje;
 
 /**
  * Created by Yayo on 1/21/15.
@@ -13,7 +13,7 @@ public class Settings {
     private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings");
     public static boolean isSoundEnabled = false;
     public static boolean isMusicEnabled = false;
-    public static int skinSeleccionada = Personaje.TIPO_NINJA;
+    public static int skinSeleccionada = Personaje.TYPE_NINJA;
     public static int monedasTotal = 1500000;
     public static Mascota.Tipo skinMascotaSeleccionada = Mascota.Tipo.GALLINA_ROSA;
 
