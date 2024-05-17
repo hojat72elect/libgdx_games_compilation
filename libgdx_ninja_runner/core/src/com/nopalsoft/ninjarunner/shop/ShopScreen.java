@@ -128,10 +128,6 @@ public class ShopScreen extends Screens {
         });
 
         btMore.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.myRequestHandler.showMoreGames();
-            }
         });
 
         ButtonGroup<Button> radioGroup = new ButtonGroup<>();

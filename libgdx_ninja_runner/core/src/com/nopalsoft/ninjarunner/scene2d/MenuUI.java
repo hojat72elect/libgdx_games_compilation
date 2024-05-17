@@ -111,18 +111,9 @@ public class MenuUI extends Group {
         });
 
         btRate.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.game.myRequestHandler.showRater();
-            }
         });
 
         btShare.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameScreen.game.myRequestHandler.shareApp();
-
-            }
         });
 
         btLeaderboard.addListener(new ClickListener() {
@@ -136,10 +127,6 @@ public class MenuUI extends Group {
         });
 
         btAchievements.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-            }
         });
 
         btSettings.addListener(new ClickListener() {
