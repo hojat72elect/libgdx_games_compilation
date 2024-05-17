@@ -18,7 +18,6 @@ import com.nopalsoft.sokoban.screens.Screens
 open class Window(currentScreen: Screens, width: Float, height: Float, positionY: Float) : Group() {
 
     protected val screen = currentScreen
-    protected val languages = currentScreen.game.languages
     private val dim = Image(Assets.blackPixel)
     var isShown = false
 

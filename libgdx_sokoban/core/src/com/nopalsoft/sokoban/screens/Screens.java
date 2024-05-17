@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.MainSokoban;
 import com.nopalsoft.sokoban.Settings;
+import com.nopalsoft.sokoban.game.GameScreen;
 
 public abstract class Screens extends InputAdapter implements Screen, GestureListener {
     public static final int SCREEN_WIDTH = 800;
@@ -26,7 +27,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     public MainSokoban game;
 
-    public OrthographicCamera oCam;
+    public OrthographicCamera myCamera;
     public SpriteBatch batcher;
     public Stage stage;
 
@@ -35,12 +36,13 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
 
     public Screens(final MainSokoban game) {
         this.stage = game.stage;
-        this.stage.clear();
+        if (this.stage != null)
+            this.stage.clear();
         this.batcher = game.batcher;
         this.game = game;
 
-        oCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        oCam.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        myCamera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+        myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
 
         GestureDetector detector = new GestureDetector(20, .5f, 2, .15f, this);
 
@@ -56,8 +58,8 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        myCamera.update();
+        batcher.setProjectionMatrix(myCamera.combined);
         draw(delta);
 
         stage.act(delta);
@@ -70,16 +72,16 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
-            if (newScreen == com.nopalsoft.sokoban.game.GameScreen.class) {
+            if (newScreen == GameScreen.class) {
                 com.nopalsoft.sokoban.Assets.loadTiledMap(level);
                 game.setScreen(new com.nopalsoft.sokoban.game.GameScreen(game, level));
-            } else if (newScreen == com.nopalsoft.sokoban.screens.MainMenuScreen.class)
-                game.setScreen(new com.nopalsoft.sokoban.screens.MainMenuScreen(game));
-            // else if (newScreen == HelpScreen.class)
-            // game.setScreen(new HelpScreen(game));
+            } else if (newScreen == MainMenuScreen.class)
+                game.setScreen(new MainMenuScreen(game));
 
-            // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-            // blackFadeout.remove();
+
+            // The blackFadeOut is removed from the stage when new Screens(game) is given "Check the
+            // constructor of the Screens class" so there is no need to do.
+
         })));
         stage.addActor(blackFadeOut);
     }
@@ -88,7 +90,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
         changeScreenWithFadeOut(newScreen, -1, game);
     }
 
-    public void addEfectoPress(final Actor actor) {
+    public void addEffectPress(final Actor actor) {
         actor.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

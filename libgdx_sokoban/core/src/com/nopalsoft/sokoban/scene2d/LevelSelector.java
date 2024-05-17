@@ -180,7 +180,7 @@ public class LevelSelector extends Group {
             }
         });
 
-        menuScreen.addEfectoPress(button);
+        menuScreen.addEffectPress(button);
 
         return button;
 
