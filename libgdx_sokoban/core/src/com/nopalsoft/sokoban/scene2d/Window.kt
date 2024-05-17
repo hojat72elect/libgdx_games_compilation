@@ -1,111 +1,104 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.I18NBundle;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.screens.Screens;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.screens.Screens
 
-public class Window extends Group {
-    public static final float ANIMATION_DURATION = .3f;
-    private final Image dim;
-    protected Screens screen;
-    protected I18NBundle languages;
-    private boolean isShown = false;
+open class Window(currentScreen: Screens, width: Float, height: Float, positionY: Float) : Group() {
 
-    public Window(Screens currentScreen, float width, float height, float positionY) {
-        screen = currentScreen;
-        languages = currentScreen.game.languages;
-        setSize(width, height);
-        setY(positionY);
+    protected val screen = currentScreen
+    protected val languages = currentScreen.game.languages
+    private val dim = Image(Assets.blackPixel)
+    var isShown = false
 
-        dim = new Image(Assets.blackPixel);
-        dim.setSize(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT);
-
-        setBackGround(Assets.backgroundWindow);
-
+    init {
+        setSize(width, height)
+        y = positionY
+        dim.setSize(Screens.SCREEN_WIDTH.toFloat(), Screens.SCREEN_HEIGHT.toFloat())
+        setBackGround(Assets.backgroundWindow)
     }
 
-    protected void setCloseButton() {
-        Button btClose = new Button(Assets.buttonClose, Assets.buttonClosePressed);
-        btClose.setSize((float) 60, (float) 60);
-        btClose.setPosition((float) 290, (float) 250);
-        btClose.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                hide();
+
+    protected fun setCloseButton() {
+        val buttonClose = Button(Assets.buttonClose, Assets.buttonClosePressed)
+        buttonClose.setSize(60f, 60f)
+        buttonClose.setPosition(290f, 250f)
+        buttonClose.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                hide()
             }
-        });
-        addActor(btClose);
-
+        })
+        addActor(buttonClose)
     }
 
-    protected void setTitle(String text, float fontScale) {
-        Table tableTitle;
-        tableTitle = new Table();
+    protected fun setTitle(text: String, fontScale: Float) {
+        val tableTitle = Table()
 
-        tableTitle.setSize((float) 180, (float) 50);
-        tableTitle.setPosition(getWidth() / 2f - tableTitle.getWidth() / 2f, getHeight() - tableTitle.getHeight());
+        tableTitle.setSize(180f, 50f)
+        tableTitle.setPosition(width / 2f - tableTitle.width / 2f, height - tableTitle.height)
 
-        Label labelTitle = new Label(text, new LabelStyle(Assets.font, Color.WHITE));
-        labelTitle.setFontScale(fontScale);
-        tableTitle.add(labelTitle);
-        addActor(tableTitle);
-
+        val labelTitle = Label(text, LabelStyle(Assets.font, Color.WHITE))
+        labelTitle.setFontScale(fontScale)
+        tableTitle.add(labelTitle)
+        addActor(tableTitle)
     }
 
-    private void setBackGround(TextureRegionDrawable imageBackground) {
-        Image img = new Image(imageBackground);
-        img.setSize(getWidth(), getHeight());
-        addActor(img);
-
+    private fun setBackGround(imageBackground: TextureRegionDrawable) {
+        val img = Image(imageBackground)
+        img.setSize(width, height)
+        addActor(img)
     }
 
-    public void show(Stage stage) {
+    fun show(stage: Stage) {
+        setOrigin(width / 2f, height / 2f)
+        x = Screens.SCREEN_WIDTH / 2f - width / 2f
 
-        setOrigin(getWidth() / 2f, getHeight() / 2f);
-        setX(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f);
+        setScale(.35f)
+        addAction(Actions.scaleTo(1f, 1f, ANIMATION_DURATION))
 
-        setScale(.35f);
-        addAction(Actions.scaleTo(1, 1, ANIMATION_DURATION));
+        dim.color.a = 0f
+        dim.addAction(Actions.alpha(.7f, ANIMATION_DURATION))
 
-        dim.getColor().a = 0;
-        dim.addAction(Actions.alpha(.7f, ANIMATION_DURATION));
-
-        isShown = true;
-        stage.addActor(dim);
-        stage.addActor(this);
-
+        isShown = true
+        stage.addActor(dim)
+        stage.addActor(this)
     }
 
-    public boolean isShown() {
-        return isShown;
-    }
+    fun hide() {
+        isShown = false
 
-    public void hide() {
-        isShown = false;
-
-        Runnable run = this::hideCompleted;
-        addAction(Actions
-                .sequence(Actions.scaleTo(.35f, .35f, ANIMATION_DURATION), Actions.run(run), Actions.removeActor(dim), Actions.removeActor()));
-        dim.addAction(Actions.alpha(0, ANIMATION_DURATION));
+        val run = Runnable { this.hideCompleted() }
+        addAction(
+            Actions
+                .sequence(
+                    Actions.scaleTo(.35f, .35f, ANIMATION_DURATION),
+                    Actions.run(run),
+                    Actions.removeActor(dim),
+                    Actions.removeActor()
+                )
+        )
+        dim.addAction(Actions.alpha(0f, ANIMATION_DURATION))
     }
 
     /**
      * Called when hiding is finished.
      */
-    public void hideCompleted() {
-
+    open fun hideCompleted() {
     }
 
+
+    companion object {
+        const val ANIMATION_DURATION = .3f
+    }
 }

@@ -60,8 +60,8 @@ class WindowPause(currentScreen: Screens) : Window(currentScreen, 350F, 300F, 10
         menuTable.add(buttonRefresh)
         menuTable.row()
 
-        val lbAnimatons = Label("Animations", LabelStyle(Assets.fontRed, Color.WHITE))
-        tableAnimations.add(lbAnimatons)
+        val labelAnimations = Label("Animations", LabelStyle(Assets.fontRed, Color.WHITE))
+        tableAnimations.add(labelAnimations)
         tableAnimations.add(btAnimations).padLeft(15f)
 
         menuTable.add(tableAnimations).colspan(2).padTop(10f)
