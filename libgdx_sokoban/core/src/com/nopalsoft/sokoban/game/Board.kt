@@ -1,285 +1,314 @@
-package com.nopalsoft.sokoban.game;
+package com.nopalsoft.sokoban.game
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Array.ArrayIterator;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.objects.Box;
-import com.nopalsoft.sokoban.objects.EndPoint;
-import com.nopalsoft.sokoban.objects.Player;
-import com.nopalsoft.sokoban.objects.Tiles;
-import com.nopalsoft.sokoban.objects.Wall;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.objects.Box
+import com.nopalsoft.sokoban.objects.EndPoint
+import com.nopalsoft.sokoban.objects.Player
+import com.nopalsoft.sokoban.objects.Tiles
+import com.nopalsoft.sokoban.objects.Wall
+import com.badlogic.gdx.utils.Array as GdxArray
 
-public class Board extends Group {
-    public static final float UNIT_SCALE = 1f;
+class Board : Group() {
 
-    static public final int STATE_RUNNING = 1;
-    static public final int STATE_GAMEOVER = 2;
-    public int state;
-    public boolean moveUp, moveDown, moveLeft, moveRight;
-    public boolean undo;
+    @JvmField
+    var state = STATE_RUNNING
+
+    @JvmField
+    var moveUp = false
+
+    @JvmField
+    var moveDown = false
+
+    @JvmField
+    var moveLeft = false
+
+    @JvmField
+    var moveRight = false
+
+    @JvmField
+    var undo = false
+
     // X previous position, Y current position.
-    Array<Vector2> arrayOfCharacterMoves;
+    private val arrayOfCharacterMoves: GdxArray<Vector2> = GdxArray()
+
     // X previous position, Y current position.
-    Array<Vector2> arrayMovesBox;
-    Array<Tiles> arrayTiles;
-    int moves;
-    float time;
-    private Player player;
+    private val arrayMovesBox: GdxArray<Vector2> = GdxArray()
+    private val arrayTiles: GdxArray<Tiles> = GdxArray(25 * 15)
 
-    public Board() {
-        setSize(800, 480);
+    @JvmField
+    var moves = 0
 
-        arrayTiles = new Array<>(25 * 15);
-        arrayOfCharacterMoves = new Array<>();
-        arrayMovesBox = new Array<>();
+    @JvmField
+    var time = 0f
+    private lateinit var player: Player
 
-        initializeMap("StaticMap");
-        initializeMap("Objetos");
+    init {
+        setSize(800f, 480f)
+        initializeMap("StaticMap")
+        initializeMap("Objetos")
+
 
         // AFTER initializing the objects I add them to the Board in order so that some
         // are drawn before others.
-        addToBoard(Wall.class);
-        addToBoard(EndPoint.class);
-        addToBoard(Box.class);
-        addToBoard(Player.class);
-
-        state = STATE_RUNNING;
-        time = moves = 0;
+        addToBoard(Wall::class.java)
+        addToBoard(EndPoint::class.java)
+        addToBoard(Box::class.java)
+        addToBoard(Player::class.java)
     }
 
-    private void addToBoard(Class<?> type) {
-        for (Tiles obj : arrayTiles) {
-            if (obj.getClass() == type) {
-                addActor(obj);
-            }
 
-        }
-    }
-
-    private void initializeMap(String layerName) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) Assets.map.getLayers().get(layerName);
-        if (layer != null) {
-
-            int tilePosition = 0;
-            for (int y = 0; y < 15; y++) {
-                for (int x = 0; x < 25; x++) {
-                    Cell cell = layer.getCell(x, y);
-                    if (cell != null) {
-                        TiledMapTile tile = cell.getTile();
-                        if (tile.getProperties() != null) {
-                            if (tile.getProperties().containsKey("tipo")) {
-                                String tipo = tile.getProperties().get("tipo").toString();
-
-                                switch (tipo) {
-                                    case "startPoint":
-                                        createPerson(tilePosition);
-                                        break;
-                                    case "pared":
-                                        createWall(tilePosition);
-                                        break;
-                                    case "caja":
-                                        createBox(tilePosition, tile.getProperties().get("color").toString());
-                                        break;
-                                    case "endPoint":
-                                        createEndPoint(tilePosition, tile.getProperties().get("color").toString());
-                                        break;
-                                }
-
-                            }
-                        }
-                    }
-                    tilePosition++;
-                }
-            }
-        }
-    }
-
-    private void createPerson(int tilePosition) {
-        Player obj = new Player(tilePosition);
-        arrayTiles.add(obj);
-        player = obj;
-
-    }
-
-    private void createWall(int tilePosition) {
-        Wall obj = new Wall(tilePosition);
-        arrayTiles.add(obj);
-
-    }
-
-    private void createBox(int tilePosition, String color) {
-        Box obj = new Box(tilePosition, color);
-        arrayTiles.add(obj);
-    }
-
-    private void createEndPoint(int tilePosition, String color) {
-        EndPoint obj = new EndPoint(tilePosition, color);
-        arrayTiles.add(obj);
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
+    override fun act(delta: Float) {
+        super.act(delta)
 
         if (state == STATE_RUNNING) {
 
             if (moves <= 0)
-                undo = false;
+                undo = false
 
             if (undo) {
-                undo();
+                undo()
             } else {
-                int auxMoves = 0;
+
+                var auxMoves = 0
                 if (moveUp) {
-                    auxMoves = 25;
+                    auxMoves = 25
                 } else if (moveDown) {
-                    auxMoves = -25;
+                    auxMoves = -25
                 } else if (moveLeft) {
-                    auxMoves = -1;
+                    auxMoves = -1
                 } else if (moveRight) {
-                    auxMoves = 1;
+                    auxMoves = 1
                 }
 
                 if (player.canMove() && (moveDown || moveLeft || moveRight || moveUp)) {
-                    int nextPos = player.position + auxMoves;
+                    val nextPos = player.position + auxMoves
 
-                    if (checkIfIsEmptySpace(nextPos) || (!checkIsBoxInPosition(nextPos) && checkIsEndpointInPosition(nextPos))) {
-                        arrayOfCharacterMoves.add(new Vector2(player.position, nextPos));
-                        arrayMovesBox.add(null);
-                        player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
-                        moves++;
+                    if (checkIfIsEmptySpace(nextPos) || (!checkIsBoxInPosition(nextPos) && checkIsEndpointInPosition(
+                            nextPos
+                        ))
+                    ) {
+                        arrayOfCharacterMoves.add(
+                            Vector2(
+                                player.position.toFloat(),
+                                nextPos.toFloat()
+                            )
+                        )
+                        arrayMovesBox.add(null)
+                        player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft)
+                        moves++
                     } else {
                         if (checkIsBoxInPosition(nextPos)) {
-                            int boxNextPos = nextPos + auxMoves;
-                            if (checkIfIsEmptySpace(boxNextPos) || (!checkIsBoxInPosition(boxNextPos) && checkIsEndpointInPosition(boxNextPos))) {
-                                Box oBox = getBoxInPosition(nextPos);
+                            val boxNextPos = nextPos + auxMoves
+                            if (checkIfIsEmptySpace(boxNextPos) || (!checkIsBoxInPosition(boxNextPos) && checkIsEndpointInPosition(
+                                    boxNextPos
+                                ))
+                            ) {
+                                val oBox = getBoxInPosition(nextPos)
 
-                                arrayOfCharacterMoves.add(new Vector2(player.position, nextPos));
-                                arrayMovesBox.add(new Vector2(oBox.position, boxNextPos));
-                                moves++;
+                                arrayOfCharacterMoves.add(
+                                    Vector2(
+                                        player.position.toFloat(),
+                                        nextPos.toFloat()
+                                    )
+                                )
+                                arrayMovesBox.add(
+                                    Vector2(
+                                        oBox?.position?.toFloat() ?: 0f,
+                                        boxNextPos.toFloat()
+                                    )
+                                )
+                                moves++
 
-                                oBox.moveToPosition(boxNextPos, false);
-                                player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
-                                EndPoint myEndPoint = getEndPointInPosition(boxNextPos);
-                                if (myEndPoint != null) {
-                                    oBox.setIsInEndPoint(myEndPoint);
-                                }
-
+                                oBox?.moveToPosition(boxNextPos, false)
+                                player.moveToPosition(
+                                    nextPos,
+                                    moveUp,
+                                    moveDown,
+                                    moveRight,
+                                    moveLeft
+                                )
+                                val myEndPoint = getEndPointInPosition(boxNextPos)
+                                if (myEndPoint != null)
+                                    oBox?.setIsInEndPoint(myEndPoint)
 
                             }
                         }
                     }
                 }
 
-                moveDown = moveLeft = moveRight = moveUp = false;
+                moveDown = false
+                moveUp = false
+                moveRight = false
+                moveLeft = false
 
-                if (checkBoxesMissingTheRightEndPoint() == 0)
-                    state = STATE_GAMEOVER;
+                if (checkBoxesMissingTheRightEndPoint() == 0) state =
+                    STATE_GAMEOVER
 
             }
 
             if (state == STATE_RUNNING)
-                time += Gdx.graphics.getRawDeltaTime();
+                time += Gdx.graphics.rawDeltaTime
         }
     }
 
-    private void undo() {
-        if (arrayOfCharacterMoves.size >= moves) {
-            Vector2 posAntPersonaje = arrayOfCharacterMoves.removeIndex(moves - 1);
-            player.moveToPosition((int) posAntPersonaje.x, true);
-        }
-        if (arrayMovesBox.size >= moves) {
-            Vector2 posAntBox = arrayMovesBox.removeIndex(moves - 1);
-            if (posAntBox != null) {
-                Box oBox = getBoxInPosition((int) posAntBox.y);
-                oBox.moveToPosition((int) posAntBox.x, true);
-                EndPoint endPointInPosition = getEndPointInPosition(oBox.position);
-                if (endPointInPosition != null)
-                    oBox.setIsInEndPoint(endPointInPosition);
+    private fun addToBoard(type: Class<*>) {
+        for (obj in arrayTiles) {
+            if (obj.javaClass == type) {
+                addActor(obj)
             }
         }
-        moves--;
-        undo = false;
     }
 
-    private boolean checkIfIsEmptySpace(int pos) {
-        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+
+    private fun initializeMap(layerName: String) {
+        val layer = Assets.map.layers[layerName] as TiledMapTileLayer
+        var tilePosition = 0
+
+        for (y in 0 until 15) {
+            for (x in 0 until 25) {
+                val cell = layer.getCell(x, y)
+                if (cell != null) {
+                    val tile = cell.tile
+                    if (tile.properties != null) {
+                        if (tile.properties.containsKey("tipo")) {
+                            val tyleType = tile.properties["tipo"].toString()
+
+                            when (tyleType) {
+                                "startPoint" -> createPerson(tilePosition)
+                                "pared" -> createWall(tilePosition)
+                                "caja" -> createBox(
+                                    tilePosition,
+                                    tile.properties["color"].toString()
+                                )
+
+                                "endPoint" -> createEndPoint(
+                                    tilePosition,
+                                    tile.properties["color"].toString()
+                                )
+                            }
+
+                        }
+
+                    }
+                }
+                tilePosition++
+            }
+        }
+    }
+
+    private fun createPerson(tilePosition: Int) {
+        val obj = Player(tilePosition)
+        arrayTiles.add(obj)
+        player = obj
+    }
+
+    private fun createWall(tilePosition: Int) {
+        val obj = Wall(tilePosition)
+        arrayTiles.add(obj)
+    }
+
+    private fun createBox(tilePosition: Int, color: String) {
+        val obj = Box(tilePosition, color)
+        arrayTiles.add(obj)
+    }
+
+    private fun createEndPoint(tilePosition: Int, color: String) {
+        val obj = EndPoint(tilePosition, color)
+        arrayTiles.add(obj)
+    }
+
+    private fun undo() {
+        if (arrayOfCharacterMoves.size >= moves) {
+            val posAntPersonaje = arrayOfCharacterMoves.removeIndex(moves - 1)
+            player.moveToPosition(posAntPersonaje.x.toInt(), true)
+        }
+        if (arrayMovesBox.size >= moves) {
+            val posAntBox = arrayMovesBox.removeIndex(moves - 1)
+            if (posAntBox != null) {
+                val oBox = getBoxInPosition(posAntBox.y.toInt())
+                oBox?.moveToPosition(posAntBox.x.toInt(), true)
+                val endPointInPosition = getEndPointInPosition(oBox!!.position)
+                if (endPointInPosition != null)
+                    oBox.setIsInEndPoint(endPointInPosition)
+            }
+        }
+        moves--
+        undo = false
+    }
+
+    private fun checkIfIsEmptySpace(pos: Int): Boolean {
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
         while (tilesIterator.hasNext()) {
             if (tilesIterator.next().position == pos)
-                return false;
+                return false
         }
-        return true;
+        return true
     }
 
     /**
      * Indicates if the object in the position is a box
      */
-    private boolean checkIsBoxInPosition(int pos) {
-        boolean isBoxInPosition = false;
-        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+    private fun checkIsBoxInPosition(pos: Int): Boolean {
+        var isBoxInPosition = false
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
         while (tilesIterator.hasNext()) {
-            Tiles obj = tilesIterator.next();
-            if (obj.position == pos && obj instanceof Box)
-                isBoxInPosition = true;
+            val obj = tilesIterator.next()
+            if (obj.position == pos && obj is Box)
+                isBoxInPosition = true
         }
-        return isBoxInPosition;
-
+        return isBoxInPosition
     }
 
-    /**
-     * Indicates if the object at the position is an endPoint.
-     */
-    private boolean checkIsEndpointInPosition(int pos) {
-        boolean isEndPointInPosition = false;
-        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+    private fun checkIsEndpointInPosition(pos: Int): Boolean {
+        var isEndPointInPosition = false
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
         while (tilesIterator.hasNext()) {
-            Tiles obj = tilesIterator.next();
-            if (obj.position == pos && obj instanceof EndPoint)
-                isEndPointInPosition = true;
+            val obj = tilesIterator.next()
+            if (obj.position == pos && obj is EndPoint)
+                isEndPointInPosition = true
         }
-        return isEndPointInPosition;
-
+        return isEndPointInPosition
     }
 
-    private Box getBoxInPosition(int pos) {
-        ArrayIterator<Tiles> ite = new ArrayIterator<>(arrayTiles);
-        while (ite.hasNext()) {
-            Tiles obj = ite.next();
-            if (obj.position == pos && obj instanceof Box)
-                return (Box) obj;
+    private fun getBoxInPosition(pos: Int): Box? {
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
+        while (tilesIterator.hasNext()) {
+            val obj = tilesIterator.next()
+            if (obj.position == pos && obj is Box)
+                return obj
         }
-        return null;
+        return null
     }
 
-    private EndPoint getEndPointInPosition(int pos) {
-        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+    private fun getEndPointInPosition(pos: Int): EndPoint? {
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
         while (tilesIterator.hasNext()) {
-            Tiles obj = tilesIterator.next();
-            if (obj.position == pos && obj instanceof EndPoint)
-                return (EndPoint) obj;
+            val obj = tilesIterator.next()
+            if (obj.position == pos && obj is EndPoint)
+                return obj
         }
-        return null;
+        return null
     }
 
-    private int checkBoxesMissingTheRightEndPoint() {
-        int numBox = 0;
-        ArrayIterator<Tiles> tilesIterator = new ArrayIterator<>(arrayTiles);
+    private fun checkBoxesMissingTheRightEndPoint(): Int {
+        var numBox = 0
+        val tilesIterator = GdxArray.ArrayIterator(arrayTiles)
         while (tilesIterator.hasNext()) {
-            Tiles obj = tilesIterator.next();
-            if (obj instanceof Box) {
-                Box oBox = (Box) obj;
-                if (!oBox.isInRightEndPoint)
-                    numBox++;
+            val obj = tilesIterator.next()
+            if (obj is Box) {
+                if (!obj.isInRightEndPoint) numBox++
             }
-
         }
-        return numBox;
+        return numBox
     }
 
+    companion object {
+        const val UNIT_SCALE = 1f
+        const val STATE_RUNNING = 1
+        const val STATE_GAMEOVER = 2
+    }
 }
