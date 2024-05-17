@@ -1,79 +1,78 @@
-package com.nopalsoft.sokoban.objects;
+package com.nopalsoft.sokoban.objects
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.Settings;
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.Settings
 
-public class Player extends Tiles {
-    public static int STATE_LEFT = 0;
-    public static int STATE_UP = 1;
-    public static int STATE_DOWN = 2;
-    public static int STATE_RIGHT = 3;
-    public static int STATE_STAND = 4;
-    int state;
+class Player(position: Int) : Tiles(position) {
 
-    float stateTime;
+    private var state = STATE_STAND
+    private var stateTime = 0f
 
-    public Player(int posicion) {
-        super(posicion);
-        state = STATE_STAND;
-        stateTime = 0;
+    override fun act(delta: Float) {
+        super.act(delta)
+        stateTime += delta
     }
 
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-        stateTime += delta;
-    }
-
-    public void moveToPosition(int pos, boolean up, boolean down, boolean right, boolean left) {
-        super.moveToPosition(pos, false);
+    fun moveToPosition(pos: Int, up: Boolean, down: Boolean, right: Boolean, left: Boolean) {
+        super.moveToPosition(pos, false)
 
         if (up) {
-            state = STATE_UP;
+            state = STATE_UP
         } else if (down) {
-            state = STATE_DOWN;
+            state = STATE_DOWN
         } else if (right) {
-            state = STATE_RIGHT;
+            state = STATE_RIGHT
         } else if (left) {
-            state = STATE_LEFT;
+            state = STATE_LEFT
         }
-        stateTime = 0;
-
+        stateTime = 0f
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
 
-        TextureRegion keyFrame;
-        if (Settings.getAnimationWalkIsON()) {
-            if (state == STATE_DOWN) {
-                keyFrame = Assets.characterGoingDown.getKeyFrame(stateTime, true);
-            } else if (state == STATE_UP) {
-                keyFrame = Assets.characterGoingUp.getKeyFrame(stateTime, true);
-            } else if (state == STATE_LEFT) {
-                keyFrame = Assets.characterGoingLeft.getKeyFrame(stateTime, true);
-            } else if (state == STATE_RIGHT) {
-                keyFrame = Assets.characterGoingRight.getKeyFrame(stateTime, true);
-            } else {
-                keyFrame = Assets.characterStand;
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        val keyFrame = if (Settings.animationWalkIsON) {
+            when (state) {
+                STATE_DOWN -> {
+                    Assets.characterGoingDown.getKeyFrame(stateTime, true)
+                }
+
+                STATE_UP -> {
+                    Assets.characterGoingUp.getKeyFrame(stateTime, true)
+                }
+
+                STATE_LEFT -> {
+                    Assets.characterGoingLeft.getKeyFrame(stateTime, true)
+                }
+
+                STATE_RIGHT -> {
+                    Assets.characterGoingRight.getKeyFrame(stateTime, true)
+                }
+
+                else -> {
+                    Assets.characterStand
+                }
             }
         } else {
-            keyFrame = Assets.characterStand;
+            Assets.characterStand
         }
 
-        batch.draw(keyFrame, getX(), getY(), SIZE, SIZE);
+        batch.draw(keyFrame, x, y, SIZE, SIZE)
     }
 
-    @Override
-    protected void endMovingToPosition() {
-        state = STATE_STAND;
-        stateTime = 0;
+    override fun endMovingToPosition() {
+        state = STATE_STAND
+        stateTime = 0f
     }
 
-    public boolean canMove() {
-        return state == STATE_STAND;
-    }
+    fun canMove() = state == STATE_STAND
 
+
+    companion object {
+        const val STATE_LEFT = 0
+        const val STATE_UP = 1
+        const val STATE_DOWN = 2
+        const val STATE_RIGHT = 3
+        const val STATE_STAND = 4
+    }
 }
