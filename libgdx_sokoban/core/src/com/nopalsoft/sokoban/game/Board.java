@@ -166,7 +166,11 @@ public class Board extends Group {
 
                                 oBox.moveToPosition(boxNextPos, false);
                                 player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft);
-                                oBox.setIsInEndPoint(getEndPointInPosition(boxNextPos));
+                                EndPoint myEndPoint = getEndPointInPosition(boxNextPos);
+                                if (myEndPoint != null) {
+                                    oBox.setIsInEndPoint(myEndPoint);
+                                }
+
 
                             }
                         }
