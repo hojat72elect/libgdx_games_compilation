@@ -15,8 +15,8 @@ import com.nopalsoft.sokoban.screens.Screens;
 
 public class WindowLevel extends Window {
 
-    Button btPlay;
-    Label lbBestMoves, lbBestTime;
+    Button buttonPlay;
+    Label labelBestMoves, labelBestTime;
 
     public WindowLevel(Screens currentScreen) {
         super(currentScreen, 350, 300, 100);
@@ -24,40 +24,40 @@ public class WindowLevel extends Window {
         setCloseButton();
         setTitle("Puntuaciones", .75f);
 
-        Table tbMenu = new Table();
-        tbMenu.setFillParent(true);
+        Table tableMenu = new Table();
+        tableMenu.setFillParent(true);
 
-        btPlay = new Button(Assets.buttonPlay, Assets.buttonPlayPressed);
+        buttonPlay = new Button(Assets.buttonPlay, Assets.buttonPlayPressed);
 
         Image imgClock = new Image(Assets.clock);
         Image imgMoves = new Image(Assets.characterStand);
 
-        lbBestMoves = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
-        lbBestTime = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
+        labelBestMoves = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
+        labelBestTime = new Label("0", new LabelStyle(Assets.fontRed, Color.WHITE));
 
-        tbMenu.defaults().expandX();
+        tableMenu.defaults().expandX();
 
-        tbMenu.padLeft(30).padRight(30).padBottom(20).padTop(50);
-        tbMenu.add(imgMoves).size(45);
-        tbMenu.add(lbBestMoves);
+        tableMenu.padLeft(30).padRight(30).padBottom(20).padTop(50);
+        tableMenu.add(imgMoves).size(45);
+        tableMenu.add(labelBestMoves);
 
-        tbMenu.row().padTop(10);
-        tbMenu.add(imgClock).size(45);
-        tbMenu.add(lbBestTime);
+        tableMenu.row().padTop(10);
+        tableMenu.add(imgClock).size(45);
+        tableMenu.add(labelBestTime);
 
-        tbMenu.row().padTop(10);
-        tbMenu.add(btPlay).colspan(2).size(60);
+        tableMenu.row().padTop(10);
+        tableMenu.add(buttonPlay).colspan(2).size(60);
 
-        addActor(tbMenu);
+        addActor(tableMenu);
 
     }
 
     public void show(Stage stage, final int level, int bestMoves, int bestTime) {
-        lbBestMoves.setText(bestMoves + "");
-        lbBestTime.setText(bestTime + "");
+        labelBestMoves.setText(bestMoves + "");
+        labelBestTime.setText(bestTime + "");
 
-        btPlay.clear();
-        btPlay.addListener(new ClickListener() {
+        buttonPlay.clear();
+        buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 screen.changeScreenWithFadeOut(GameScreen.class, level, screen.game);
