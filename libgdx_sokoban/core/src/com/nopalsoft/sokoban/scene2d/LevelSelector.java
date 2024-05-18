@@ -159,15 +159,15 @@ public class LevelSelector extends Group {
                     completed = true;
             }
 
-            Image imgLevel;
+            Image imageLevel;
 
             if (completed)
-                imgLevel = new Image(Assets.levelStar);
+                imageLevel = new Image(Assets.levelStar);
             else
-                imgLevel = new Image(Assets.levelOff);
+                imageLevel = new Image(Assets.levelOff);
 
             button.row();
-            button.add(imgLevel).size(10).padBottom(2);
+            button.add(imageLevel).size(10).padBottom(2);
         }
 
         button.addListener(new ClickListener() {
