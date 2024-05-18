@@ -15,8 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.nopalsoft.sokoban.Assets;
 import com.nopalsoft.sokoban.MainSokoban;
 import com.nopalsoft.sokoban.Settings;
 import com.nopalsoft.sokoban.game.GameScreen;
@@ -24,15 +22,11 @@ import com.nopalsoft.sokoban.game.GameScreen;
 public abstract class Screens extends InputAdapter implements Screen, GestureListener {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 480;
-
+    private final OrthographicCamera myCamera;
+    private final SpriteBatch batcher;
     public MainSokoban game;
+    protected Stage stage;
 
-    public OrthographicCamera myCamera;
-    public SpriteBatch batcher;
-    public Stage stage;
-
-
-    Image blackFadeOut;
 
     public Screens(final MainSokoban game) {
         this.stage = game.stage;
@@ -68,7 +62,7 @@ public abstract class Screens extends InputAdapter implements Screen, GestureLis
     }
 
     public void changeScreenWithFadeOut(final Class<?> newScreen, final int level, final MainSokoban game) {
-        blackFadeOut = new Image(Assets.blackPixel);
+        com.badlogic.gdx.scenes.scene2d.ui.Image blackFadeOut = new com.badlogic.gdx.scenes.scene2d.ui.Image(com.nopalsoft.sokoban.Assets.blackPixel);
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
