@@ -1,199 +1,187 @@
-package com.nopalsoft.sokoban.game;
+package com.nopalsoft.sokoban.game
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.MainSokoban;
-import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.scene2d.ControlsNoPad;
-import com.nopalsoft.sokoban.scene2d.CounterBar;
-import com.nopalsoft.sokoban.scene2d.WindowPause;
-import com.nopalsoft.sokoban.screens.Screens;
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.MainSokoban
+import com.nopalsoft.sokoban.Settings
+import com.nopalsoft.sokoban.scene2d.ControlsNoPad
+import com.nopalsoft.sokoban.scene2d.CounterBar
+import com.nopalsoft.sokoban.scene2d.WindowPause
+import com.nopalsoft.sokoban.screens.MainMenuScreen
+import com.nopalsoft.sokoban.screens.Screens
 
-public class GameScreen extends Screens {
-    static final int STATE_RUNNING = 0;
-    static final int STATE_PAUSED = 1;
-    static final int STATE_GAME_OVER = 2;
-    private final Stage stageGame;
-    public int state;
-    public int level;
-    BoardRenderer renderer;
-    Board myBoard;
-    ControlsNoPad myControl;
-    Button buttonUndo;
-    Button buttonPause;
-    CounterBar barTime;
-    CounterBar barMoves;
-    WindowPause myWindowPause;
+class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
 
-    public GameScreen(final MainSokoban game, int level) {
-        super(game);
-        this.level = level;
+    private val stageGame = Stage(StretchViewport(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat()))
+    private val myBoard = Board()
+    private val myControl = ControlsNoPad(this)
+    private val buttonUndo = Button(Assets.buttonRefresh, Assets.buttonRefreshPressed)
+    private val buttonPause = Button(Assets.buttonPause, Assets.buttonPausePressed)
+    private val barTime = CounterBar(Assets.backgroundTime, 5f, 430f)
+    private val barMoves = CounterBar(Assets.backgroundMoves, 5f, 380f)
+    private val myWindowPause = WindowPause(this)
+    private var state = 0
+    private val renderer = BoardRenderer()
+    private val lbNivel = Label(
+        "Level " + (level + 1),
+        Label.LabelStyle(Assets.fontRed, Color.WHITE)
+    )
 
-        stageGame = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
-        myBoard = new Board();
 
-        renderer = new BoardRenderer();
+    init {
+        lbNivel.width = barTime.width
+        lbNivel.setPosition(5f, 330f)
+        lbNivel.setAlignment(Align.center)
 
-        myControl = new ControlsNoPad(this);
-
-        barTime = new CounterBar(Assets.backgroundTime, 5, 430);
-        barMoves = new CounterBar(Assets.backgroundMoves, 5, 380);
-
-        myWindowPause = new WindowPause(this);
-
-        Label lbNivel = new Label("Level " + (level + 1), new LabelStyle(Assets.fontRed, Color.WHITE));
-        lbNivel.setWidth(barTime.getWidth());
-        lbNivel.setPosition(5, 330);
-        lbNivel.setAlignment(Align.center);
-
-        buttonUndo = new Button(Assets.buttonRefresh, Assets.buttonRefreshPressed);
-        buttonUndo.setSize(80, 80);
-        buttonUndo.setPosition(700, 20);
-        buttonUndo.getColor().a = myControl.getColor().a;// Have the same alpha color
-        buttonUndo.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                myBoard.undo = true;
+        buttonUndo.setSize(80f, 80f)
+        buttonUndo.setPosition(700f, 20f)
+        buttonUndo.color.a = myControl.color.a // Have the same alpha color
+        buttonUndo.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                myBoard.undo = true
             }
-        });
+        })
 
-        buttonPause = new Button(Assets.buttonPause, Assets.buttonPausePressed);
-        buttonPause.setSize(60, 60);
-        buttonPause.setPosition(730, 410);
+        buttonPause.setSize(60f, 60f)
+        buttonPause.setPosition(730f, 410f)
 
-        buttonPause.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                setPause();
+        buttonPause.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                setPause()
             }
+        })
 
-        });
+        stageGame.addActor(myBoard)
+        stageGame.addActor(barTime)
+        stageGame.addActor(barMoves)
+        stage.addActor(lbNivel)
+        stage.addActor(myControl)
+        stage.addActor(buttonUndo)
+        stage.addActor(buttonPause)
 
-        stageGame.addActor(myBoard);
-        stageGame.addActor(barTime);
-        stageGame.addActor(barMoves);
-        stage.addActor(lbNivel);
-        stage.addActor(myControl);
-        stage.addActor(buttonUndo);
-        stage.addActor(buttonPause);
+        setRunning()
 
-        setRunning();
     }
 
-    @Override
-    public void draw(float delta) {
-        Assets.background.render(delta);
+
+    override fun draw(delta: Float) {
+        Assets.background.render(delta)
 
         // Render el tileMap
-        renderer.render();
+        renderer.render()
 
         // Render el tablero
-        stageGame.draw();
-
+        stageGame.draw()
     }
 
-    @Override
-    public void update(float delta) {
+    override fun update(delta: Float) {
+
 
         if (state != STATE_PAUSED) {
-            stageGame.act(delta);
-            barMoves.updateActualNum(myBoard.moves);
-            barTime.updateActualNum((int) myBoard.time);
+            stageGame.act(delta)
+            barMoves.updateActualNum(myBoard.moves)
+            barTime.updateActualNum(myBoard.time.toInt())
 
             if (state == STATE_RUNNING && myBoard.state == Board.STATE_GAMEOVER) {
-                setGameover();
+                setGameover()
             }
         }
-
     }
 
-    private void setGameover() {
-        state = STATE_GAME_OVER;
-        Settings.levelCompeted(level, myBoard.moves, (int) myBoard.time);
-        stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run(() -> {
-            level += 1;
-            if (level >= Settings.getNUM_MAPS())
-                changeScreenWithFadeOut(com.nopalsoft.sokoban.screens.MainMenuScreen.class, game);
+    override fun up() {
+        myBoard.moveUp = true
+        super.up()
+    }
+
+    override fun down() {
+        myBoard.moveDown = true
+        super.down()
+    }
+
+    override fun right() {
+        myBoard.moveRight = true
+        super.right()
+    }
+
+    override fun left() {
+        myBoard.moveLeft = true
+        super.left()
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if (state == STATE_RUNNING) {
+            when (keycode) {
+                Input.Keys.LEFT, Input.Keys.A -> {
+                    myBoard.moveLeft = true
+                }
+
+                Input.Keys.RIGHT, Input.Keys.D -> {
+                    myBoard.moveRight = true
+                }
+
+                Input.Keys.UP, Input.Keys.W -> {
+                    myBoard.moveUp = true
+                }
+
+                Input.Keys.DOWN, Input.Keys.S -> {
+                    myBoard.moveDown = true
+                }
+
+                Input.Keys.Z -> {
+                    myBoard.undo = true
+                }
+
+                Input.Keys.ESCAPE, Input.Keys.BACK -> {
+                    setPause()
+                }
+            }
+        } else if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+            if (myWindowPause.isShown)
+                myWindowPause.hide()
+        }
+
+        return true
+    }
+
+    private fun setGameover() {
+        state = STATE_GAME_OVER
+        Settings.levelCompeted(level, myBoard.moves, myBoard.time.toInt())
+        stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run {
+            level += 1
+            if (level >= Settings.NUM_MAPS)
+                changeScreenWithFadeOut(MainMenuScreen::class.java, game)
             else
-                changeScreenWithFadeOut(GameScreen.class, level, game);
-
-        })));
+                changeScreenWithFadeOut(GameScreen::class.java, level, game)
+        }))
     }
 
-    public void setRunning() {
+    fun setRunning() {
         if (state != STATE_GAME_OVER) {
-            state = STATE_RUNNING;
+            state = STATE_RUNNING
         }
     }
 
-    private void setPause() {
+    private fun setPause() {
         if (state == STATE_RUNNING) {
-            state = STATE_PAUSED;
-            myWindowPause.show(stage);
+            state = STATE_PAUSED
+            myWindowPause.show(stage)
         }
     }
 
-    @Override
-    public void up() {
-        myBoard.moveUp = true;
-        super.up();
+
+    companion object {
+
+        const val STATE_RUNNING = 0
+        const val STATE_PAUSED = 1
+        const val STATE_GAME_OVER = 2
     }
-
-    @Override
-    public void down() {
-        myBoard.moveDown = true;
-        super.down();
-    }
-
-    @Override
-    public void right() {
-        myBoard.moveRight = true;
-        super.right();
-    }
-
-    @Override
-    public void left() {
-        myBoard.moveLeft = true;
-        super.left();
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        if (state == STATE_RUNNING) {
-            if (keycode == Keys.LEFT || keycode == Keys.A) {
-                myBoard.moveLeft = true;
-
-            } else if (keycode == Keys.RIGHT || keycode == Keys.D) {
-                myBoard.moveRight = true;
-
-            } else if (keycode == Keys.UP || keycode == Keys.W) {
-                myBoard.moveUp = true;
-
-            } else if (keycode == Keys.DOWN || keycode == Keys.S) {
-                myBoard.moveDown = true;
-
-            } else if (keycode == Keys.Z) {
-                myBoard.undo = true;
-
-            } else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-                setPause();
-            }
-        } else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-            if (myWindowPause.isShown())
-                myWindowPause.hide();
-        }
-
-        return true;
-    }
-
 }
