@@ -1,124 +1,105 @@
-package com.nopalsoft.sokoban.screens;
+package com.nopalsoft.sokoban.screens
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.MainSokoban;
-import com.nopalsoft.sokoban.scene2d.LevelSelector;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.MainSokoban
+import com.nopalsoft.sokoban.scene2d.LevelSelector
 
-public class MainMenuScreen extends Screens {
+class MainMenuScreen(game: MainSokoban) : Screens(game) {
 
-    LevelSelector lvlSelector;
+    private val lvlSelector = LevelSelector(this)
+    private val tbMenu = Table()
+    private val btLeaderboard = Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed)
+    private val btAchievements = Button(Assets.buttonAchievement, Assets.buttonAchievementPressed)
+    private val btFacebook = Button(Assets.buttonFacebook, Assets.buttonFacebookPressed)
+    private val btSettings = Button(Assets.buttonSettings, Assets.buttonSettingsPressed)
+    private val btMore = Button(Assets.buttonMore, Assets.buttonMorePressed)
+    private val btNextPage = Button(Assets.buttonRight, Assets.buttonRightPressed)
+    private val btPreviousPage = Button(Assets.buttonLeft, Assets.buttonLeftPressed)
 
-    Table tbMenu;
-    Button btLeaderboard, btAchievements, btFacebook, btSettings, btMore;
-    Button btNextPage, btPreviousPage;
 
-    public MainMenuScreen(final MainSokoban game) {
-        super(game);
+    init {
+        btPreviousPage.setSize(75f, 75f)
+        btPreviousPage.setPosition(65f, 220f)
+        btPreviousPage.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                right()
+            }
+        })
 
-        lvlSelector = new LevelSelector(this);
+        btNextPage.setSize(75f, 75f)
+        btNextPage.setPosition(660f, 220f)
+        btNextPage.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                left()
+            }
+        })
 
-        btPreviousPage = new Button(Assets.buttonLeft, Assets.buttonLeftPressed);
-        btPreviousPage.setSize(75, 75);
-        btPreviousPage.setPosition(65, 220);
-        btPreviousPage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                right();
+        btLeaderboard.addListener(object : ClickListener() {
+        })
+        btAchievements.addListener(object : ClickListener() {
+        })
+        btFacebook.addListener(object : ClickListener() {
+        })
+        btSettings.addListener(object : ClickListener() {
+        })
+        btMore.addListener(object : ClickListener() {
+        })
+
+        tbMenu.defaults().size(80f).pad(7.5f)
+
+        tbMenu.add(btAchievements)
+        tbMenu.add(btFacebook)
+        tbMenu.add(btSettings)
+        tbMenu.add(btMore)
+
+        tbMenu.pack()
+        tbMenu.setPosition(SCREEN_WIDTH / 2f - tbMenu.width / 2f, 20f)
+
+        stage.addActor(lvlSelector)
+        stage.addActor(tbMenu)
+        stage.addActor(btPreviousPage)
+        stage.addActor(btNextPage)
+    }
+
+
+    override fun update(delta: Float) {
+        // TODO
+    }
+
+    override fun draw(delta: Float) {
+        Assets.background.render(delta)
+    }
+
+    override fun right() {
+        lvlSelector.previousPage()
+    }
+
+    override fun left() {
+        lvlSelector.nextPage()
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+
+        when (keycode) {
+            Input.Keys.LEFT, Input.Keys.A -> {
+                right()
             }
 
-        });
-        btNextPage = new Button(Assets.buttonRight, Assets.buttonRightPressed);
-        btNextPage.setSize(75, 75);
-        btNextPage.setPosition(660, 220);
-        btNextPage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                left();
+            Input.Keys.RIGHT, Input.Keys.D -> {
+                left()
             }
-        });
 
-        btLeaderboard = new Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed);
-        btLeaderboard.addListener(new ClickListener() {
-
-        });
-
-        btAchievements = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed);
-        btAchievements.addListener(new ClickListener() {
-
-        });
-
-        btFacebook = new Button(Assets.buttonFacebook, Assets.buttonFacebookPressed);
-        btFacebook.addListener(new ClickListener() {
-
-        });
-
-        btSettings = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed);
-        btSettings.addListener(new ClickListener() {
-
-        });
-
-        btMore = new Button(Assets.buttonMore, Assets.buttonMorePressed);
-        btMore.addListener(new ClickListener() {
-
-        });
-
-        tbMenu = new Table();
-        tbMenu.defaults().size(80).pad(7.5f);
-
-        tbMenu.add(btAchievements);
-        tbMenu.add(btFacebook);
-        tbMenu.add(btSettings);
-        tbMenu.add(btMore);
-
-        tbMenu.pack();
-        tbMenu.setPosition(SCREEN_WIDTH / 2f - tbMenu.getWidth() / 2f, 20);
-
-        stage.addActor(lvlSelector);
-        stage.addActor(tbMenu);
-        stage.addActor(btPreviousPage);
-        stage.addActor(btNextPage);
-    }
-
-    @Override
-    public void update(float delta) {
-
-    }
-
-    @Override
-    public void draw(float delta) {
-        Assets.background.render(delta);
-    }
-
-    @Override
-    public void right() {
-        lvlSelector.previousPage();
-    }
-
-    @Override
-    public void left() {
-        lvlSelector.nextPage();
-
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-
-        if (keycode == Keys.LEFT || keycode == Keys.A) {
-            right();
-        } else if (keycode == Keys.RIGHT || keycode == Keys.D) {
-            left();
-        } else if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-            Gdx.app.exit();
+            Input.Keys.ESCAPE, Input.Keys.BACK -> {
+                Gdx.app.exit()
+            }
         }
 
-        return true;
+        return true
     }
-
-
 }
