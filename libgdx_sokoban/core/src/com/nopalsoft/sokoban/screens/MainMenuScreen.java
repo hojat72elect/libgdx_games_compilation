@@ -71,7 +71,6 @@ public class MainMenuScreen extends Screens {
         tbMenu = new Table();
         tbMenu.defaults().size(80).pad(7.5f);
 
-        // tbMenu.add(btLeaderboard);
         tbMenu.add(btAchievements);
         tbMenu.add(btFacebook);
         tbMenu.add(btSettings);
