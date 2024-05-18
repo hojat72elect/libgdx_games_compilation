@@ -12,59 +12,61 @@ import com.nopalsoft.sokoban.scene2d.LevelSelector
 
 class MainMenuScreen(game: MainSokoban) : Screens(game) {
 
-    private val lvlSelector = LevelSelector(this)
-    private val tbMenu = Table()
-    private val btLeaderboard = Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed)
-    private val btAchievements = Button(Assets.buttonAchievement, Assets.buttonAchievementPressed)
-    private val btFacebook = Button(Assets.buttonFacebook, Assets.buttonFacebookPressed)
-    private val btSettings = Button(Assets.buttonSettings, Assets.buttonSettingsPressed)
-    private val btMore = Button(Assets.buttonMore, Assets.buttonMorePressed)
-    private val btNextPage = Button(Assets.buttonRight, Assets.buttonRightPressed)
-    private val btPreviousPage = Button(Assets.buttonLeft, Assets.buttonLeftPressed)
+    private val levelSelector = LevelSelector(this)
+    private val tableMenu = Table()
+    private val buttonLeaderboard =
+        Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed)
+    private val buttonAchievements =
+        Button(Assets.buttonAchievement, Assets.buttonAchievementPressed)
+    private val buttonFacebook = Button(Assets.buttonFacebook, Assets.buttonFacebookPressed)
+    private val buttonSettings = Button(Assets.buttonSettings, Assets.buttonSettingsPressed)
+    private val buttonMore = Button(Assets.buttonMore, Assets.buttonMorePressed)
+    private val buttonNextPage = Button(Assets.buttonRight, Assets.buttonRightPressed)
+    private val buttonPreviousPage = Button(Assets.buttonLeft, Assets.buttonLeftPressed)
 
 
     init {
-        btPreviousPage.setSize(75f, 75f)
-        btPreviousPage.setPosition(65f, 220f)
-        btPreviousPage.addListener(object : ClickListener() {
+        buttonPreviousPage.setSize(75f, 75f)
+        buttonPreviousPage.setPosition(65f, 220f)
+        buttonPreviousPage.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 right()
             }
         })
 
-        btNextPage.setSize(75f, 75f)
-        btNextPage.setPosition(660f, 220f)
-        btNextPage.addListener(object : ClickListener() {
+        buttonNextPage.setSize(75f, 75f)
+        buttonNextPage.setPosition(660f, 220f)
+        buttonNextPage.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 left()
             }
         })
 
-        btLeaderboard.addListener(object : ClickListener() {
+        buttonLeaderboard.addListener(object : ClickListener() {
         })
-        btAchievements.addListener(object : ClickListener() {
+        buttonAchievements.addListener(object : ClickListener() {
         })
-        btFacebook.addListener(object : ClickListener() {
+        buttonFacebook.addListener(object : ClickListener() {
         })
-        btSettings.addListener(object : ClickListener() {
+        buttonSettings.addListener(object : ClickListener() {
         })
-        btMore.addListener(object : ClickListener() {
+        buttonMore.addListener(object : ClickListener() {
         })
 
-        tbMenu.defaults().size(80f).pad(7.5f)
+        tableMenu.defaults().size(80f).pad(7.5f)
 
-        tbMenu.add(btAchievements)
-        tbMenu.add(btFacebook)
-        tbMenu.add(btSettings)
-        tbMenu.add(btMore)
+        tableMenu.add(buttonAchievements)
+        tableMenu.add(buttonFacebook)
+        tableMenu.add(buttonSettings)
+        tableMenu.add(buttonMore)
 
-        tbMenu.pack()
-        tbMenu.setPosition(SCREEN_WIDTH / 2f - tbMenu.width / 2f, 20f)
+        tableMenu.pack()
+        tableMenu.setPosition(SCREEN_WIDTH / 2f - tableMenu.width / 2f, 20f)
 
-        stage.addActor(lvlSelector)
-        stage.addActor(tbMenu)
-        stage.addActor(btPreviousPage)
-        stage.addActor(btNextPage)
+        stage.addActor(levelSelector)
+        stage.addActor(tableMenu)
+        stage.addActor(buttonPreviousPage)
+        stage.addActor(buttonNextPage)
     }
 
 
@@ -77,11 +79,11 @@ class MainMenuScreen(game: MainSokoban) : Screens(game) {
     }
 
     override fun right() {
-        lvlSelector.previousPage()
+        levelSelector.previousPage()
     }
 
     override fun left() {
-        lvlSelector.nextPage()
+        levelSelector.nextPage()
     }
 
     override fun keyDown(keycode: Int): Boolean {
