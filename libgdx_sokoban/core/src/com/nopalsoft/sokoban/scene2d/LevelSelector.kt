@@ -1,182 +1,168 @@
-package com.nopalsoft.sokoban.scene2d;
+package com.nopalsoft.sokoban.scene2d
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.sokoban.Assets;
-import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.screens.MainMenuScreen;
-import com.nopalsoft.sokoban.screens.Screens;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.Settings
+import com.nopalsoft.sokoban.screens.MainMenuScreen
+import com.nopalsoft.sokoban.screens.Screens
 
-public class LevelSelector extends Group {
+class LevelSelector(currentScreen: Screens) : Group() {
 
-    private final MainMenuScreen menuScreen;
-
-    Label labelTitle;
-
-    ScrollPane scrollPane;
-    Table container;
+    private val menuScreen = currentScreen as MainMenuScreen
+    private val labelTitle = Label("Niveles", Label.LabelStyle(Assets.font, Color.WHITE))
+    private val container = Table()
+    private val scrollPane = ScrollPane(container)
 
     // Current page (each page has 15 levels).
-    int actualPage;
-    int totalStars;
+    private var actualPage = 0
+    private var totalStars = 0
 
-    WindowLevel windowLevel;
+    private val windowLevel = WindowLevel(currentScreen)
 
-    public LevelSelector(Screens currentScreen) {
-        setSize(600, 385);
-        setPosition(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f, 70);
-        menuScreen = (MainMenuScreen) currentScreen;
 
-        setBackGround(Assets.backgroundWindow);
+    init {
+        setSize(600f, 385f)
+        setPosition(Screens.SCREEN_WIDTH / 2f - width / 2f, 70f)
+        setBackGround(Assets.backgroundWindow)
 
-        windowLevel = new WindowLevel(currentScreen);
+        val tableTitle = Table()
+        tableTitle.setSize(300f, 50f)
+        tableTitle.setPosition(width / 2f - tableTitle.width / 2f, 324f)
+        tableTitle.add(labelTitle)
 
-        Table tableTitle;
-        tableTitle = new Table();
+        scrollPane.setSize(width - 100, height - 100)
+        scrollPane.setPosition(width / 2f - scrollPane.width / 2f, 30f)
+        scrollPane.setScrollingDisabled(false, true)
 
-        tableTitle.setSize(300, 50);
-        tableTitle.setPosition(getWidth() / 2f - tableTitle.getWidth() / 2f, 324);
+        container.defaults().padLeft(5f).padRight(5f)
 
-        labelTitle = new Label("Niveles", new LabelStyle(Assets.font, Color.WHITE));
-        tableTitle.add(labelTitle);
-
-        container = new Table();
-        scrollPane = new ScrollPane(container);
-        scrollPane.setSize(getWidth() - 100, getHeight() - 100);
-        scrollPane.setPosition(getWidth() / 2f - scrollPane.getWidth() / 2f, 30);
-        scrollPane.setScrollingDisabled(false, true);
-
-        container.defaults().padLeft(5).padRight(5);
-
-        for (int i = 0; i < Settings.arrayLevel.length; i++) {
-            totalStars += Settings.arrayLevel[i].numStars;
+        for (i in Settings.arrayLevel.indices) {
+            totalStars += Settings.arrayLevel[i]!!.numStars
         }
-        totalStars += 2;// By default I already have 3 stars
+        totalStars += 2 // By default I already have 3 stars
 
-        int numberOfPages = (int) (Settings.getNUM_MAPS() / 15f);
-        if (Settings.getNUM_MAPS() % 15f != 0)
-            numberOfPages++;
+        var numberOfPages = Settings.NUM_MAPS / 15
+        if (Settings.NUM_MAPS % 15f != 0f)
+            numberOfPages++
 
-        for (int column = 0; column < numberOfPages; column++) {
-            container.add(getListLevel(column));
+        for (column in 0 until numberOfPages) {
+            container.add<Table>(getListLevel(column))
         }
 
-        actualPage = 0;
 
-        addActor(tableTitle);
-        addActor(scrollPane);
-
-        scrollToPage(0);
+        addActor(tableTitle)
+        addActor(scrollPane)
+        scrollToPage(0)
 
     }
 
-    private void setBackGround(TextureRegionDrawable imageBackground) {
-        Image img = new Image(imageBackground);
-        img.setSize(getWidth(), getHeight());
-        addActor(img);
-
+    private fun setBackGround(imageBackground: TextureRegionDrawable) {
+        val img = Image(imageBackground)
+        img.setSize(width, height)
+        addActor(img)
     }
 
     /**
      * Each list has 15 items.
      */
-    public Table getListLevel(int list) {
-        Table content = new Table();
+    fun getListLevel(list: Int): Table {
+        val content = Table()
 
-        int level = list * 15;
-        content.defaults().pad(7, 12, 7, 12);
-        for (int col = 0; col < 15; col++) {
-            Button oButton = getLevelButton(level);
-            content.add(oButton).size(76, 83);
-            level++;
+        var level = list * 15
+        content.defaults().pad(7f, 12f, 7f, 12f)
+        for (col in 0..14) {
+            val oButton = getLevelButton(level)
+            content.add(oButton).size(76f, 83f)
+            level++
 
             if (level % 5 == 0)
-                content.row();
+                content.row()
 
             // To hide worlds that do not exist
-            if (level > Settings.getNUM_MAPS())
-                oButton.setVisible(false);
-
+            if (level > Settings.NUM_MAPS)
+                oButton.isVisible = false
         }
-        return content;
-
+        return content
     }
 
-    private void scrollToPage(int page) {
-
-        Table tabToScrollTo = (Table) container.getChildren().get(page);
-        scrollPane.scrollTo(tabToScrollTo.getX(), tabToScrollTo.getY(), tabToScrollTo.getWidth(), tabToScrollTo.getHeight());
-
+    private fun scrollToPage(page: Int) {
+        val tabToScrollTo = container.children[page] as Table
+        scrollPane.scrollTo(
+            tabToScrollTo.x,
+            tabToScrollTo.y,
+            tabToScrollTo.width,
+            tabToScrollTo.height
+        )
     }
 
-    public void nextPage() {
-        actualPage++;
-        if (actualPage >= container.getChildren().size)
-            actualPage = container.getChildren().size - 1;
-        scrollToPage(actualPage);
+    fun nextPage() {
+        actualPage++
+        if (actualPage >= container.children.size)
+            actualPage = container.children.size - 1
+        scrollToPage(actualPage)
     }
 
-    public void previousPage() {
-        actualPage--;
+    fun previousPage() {
+        actualPage--
         if (actualPage < 0)
-            actualPage = 0;
-        scrollToPage(actualPage);
-
+            actualPage = 0
+        scrollToPage(actualPage)
     }
 
-    public Button getLevelButton(final int level) {
-        final TextButton button;
+    fun getLevelButton(level: Int): Button {
+        val button: TextButton
 
-        final int skullsToNextLevel = (int) (level * 1f);// I only need 1 star to unlock the next level.
+        val skullsToNextLevel = level * 1 // I only need 1 star to unlock the next level.
 
-        if (!(totalStars >= skullsToNextLevel)) {
-            button = new TextButton("", Assets.styleTextButtonLevelLocked);
-            button.setDisabled(true);
+        if (totalStars < skullsToNextLevel) {
+            button = TextButton("", Assets.styleTextButtonLevelLocked)
+            button.isDisabled = true
         } else {
-
-            button = new TextButton("" + (level + 1), Assets.styleTextButtonLevel);
+            button = TextButton((level + 1).toString(), Assets.styleTextButtonLevel)
 
             // I am adding worlds that do not exist to be able to fill the table that is why I put this fix.
-            boolean completed = false;
-            if (level < Settings.arrayLevel.length) {
-                if (Settings.arrayLevel[level].numStars == 1)
-                    completed = true;
+            var completed = false
+            if (level < Settings.arrayLevel.size) {
+                if (Settings.arrayLevel[level]!!.numStars == 1)
+                    completed = true
             }
 
-            Image imageLevel;
+            val imageLevel = if (completed) {
+                Image(Assets.levelStar)
+            } else {
+                Image(Assets.levelOff)
+            }
 
-            if (completed)
-                imageLevel = new Image(Assets.levelStar);
-            else
-                imageLevel = new Image(Assets.levelOff);
-
-            button.row();
-            button.add(imageLevel).size(10).padBottom(2);
+            button.row()
+            button.add(imageLevel).size(10f).padBottom(2f)
         }
 
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!button.isDisabled()) {
-                    windowLevel.show(getStage(), level, Settings.arrayLevel[level].bestMoves, Settings.arrayLevel[level].bestTime);
-
+        button.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                if (!button.isDisabled) {
+                    windowLevel.show(
+                        stage,
+                        level,
+                        Settings.arrayLevel[level]!!.bestMoves,
+                        Settings.arrayLevel[level]!!.bestTime
+                    )
                 }
             }
-        });
+        })
 
-        menuScreen.addEffectPress(button);
+        menuScreen.addEffectPress(button)
 
-        return button;
-
+        return button
     }
+
 }
