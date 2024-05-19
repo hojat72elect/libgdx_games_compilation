@@ -34,19 +34,19 @@ class Player(position: Int) : Tiles(position) {
         val keyFrame = if (Settings.animationWalkIsON) {
             when (state) {
                 STATE_DOWN -> {
-                    Assets.characterGoingDown.getKeyFrame(stateTime, true)
+                    Assets.characterGoingDown?.getKeyFrame(stateTime, true)
                 }
 
                 STATE_UP -> {
-                    Assets.characterGoingUp.getKeyFrame(stateTime, true)
+                    Assets.characterGoingUp?.getKeyFrame(stateTime, true)
                 }
 
                 STATE_LEFT -> {
-                    Assets.characterGoingLeft.getKeyFrame(stateTime, true)
+                    Assets.characterGoingLeft?.getKeyFrame(stateTime, true)
                 }
 
                 STATE_RIGHT -> {
-                    Assets.characterGoingRight.getKeyFrame(stateTime, true)
+                    Assets.characterGoingRight?.getKeyFrame(stateTime, true)
                 }
 
                 else -> {

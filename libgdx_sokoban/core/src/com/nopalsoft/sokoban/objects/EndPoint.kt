@@ -26,14 +26,14 @@ class EndPoint(position: Int, color: String) : Tiles(position) {
 
     private fun setTextureColor(numColor: Int) {
         when (numColor) {
-            Box.COLOR_BEIGE -> keyFrame = Assets.endPointBeige
-            Box.COLOR_BLACK -> keyFrame = Assets.endPointBlack
-            Box.COLOR_BLUE -> keyFrame = Assets.endPointBlue
-            Box.COLOR_BROWN -> keyFrame = Assets.endPointBrown
-            Box.COLOR_GRAY -> keyFrame = Assets.endPointGray
-            Box.COLOR_RED -> keyFrame = Assets.endPointRed
-            Box.COLOR_YELLOW -> keyFrame = Assets.endPointYellow
-            Box.COLOR_PURPLE -> keyFrame = Assets.endPointPurple
+            Box.COLOR_BEIGE -> keyFrame = Assets.endPointBeige!!
+            Box.COLOR_BLACK -> keyFrame = Assets.endPointBlack!!
+            Box.COLOR_BLUE -> keyFrame = Assets.endPointBlue!!
+            Box.COLOR_BROWN -> keyFrame = Assets.endPointBrown!!
+            Box.COLOR_GRAY -> keyFrame = Assets.endPointGray!!
+            Box.COLOR_RED -> keyFrame = Assets.endPointRed!!
+            Box.COLOR_YELLOW -> keyFrame = Assets.endPointYellow!!
+            Box.COLOR_PURPLE -> keyFrame = Assets.endPointPurple!!
         }
     }
 

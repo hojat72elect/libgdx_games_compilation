@@ -33,7 +33,7 @@ class LevelSelector(currentScreen: Screens) : Group() {
     init {
         setSize(600f, 385f)
         setPosition(Screens.SCREEN_WIDTH / 2f - width / 2f, 70f)
-        setBackGround(Assets.backgroundWindow)
+        setBackGround(Assets.backgroundWindow!!)
 
         val tableTitle = Table()
         tableTitle.setSize(300f, 50f)

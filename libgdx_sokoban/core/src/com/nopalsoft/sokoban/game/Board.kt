@@ -165,7 +165,7 @@ class Board : Group() {
 
 
     private fun initializeMap(layerName: String) {
-        val layer = Assets.map.layers[layerName] as TiledMapTileLayer
+        val layer = Assets.map!!.layers[layerName] as TiledMapTileLayer
         var tilePosition = 0
 
         for (y in 0 until 15) {

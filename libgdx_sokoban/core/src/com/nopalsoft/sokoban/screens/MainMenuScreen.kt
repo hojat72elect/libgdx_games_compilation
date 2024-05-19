@@ -75,7 +75,7 @@ class MainMenuScreen(game: MainSokoban) : Screens(game) {
     }
 
     override fun draw(delta: Float) {
-        Assets.background.render(delta)
+        Assets.background?.render(delta)
     }
 
     override fun right() {

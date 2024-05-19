@@ -26,8 +26,8 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     private val myControl = ControlsNoPad(this)
     private val buttonUndo = Button(Assets.buttonRefresh, Assets.buttonRefreshPressed)
     private val buttonPause = Button(Assets.buttonPause, Assets.buttonPausePressed)
-    private val barTime = CounterBar(Assets.backgroundTime, 5f, 430f)
-    private val barMoves = CounterBar(Assets.backgroundMoves, 5f, 380f)
+    private val barTime = CounterBar(Assets.backgroundTime!!, 5f, 430f)
+    private val barMoves = CounterBar(Assets.backgroundMoves!!, 5f, 380f)
     private val myWindowPause = WindowPause(this)
     private var state = 0
     private val renderer = BoardRenderer()
@@ -74,7 +74,7 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
 
 
     override fun draw(delta: Float) {
-        Assets.background.render(delta)
+        Assets.background?.render(delta)
 
         // Render el tileMap
         renderer.render()

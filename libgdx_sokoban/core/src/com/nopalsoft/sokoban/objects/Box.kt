@@ -29,22 +29,22 @@ class Box(position: Int, color: String) : Tiles(position) {
 
     private fun setTextureColor(numColor: Int) {
         keyFrame = when (numColor) {
-            COLOR_BEIGE -> Assets.beigeBox
-            COLOR_DARK_BEIGE -> Assets.darkBeigeBox
-            COLOR_BLACK -> Assets.blackBox
-            COLOR_DARK_BLACK -> Assets.darkBlackBox
-            COLOR_BLUE -> Assets.blueBox
-            COLOR_DARK_BLUE -> Assets.darkBlueBox
-            COLOR_BROWN -> Assets.brownBox
-            COLOR_DARK_BROWN -> Assets.darkBrownBox
-            COLOR_GRAY -> Assets.grayBox
-            COLOR_DARK_GRAY -> Assets.darkGrayBox
-            COLOR_RED -> Assets.redBox
-            COLOR_DARK_RED -> Assets.darkRedBox
-            COLOR_YELLOW -> Assets.yellowBox
-            COLOR_DARK_YELLOW -> Assets.darkYellowBox
-            COLOR_PURPLE -> Assets.purpleBox
-            COLOR_DARK_PURPLE -> Assets.darkPurpleBox
+            COLOR_BEIGE -> Assets.beigeBox!!
+            COLOR_DARK_BEIGE -> Assets.darkBeigeBox!!
+            COLOR_BLACK -> Assets.blackBox!!
+            COLOR_DARK_BLACK -> Assets.darkBlackBox!!
+            COLOR_BLUE -> Assets.blueBox!!
+            COLOR_DARK_BLUE -> Assets.darkBlueBox!!
+            COLOR_BROWN -> Assets.brownBox!!
+            COLOR_DARK_BROWN -> Assets.darkBrownBox!!
+            COLOR_GRAY -> Assets.grayBox!!
+            COLOR_DARK_GRAY -> Assets.darkGrayBox!!
+            COLOR_RED -> Assets.redBox!!
+            COLOR_DARK_RED -> Assets.darkRedBox!!
+            COLOR_YELLOW -> Assets.yellowBox!!
+            COLOR_DARK_YELLOW -> Assets.darkYellowBox!!
+            COLOR_PURPLE -> Assets.purpleBox!!
+            COLOR_DARK_PURPLE -> Assets.darkPurpleBox!!
             else -> {
                 throw Exception("The provided color is not known")
             }
