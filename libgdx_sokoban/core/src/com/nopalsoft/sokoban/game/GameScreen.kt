@@ -23,7 +23,7 @@ import com.nopalsoft.sokoban.screens.Screens
 
 class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
 
-    private val stageGame = Stage(StretchViewport(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat()))
+    private val stageGame = Stage(StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT))
     private val myBoard = Board()
     private val myControl = ControlsNoPad(this)
     private val buttonUndo = Button(Assets.buttonRefresh, Assets.buttonRefreshPressed)

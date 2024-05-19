@@ -24,7 +24,7 @@ open class Window(currentScreen: Screens, width: Float, height: Float, positionY
     init {
         setSize(width, height)
         y = positionY
-        dim.setSize(Screens.SCREEN_WIDTH.toFloat(), Screens.SCREEN_HEIGHT.toFloat())
+        dim.setSize(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT)
         setBackGround(Assets.backgroundWindow!!)
     }
 

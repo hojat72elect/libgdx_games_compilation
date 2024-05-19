@@ -22,7 +22,7 @@ import kotlin.math.abs
 abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
     GestureDetector.GestureListener {
 
-    private val myCamera = OrthographicCamera(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+    private val myCamera = OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT)
     private val batcher = game.batcher
     protected val stage = game.stage
 
@@ -51,7 +51,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
 
     fun changeScreenWithFadeOut(newScreen: Class<*>, level: Int, game: MainSokoban) {
         val blackFadeOut = Image(Assets.blackPixel)
-        blackFadeOut.setSize(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT)
         blackFadeOut.color.a = 0f
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run {
             if (newScreen == GameScreen::class.java) {
@@ -176,7 +176,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
 
 
     companion object {
-        const val SCREEN_WIDTH = 800
-        const val SCREEN_HEIGHT = 480
+        const val SCREEN_WIDTH = 800f
+        const val SCREEN_HEIGHT = 480f
     }
 }

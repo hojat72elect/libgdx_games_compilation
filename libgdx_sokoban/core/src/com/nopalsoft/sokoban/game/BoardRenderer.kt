@@ -9,8 +9,8 @@ import com.nopalsoft.sokoban.screens.Screens
 class BoardRenderer {
 
     private var myCamera = OrthographicCamera(
-        Screens.SCREEN_WIDTH.toFloat(),
-        Screens.SCREEN_HEIGHT.toFloat()
+        Screens.SCREEN_WIDTH,
+        Screens.SCREEN_HEIGHT
     )
     private val tiledRender = OrthogonalTiledMapRenderer(
         Assets.map,
