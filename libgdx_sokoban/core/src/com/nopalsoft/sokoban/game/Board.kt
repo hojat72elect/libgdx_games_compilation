@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.nopalsoft.sokoban.Assets
 import com.nopalsoft.sokoban.GameState
+import com.nopalsoft.sokoban.Movement
 import com.nopalsoft.sokoban.objects.Box
 import com.nopalsoft.sokoban.objects.EndPoint
 import com.nopalsoft.sokoban.objects.Player
@@ -16,10 +17,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
 class Board : Group() {
 
     var state = GameState.STATE_RUNNING
-    var moveUp = false
-    var moveDown = false
-    var moveLeft = false
-    var moveRight = false
+    var playerMovement = Movement.IDLE
     var undo = false
 
     // X previous position, Y current position.
@@ -62,17 +60,29 @@ class Board : Group() {
             } else {
 
                 var auxMoves = 0
-                if (moveUp) {
-                    auxMoves = 25
-                } else if (moveDown) {
-                    auxMoves = -25
-                } else if (moveLeft) {
-                    auxMoves = -1
-                } else if (moveRight) {
-                    auxMoves = 1
+                when (playerMovement) {
+                    Movement.UP -> {
+                        auxMoves = 25
+                    }
+
+                    Movement.DOWN -> {
+                        auxMoves = -25
+                    }
+
+                    Movement.LEFT -> {
+                        auxMoves = -1
+                    }
+
+                    Movement.RIGHT -> {
+                        auxMoves = 1
+                    }
+
+                    else -> {
+                        // Player isn't moving anywhere, just stay still.
+                    }
                 }
 
-                if (player.canMove() && (moveDown || moveLeft || moveRight || moveUp)) {
+                if (player.canMove() && (playerMovement != Movement.IDLE)) {
                     val nextPos = player.position + auxMoves
 
                     if (checkIfIsEmptySpace(nextPos) || (!checkIsBoxInPosition(nextPos) && checkIsEndpointInPosition(
@@ -86,7 +96,13 @@ class Board : Group() {
                             )
                         )
                         arrayMovesBox.add(null)
-                        player.moveToPosition(nextPos, moveUp, moveDown, moveRight, moveLeft)
+                        player.moveToPosition(
+                            nextPos,
+                            playerMovement == Movement.UP,
+                            playerMovement == Movement.DOWN,
+                            playerMovement == Movement.RIGHT,
+                            playerMovement == Movement.LEFT
+                        )
                         moves++
                     } else {
                         if (checkIsBoxInPosition(nextPos)) {
@@ -114,10 +130,10 @@ class Board : Group() {
                                 oBox?.moveToPosition(boxNextPos, false)
                                 player.moveToPosition(
                                     nextPos,
-                                    moveUp,
-                                    moveDown,
-                                    moveRight,
-                                    moveLeft
+                                    playerMovement == Movement.UP,
+                                    playerMovement == Movement.DOWN,
+                                    playerMovement == Movement.RIGHT,
+                                    playerMovement == Movement.LEFT
                                 )
                                 val myEndPoint = getEndPointInPosition(boxNextPos)
                                 if (myEndPoint != null)
@@ -128,10 +144,7 @@ class Board : Group() {
                     }
                 }
 
-                moveDown = false
-                moveUp = false
-                moveRight = false
-                moveLeft = false
+                playerMovement = Movement.IDLE
 
                 if (checkBoxesMissingTheRightEndPoint() == 0) state =
                     GameState.STATE_GAMEOVER

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.nopalsoft.sokoban.Assets
 import com.nopalsoft.sokoban.GameState
 import com.nopalsoft.sokoban.MainSokoban
+import com.nopalsoft.sokoban.Movement
 import com.nopalsoft.sokoban.Settings
 import com.nopalsoft.sokoban.scene2d.ControlsNoPad
 import com.nopalsoft.sokoban.scene2d.CounterBar
@@ -99,22 +100,22 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     }
 
     override fun up() {
-        myBoard.moveUp = true
+        myBoard.playerMovement = Movement.UP
         super.up()
     }
 
     override fun down() {
-        myBoard.moveDown = true
+        myBoard.playerMovement = Movement.DOWN
         super.down()
     }
 
     override fun right() {
-        myBoard.moveRight = true
+        myBoard.playerMovement = Movement.RIGHT
         super.right()
     }
 
     override fun left() {
-        myBoard.moveLeft = true
+        myBoard.playerMovement = Movement.LEFT
         super.left()
     }
 
@@ -122,19 +123,19 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
         if (state == GameState.STATE_RUNNING) {
             when (keycode) {
                 Input.Keys.LEFT, Input.Keys.A -> {
-                    myBoard.moveLeft = true
+                    myBoard.playerMovement = Movement.LEFT
                 }
 
                 Input.Keys.RIGHT, Input.Keys.D -> {
-                    myBoard.moveRight = true
+                    myBoard.playerMovement = Movement.RIGHT
                 }
 
                 Input.Keys.UP, Input.Keys.W -> {
-                    myBoard.moveUp = true
+                    myBoard.playerMovement = Movement.UP
                 }
 
                 Input.Keys.DOWN, Input.Keys.S -> {
-                    myBoard.moveDown = true
+                    myBoard.playerMovement = Movement.DOWN
                 }
 
                 Input.Keys.Z -> {
