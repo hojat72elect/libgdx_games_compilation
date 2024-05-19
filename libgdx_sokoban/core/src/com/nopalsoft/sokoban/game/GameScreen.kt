@@ -63,10 +63,10 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
         stageGame.addActor(myBoard)
         stageGame.addActor(barTime)
         stageGame.addActor(barMoves)
-        stage.addActor(lbNivel)
-        stage.addActor(myControl)
-        stage.addActor(buttonUndo)
-        stage.addActor(buttonPause)
+        stage?.addActor(lbNivel)
+        stage?.addActor(myControl)
+        stage?.addActor(buttonUndo)
+        stage?.addActor(buttonPause)
 
         setRunning()
 
@@ -155,7 +155,7 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     private fun setGameover() {
         state = STATE_GAME_OVER
         Settings.levelCompeted(level, myBoard.moves, myBoard.time.toInt())
-        stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run {
+        stage?.addAction(Actions.sequence(Actions.delay(.35f), Actions.run {
             level += 1
             if (level >= Settings.NUM_MAPS)
                 changeScreenWithFadeOut(MainMenuScreen::class.java, game)
@@ -173,7 +173,7 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     private fun setPause() {
         if (state == STATE_RUNNING) {
             state = STATE_PAUSED
-            myWindowPause.show(stage)
+            myWindowPause.show(stage!!)
         }
     }
 

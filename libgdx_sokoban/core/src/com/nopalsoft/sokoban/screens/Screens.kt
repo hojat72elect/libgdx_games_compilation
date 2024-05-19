@@ -1,209 +1,182 @@
-package com.nopalsoft.sokoban.screens;
+package com.nopalsoft.sokoban.screens
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.nopalsoft.sokoban.MainSokoban;
-import com.nopalsoft.sokoban.Settings;
-import com.nopalsoft.sokoban.game.GameScreen;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.input.GestureDetector
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.MainSokoban
+import com.nopalsoft.sokoban.Settings
+import com.nopalsoft.sokoban.game.GameScreen
+import kotlin.math.abs
 
-public abstract class Screens extends InputAdapter implements Screen, GestureListener {
-    public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 480;
-    private final OrthographicCamera myCamera;
-    private final SpriteBatch batcher;
-    public MainSokoban game;
-    protected Stage stage;
+abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
+    GestureDetector.GestureListener {
+
+    private val myCamera = OrthographicCamera(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+    private val batcher = game.batcher
+    protected val stage = game.stage
 
 
-    public Screens(final MainSokoban game) {
-        this.stage = game.stage;
-        if (this.stage != null)
-            this.stage.clear();
-        this.batcher = game.batcher;
-        this.game = game;
+    init {
+        stage?.clear()
+        myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0f)
 
-        myCamera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
-
-        GestureDetector detector = new GestureDetector(20, .5f, 2, .15f, this);
-
-        InputMultiplexer input = new InputMultiplexer(this, detector, stage);
-        Gdx.input.setInputProcessor(input);
-
+        val detector = GestureDetector(20f, .5f, 2f, .15f, this)
+        val input = InputMultiplexer(this, detector, stage)
+        Gdx.input.inputProcessor = input
     }
 
-    @Override
-    public void render(float delta) {
-        update(delta);
+    override fun render(delta: Float) {
+        update(delta)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        myCamera.update()
+        batcher?.setProjectionMatrix(myCamera.combined)
+        draw(delta)
 
-        myCamera.update();
-        batcher.setProjectionMatrix(myCamera.combined);
-        draw(delta);
-
-        stage.act(delta);
-        stage.draw();
-
+        stage?.act(delta)
+        stage?.draw()
     }
 
-    public void changeScreenWithFadeOut(final Class<?> newScreen, final int level, final MainSokoban game) {
-        com.badlogic.gdx.scenes.scene2d.ui.Image blackFadeOut = new com.badlogic.gdx.scenes.scene2d.ui.Image(com.nopalsoft.sokoban.Assets.blackPixel);
-        blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        blackFadeOut.getColor().a = 0;
-        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run(() -> {
-            if (newScreen == GameScreen.class) {
-                com.nopalsoft.sokoban.Assets.loadTiledMap(level);
-                game.setScreen(new com.nopalsoft.sokoban.game.GameScreen(game, level));
-            } else if (newScreen == MainMenuScreen.class)
-                game.setScreen(new MainMenuScreen(game));
-
+    fun changeScreenWithFadeOut(newScreen: Class<*>, level: Int, game: MainSokoban) {
+        val blackFadeOut = Image(Assets.blackPixel)
+        blackFadeOut.setSize(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        blackFadeOut.color.a = 0f
+        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run {
+            if (newScreen == GameScreen::class.java) {
+                Assets.loadTiledMap(level)
+                game.screen = GameScreen(game, level)
+            } else if (newScreen == MainMenuScreen::class.java)
+                game.screen = MainMenuScreen(game)
 
             // The blackFadeOut is removed from the stage when new Screens(game) is given "Check the
             // constructor of the Screens class" so there is no need to do.
-
-        })));
-        stage.addActor(blackFadeOut);
+        }))
+        stage?.addActor(blackFadeOut)
     }
 
-    public void changeScreenWithFadeOut(final Class<?> newScreen, final MainSokoban game) {
-        changeScreenWithFadeOut(newScreen, -1, game);
+    fun changeScreenWithFadeOut(newScreen: Class<*>, game: MainSokoban) {
+        changeScreenWithFadeOut(newScreen, -1, game)
     }
 
-    public void addEffectPress(final Actor actor) {
-        actor.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() - 5);
-                event.stop();
-                return true;
+    fun addEffectPress(actor: Actor) {
+        actor.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent,
+                x: Float,
+                y: Float,
+                pointer: Int,
+                button: Int
+            ): Boolean {
+                actor.setPosition(actor.x, actor.y - 5)
+                event.stop()
+                return true
             }
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() + 5);
+            override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+                actor.setPosition(actor.x, actor.y + 5)
             }
-        });
+        })
     }
 
-    public abstract void draw(float delta);
+    abstract fun draw(delta: Float)
 
-    public abstract void update(float delta);
+    abstract fun update(delta: Float)
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+
+    override fun resize(width: Int, height: Int) {
+        stage?.viewport?.update(width, height, true)
     }
 
-    @Override
-    public void show() {
+    override fun show() {
+        // todo
     }
 
-    @Override
-    public void hide() {
-        Settings.save();
+    override fun hide() {
+        Settings.save()
     }
 
-    @Override
-    public void pause() {
-
+    override fun pause() {
     }
 
-    @Override
-    public void resume() {
 
+    override fun resume() {
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-        batcher.dispose();
+    override fun dispose() {
+        stage?.dispose()
+        batcher?.dispose()
     }
 
-    @Override
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        return false;
-    }
+    override fun touchDown(x: Float, y: Float, pointer: Int, button: Int) = false
 
-    @Override
-    public boolean tap(float x, float y, int count, int button) {
-        return false;
-    }
+    override fun tap(x: Float, y: Float, count: Int, button: Int) = false
 
-    @Override
-    public boolean longPress(float x, float y) {
-        return false;
-    }
+    override fun longPress(x: Float, y: Float) = false
 
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+    override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean {
+        if (abs(velocityX.toDouble()) > abs(velocityY.toDouble())) {
             if (velocityX > 0) {
-                right();
+                right()
             } else {
-                left();
+                left()
             }
         } else {
             if (velocityY > 0) {
-                down();
+                down()
             } else {
-                up();
+                up()
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean pan(float x, float y, float deltaX, float deltaY) {
-        return false;
+    override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float) = false
+
+    override fun panStop(x: Float, y: Float, pointer: Int, button: Int) = false
+
+    override fun zoom(initialDistance: Float, distance: Float) = false
+
+    override fun pinch(
+        initialPointer1: Vector2,
+        initialPointer2: Vector2,
+        pointer1: Vector2,
+        pointer2: Vector2
+    ) = false
+
+    open fun up() {
+        Gdx.app.log("UP", "")
     }
 
-    @Override
-    public boolean panStop(float x, float y, int pointer, int button) {
-        return false;
+    open fun down() {
+        Gdx.app.log("DOWN", "")
     }
 
-    @Override
-    public boolean zoom(float initialDistance, float distance) {
-        return false;
+    open fun left() {
+        Gdx.app.log("LEFT", "")
     }
 
-    @Override
-    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        return false;
+    open fun right() {
+        Gdx.app.log("RIGHT", "")
     }
 
-    public void up() {
-        Gdx.app.log("UP", "");
+    override fun pinchStop() {
     }
 
-    public void down() {
-        Gdx.app.log("DOWN", "");
-    }
 
-    public void left() {
-        Gdx.app.log("LEFT", "");
-    }
-
-    public void right() {
-        Gdx.app.log("RIGHT", "");
-    }
-
-    @Override
-    public void pinchStop() {
+    companion object {
+        const val SCREEN_WIDTH = 800
+        const val SCREEN_HEIGHT = 480
     }
 }
