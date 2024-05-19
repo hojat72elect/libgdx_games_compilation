@@ -6,7 +6,7 @@ import com.nopalsoft.sokoban.Assets
 import kotlin.math.abs
 
 class Box(position: Int, color: String) : Tiles(position) {
-    @JvmField
+
     var isInRightEndPoint = false
     private var numColor = when (color) {
         "brown" -> COLOR_BROWN

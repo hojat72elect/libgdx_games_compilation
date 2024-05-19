@@ -14,22 +14,16 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 class Board : Group() {
 
-    @JvmField
     var state = STATE_RUNNING
 
-    @JvmField
     var moveUp = false
 
-    @JvmField
     var moveDown = false
 
-    @JvmField
     var moveLeft = false
 
-    @JvmField
     var moveRight = false
 
-    @JvmField
     var undo = false
 
     // X previous position, Y current position.
@@ -39,10 +33,8 @@ class Board : Group() {
     private val arrayMovesBox: GdxArray<Vector2> = GdxArray()
     private val arrayTiles: GdxArray<Tiles> = GdxArray(25 * 15)
 
-    @JvmField
     var moves = 0
 
-    @JvmField
     var time = 0f
     private lateinit var player: Player
 

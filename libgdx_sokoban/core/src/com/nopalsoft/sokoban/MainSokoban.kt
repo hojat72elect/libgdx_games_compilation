@@ -9,14 +9,8 @@ import com.nopalsoft.sokoban.screens.MainMenuScreen
 import com.nopalsoft.sokoban.screens.Screens
 
 class MainSokoban : Game() {
-
-    @JvmField
     var stage: Stage? = null
-
-    @JvmField
     var batcher: SpriteBatch? = null
-
-    @JvmField
     var languages: I18NBundle? = null
 
     override fun create() {

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 import com.nopalsoft.sokoban.Assets
 
 class EndPoint(position: Int, color: String) : Tiles(position) {
-    @JvmField
+
     var numColor: Int = 0
 
     private lateinit var keyFrame: AtlasRegion

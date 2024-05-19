@@ -9,9 +9,9 @@ import com.nopalsoft.sokoban.game.Board
 /**
  * All objects are useful (the floor, the character, the boxes).
  */
-open class Tiles(@JvmField var position: Int) : Actor() {
+open class Tiles(var position: Int) : Actor() {
     // ALL MAPS ARE 25x15 Tiles of 32px which gives a resolution of 800x480
-    @JvmField
+
     val SIZE: Float = 32 * Board.UNIT_SCALE // Token size
 
     init {

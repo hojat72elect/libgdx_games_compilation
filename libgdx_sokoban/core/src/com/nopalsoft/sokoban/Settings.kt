@@ -6,19 +6,11 @@ import com.nopalsoft.sokoban.objects.Level
 object Settings {
 
     private val pref = Gdx.app.getPreferences("com.nopalsoft.sokoban")
-
-    @JvmStatic
     var isTest = true
-
-    @JvmStatic
     var animationWalkIsON = false
-
-    @JvmStatic
     var NUM_MAPS = 62
 
     lateinit var arrayLevel: Array<Level?> // Each position is a level
-
-    @JvmStatic
     fun load() {
         arrayLevel = arrayOfNulls(NUM_MAPS)
 
@@ -38,13 +30,11 @@ object Settings {
         }
     }
 
-    @JvmStatic
     fun save() {
         pref.putBoolean("animationWalkIsON", animationWalkIsON)
         pref.flush()
     }
 
-    @JvmStatic
     fun levelCompeted(level: Int, moves: Int, time: Int) {
         arrayLevel[level]?.numStars = 1
         arrayLevel[level]?.bestMoves = moves
