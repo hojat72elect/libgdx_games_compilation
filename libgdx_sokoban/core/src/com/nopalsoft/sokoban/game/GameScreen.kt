@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.GameState
 import com.nopalsoft.sokoban.MainSokoban
 import com.nopalsoft.sokoban.Settings
 import com.nopalsoft.sokoban.scene2d.ControlsNoPad
@@ -29,7 +30,7 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     private val barTime = CounterBar(Assets.backgroundTime!!, 5f, 430f)
     private val barMoves = CounterBar(Assets.backgroundMoves!!, 5f, 380f)
     private val myWindowPause = WindowPause(this)
-    private var state = 0
+    private var state = GameState.STATE_RUNNING
     private val renderer = BoardRenderer()
     private val lbNivel = Label(
         "Level " + (level + 1),
@@ -63,10 +64,10 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
         stageGame.addActor(myBoard)
         stageGame.addActor(barTime)
         stageGame.addActor(barMoves)
-        stage?.addActor(lbNivel)
-        stage?.addActor(myControl)
-        stage?.addActor(buttonUndo)
-        stage?.addActor(buttonPause)
+        stage.addActor(lbNivel)
+        stage.addActor(myControl)
+        stage.addActor(buttonUndo)
+        stage.addActor(buttonPause)
 
         setRunning()
 
@@ -86,12 +87,12 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     override fun update(delta: Float) {
 
 
-        if (state != STATE_PAUSED) {
+        if (state != GameState.STATE_PAUSED) {
             stageGame.act(delta)
             barMoves.updateActualNum(myBoard.moves)
             barTime.updateActualNum(myBoard.time.toInt())
 
-            if (state == STATE_RUNNING && myBoard.state == Board.STATE_GAMEOVER) {
+            if (state == GameState.STATE_RUNNING && myBoard.state == GameState.STATE_GAMEOVER) {
                 setGameover()
             }
         }
@@ -118,7 +119,7 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (state == STATE_RUNNING) {
+        if (state == GameState.STATE_RUNNING) {
             when (keycode) {
                 Input.Keys.LEFT, Input.Keys.A -> {
                     myBoard.moveLeft = true
@@ -153,9 +154,9 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     }
 
     private fun setGameover() {
-        state = STATE_GAME_OVER
+        state = GameState.STATE_GAMEOVER
         Settings.levelCompeted(level, myBoard.moves, myBoard.time.toInt())
-        stage?.addAction(Actions.sequence(Actions.delay(.35f), Actions.run {
+        stage.addAction(Actions.sequence(Actions.delay(.35f), Actions.run {
             level += 1
             if (level >= Settings.NUM_MAPS)
                 changeScreenWithFadeOut(MainMenuScreen::class.java, game)
@@ -165,23 +166,15 @@ class GameScreen(game: MainSokoban, var level: Int) : Screens(game) {
     }
 
     fun setRunning() {
-        if (state != STATE_GAME_OVER) {
-            state = STATE_RUNNING
+        if (state != GameState.STATE_GAMEOVER) {
+            state = GameState.STATE_RUNNING
         }
     }
 
     private fun setPause() {
-        if (state == STATE_RUNNING) {
-            state = STATE_PAUSED
-            myWindowPause.show(stage!!)
+        if (state == GameState.STATE_RUNNING) {
+            state = GameState.STATE_PAUSED
+            myWindowPause.show(stage)
         }
-    }
-
-
-    companion object {
-
-        const val STATE_RUNNING = 0
-        const val STATE_PAUSED = 1
-        const val STATE_GAME_OVER = 2
     }
 }

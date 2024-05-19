@@ -3,15 +3,13 @@ package com.nopalsoft.sokoban
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.nopalsoft.sokoban.screens.MainMenuScreen
 import com.nopalsoft.sokoban.screens.Screens
 
 class MainSokoban : Game() {
-    var stage: Stage? = null
+   lateinit var stage: Stage
     var batcher: SpriteBatch? = null
-    var languages: I18NBundle? = null
 
     override fun create() {
         stage = Stage(

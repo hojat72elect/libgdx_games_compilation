@@ -28,7 +28,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
 
 
     init {
-        stage?.clear()
+        stage.clear()
         myCamera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0f)
 
         val detector = GestureDetector(20f, .5f, 2f, .15f, this)
@@ -45,8 +45,8 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
         batcher?.setProjectionMatrix(myCamera.combined)
         draw(delta)
 
-        stage?.act(delta)
-        stage?.draw()
+        stage.act(delta)
+        stage.draw()
     }
 
     fun changeScreenWithFadeOut(newScreen: Class<*>, level: Int, game: MainSokoban) {
@@ -63,7 +63,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
             // The blackFadeOut is removed from the stage when new Screens(game) is given "Check the
             // constructor of the Screens class" so there is no need to do.
         }))
-        stage?.addActor(blackFadeOut)
+        stage.addActor(blackFadeOut)
     }
 
     fun changeScreenWithFadeOut(newScreen: Class<*>, game: MainSokoban) {
@@ -96,7 +96,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
 
 
     override fun resize(width: Int, height: Int) {
-        stage?.viewport?.update(width, height, true)
+        stage.viewport?.update(width, height, true)
     }
 
     override fun show() {
@@ -115,7 +115,7 @@ abstract class Screens(val game: MainSokoban) : InputAdapter(), Screen,
     }
 
     override fun dispose() {
-        stage?.dispose()
+        stage.dispose()
         batcher?.dispose()
     }
 

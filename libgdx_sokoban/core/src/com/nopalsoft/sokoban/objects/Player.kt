@@ -57,7 +57,7 @@ class Player(position: Int) : Tiles(position) {
             Assets.characterStand
         }
 
-        batch.draw(keyFrame, x, y, SIZE, SIZE)
+        batch.draw(keyFrame, x, y, size, size)
     }
 
     override fun endMovingToPosition() {

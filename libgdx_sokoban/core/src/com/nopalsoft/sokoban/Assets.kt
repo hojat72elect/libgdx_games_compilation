@@ -100,7 +100,7 @@ object Assets {
     var backgroundWindow: TextureRegionDrawable? = null
     var styleTextButtonLevel: TextButtonStyle? = null
     var styleTextButtonLevelLocked: TextButtonStyle? = null
-    var atlas: TextureAtlas? = null
+    private var atlas: TextureAtlas? = null
 
     fun load() {
         atlas = TextureAtlas(Gdx.files.internal("data/atlasMap.txt"))
@@ -243,10 +243,10 @@ object Assets {
             map!!.dispose()
             map = null
         }
-        if (isTest) {
-            map = TmxMapLoader().load("data/mapsTest/map$numMap.tmx")
+        map = if (isTest) {
+            TmxMapLoader().load("data/mapsTest/map$numMap.tmx")
         } else {
-            map = AtlasTmxMapLoader().load("data/maps/map$numMap.tmx")
+            AtlasTmxMapLoader().load("data/maps/map$numMap.tmx")
         }
     }
 }

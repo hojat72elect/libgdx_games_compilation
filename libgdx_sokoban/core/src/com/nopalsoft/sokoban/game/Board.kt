@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.nopalsoft.sokoban.Assets
+import com.nopalsoft.sokoban.GameState
 import com.nopalsoft.sokoban.objects.Box
 import com.nopalsoft.sokoban.objects.EndPoint
 import com.nopalsoft.sokoban.objects.Player
@@ -14,16 +15,11 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 class Board : Group() {
 
-    var state = STATE_RUNNING
-
+    var state = GameState.STATE_RUNNING
     var moveUp = false
-
     var moveDown = false
-
     var moveLeft = false
-
     var moveRight = false
-
     var undo = false
 
     // X previous position, Y current position.
@@ -56,7 +52,7 @@ class Board : Group() {
     override fun act(delta: Float) {
         super.act(delta)
 
-        if (state == STATE_RUNNING) {
+        if (state == GameState.STATE_RUNNING) {
 
             if (moves <= 0)
                 undo = false
@@ -138,11 +134,11 @@ class Board : Group() {
                 moveLeft = false
 
                 if (checkBoxesMissingTheRightEndPoint() == 0) state =
-                    STATE_GAMEOVER
+                    GameState.STATE_GAMEOVER
 
             }
 
-            if (state == STATE_RUNNING)
+            if (state == GameState.STATE_RUNNING)
                 time += Gdx.graphics.rawDeltaTime
         }
     }
@@ -300,7 +296,5 @@ class Board : Group() {
 
     companion object {
         const val UNIT_SCALE = 1f
-        const val STATE_RUNNING = 1
-        const val STATE_GAMEOVER = 2
     }
 }

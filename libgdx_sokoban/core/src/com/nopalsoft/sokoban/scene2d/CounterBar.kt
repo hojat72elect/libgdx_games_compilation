@@ -9,7 +9,7 @@ import com.nopalsoft.sokoban.Assets
 
 class CounterBar(background: TextureRegionDrawable, x: Float, y: Float) : Table() {
 
-    private val labelDisplay = Label("", LabelStyle(Assets.fontRed, Color.WHITE));
+    private val labelDisplay = Label("", LabelStyle(Assets.fontRed, Color.WHITE))
 
     init {
         this.setBounds(x, y, WIDTH, HEIGHT)
@@ -27,7 +27,7 @@ class CounterBar(background: TextureRegionDrawable, x: Float, y: Float) : Table(
 
 
     companion object {
-        private val WIDTH = 125f
-        private val HEIGHT = 42f
+        private const val WIDTH = 125f
+        private const val HEIGHT = 42f
     }
 }

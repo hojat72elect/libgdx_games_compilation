@@ -52,7 +52,7 @@ class Box(position: Int, color: String) : Tiles(position) {
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
-        batch.draw(keyFrame, x, y, SIZE, SIZE)
+        batch.draw(keyFrame, x, y, size, size)
     }
 
     fun setIsInEndPoint(endPoint: EndPoint) {

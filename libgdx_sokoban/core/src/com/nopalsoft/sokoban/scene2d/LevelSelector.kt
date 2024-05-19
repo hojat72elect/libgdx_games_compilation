@@ -56,7 +56,7 @@ class LevelSelector(currentScreen: Screens) : Group() {
             numberOfPages++
 
         for (column in 0 until numberOfPages) {
-            container.add<Table>(getListLevel(column))
+            container.add(getListLevel(column))
         }
 
 
@@ -75,7 +75,7 @@ class LevelSelector(currentScreen: Screens) : Group() {
     /**
      * Each list has 15 items.
      */
-    fun getListLevel(list: Int): Table {
+    private fun getListLevel(list: Int): Table {
         val content = Table()
 
         var level = list * 15
@@ -119,7 +119,7 @@ class LevelSelector(currentScreen: Screens) : Group() {
         scrollToPage(actualPage)
     }
 
-    fun getLevelButton(level: Int): Button {
+    private fun getLevelButton(level: Int): Button {
         val button: TextButton
 
         val skullsToNextLevel = level * 1 // I only need 1 star to unlock the next level.

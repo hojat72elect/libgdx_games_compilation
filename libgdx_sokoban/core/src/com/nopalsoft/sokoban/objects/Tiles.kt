@@ -12,10 +12,10 @@ import com.nopalsoft.sokoban.game.Board
 open class Tiles(var position: Int) : Actor() {
     // ALL MAPS ARE 25x15 Tiles of 32px which gives a resolution of 800x480
 
-    val SIZE: Float = 32 * Board.UNIT_SCALE // Token size
+    val size: Float = 32 * Board.UNIT_SCALE // Token size
 
     init {
-        setSize(SIZE, SIZE)
+        setSize(size, size)
         setPosition(
             mapPositions[position]!!.x, mapPositions[position]!!.y
         )
