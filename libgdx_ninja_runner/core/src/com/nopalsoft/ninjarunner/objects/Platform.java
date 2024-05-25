@@ -3,7 +3,7 @@ package com.nopalsoft.ninjarunner.objects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class Plataforma implements Poolable {
+public class Platform implements Poolable {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_DESTROY = 1;
     public final static float HEIGHT = .50f;
@@ -12,7 +12,7 @@ public class Plataforma implements Poolable {
     public int state;
     public float stateTime;
 
-    public Plataforma() {
+    public Platform() {
         position = new Vector2();
     }
 

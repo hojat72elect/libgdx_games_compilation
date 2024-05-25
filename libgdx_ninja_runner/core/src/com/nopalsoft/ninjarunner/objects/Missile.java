@@ -6,20 +6,20 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.nopalsoft.ninjarunner.Assets;
 
 
-public class Missil implements Poolable, Comparable<Missil> {
+public class Missile implements Poolable, Comparable<Missile> {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_EXPLODE = 1;
     public final static int STATE_DESTROY = 2;
     public static final float WIDTH = 1.27f;
     public static final float HEIGHT = .44f;
-    public static final float VELOCIDAD_X = -2.5f;
-    private final static float DURATION_EXPLOSION = Assets.explosion.animationDuration + .1f;
+    public static final float SPEED_X = -2.5f;
+    private final static float EXPLOSION_DURATION = Assets.explosion.animationDuration + .1f;
     public final Vector2 position;
     public int state;
     public float stateTime;
-    public float distanceFromPersonaje;
+    public float distanceFromCharacter;
 
-    public Missil() {
+    public Missile() {
         position = new Vector2();
     }
 
@@ -30,7 +30,7 @@ public class Missil implements Poolable, Comparable<Missil> {
 
     }
 
-    public void update(float delta, Body body, Personaje oPersonaje) {
+    public void update(float delta, Body body, Player myPlayer) {
         if (state == STATE_NORMAL) {
             position.x = body.getPosition().x;
             position.y = body.getPosition().y;
@@ -39,13 +39,13 @@ public class Missil implements Poolable, Comparable<Missil> {
         }
         if (state == STATE_EXPLODE) {
 
-            if (stateTime >= DURATION_EXPLOSION) {
+            if (stateTime >= EXPLOSION_DURATION) {
                 state = STATE_DESTROY;
                 stateTime = 0;
             }
         }
 
-        distanceFromPersonaje = oPersonaje.position.dst(position);
+        distanceFromCharacter = myPlayer.position.dst(position);
         stateTime += delta;
     }
 
@@ -68,8 +68,8 @@ public class Missil implements Poolable, Comparable<Missil> {
     }
 
     @Override
-    public int compareTo(Missil o2) {
-        return Float.compare(distanceFromPersonaje, o2.distanceFromPersonaje);
+    public int compareTo(Missile o2) {
+        return Float.compare(distanceFromCharacter, o2.distanceFromCharacter);
     }
 
 }

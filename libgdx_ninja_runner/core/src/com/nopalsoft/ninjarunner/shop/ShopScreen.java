@@ -41,7 +41,7 @@ public class ShopScreen extends Screens {
         tbTitle.add(lbShop).expand();
         tbTitle.row();
 
-        Image imgGem = new Image(Assets.moneda.getKeyFrame(0));
+        Image imgGem = new Image(Assets.coinAnimation.getKeyFrame(0));
         imgGem.setSize(20, 20);
 
         lbCoins = new Label("x0", Assets.labelStyleSmall);
@@ -112,7 +112,7 @@ public class ShopScreen extends Screens {
         btMascota.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                new MascotasSubMenu(contenedor, game);
+                new PetsSubMenu(contenedor, game);
             }
         });
 
@@ -142,7 +142,7 @@ public class ShopScreen extends Screens {
 
     @Override
     public void update(float delta) {
-        lbCoins.setText("x" + Settings.monedasTotal);
+        lbCoins.setText("x" + Settings.totalCoins);
     }
 
     @Override

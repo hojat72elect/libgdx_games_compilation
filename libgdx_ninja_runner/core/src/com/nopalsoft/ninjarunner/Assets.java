@@ -19,39 +19,36 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.ninjarunner.parallax.ParallaxBackground;
 import com.nopalsoft.ninjarunner.parallax.ParallaxLayer;
 
-/**
- * Created by Yayo on 1/21/15.
- */
 public class Assets {
 
     public static BitmapFont fontSmall;
     public static BitmapFont fontLarge;
 
-    public static AnimationSprite personajeRun;
-    public static AnimationSprite personajeDash;
-    public static AnimationSprite personajeIdle;
-    public static AnimationSprite personajeDead;
-    public static AnimationSprite personajeJump;
-    public static AnimationSprite personajeHurt;
-    public static AnimationSprite personajeDizzy;
-    public static AnimationSprite personajeSlide;
+    public static AnimationSprite playerRunAnimation;
+    public static AnimationSprite playerDashAnimation;
+    public static AnimationSprite playerIdleAnimation;
+    public static AnimationSprite playerDeadAnimation;
+    public static AnimationSprite playerJumpAnimation;
+    public static AnimationSprite playerHurtAnimation;
+    public static AnimationSprite playerDizzyAnimation;
+    public static AnimationSprite playerSlideAnimation;
 
-    public static AnimationSprite ninjaRun;
-    public static AnimationSprite ninjaDash;
-    public static AnimationSprite ninjaIdle;
-    public static AnimationSprite ninjaDead;
-    public static AnimationSprite ninjaJump;
-    public static AnimationSprite ninjaHurt;
-    public static AnimationSprite ninjaDizzy;
-    public static AnimationSprite ninjaSlide;
+    public static AnimationSprite ninjaRunAnimation;
+    public static AnimationSprite ninjaDashAnimation;
+    public static AnimationSprite ninjaIdleAnimation;
+    public static AnimationSprite ninjaDeadAnimation;
+    public static AnimationSprite ninjaJumpAnimation;
+    public static AnimationSprite ninjaHurtAnimation;
+    public static AnimationSprite ninjaDizzyAnimation;
+    public static AnimationSprite ninjaSlideAnimation;
 
-    public static AnimationSprite Mascota1Fly;
-    public static AnimationSprite Mascota1Dash;
+    public static AnimationSprite Pet1FlyAnimation;
+    public static AnimationSprite Pet1DashAnimation;
 
-    public static AnimationSprite MascotaBombFly;
+    public static AnimationSprite PetBombFlyAnimation;
 
-    public static AnimationSprite moneda;
-    public static AnimationSprite pick;
+    public static AnimationSprite coinAnimation;
+    public static AnimationSprite pickAnimation;
 
     public static Sprite magnet;
     public static Sprite energy;
@@ -63,14 +60,14 @@ public class Assets {
 
     public static AnimationSprite candyExplosionRed;
 
-    public static Sprite plataforma;
-    public static Sprite pared;
+    public static Sprite platform;
+    public static Sprite wall;
 
-    // Obstaculos
-    public static Sprite cajas4;
-    public static Sprite cajas7;
+    // Obstacles
+    public static Sprite boxes4;
+    public static Sprite boxes7;
 
-    public static AnimationSprite missil;
+    public static AnimationSprite missileAnimation;
     public static AnimationSprite explosion;
 
     public static ParallaxBackground backgroundNubes;
@@ -144,7 +141,7 @@ public class Assets {
         Sprite fly6 = atlas.createSprite("Mascota1/fly6");
         Sprite fly7 = atlas.createSprite("Mascota1/fly7");
         Sprite fly8 = atlas.createSprite("Mascota1/fly8");
-        Mascota1Fly = new com.nopalsoft.ninjarunner.AnimationSprite(.075f, fly1, fly2, fly3, fly4, fly5, fly6, fly7, fly8);
+        Pet1FlyAnimation = new com.nopalsoft.ninjarunner.AnimationSprite(.075f, fly1, fly2, fly3, fly4, fly5, fly6, fly7, fly8);
 
         fly1 = atlas.createSprite("Mascota2/fly1");
         fly2 = atlas.createSprite("Mascota2/fly2");
@@ -154,13 +151,13 @@ public class Assets {
         fly6 = atlas.createSprite("Mascota2/fly6");
         fly7 = atlas.createSprite("Mascota2/fly7");
         fly8 = atlas.createSprite("Mascota2/fly8");
-        MascotaBombFly = new AnimationSprite(.075f, fly1, fly2, fly3, fly4, fly5, fly6, fly7, fly8);
+        PetBombFlyAnimation = new AnimationSprite(.075f, fly1, fly2, fly3, fly4, fly5, fly6, fly7, fly8);
 
         Sprite dash1 = atlas.createSprite("Mascota1/dash1");
         Sprite dash2 = atlas.createSprite("Mascota1/dash2");
         Sprite dash3 = atlas.createSprite("Mascota1/dash3");
         Sprite dash4 = atlas.createSprite("Mascota1/dash4");
-        Mascota1Dash = new AnimationSprite(.04f, dash1, dash2, dash3, dash4);
+        Pet1DashAnimation = new AnimationSprite(.04f, dash1, dash2, dash3, dash4);
 
         Sprite moneda1 = atlas.createSprite("moneda1");
         Sprite moneda2 = atlas.createSprite("moneda2");
@@ -170,18 +167,18 @@ public class Assets {
         Sprite moneda6 = atlas.createSprite("moneda6");
         Sprite moneda7 = atlas.createSprite("moneda7");
         Sprite moneda8 = atlas.createSprite("moneda8");
-        moneda = new AnimationSprite(.075f, moneda1, moneda2, moneda3, moneda4, moneda5, moneda6, moneda7, moneda8);
+        coinAnimation = new AnimationSprite(.075f, moneda1, moneda2, moneda3, moneda4, moneda5, moneda6, moneda7, moneda8);
 
         Sprite pick1 = atlas.createSprite("pick1");
         Sprite pick2 = atlas.createSprite("pick2");
         Sprite pick3 = atlas.createSprite("pick3");
-        pick = new AnimationSprite(.1f, pick1, pick2, pick3);
+        pickAnimation = new AnimationSprite(.1f, pick1, pick2, pick3);
 
         Sprite missile1 = atlas.createSprite("misil1");
         Sprite missile2 = atlas.createSprite("misil2");
         Sprite missile3 = atlas.createSprite("misil3");
         Sprite missile4 = atlas.createSprite("misil4");
-        missil = new AnimationSprite(.05f, missile1, missile2, missile3, missile4);
+        missileAnimation = new AnimationSprite(.05f, missile1, missile2, missile3, missile4);
 
         Sprite explosion1 = atlas.createSprite("explosion1");
         Sprite explosion2 = atlas.createSprite("explosion2");
@@ -190,10 +187,10 @@ public class Assets {
         Sprite explosion5 = atlas.createSprite("explosion5");
         explosion = new AnimationSprite(.05f, explosion1, explosion2, explosion3, explosion4, explosion5);
 
-        plataforma = atlas.createSprite("plataforma");
-        pared = atlas.createSprite("pared");
-        cajas4 = atlas.createSprite("cajas4");
-        cajas7 = atlas.createSprite("cajas7");
+        platform = atlas.createSprite("plataforma");
+        wall = atlas.createSprite("pared");
+        boxes4 = atlas.createSprite("cajas4");
+        boxes7 = atlas.createSprite("cajas7");
         magnet = atlas.createSprite("magnet");
         energy = atlas.createSprite("energy");
         hearth = atlas.createSprite("hearth");
@@ -251,29 +248,29 @@ public class Assets {
         Sprite dash1 = atlas.createSprite("dash1");
         Sprite dash2 = atlas.createSprite("dash2");
         Sprite dash3 = atlas.createSprite("dash3");
-        personajeDash = new AnimationSprite(.085f, dash1, dash2, dash3);
+        playerDashAnimation = new AnimationSprite(.085f, dash1, dash2, dash3);
 
         Sprite idle1 = atlas.createSprite("idle1");
         Sprite idle2 = atlas.createSprite("idle2");
         Sprite idle3 = atlas.createSprite("idle3");
         Sprite idle4 = atlas.createSprite("idle4");
-        personajeIdle = new AnimationSprite(.25f, idle1, idle2, idle3, idle4);
+        playerIdleAnimation = new AnimationSprite(.25f, idle1, idle2, idle3, idle4);
 
         Sprite dead1 = atlas.createSprite("dead1");
         Sprite dead2 = atlas.createSprite("dead2");
         Sprite dead3 = atlas.createSprite("dead3");
         Sprite dead4 = atlas.createSprite("dead4");
         Sprite dead5 = atlas.createSprite("dead5");
-        personajeDead = new AnimationSprite(.085f, dead1, dead2, dead3, dead4, dead5);
+        playerDeadAnimation = new AnimationSprite(.085f, dead1, dead2, dead3, dead4, dead5);
 
         Sprite hurt1 = atlas.createSprite("hurt1");
         Sprite hurt2 = atlas.createSprite("hurt2");
-        personajeHurt = new AnimationSprite(.085f, hurt1, hurt2);
+        playerHurtAnimation = new AnimationSprite(.085f, hurt1, hurt2);
 
         Sprite dizzy1 = atlas.createSprite("dizzy1");
         Sprite dizzy2 = atlas.createSprite("dizzy2");
         Sprite dizzy3 = atlas.createSprite("dizzy3");
-        personajeDizzy = new AnimationSprite(.18f, dizzy1, dizzy2, dizzy3);
+        playerDizzyAnimation = new AnimationSprite(.18f, dizzy1, dizzy2, dizzy3);
 
         Sprite jump1 = atlas.createSprite("jump1");
         Sprite jump2 = atlas.createSprite("jump2");
@@ -281,7 +278,7 @@ public class Assets {
         Sprite jump4 = atlas.createSprite("jump4");
         Sprite jump5 = atlas.createSprite("jump5");
         Sprite jump6 = atlas.createSprite("jump6");
-        personajeJump = new AnimationSprite(.18f, jump1, jump2, jump3, jump4, jump5, jump6);
+        playerJumpAnimation = new AnimationSprite(.18f, jump1, jump2, jump3, jump4, jump5, jump6);
 
         Sprite run1 = atlas.createSprite("run1");
         Sprite run2 = atlas.createSprite("run2");
@@ -289,12 +286,12 @@ public class Assets {
         Sprite run4 = atlas.createSprite("run4");
         Sprite run5 = atlas.createSprite("run5");
         Sprite run6 = atlas.createSprite("run6");
-        personajeRun = new AnimationSprite(.1f, run1, run2, run3, run4, run5, run6);
+        playerRunAnimation = new AnimationSprite(.1f, run1, run2, run3, run4, run5, run6);
 
         Sprite slide1 = atlas.createSprite("slide1");
         Sprite slide2 = atlas.createSprite("slide2");
         Sprite slide3 = atlas.createSprite("slide3");
-        personajeSlide = new AnimationSprite(.1f, slide1, slide2, slide3);
+        playerSlideAnimation = new AnimationSprite(.1f, slide1, slide2, slide3);
 
     }
 
@@ -306,8 +303,8 @@ public class Assets {
         Sprite run4 = atlas.createSprite("Ninja/run4");
         Sprite run5 = atlas.createSprite("Ninja/run5");
         Sprite run6 = atlas.createSprite("Ninja/run6");
-        ninjaRun = new com.nopalsoft.ninjarunner.AnimationSprite(.1f, run1, run2, run3, run4, run5, run6);
-        ninjaDash = new com.nopalsoft.ninjarunner.AnimationSprite(.05f, run1, run2, run3, run4, run5, run6);
+        ninjaRunAnimation = new AnimationSprite(.1f, run1, run2, run3, run4, run5, run6);
+        ninjaDashAnimation = new AnimationSprite(.05f, run1, run2, run3, run4, run5, run6);
 
         Sprite jump1 = atlas.createSprite("Ninja/jump1");
         Sprite jump2 = atlas.createSprite("Ninja/jump2");
@@ -317,34 +314,34 @@ public class Assets {
         Sprite jump6 = atlas.createSprite("Ninja/jump6");
         Sprite jump7 = atlas.createSprite("Ninja/jump7");
         Sprite jump8 = atlas.createSprite("Ninja/jump8");
-        ninjaJump = new com.nopalsoft.ninjarunner.AnimationSprite(.075f, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8);
+        ninjaJumpAnimation = new AnimationSprite(.075f, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8);
 
         Sprite slide1 = atlas.createSprite("Ninja/slide1");
         Sprite slide2 = atlas.createSprite("Ninja/slide2");
         Sprite slide3 = atlas.createSprite("Ninja/slide3");
-        ninjaSlide = new AnimationSprite(.1f, slide1, slide2, slide3);
+        ninjaSlideAnimation = new AnimationSprite(.1f, slide1, slide2, slide3);
 
         Sprite idle1 = atlas.createSprite("Ninja/idle1");
         Sprite idle2 = atlas.createSprite("Ninja/idle2");
         Sprite idle3 = atlas.createSprite("Ninja/idle3");
         Sprite idle4 = atlas.createSprite("Ninja/idle4");
-        ninjaIdle = new AnimationSprite(.25f, idle1, idle2, idle3, idle4);
+        ninjaIdleAnimation = new AnimationSprite(.25f, idle1, idle2, idle3, idle4);
 
         Sprite dead1 = atlas.createSprite("Ninja/dead1");
         Sprite dead2 = atlas.createSprite("Ninja/dead2");
         Sprite dead3 = atlas.createSprite("Ninja/dead3");
         Sprite dead4 = atlas.createSprite("Ninja/dead4");
         Sprite dead5 = atlas.createSprite("Ninja/dead5");
-        ninjaDead = new AnimationSprite(.085f, dead1, dead2, dead3, dead4, dead5);
+        ninjaDeadAnimation = new AnimationSprite(.085f, dead1, dead2, dead3, dead4, dead5);
 
         Sprite hurt1 = atlas.createSprite("Ninja/hurt1");
         Sprite hurt2 = atlas.createSprite("Ninja/hurt2");
-        ninjaHurt = new AnimationSprite(.085f, hurt1, hurt2);
+        ninjaHurtAnimation = new AnimationSprite(.085f, hurt1, hurt2);
 
         Sprite dizzy1 = atlas.createSprite("Ninja/dizzy1");
         Sprite dizzy2 = atlas.createSprite("Ninja/dizzy2");
         Sprite dizzy3 = atlas.createSprite("Ninja/dizzy3");
-        ninjaDizzy = new AnimationSprite(.18f, dizzy1, dizzy2, dizzy3);
+        ninjaDizzyAnimation = new AnimationSprite(.18f, dizzy1, dizzy2, dizzy3);
 
     }
 

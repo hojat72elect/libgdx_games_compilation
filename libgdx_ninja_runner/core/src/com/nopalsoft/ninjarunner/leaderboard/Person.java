@@ -6,39 +6,43 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Person implements Comparable<Person> {
     final public String id;
-    public TipoCuenta tipoCuenta;
+    public AccountType accountType;
     public String name;
     public long score;
-    public String urlImagen;
-    public TextureRegionDrawable imagen;
-    public boolean isMe;// Indica que esta persona es el usuario
+    public String imageURL;
+    public TextureRegionDrawable image;
+    public boolean isMe;// Indicates that this person is the user.
 
-    public Person(TipoCuenta tipoCuenta, String id, String name, long oScore, String imagenURL) {
-        this.tipoCuenta = tipoCuenta;
+    public Person(AccountType accountType, String id, String name, long myScore, String imageURL) {
+        this.accountType = accountType;
         this.id = id;
         this.name = name;
-        this.score = oScore;
-        this.urlImagen = imagenURL;
+        this.score = myScore;
+        this.imageURL = imageURL;
 
     }
 
     public void downloadImage(final DownloadImageCompleteListener listener) {
-        if (imagen != null)//Pa que bajarla otra vez
+        if (image != null)// If it exists, do not download it again.
             return;
         HttpRequest request = new HttpRequest(HttpMethods.GET);
-        request.setUrl(urlImagen);
+        request.setUrl(imageURL);
         Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
             @Override
             public void handleHttpResponse(HttpResponse httpResponse) {
                 final byte[] bytes = httpResponse.getResult();
                 Gdx.app.postRunnable(() -> {
-                    com.badlogic.gdx.graphics.Pixmap pixmap = new com.badlogic.gdx.graphics.Pixmap(bytes, 0, bytes.length);
-                    com.badlogic.gdx.graphics.Texture texture = new com.badlogic.gdx.graphics.Texture(new com.badlogic.gdx.graphics.glutils.PixmapTextureData(pixmap, pixmap.getFormat(), false, false, true));
+                    Pixmap pixmap = new Pixmap(bytes, 0, bytes.length);
+                    Texture texture = new Texture(new PixmapTextureData(pixmap, pixmap.getFormat(), false, false, true));
                     pixmap.dispose();
-                    imagen = new com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture));
+                    image = new TextureRegionDrawable(new TextureRegion(texture));
                     if (listener != null)
                         listener.imageDownloaded();
                 });
@@ -74,7 +78,7 @@ public class Person implements Comparable<Person> {
     public boolean equals(Object obj) {
         if (obj instanceof Person) {
             Person objPerson = (Person) obj;
-            return id.equals(objPerson.id) && tipoCuenta == objPerson.tipoCuenta;
+            return id.equals(objPerson.id) && accountType == objPerson.accountType;
 
         } else
             return false;
@@ -85,13 +89,7 @@ public class Person implements Comparable<Person> {
         return Long.compare(o.score, score);
     }
 
-    public void updateDatos(String _name, long _score) {
-        name = _name;
-        score = _score;
-
-    }
-
-    public enum TipoCuenta {
+    public enum AccountType {
         GOOGLE_PLAY, AMAZON, FACEBOOK
     }
 

@@ -85,7 +85,7 @@ public class UpgradesSubMenu {
                 agregarPersonajeTabla("Upgrade Eneergy", lbPrecioEnergy, Assets.energy, 25, 35, idiomas.get("bombDescription"), arrEnergy,
                         btUpgradeEnergy)).row();
         contenedor.add(
-                agregarPersonajeTabla("Upgrade coins", lbPrecioCoins, Assets.moneda.getKeyFrame(0), 35, 35, idiomas.get("bombDescription"), arrCoins,
+                agregarPersonajeTabla("Upgrade coins", lbPrecioCoins, Assets.coinAnimation.getKeyFrame(0), 35, 35, idiomas.get("bombDescription"), arrCoins,
                         btUpgradeCoins)).row();
         contenedor.add(
                 agregarPersonajeTabla(idiomas.get("upgradeTreasureChest"), lbPrecioTreasureChest, Assets.magnet, 35, 35,
@@ -98,7 +98,7 @@ public class UpgradesSubMenu {
     private Table agregarPersonajeTabla(String titulo, Label lblPrecio, Sprite imagen, float imagenWidth, float imagenHeight, String descripcion,
                                         Image[] arrLevel, Button btUpgrade) {
 
-        Image moneda = new Image(Assets.moneda.getKeyFrame(0));
+        Image moneda = new Image(Assets.coinAnimation.getKeyFrame(0));
         Image imgPersonaje = new Image(imagen);
 
         if (lblPrecio == null)
@@ -169,8 +169,8 @@ public class UpgradesSubMenu {
             public void clicked(InputEvent event, float x, float y) {
                 int levelActual = (Integer) btn.getUserObject();
 
-                if (Settings.monedasTotal >= calcularPrecio(levelActual)) {
-                    Settings.monedasTotal -= calcularPrecio(levelActual);
+                if (Settings.totalCoins >= calcularPrecio(levelActual)) {
+                    Settings.totalCoins -= calcularPrecio(levelActual);
 
                     if (btn == btUpgradeMagnet) {
                         Settings.LEVEL_MAGNET++;

@@ -10,151 +10,144 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
 import com.nopalsoft.ninjarunner.objects.Item;
 import com.nopalsoft.ninjarunner.objects.ItemCandyBean;
 import com.nopalsoft.ninjarunner.objects.ItemCandyCorn;
 import com.nopalsoft.ninjarunner.objects.ItemCandyJelly;
+import com.nopalsoft.ninjarunner.objects.ItemCurrency;
 import com.nopalsoft.ninjarunner.objects.ItemEnergy;
 import com.nopalsoft.ninjarunner.objects.ItemHearth;
 import com.nopalsoft.ninjarunner.objects.ItemMagnet;
-import com.nopalsoft.ninjarunner.objects.ItemMoneda;
-import com.nopalsoft.ninjarunner.objects.Mascota;
-import com.nopalsoft.ninjarunner.objects.Missil;
-import com.nopalsoft.ninjarunner.objects.Obstaculo;
-import com.nopalsoft.ninjarunner.objects.Pared;
-import com.nopalsoft.ninjarunner.objects.Personaje;
-import com.nopalsoft.ninjarunner.objects.Plataforma;
+import com.nopalsoft.ninjarunner.objects.Missile;
+import com.nopalsoft.ninjarunner.objects.Obstacle;
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes4;
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes7;
+import com.nopalsoft.ninjarunner.objects.Pet;
+import com.nopalsoft.ninjarunner.objects.Platform;
+import com.nopalsoft.ninjarunner.objects.Player;
+import com.nopalsoft.ninjarunner.objects.Wall;
 
 public class WorldGame {
     static final int STATE_GAMEOVER = 1;
     public int state;
-    public World oWorldBox;
-    public Personaje oPersonaje;
-    public Mascota oMascota;
-    float timeToSpwanMissil;
-    ObjectManagerBox2d oManager;
-    Array<Body> arrBodies;
-    Array<Plataforma> arrPlataformas;
-    Array<Pared> arrPared;
-    Array<Item> arrItems;
-    Array<Obstaculo> arrObstaculos;
-    Array<Missil> arrMissiles;
+    public World myWorldBox;
+    public Player myPlayer;
+    public Pet myPet;
+    float timeToSpawnMissile;
+    ObjectManagerBox2d myManager;
+    Array<Body> arrayBodies;
+    Array<Platform> arrayPlatforms;
+    Array<Wall> arrayWall;
+    Array<Item> arrayItems;
+    Array<Obstacle> arrayObstacles;
+    Array<Missile> arrayMissiles;
 
     /**
-     * Variable que indica hasta donde se ha ido creando el mundo
+     * Variable that indicates how far the world has been created.
      */
-    float mundoCreadoHastaX;
+    float worldCreatedUpToX;
 
-    int monedasTomadas;
-    long puntuacion;
-    boolean bodyIsSLide;// INdica el si el cuarpo que tiene ahorita es sliding;
+    int takenCoins;
+    long score;
+    boolean isBodySliding; // Indicates whether the body you have right now is sliding.
     boolean recreateFixture = false;
 
     public WorldGame() {
-        oWorldBox = new World(new Vector2(0, -9.8f), true);
-        oWorldBox.setContactListener(new Colisiones());
+        myWorldBox = new World(new Vector2(0, -9.8f), true);
+        myWorldBox.setContactListener(new com.nopalsoft.ninjarunner.game.WorldGame.Collisions());
 
-        oManager = new ObjectManagerBox2d(this);
+        myManager = new ObjectManagerBox2d(this);
 
-        arrBodies = new Array<>();
-        arrPlataformas = new Array<>();
-        arrItems = new Array<>();
-        arrPared = new Array<>();
-        arrObstaculos = new Array<>();
-        arrMissiles = new Array<>();
+        arrayBodies = new Array<>();
+        arrayPlatforms = new Array<>();
+        arrayItems = new Array<>();
+        arrayWall = new Array<>();
+        arrayObstacles = new Array<>();
+        arrayMissiles = new Array<>();
 
-        timeToSpwanMissil = 0;
+        timeToSpawnMissile = 0;
 
-        oManager.crearHeroStand(2f, 1f, Settings.skinSeleccionada);
-        oManager.crearMascota(oPersonaje.position.x - 1, oPersonaje.position.y + .75f);
+        myManager.createHeroStand(2f, 1f, Settings.selectedSkin);
+        myManager.createPet(myPlayer.position.x - 1, myPlayer.position.y + .75f);
 
-        mundoCreadoHastaX = oManager.crearPlataforma(0, 0, 3);
+        worldCreatedUpToX = myManager.createPlatform(0, 0, 3);
 
-        crearSiguienteParte();
+        createNextPart();
 
     }
 
-    private void crearSiguienteParte() {
-        float x = mundoCreadoHastaX;
+    private void createNextPart() {
+        float x = worldCreatedUpToX;
 
-        // SEPARACION MAXIMA 3f
-        // ALTURA MAXIMA 1.5f
+        while (worldCreatedUpToX < (x + 1)) {
 
-        while (mundoCreadoHastaX < (x + 1)) {
-
-            // Primero creo la plataforma
-            int plataformasPegadas = MathUtils.random(1, 20);
-            float separacion = MathUtils.random(1f, 3f);
+            // First I create the platform
+            float separation = MathUtils.random(1f, 3f);
             float y = MathUtils.random(0, 1.5f);
 
             // y = 0;
-            plataformasPegadas = 25;
+            int connectedPlatforms = 25;
 
-            mundoCreadoHastaX = oManager.crearPlataforma(mundoCreadoHastaX + separacion, y, plataformasPegadas);
+            worldCreatedUpToX = myManager.createPlatform(worldCreatedUpToX + separation, y, connectedPlatforms);
 
-            // Despues agrego cosas arriba de la plataforma
+            // Then I add things above the platform.
 
-            float xAux = x + separacion;
+            float xAux = x + separation;
 
-            while (xAux < mundoCreadoHastaX - 2) {
-                if (xAux < x + separacion + 2)
+            while (xAux < worldCreatedUpToX - 2) {
+                if (xAux < x + separation + 2)
                     xAux = addRandomItems(xAux, y);
 
                 if (MathUtils.randomBoolean(.1f)) {
-                    xAux = oManager.crearCaja4(xAux, y + .8f);
+                    xAux = myManager.createBox4(xAux, y + .8f);
                     xAux = addRandomItems(xAux, y);
 
                 } else if (MathUtils.randomBoolean(.1f)) {
-                    xAux = oManager.crearCaja7(xAux, y + 1f);
+                    xAux = myManager.createBox7(xAux, y + 1f);
                     xAux = addRandomItems(xAux, y);
                 } else if (MathUtils.randomBoolean(.1f)) {
-                    xAux = oManager.crearPared(xAux, y + 3.17f);
+                    xAux = myManager.createWall(xAux, y + 3.17f);
                     xAux = addRandomItems(xAux, y);
                 } else {
                     xAux = addRandomItems(xAux, y);
                 }
             }
-
-            /*
-             * PARED y+3.17; CAJA4 y+.8f; CAJA7 y+1f;
-             */
-
         }
-
     }
 
     private float addRandomItems(float xAux, float y) {
 
         if (MathUtils.randomBoolean(.3f)) {
             for (int i = 0; i < 5; i++) {
-                oManager.crearItem(ItemMoneda.class, xAux, y + 1.5f);
-                xAux = oManager.crearItem(ItemMoneda.class, xAux, y + 1f);
+                myManager.createItem(ItemCurrency.class, xAux, y + 1.5f);
+                xAux = myManager.createItem(ItemCurrency.class, xAux, y + 1f);
             }
         } else if (MathUtils.randomBoolean(.5f)) {
 
             for (int i = 0; i < 5; i++) {
-                oManager.crearItem(ItemCandyBean.class, xAux, y + .8f);
-                oManager.crearItem(ItemCandyBean.class, xAux, y + 1.1f);
-                xAux = oManager.crearItem(ItemCandyJelly.class, xAux, y + 1.5f);
+                myManager.createItem(ItemCandyBean.class, xAux, y + .8f);
+                myManager.createItem(ItemCandyBean.class, xAux, y + 1.1f);
+                xAux = myManager.createItem(ItemCandyJelly.class, xAux, y + 1.5f);
             }
         } else if (MathUtils.randomBoolean(.5f)) {
 
             for (int i = 0; i < 5; i++) {
-                oManager.crearItem(ItemCandyCorn.class, xAux, y + .8f);
-                oManager.crearItem(ItemCandyCorn.class, xAux, y + 1.1f);
-                xAux = oManager.crearItem(ItemCandyCorn.class, xAux, y + 1.5f);
+                myManager.createItem(ItemCandyCorn.class, xAux, y + .8f);
+                myManager.createItem(ItemCandyCorn.class, xAux, y + 1.1f);
+                xAux = myManager.createItem(ItemCandyCorn.class, xAux, y + 1.5f);
             }
         }
 
         if (MathUtils.randomBoolean(.025f)) {
 
-            xAux = oManager.crearItem(ItemHearth.class, xAux, y + 1.5f);
-            xAux = oManager.crearItem(ItemEnergy.class, xAux, y + 1.5f);
+            xAux = myManager.createItem(ItemHearth.class, xAux, y + 1.5f);
+            xAux = myManager.createItem(ItemEnergy.class, xAux, y + 1.5f);
         } else if (MathUtils.randomBoolean(.025f)) {
 
-            xAux = oManager.crearItem(ItemMagnet.class, xAux, y + 1.5f);
+            xAux = myManager.createItem(ItemMagnet.class, xAux, y + 1.5f);
 
         }
 
@@ -162,293 +155,290 @@ public class WorldGame {
     }
 
     public void update(float delta, boolean didJump, boolean dash, boolean didSlide) {
-        oWorldBox.step(delta, 8, 4);
+        myWorldBox.step(delta, 8, 4);
 
-        oWorldBox.getBodies(arrBodies);
+        myWorldBox.getBodies(arrayBodies);
         eliminarObjetos();
-        oWorldBox.getBodies(arrBodies);
+        myWorldBox.getBodies(arrayBodies);
 
-        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
-            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Personaje) {
+        for (com.badlogic.gdx.physics.box2d.Body body : arrayBodies) {
+            if (body.getUserData() instanceof Player) {
                 updatePersonaje(delta, body, didJump, dash, didSlide);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Mascota) {
+            } else if (body.getUserData() instanceof Pet) {
                 updateMascota(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Plataforma) {
+            } else if (body.getUserData() instanceof Platform) {
                 updatePlataforma(body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Pared) {
+            } else if (body.getUserData() instanceof Wall) {
                 updatePared(body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Item) {
+            } else if (body.getUserData() instanceof Item) {
                 updateItem(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Obstaculo) {
+            } else if (body.getUserData() instanceof Obstacle) {
                 updateObstaculos(delta, body);
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Missil) {
+            } else if (body.getUserData() instanceof Missile) {
                 updateMissil(delta, body);
             }
         }
 
-        if (oPersonaje.position.x > mundoCreadoHastaX - 5)
-            crearSiguienteParte();
+        if (myPlayer.position.x > worldCreatedUpToX - 5)
+            createNextPart();
 
-        if (oPersonaje.state == Personaje.STATE_DEAD && oPersonaje.stateTime >= Personaje.DURATION_DEAD)
+        if (myPlayer.state == Player.STATE_DEAD && myPlayer.stateTime >= Player.DURATION_DEAD)
             state = STATE_GAMEOVER;
 
-        timeToSpwanMissil += delta;
+        timeToSpawnMissile += delta;
         float TIME_TO_SPAWN_MISSIL = 15;
-        if (timeToSpwanMissil >= TIME_TO_SPAWN_MISSIL) {
-            timeToSpwanMissil -= TIME_TO_SPAWN_MISSIL;
+        if (timeToSpawnMissile >= TIME_TO_SPAWN_MISSIL) {
+            timeToSpawnMissile -= TIME_TO_SPAWN_MISSIL;
 
-            oManager.crearMissil(oPersonaje.position.x + 10, oPersonaje.position.y);
+            myManager.crearMissil(myPlayer.position.x + 10, myPlayer.position.y);
 
         }
 
     }
 
     private void eliminarObjetos() {
-        for (com.badlogic.gdx.physics.box2d.Body body : arrBodies) {
-            if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Plataforma) {
-                com.nopalsoft.ninjarunner.objects.Plataforma obj = (com.nopalsoft.ninjarunner.objects.Plataforma) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objects.Plataforma.STATE_DESTROY) {
-                    arrPlataformas.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+        for (Body body : arrayBodies) {
+            if (body.getUserData() instanceof Platform) {
+                Platform obj = (Platform) body.getUserData();
+                if (obj.state == Platform.STATE_DESTROY) {
+                    arrayPlatforms.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Pared) {
-                com.nopalsoft.ninjarunner.objects.Pared obj = (com.nopalsoft.ninjarunner.objects.Pared) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objects.Pared.STATE_DESTROY) {
-                    arrPared.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+            } else if (body.getUserData() instanceof Wall) {
+                Wall obj = (Wall) body.getUserData();
+                if (obj.state == Wall.STATE_DESTROY) {
+                    arrayWall.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Item) {
-                com.nopalsoft.ninjarunner.objects.Item obj = (com.nopalsoft.ninjarunner.objects.Item) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objects.Item.STATE_DESTROY && obj.stateTime >= com.nopalsoft.ninjarunner.objects.Item.DURATION_PICK) {
-                    arrItems.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+            } else if (body.getUserData() instanceof Item) {
+                Item obj = (Item) body.getUserData();
+                if (obj.state == Item.STATE_DESTROY && obj.stateTime >= Item.DURATION_PICK) {
+                    arrayItems.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.ObstaculoCajas4) {
-                com.nopalsoft.ninjarunner.objects.ObstaculoCajas4 obj = (com.nopalsoft.ninjarunner.objects.ObstaculoCajas4) body.getUserData();
+            } else if (body.getUserData() instanceof ObstacleBoxes4) {
+                ObstacleBoxes4 obj = (ObstacleBoxes4) body.getUserData();
 
-                if (obj.state == com.nopalsoft.ninjarunner.objects.ObstaculoCajas4.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == ObstacleBoxes4.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
-                    arrObstaculos.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+                    arrayObstacles.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.ObstaculoCajas7) {
-                com.nopalsoft.ninjarunner.objects.ObstaculoCajas7 obj = (com.nopalsoft.ninjarunner.objects.ObstaculoCajas7) body.getUserData();
+            } else if (body.getUserData() instanceof ObstacleBoxes7) {
+                ObstacleBoxes7 obj = (ObstacleBoxes7) body.getUserData();
 
-                if (obj.state == com.nopalsoft.ninjarunner.objects.ObstaculoCajas7.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.state == ObstacleBoxes7.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
-                    arrObstaculos.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+                    arrayObstacles.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
-            } else if (body.getUserData() instanceof com.nopalsoft.ninjarunner.objects.Missil) {
-                com.nopalsoft.ninjarunner.objects.Missil obj = (com.nopalsoft.ninjarunner.objects.Missil) body.getUserData();
-                if (obj.state == com.nopalsoft.ninjarunner.objects.Missil.STATE_DESTROY) {
-                    arrMissiles.removeValue(obj, true);
-                    com.badlogic.gdx.utils.Pools.free(obj);
-                    oWorldBox.destroyBody(body);
+            } else if (body.getUserData() instanceof Missile) {
+                Missile obj = (Missile) body.getUserData();
+                if (obj.state == Missile.STATE_DESTROY) {
+                    arrayMissiles.removeValue(obj, true);
+                    Pools.free(obj);
+                    myWorldBox.destroyBody(body);
                 }
             }
         }
     }
 
     private void updatePersonaje(float delta, Body body, boolean didJump, boolean dash, boolean didSlide) {
-        oPersonaje.update(delta, body, didJump, false, dash, didSlide);
+        myPlayer.update(delta, body, didJump, false, dash, didSlide);
 
-        if (oPersonaje.position.y < -1) {
-            oPersonaje.die();
-        } else if (oPersonaje.isSlide && !bodyIsSLide) {
+        if (myPlayer.position.y < -1) {
+            myPlayer.die();
+        } else if (myPlayer.isSlide && !isBodySliding) {
             recreateFixture = true;
-            bodyIsSLide = true;
-            oManager.recreateFixturePersonajeSlide(body);
-        } else if (!oPersonaje.isSlide && bodyIsSLide) {
+            isBodySliding = true;
+            myManager.recreateFixturePlayerSlide(body);
+        } else if (!myPlayer.isSlide && isBodySliding) {
             recreateFixture = true;
-            bodyIsSLide = false;
-            oManager.recreateFixturePersonajeStand(body);
+            isBodySliding = false;
+            myManager.recreateFixturePlayerStand(body);
         }
 
     }
 
     private void updateMascota(float delta, Body body) {
 
-        float targetPositionX = oPersonaje.position.x - .75f;
-        float targetPositionY = oPersonaje.position.y + .25f;
+        float targetPositionX = myPlayer.position.x - .75f;
+        float targetPositionY = myPlayer.position.y + .25f;
 
-        if (oMascota.tipo == Mascota.Tipo.BOMBA) {
-            Missil oMissil = getNextClosesMissil();
-            if (oMissil != null && oMissil.distanceFromPersonaje < 5f && oMissil.state == Missil.STATE_NORMAL) {
-                targetPositionX = oMissil.position.x;
-                targetPositionY = oMissil.position.y;
+        if (myPet.petType == Pet.PetType.BOMB) {
+            Missile oMissile = getClosestUpcomingMissile();
+            if (oMissile != null && oMissile.distanceFromCharacter < 5f && oMissile.state == Missile.STATE_NORMAL) {
+                targetPositionX = oMissile.position.x;
+                targetPositionY = oMissile.position.y;
             }
         } else {
-            if (oPersonaje.isDash) {
-                targetPositionX = oPersonaje.position.x + 4.25f;
-                targetPositionY = oPersonaje.position.y;
+            if (myPlayer.isDash) {
+                targetPositionX = myPlayer.position.x + 4.25f;
+                targetPositionY = myPlayer.position.y;
             }
         }
 
-        oMascota.update(body, delta, targetPositionX, targetPositionY);
+        myPet.update(body, delta, targetPositionX, targetPositionY);
     }
 
     private void updatePlataforma(Body body) {
-        Plataforma obj = (Plataforma) body.getUserData();
+        Platform obj = (Platform) body.getUserData();
 
-        if (obj.position.x < oPersonaje.position.x - 3)
+        if (obj.position.x < myPlayer.position.x - 3)
             obj.setDestroy();
 
     }
 
     private void updatePared(Body body) {
-        Pared obj = (Pared) body.getUserData();
+        Wall obj = (Wall) body.getUserData();
 
-        if (obj.position.x < oPersonaje.position.x - 3)
+        if (obj.position.x < myPlayer.position.x - 3)
             obj.setDestroy();
 
     }
 
     private void updateItem(float delta, Body body) {
         Item obj = (Item) body.getUserData();
-        obj.update(delta, body, oMascota, oPersonaje);
+        obj.update(delta, body, myPet, myPlayer);
 
-        if (obj.position.x < oPersonaje.position.x - 3)
+        if (obj.position.x < myPlayer.position.x - 3)
             obj.setPicked();
 
     }
 
     private void updateObstaculos(float delta, Body body) {
-        Obstaculo obj = (Obstaculo) body.getUserData();
+        Obstacle obj = (Obstacle) body.getUserData();
         obj.update(delta);
 
-        if (obj.position.x < oPersonaje.position.x - 3)
+        if (obj.position.x < myPlayer.position.x - 3)
             obj.setDestroy();
 
     }
 
     private void updateMissil(float delta, Body body) {
-        Missil obj = (Missil) body.getUserData();
-        obj.update(delta, body, oPersonaje);
+        Missile obj = (Missile) body.getUserData();
+        obj.update(delta, body, myPlayer);
 
-        if (obj.position.x < oPersonaje.position.x - 3)
+        if (obj.position.x < myPlayer.position.x - 3)
             obj.setDestroy();
 
-        arrMissiles.sort();
+        arrayMissiles.sort();
 
     }
 
     /**
-     * Regresa el misil mas cercano al personaje que este en estado normal
+     * Return the missile closest to the character that is in normal state.
      */
-    private Missil getNextClosesMissil() {
-        for (int i = 0; i < arrMissiles.size; i++) {
-            if (arrMissiles.get(i).state == Missil.STATE_NORMAL)
-                return arrMissiles.get(i);
+    private Missile getClosestUpcomingMissile() {
+        for (int i = 0; i < arrayMissiles.size; i++) {
+            if (arrayMissiles.get(i).state == Missile.STATE_NORMAL)
+                return arrayMissiles.get(i);
         }
         return null;
     }
 
-    /**
-     * #### COLISIONES #####
-     */
 
-    class Colisiones implements ContactListener {
+    class Collisions implements ContactListener {
 
         @Override
         public void beginContact(Contact contact) {
             Fixture a = contact.getFixtureA();
             Fixture b = contact.getFixtureB();
 
-            if (a.getBody().getUserData() instanceof Personaje)
+            if (a.getBody().getUserData() instanceof Player)
                 beginContactHeroOtraCosa(a, b);
-            else if (b.getBody().getUserData() instanceof Personaje)
+            else if (b.getBody().getUserData() instanceof Player)
                 beginContactHeroOtraCosa(b, a);
 
-            if (a.getBody().getUserData() instanceof Mascota)
+            if (a.getBody().getUserData() instanceof Pet)
                 beginContactMascotaOtraCosa(b);
-            else if (b.getBody().getUserData() instanceof Mascota)
+            else if (b.getBody().getUserData() instanceof Pet)
                 beginContactMascotaOtraCosa(a);
 
         }
 
         private void beginContactHeroOtraCosa(Fixture fixHero, Fixture otraCosa) {
-            Object oOtraCosa = otraCosa.getBody().getUserData();
+            Object other = otraCosa.getBody().getUserData();
 
-            if (oOtraCosa instanceof Plataforma) {
+            if (other instanceof Platform) {
                 if (fixHero.getUserData().equals("pies")) {
                     if (recreateFixture)
                         recreateFixture = false;
                     else
-                        oPersonaje.touchFloor();
+                        myPlayer.touchFloor();
 
                 }
-            } else if (oOtraCosa instanceof Item) {
-                Item obj = (Item) oOtraCosa;
+            } else if (other instanceof Item) {
+                Item obj = (Item) other;
                 if (obj.state == Item.STATE_NORMAL) {
-                    if (obj instanceof ItemMoneda) {
-                        monedasTomadas++;
-                        puntuacion++;
+                    if (obj instanceof ItemCurrency) {
+                        takenCoins++;
+                        score++;
                         Assets.playSound(Assets.coin, 1);
                     } else if (obj instanceof ItemMagnet) {
-                        oPersonaje.setPickUpMagnet();
+                        myPlayer.setPickUpMagnet();
                     } else if (obj instanceof ItemEnergy) {
-                        //todo oPersonaje.shield++;
+                        //todo oPlayer.shield++;
                     } else if (obj instanceof ItemHearth) {
-                        oPersonaje.vidas++;
+                        myPlayer.lives++;
                     } else if (obj instanceof ItemCandyJelly) {
                         Assets.playSound(Assets.popCandy, 1);
-                        puntuacion += 2;
+                        score += 2;
                     } else if (obj instanceof ItemCandyBean) {
                         Assets.playSound(Assets.popCandy, 1);
-                        puntuacion += 5;
+                        score += 5;
                     } else if (obj instanceof ItemCandyCorn) {
                         Assets.playSound(Assets.popCandy, 1);
-                        puntuacion += 15;
+                        score += 15;
                     }
 
                     obj.setPicked();
                 }
-            } else if (oOtraCosa instanceof Pared) {
-                Pared obj = (Pared) oOtraCosa;
-                if (obj.state == Pared.STATE_NORMAL) {
-                    oPersonaje.getDizzy();
+            } else if (other instanceof Wall) {
+                Wall obj = (Wall) other;
+                if (obj.state == Wall.STATE_NORMAL) {
+                    myPlayer.getDizzy();
                 }
-            } else if (oOtraCosa instanceof Obstaculo) {
-                Obstaculo obj = (Obstaculo) oOtraCosa;
-                if (obj.state == Obstaculo.STATE_NORMAL) {
+            } else if (other instanceof Obstacle) {
+                Obstacle obj = (Obstacle) other;
+                if (obj.state == Obstacle.STATE_NORMAL) {
                     obj.setDestroy();
-                    oPersonaje.getHurt();
+                    myPlayer.getHurt();
                 }
-            } else if (oOtraCosa instanceof Missil) {
-                Missil obj = (Missil) oOtraCosa;
-                if (obj.state == Obstaculo.STATE_NORMAL) {
+            } else if (other instanceof Missile) {
+                Missile obj = (Missile) other;
+                if (obj.state == Obstacle.STATE_NORMAL) {
                     obj.setHitTarget();
-                    oPersonaje.getDizzy();
+                    myPlayer.getDizzy();
                 }
             }
 
         }
 
-        public void beginContactMascotaOtraCosa(Fixture otraCosa) {
-            Object oOtraCosa = otraCosa.getBody().getUserData();
+        public void beginContactMascotaOtraCosa(Fixture otherFixture) {
+            Object otherObject = otherFixture.getBody().getUserData();
 
-            if (oOtraCosa instanceof Pared && oPersonaje.isDash) {
-                Pared obj = (Pared) oOtraCosa;
+            if (otherObject instanceof Wall && myPlayer.isDash) {
+                Wall obj = (Wall) otherObject;
                 obj.setDestroy();
-            } else if (oOtraCosa instanceof Obstaculo && oPersonaje.isDash) {
-                Obstaculo obj = (Obstaculo) oOtraCosa;
+            } else if (otherObject instanceof Obstacle && myPlayer.isDash) {
+                Obstacle obj = (Obstacle) otherObject;
                 obj.setDestroy();
-            } else if (oOtraCosa instanceof ItemMoneda) {
-                ItemMoneda obj = (ItemMoneda) oOtraCosa;
-                if (obj.state == ItemMoneda.STATE_NORMAL) {
+            } else if (otherObject instanceof ItemCurrency) {
+                ItemCurrency obj = (ItemCurrency) otherObject;
+                if (obj.state == ItemCurrency.STATE_NORMAL) {
                     obj.setPicked();
-                    monedasTomadas++;
+                    takenCoins++;
                     Assets.playSound(Assets.coin, 1);
                 }
-            } else if (oOtraCosa instanceof Missil) {
-                Missil obj = (Missil) oOtraCosa;
-                if (obj.state == Obstaculo.STATE_NORMAL) {
+            } else if (otherObject instanceof Missile) {
+                Missile obj = (Missile) otherObject;
+                if (obj.state == Obstacle.STATE_NORMAL) {
                     obj.setHitTarget();
                 }
             }
@@ -463,19 +453,19 @@ public class WorldGame {
             if (a == null || b == null)
                 return;
 
-            if (a.getBody().getUserData() instanceof Personaje)
-                endContactHeroOtraCosa(a, b);
-            else if (b.getBody().getUserData() instanceof Personaje)
-                endContactHeroOtraCosa(b, a);
+            if (a.getBody().getUserData() instanceof Player)
+                endContactHeroOtherFixture(a, b);
+            else if (b.getBody().getUserData() instanceof Player)
+                endContactHeroOtherFixture(b, a);
 
         }
 
-        private void endContactHeroOtraCosa(Fixture fixHero, Fixture otraCosa) {
-            Object oOtraCosa = otraCosa.getBody().getUserData();
+        private void endContactHeroOtherFixture(Fixture fixHero, Fixture otherfixture) {
+            Object otherObject = otherfixture.getBody().getUserData();
 
-            if (oOtraCosa instanceof Plataforma) {
+            if (otherObject instanceof Platform) {
                 if (fixHero.getUserData().equals("pies"))
-                    oPersonaje.endTouchFloor();
+                    myPlayer.endTouchFloor();
 
             }
         }
@@ -485,21 +475,21 @@ public class WorldGame {
             Fixture a = contact.getFixtureA();
             Fixture b = contact.getFixtureB();
 
-            if (a.getBody().getUserData() instanceof Personaje)
+            if (a.getBody().getUserData() instanceof Player)
                 preSolveHero(a, b, contact);
-            else if (b.getBody().getUserData() instanceof Personaje)
+            else if (b.getBody().getUserData() instanceof Player)
                 preSolveHero(b, a, contact);
 
         }
 
-        private void preSolveHero(Fixture fixHero, Fixture otraCosa, Contact contact) {
-            Object oOtraCosa = otraCosa.getBody().getUserData();
+        private void preSolveHero(Fixture fixHero, Fixture otherFixture, Contact contact) {
+            Object otherObject = otherFixture.getBody().getUserData();
 
-            if (oOtraCosa instanceof Plataforma) {
-                Plataforma obj = (Plataforma) oOtraCosa;
+            if (otherObject instanceof Platform) {
+                Platform obj = (Platform) otherObject;
 
                 float ponyY = fixHero.getBody().getPosition().y - .30f;
-                float pisY = obj.position.y + Plataforma.HEIGHT / 2f;
+                float pisY = obj.position.y + Platform.HEIGHT / 2f;
 
                 if (ponyY < pisY)
                     contact.setEnabled(false);

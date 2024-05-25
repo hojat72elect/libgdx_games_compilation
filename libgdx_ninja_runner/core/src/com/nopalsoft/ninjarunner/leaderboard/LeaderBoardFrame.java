@@ -35,7 +35,7 @@ public class LeaderBoardFrame extends Table {
         tbAux.add(lbScore).row();
 
         Image imRedSocial = null;
-        switch (oPersona.tipoCuenta) {
+        switch (oPersona.accountType) {
             case GOOGLE_PLAY:
                 imRedSocial = new Image(Assets.imageGoogle);
                 break;
@@ -49,13 +49,13 @@ public class LeaderBoardFrame extends Table {
         tbAux.add(imRedSocial).size(25).row();
 
 
-        if (oPersona.imagen != null)
-            setPicture(oPersona.imagen);
+        if (oPersona.image != null)
+            setPicture(oPersona.image);
         else {
             oPersona.downloadImage(new Person.DownloadImageCompleteListener() {
                 @Override
                 public void imageDownloaded() {
-                    setPicture(oPersona.imagen);
+                    setPicture(oPersona.image);
                 }
 
                 @Override

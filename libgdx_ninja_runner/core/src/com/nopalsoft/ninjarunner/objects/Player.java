@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
 
-public class Personaje {
+public class Player {
     public final static int STATE_NORMAL = 0;// NORMAL APLICA PARA RUN,DASH,SLIDE,JUMP
     public final static int STATE_HURT = 1;
     public final static int STATE_DIZZY = 2;
@@ -21,8 +21,8 @@ public class Personaje {
     public final static float HEIGHT_SLIDE = .45f;
     public static final float VELOCITY_RUN = 3;
     public static final float VELOCITY_DASH = 7;
-    public final static float DURATION_DEAD = Assets.personajeDead.animationDuration + .5f;
-    public final static float DURATION_HURT = Assets.personajeHurt.animationDuration + .1f;
+    public final static float DURATION_DEAD = Assets.playerDeadAnimation.animationDuration + .5f;
+    public final static float DURATION_HURT = Assets.playerHurtAnimation.animationDuration + .1f;
     public final static float DURATION_DIZZY = 1.25f;
     public static float VELOCIDAD_JUMP = 5;
     public final int tipo;
@@ -34,14 +34,14 @@ public class Personaje {
     public int state;
     public Vector2 position;
     public float stateTime;
-    public boolean isJumping;// To know if i can draw the jumping animation
-    public int numPisosEnContacto;// Pisos que esta tocando actualmente si es ==0 no puede saltar
+    public boolean isJumping;// To know if I can draw the jumping animation.
+    public int numberOfFloorsInContact;// Floors you are currently touching if ==0 you cannot jump.
     public boolean didGetHurtAtLeastOnce;
     /**
-     * Verdadero si toca las escaleras
+     * True if you touch the stairs.
      */
 
-    public int vidas;
+    public int lives;
     public boolean isDash;
     public boolean isSlide;
     public boolean isIdle;
@@ -54,7 +54,7 @@ public class Personaje {
     private boolean canJump;
     private boolean canDoubleJump;
 
-    public Personaje(float x, float y, int tipo) {
+    public Player(float x, float y, int tipo) {
         position = new Vector2(x, y);
         initialPosition = new Vector2(x, y);
         state = STATE_NORMAL;
@@ -65,7 +65,7 @@ public class Personaje {
         didGetHurtAtLeastOnce = false;
         isIdle = true;
 
-        vidas = MAX_VIDAS;
+        lives = MAX_VIDAS;
         DURATION_MAGNET = 10;
 
     }
@@ -76,7 +76,7 @@ public class Personaje {
 
         isIdle = false;
 
-        // No importa si esta vivo/dizzy/ o lo que sea se le quita el tiempo
+        // It doesn't matter if he's alive/dizzy/or whatever, it takes away this time.
         if (isMagnetEnabled) {
             durationMagnet += delta;
             if (durationMagnet >= DURATION_MAGNET) {
@@ -91,7 +91,7 @@ public class Personaje {
             isJumping = false;
             canDoubleJump = true;
             stateTime = 0;
-            vidas = MAX_VIDAS;
+            lives = MAX_VIDAS;
             initialPosition.y = 3;
             position.x = initialPosition.x;
             position.y = initialPosition.y;
@@ -135,7 +135,7 @@ public class Personaje {
             isSlide = false;
 
             body.setGravityScale(.9f);
-            Assets.playSound(Assets.jump, 1);// FIXME Arreglar el sonido
+            Assets.playSound(Assets.jump, 1);// FIXME Fix the sound
 
         }
         if (!isJumpPressed)
@@ -172,8 +172,8 @@ public class Personaje {
         if (state != STATE_NORMAL)
             return;
 
-        vidas--;
-        if (vidas > 0) {
+        lives--;
+        if (lives > 0) {
             state = STATE_HURT;
         } else {
             state = STATE_DEAD;
@@ -186,8 +186,8 @@ public class Personaje {
         if (state != STATE_NORMAL)
             return;
 
-        vidas--;
-        if (vidas > 0) {
+        lives--;
+        if (lives > 0) {
             state = STATE_DIZZY;
         } else {
             state = STATE_DEAD;
@@ -198,7 +198,7 @@ public class Personaje {
 
     public void die() {
         if (state != STATE_DEAD) {
-            vidas = 0;
+            lives = 0;
 
             state = STATE_DEAD;
             stateTime = 0;
@@ -206,7 +206,7 @@ public class Personaje {
     }
 
     public void touchFloor() {
-        numPisosEnContacto++;
+        numberOfFloorsInContact++;
 
         canJump = true;
         isJumping = false;
@@ -216,11 +216,11 @@ public class Personaje {
     }
 
     public void endTouchFloor() {
-        numPisosEnContacto--;
-        if (numPisosEnContacto == 0) {
+        numberOfFloorsInContact--;
+        if (numberOfFloorsInContact == 0) {
             canJump = false;
 
-            // Si dejo de tocar el piso porque salto todavia puede saltar otra vez
+            // If I stop touching the floor because I jump, I can still jump again.
             if (!isJumping)
                 canDoubleJump = false;
         }

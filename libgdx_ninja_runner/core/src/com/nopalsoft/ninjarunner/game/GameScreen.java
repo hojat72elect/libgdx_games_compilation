@@ -17,7 +17,7 @@ public class GameScreen extends Screens {
     static final int STATE_MENU = 0;
     static final int STATE_RUNNING = 1;
     static final int STATE_GAME_OVER = 2;
-    public WorldGame oWorld;
+    public WorldGame myWorld;
     int state;
     GameUI gameUI;
     MenuUI menuUI;
@@ -27,11 +27,10 @@ public class GameScreen extends Screens {
 
     public GameScreen(Game _game, boolean showMainMenu) {
         super(_game);
-        oWorld = new WorldGame();
-        renderer = new WorldGameRenderer(batcher, oWorld);
-        gameUI = new GameUI(this, oWorld);
-        menuUI = new MenuUI(this, oWorld);
-        // vtPause = new VentanaPause(this);
+        myWorld = new WorldGame();
+        renderer = new WorldGameRenderer(batcher, myWorld);
+        gameUI = new GameUI(this, myWorld);
+        menuUI = new MenuUI(this, myWorld);
 
         if (showMainMenu) {
             state = STATE_MENU;
@@ -72,22 +71,22 @@ public class GameScreen extends Screens {
     public void update(float delta) {
 
         if (state == STATE_MENU) {
-            oWorld.oPersonaje.updateStateTime(delta);
-            oWorld.oMascota.updateStateTime(delta);
+            myWorld.myPlayer.updateStateTime(delta);
+            myWorld.myPet.updateStateTime(delta);
 
         } else if (state == STATE_RUNNING) {
 
-            oWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide);
+            myWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide);
 
             gameUI.didJump = false;
             gameUI.didDash = false;
 
-            if (oWorld.state == WorldGame.STATE_GAMEOVER) {
+            if (myWorld.state == WorldGame.STATE_GAMEOVER) {
                 setGameover();
             }
 
-            setNextGoalFrame(oWorld.puntuacion);
-            nextGoalFrame.updateScore(oWorld.puntuacion);
+            setNextGoalFrame(myWorld.score);
+            nextGoalFrame.updateScore(myWorld.score);
 
         } else if (state == STATE_GAME_OVER) {
             if (Gdx.input.justTouched()) {
@@ -147,7 +146,7 @@ public class GameScreen extends Screens {
     }
 
     private void setGameover() {
-        Settings.setNewScore(oWorld.puntuacion);
+        Settings.setNewScore(myWorld.score);
         state = STATE_GAME_OVER;
         Assets.music1.stop();
 
@@ -175,12 +174,12 @@ public class GameScreen extends Screens {
 
         batcher.begin();
         Assets.fontSmall.draw(batcher, "FPS GERA" + Gdx.graphics.getFramesPerSecond(), 5, 20);
-        Assets.fontSmall.draw(batcher, "Bodies " + oWorld.oWorldBox.getBodyCount(), 5, 40);
-        Assets.fontSmall.draw(batcher, "Vidas " + oWorld.oPersonaje.vidas, 5, 60);
-        Assets.fontSmall.draw(batcher, "Monedas " + oWorld.monedasTomadas, 5, 80);
-        Assets.fontSmall.draw(batcher, "Puntos " + oWorld.puntuacion, 5, 100);
-        Assets.fontSmall.draw(batcher, "Distancia " + oWorld.oPersonaje.position.x, 5, 120);
-        Assets.fontSmall.draw(batcher, "Plataformas " + oWorld.arrPlataformas.size, 5, 140);
+        Assets.fontSmall.draw(batcher, "Bodies " + myWorld.myWorldBox.getBodyCount(), 5, 40);
+        Assets.fontSmall.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5, 60);
+        Assets.fontSmall.draw(batcher, "Monedas " + myWorld.takenCoins, 5, 80);
+        Assets.fontSmall.draw(batcher, "Puntos " + myWorld.score, 5, 100);
+        Assets.fontSmall.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5, 120);
+        Assets.fontSmall.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5, 140);
 
         batcher.end();
 

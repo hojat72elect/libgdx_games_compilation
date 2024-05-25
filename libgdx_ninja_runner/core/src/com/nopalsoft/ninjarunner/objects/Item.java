@@ -9,7 +9,7 @@ import com.nopalsoft.ninjarunner.Assets;
 public class Item implements Poolable {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_DESTROY = 1;
-    public final static float DURATION_PICK = Assets.pick.animationDuration + .1f;
+    public final static float DURATION_PICK = Assets.pickAnimation.animationDuration + .1f;
     public final float WIDTH;
     public final float HEIGHT;
     public final Vector2 position;
@@ -33,17 +33,17 @@ public class Item implements Poolable {
 
     }
 
-    public void update(float delta, Body body, Mascota oMascota, Personaje oPersonaje) {
+    public void update(float delta, Body body, Pet oPet, Player oPlayer) {
 
         if (state == STATE_NORMAL) {
             position.x = body.getPosition().x;
             position.y = body.getPosition().y;
 
             // First I check if they are attracted to the character
-            if (oPersonaje.isMagnetEnabled && position.dst(oPersonaje.position) <= 5f) {
-                moveCoinsMagnet(body, oPersonaje.position);
+            if (oPlayer.isMagnetEnabled && position.dst(oPlayer.position) <= 5f) {
+                moveCoinsMagnet(body, oPlayer.position);
 
-            } else if (oMascota != null && position.dst(oMascota.position) <= 2f) {
+            } else if (oPet != null && position.dst(oPet.position) <= 2f) {
                 // TODO
             } else
                 body.setLinearVelocity(0, 0);
@@ -54,7 +54,7 @@ public class Item implements Poolable {
 
     private void moveCoinsMagnet(Body body, Vector2 targetPosition) {
         velocity = body.getLinearVelocity();
-        velocity.set(targetPosition).sub(position).scl(Personaje.VELOCITY_DASH + 3);
+        velocity.set(targetPosition).sub(position).scl(Player.VELOCITY_DASH + 3);
         body.setLinearVelocity(velocity);
     }
 
