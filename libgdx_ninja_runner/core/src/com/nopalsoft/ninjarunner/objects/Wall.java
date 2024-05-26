@@ -16,7 +16,7 @@ public class Wall implements Poolable {
         position = new Vector2();
     }
 
-    public void init(float x, float y) {
+    public void initializeWall(float x, float y) {
         position.set(x, y);
         state = STATE_NORMAL;
         stateTime = 0;

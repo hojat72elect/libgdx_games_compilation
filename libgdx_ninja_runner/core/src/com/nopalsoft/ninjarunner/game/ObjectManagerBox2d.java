@@ -293,7 +293,7 @@ public class ObjectManagerBox2d {
         Wall myWall = Pools.obtain(Wall.class);
 
         x += Wall.WIDTH / 2f;
-        myWall.init(x, y);
+        myWall.initializeWall(x, y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(myWall.position.x, myWall.position.y);
