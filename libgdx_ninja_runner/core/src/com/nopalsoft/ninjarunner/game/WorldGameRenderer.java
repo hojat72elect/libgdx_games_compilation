@@ -110,8 +110,8 @@ public class WorldGameRenderer {
             }
 
             if (spriteFrame != null) {
-                spriteFrame.setPosition(obj.position.x - obj.WIDTH / 2f, obj.position.y - obj.HEIGHT / 2f);
-                spriteFrame.setSize(obj.WIDTH, obj.HEIGHT);
+                spriteFrame.setPosition(obj.position.x - obj.width / 2f, obj.position.y - obj.height / 2f);
+                spriteFrame.setSize(obj.width, obj.height);
                 spriteFrame.draw(batcher);
             }
 

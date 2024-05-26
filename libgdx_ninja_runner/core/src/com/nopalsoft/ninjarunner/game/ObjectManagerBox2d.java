@@ -139,7 +139,7 @@ public class ObjectManagerBox2d {
 
     public float createItem(Class<? extends Item> itemClass, float x, float y) {
         Item obj = Pools.obtain(itemClass);
-        x += obj.WIDTH / 2f;
+        x += obj.width / 2f;
 
         obj.initializeItem(x, y);
 
@@ -150,7 +150,7 @@ public class ObjectManagerBox2d {
         Body body = myWorldBox.createBody(myBodyDefinition);
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(obj.WIDTH / 2f);
+        shape.setRadius(obj.width / 2f);
 
         FixtureDef myFixtureDefinition = new FixtureDef();
         myFixtureDefinition.shape = shape;
@@ -162,7 +162,7 @@ public class ObjectManagerBox2d {
 
         shape.dispose();
 
-        return x + obj.WIDTH / 2f;
+        return x + obj.width / 2f;
 
     }
 

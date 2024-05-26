@@ -1,71 +1,71 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.nopalsoft.ninjarunner.Assets;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
+import com.nopalsoft.ninjarunner.Assets
 
+open class Item(@JvmField val width: Float, @JvmField val height: Float) : Poolable {
 
-public class Item implements Poolable {
-    public final static int STATE_NORMAL = 0;
-    public final static int STATE_DESTROY = 1;
-    public final static float DURATION_PICK = Assets.pickAnimation.animationDuration + .1f;
-    public final float WIDTH;
-    public final float HEIGHT;
-    public final Vector2 position;
-    public int state;
-    public Vector2 velocity;
-    public float stateTime;
+    @JvmField
+    var state = 0
 
-    public Item(float width, float height) {
-        position = new Vector2();
-        velocity = new Vector2();
-        this.WIDTH = width;
-        this.HEIGHT = height;
+    @JvmField
+    var stateTime = 0f
 
+    @JvmField
+    val position = Vector2()
+    var velocity = Vector2()
+
+    fun initializeItem(x: Float, y: Float) {
+        position.set(x, y)
+        velocity.set(0f, 0f)
+        state = STATE_NORMAL
+        stateTime = 0f
     }
 
-    public void initializeItem(float x, float y) {
-        position.set(x, y);
-        velocity.set(0, 0);
-        state = STATE_NORMAL;
-        stateTime = 0;
 
-    }
-
-    public void update(float delta, Body body, Pet oPet, Player oPlayer) {
-
+    fun update(delta: Float, body: Body, oPet: Pet, oPlayer: Player) {
         if (state == STATE_NORMAL) {
-            position.x = body.getPosition().x;
-            position.y = body.getPosition().y;
+            position.x = body.position.x
+            position.y = body.position.y
 
-            // First I check if they are attracted to the character
+            // First I check if they are attracted to the character.
             if (oPlayer.isMagnetEnabled && position.dst(oPlayer.position) <= 5f) {
-                moveCoinsMagnet(body, oPlayer.position);
-
-            } else if (oPet != null && position.dst(oPet.position) <= 2f) {
+                moveCoinsMagnet(body, oPlayer.position)
+            } else if (position.dst(oPet.position) <= 2f) {
                 // TODO
-            } else
-                body.setLinearVelocity(0, 0);
+            } else {
+                body.setLinearVelocity(0f, 0f)
+            }
         }
 
-        stateTime += delta;
+        stateTime += delta
     }
 
-    private void moveCoinsMagnet(Body body, Vector2 targetPosition) {
-        velocity = body.getLinearVelocity();
-        velocity.set(targetPosition).sub(position).scl(Player.VELOCITY_DASH + 3);
-        body.setLinearVelocity(velocity);
+    private fun moveCoinsMagnet(body: Body, targetPosition: Vector2) {
+        velocity = body.linearVelocity
+        velocity.set(targetPosition).sub(position).scl(Player.VELOCITY_DASH + 3)
+        body.linearVelocity = velocity
     }
 
-    public void setPicked() {
+    fun setPicked() {
         if (state == STATE_NORMAL) {
-            state = STATE_DESTROY;
-            stateTime = 0;
+            state = STATE_DESTROY
+            stateTime = 0f
         }
     }
 
-    @Override
-    public void reset() {
+
+    override fun reset() {
+        // Nothing is going on in here
+    }
+
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DESTROY = 1
+
+        @JvmStatic
+        val DURATION_PICK = Assets.pickAnimation.animationDuration + .1
     }
 }

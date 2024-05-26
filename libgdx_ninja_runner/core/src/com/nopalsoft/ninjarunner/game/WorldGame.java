@@ -214,7 +214,7 @@ public class WorldGame {
                 }
             } else if (body.getUserData() instanceof Item) {
                 Item obj = (Item) body.getUserData();
-                if (obj.state == Item.STATE_DESTROY && obj.stateTime >= Item.DURATION_PICK) {
+                if (obj.state == Item.STATE_DESTROY && obj.stateTime >= Item.getDURATION_PICK()) {
                     arrayItems.removeValue(obj, true);
                     Pools.free(obj);
                     myWorldBox.destroyBody(body);
