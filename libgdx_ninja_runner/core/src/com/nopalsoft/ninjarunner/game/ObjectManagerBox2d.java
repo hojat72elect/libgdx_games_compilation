@@ -320,7 +320,7 @@ public class ObjectManagerBox2d {
 
     public void crearMissil(float x, float y) {
         Missile obj = Pools.obtain(Missile.class);
-        obj.init(x, y);
+        obj.initializeMissile(x, y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(obj.position.x, obj.position.y);

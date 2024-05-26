@@ -23,7 +23,7 @@ public class Missile implements Poolable, Comparable<Missile> {
         position = new Vector2();
     }
 
-    public void init(float x, float y) {
+    public void initializeMissile(float x, float y) {
         position.set(x, y);
         state = STATE_NORMAL;
         stateTime = 0;
