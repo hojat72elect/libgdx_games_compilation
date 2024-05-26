@@ -395,7 +395,7 @@ public class Assets {
     }
 
     public static void playSound(Sound sound, int volume) {
-        if (Settings.isSoundEnabled) {
+        if (Settings.isSoundEnabled()) {
             sound.play(volume);
         }
     }

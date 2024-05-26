@@ -93,13 +93,13 @@ public class PersonajesSubMenu {
 
         // DEFAULT
         btSelectShanti = new TextButton(textSelect, Assets.styleTextButtonPurchased);
-        if (Settings.selectedSkin == com.nopalsoft.ninjarunner.objects.Player.TYPE_GIRL)
+        if (Settings.getSelectedSkin() == com.nopalsoft.ninjarunner.objects.Player.TYPE_GIRL)
             btSelectShanti.setVisible(false);
 
         btSelectShanti.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Settings.selectedSkin = com.nopalsoft.ninjarunner.objects.Player.TYPE_GIRL;
+                Settings.setSelectedSkin(com.nopalsoft.ninjarunner.objects.Player.TYPE_GIRL);
                 setSelected(btSelectShanti);
             }
         });
@@ -110,17 +110,18 @@ public class PersonajesSubMenu {
         else
             btBuyNinja = new TextButton(textBuy, Assets.styleTextButtonBuy);
 
-        if (Settings.selectedSkin == com.nopalsoft.ninjarunner.objects.Player.TYPE_NINJA)
+        if (Settings.getSelectedSkin() == com.nopalsoft.ninjarunner.objects.Player.TYPE_NINJA)
             btBuyNinja.setVisible(false);
 
         btBuyNinja.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (didBuyNinja) {
-                    Settings.selectedSkin = com.nopalsoft.ninjarunner.objects.Player.TYPE_NINJA;
+                    Settings.setSelectedSkin(com.nopalsoft.ninjarunner.objects.Player.TYPE_NINJA);
                     setSelected(btBuyNinja);
-                } else if (Settings.totalCoins >= PRECIO_NINJA) {
-                    Settings.totalCoins -= PRECIO_NINJA;
+                } else if (Settings.getTotalCoins() >= PRECIO_NINJA) {
+
+                    Settings.setTotalCoins(Settings.getTotalCoins() - PRECIO_NINJA);
                     setButtonStylePurchased(btBuyNinja);
                     lbPrecioNinja.remove();
                     didBuyNinja = true;

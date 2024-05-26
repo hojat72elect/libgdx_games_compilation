@@ -1,46 +1,69 @@
-package com.nopalsoft.ninjarunner;
+package com.nopalsoft.ninjarunner
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.nopalsoft.ninjarunner.objects.Pet.PetType;
-import com.nopalsoft.ninjarunner.objects.Player;
+import com.badlogic.gdx.Gdx
+import com.nopalsoft.ninjarunner.objects.Pet.PetType
+import com.nopalsoft.ninjarunner.objects.Player
 
-public class Settings {
+object Settings {
+    private val pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings")
 
-    private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings");
-    public static boolean isSoundEnabled = false;
-    public static boolean isMusicEnabled = false;
-    public static int selectedSkin = Player.TYPE_NINJA;
-    public static int totalCoins = 1500000;
-    public static PetType selectedPet = PetType.PINK_BIRD;
+    @JvmStatic
+    var isSoundEnabled = false
 
-    public static int LEVEL_PET_BIRD;
-    public static int LEVEL_PET_BOMB;
+    @JvmStatic
+    var isMusicEnabled = false
 
-    public static int LEVEL_MAGNET;
-    public static int LEVEL_LIFE;
-    public static int LEVEL_ENERGY;
-    public static int LEVEL_COINS;
-    public static int LEVEL_TREASURE_CHEST;
-    public static long bestScore;
+    @JvmStatic
+    var selectedSkin = Player.TYPE_NINJA
 
-    public static void load() {
-        LEVEL_MAGNET = pref.getInteger("LEVEL_MAGNET", 0);
-        LEVEL_LIFE = pref.getInteger("LEVEL_LIFE", 0);
-        LEVEL_ENERGY = pref.getInteger("LEVEL_ENERGY", 0);
-        LEVEL_COINS = pref.getInteger("LEVEL_COINS", 0);
-        LEVEL_TREASURE_CHEST = pref.getInteger("LEVEL_TREASURE_CHEST", 0);
+    @JvmStatic
+    var totalCoins = 1_500_000
 
+    @JvmStatic
+    var selectedPet = PetType.PINK_BIRD
+
+    @JvmStatic
+    var LEVEL_PET_BIRD = 0
+
+    @JvmStatic
+    var LEVEL_PET_BOMB = 0
+
+    @JvmStatic
+    var LEVEL_MAGNET = 0
+
+    @JvmStatic
+    var LEVEL_LIFE = 0
+
+    @JvmStatic
+    var LEVEL_ENERGY = 0
+
+    @JvmStatic
+    var LEVEL_COINS = 0
+
+    @JvmStatic
+    var LEVEL_TREASURE_CHEST = 0
+
+    @JvmStatic
+    var bestScore = 0L
+
+    @JvmStatic
+    fun load() {
+        LEVEL_MAGNET = pref.getInteger("LEVEL_MAGNET", 0)
+        LEVEL_LIFE = pref.getInteger("LEVEL_LIFE", 0)
+        LEVEL_ENERGY = pref.getInteger("LEVEL_ENERGY", 0)
+        LEVEL_COINS = pref.getInteger("LEVEL_COINS", 0)
+        LEVEL_TREASURE_CHEST = pref.getInteger("LEVEL_TREASURE_CHEST", 0)
     }
 
-    public static void save() {
-
+    @JvmStatic
+    fun save() {
+        // FIXME: looks like we're not doing anything for saving the settings of the game.
     }
 
-    public static void setNewScore(long score) {
+    @JvmStatic
+    fun setNewScore(score: Long) {
         if (score > bestScore) {
-            bestScore = score;
+            bestScore = score
         }
     }
-
 }

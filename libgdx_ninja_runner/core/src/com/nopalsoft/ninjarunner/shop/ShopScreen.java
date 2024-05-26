@@ -142,7 +142,7 @@ public class ShopScreen extends Screens {
 
     @Override
     public void update(float delta) {
-        lbCoins.setText("x" + Settings.totalCoins);
+        lbCoins.setText("x" + Settings.getTotalCoins());
     }
 
     @Override

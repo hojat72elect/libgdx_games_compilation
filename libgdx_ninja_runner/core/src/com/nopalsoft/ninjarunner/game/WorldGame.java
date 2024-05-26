@@ -70,7 +70,7 @@ public class WorldGame {
 
         timeToSpawnMissile = 0;
 
-        myManager.createHeroStand(2f, 1f, Settings.selectedSkin);
+        myManager.createHeroStand(2f, 1f, Settings.getSelectedSkin());
         myManager.createPet(myPlayer.position.x - 1, myPlayer.position.y + .75f);
 
         worldCreatedUpToX = myManager.createPlatform(0, 0, 3);

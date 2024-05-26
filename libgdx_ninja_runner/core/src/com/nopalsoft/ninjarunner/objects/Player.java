@@ -27,7 +27,7 @@ public class Player {
     public static float VELOCIDAD_JUMP = 5;
     public final int tipo;
     public final float VELOCIDAD_SECOND_JUMP = 4;
-    public final int MAX_VIDAS = Settings.LEVEL_LIFE + 5;
+    public final int MAX_VIDAS = Settings.getLEVEL_LIFE() + 5;
     final float DURATION_MAGNET;
     final float DURATION_DASH = 5;
     final Vector2 initialPosition;

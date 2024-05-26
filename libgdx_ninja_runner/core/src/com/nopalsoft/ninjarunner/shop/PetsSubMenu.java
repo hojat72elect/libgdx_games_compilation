@@ -16,8 +16,8 @@ import com.nopalsoft.ninjarunner.AnimationSprite;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 import com.nopalsoft.ninjarunner.objects.Pet.PetType;
+import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 
 public class PetsSubMenu {
 
@@ -55,14 +55,14 @@ public class PetsSubMenu {
         arrayBird = new Image[MAX_LEVEL];
         arrayBomb = new Image[MAX_LEVEL];
 
-        if (Settings.LEVEL_PET_BIRD < MAX_LEVEL) {
-            labelPriceBird = new Label(calculatePrice(Settings.LEVEL_PET_BIRD) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_PET_BIRD() < MAX_LEVEL) {
+            labelPriceBird = new Label(calculatePrice(Settings.getLEVEL_PET_BIRD()) + "", Assets.labelStyleSmall);
         }
 
         if (!didBuyBomb) {
             labelPriceBomb = new Label(BOMB_PRICE + "", Assets.labelStyleSmall);
-        } else if (Settings.LEVEL_PET_BOMB < MAX_LEVEL) {
-            labelPriceBomb = new Label(calculatePrice(Settings.LEVEL_PET_BOMB) + "", Assets.labelStyleSmall);
+        } else if (Settings.getLEVEL_PET_BOMB() < MAX_LEVEL) {
+            labelPriceBomb = new Label(calculatePrice(Settings.getLEVEL_PET_BOMB()) + "", Assets.labelStyleSmall);
         }
 
         initializeButtons();
@@ -131,27 +131,28 @@ public class PetsSubMenu {
         {
             {
                 buttonBuyOrSelectBird = new TextButton(textSelect, Assets.styleTextButtonPurchased);
-                if (Settings.selectedPet == PetType.PINK_BIRD)
+                if (Settings.getSelectedPet() == PetType.PINK_BIRD)
                     buttonBuyOrSelectBird.setVisible(false);
                 buttonBuyOrSelectBird.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Settings.selectedPet = PetType.PINK_BIRD;
+                        Settings.setSelectedPet(PetType.PINK_BIRD);
                         setSelected(buttonBuyOrSelectBird);
                     }
                 });
             }
             {
                 buttonUpgradeBird = new Button(Assets.styleButtonUpgrade);
-                if (Settings.LEVEL_PET_BIRD == MAX_LEVEL)
+                if (Settings.getLEVEL_PET_BIRD() == MAX_LEVEL)
                     buttonUpgradeBird.setVisible(false);
                 buttonUpgradeBird.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if (Settings.totalCoins >= calculatePrice(Settings.LEVEL_PET_BIRD)) {
-                            Settings.totalCoins -= calculatePrice(Settings.LEVEL_PET_BIRD);
-                            Settings.LEVEL_PET_BIRD++;
-                            updateLabelPriceAndButton(Settings.LEVEL_PET_BIRD, labelPriceBird, buttonUpgradeBird);
+                        if (Settings.getTotalCoins() >= calculatePrice(Settings.getLEVEL_PET_BIRD())) {
+                            Settings.setTotalCoins(Settings.getTotalCoins() - calculatePrice(Settings.getLEVEL_PET_BIRD()));
+                            Settings.setLEVEL_PET_BIRD(Settings.getLEVEL_PET_BIRD() + 1);
+
+                            updateLabelPriceAndButton(Settings.getLEVEL_PET_BIRD(), labelPriceBird, buttonUpgradeBird);
                             setArrays();
                         }
                     }
@@ -166,21 +167,22 @@ public class PetsSubMenu {
                 else
                     buttonBuyBomb = new TextButton(textBuy, Assets.styleTextButtonBuy);
 
-                if (Settings.selectedPet == PetType.BOMB)
+                if (Settings.getSelectedPet() == PetType.BOMB)
                     buttonBuyBomb.setVisible(false);
 
                 buttonBuyBomb.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         if (didBuyBomb) {
-                            Settings.selectedPet = PetType.BOMB;
+                            Settings.setSelectedPet(PetType.BOMB);
                             setSelected(buttonBuyBomb);
-                        } else if (Settings.totalCoins >= BOMB_PRICE) {
-                            Settings.totalCoins -= BOMB_PRICE;
+                        } else if (Settings.getTotalCoins() >= BOMB_PRICE) {
+
+                            Settings.setTotalCoins(Settings.getTotalCoins() - BOMB_PRICE);
                             setButtonStylePurchased(buttonBuyBomb);
                             didBuyBomb = true;
                             buttonUpgradeBomb.setVisible(true);
-                            updateLabelPriceAndButton(Settings.LEVEL_PET_BOMB, labelPriceBomb, buttonUpgradeBomb);
+                            updateLabelPriceAndButton(Settings.getLEVEL_PET_BOMB(), labelPriceBomb, buttonUpgradeBomb);
                         }
                         savePurchases();
                     }
@@ -188,15 +190,15 @@ public class PetsSubMenu {
             }
             {// UPGRADE
                 buttonUpgradeBomb = new Button(Assets.styleButtonUpgrade);
-                if (Settings.LEVEL_PET_BOMB == MAX_LEVEL || !didBuyBomb)
+                if (Settings.getLEVEL_PET_BOMB() == MAX_LEVEL || !didBuyBomb)
                     buttonUpgradeBomb.setVisible(false);
                 buttonUpgradeBomb.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if (Settings.totalCoins >= calculatePrice(Settings.LEVEL_PET_BOMB)) {
-                            Settings.totalCoins -= calculatePrice(Settings.LEVEL_PET_BOMB);
-                            Settings.LEVEL_PET_BOMB++;
-                            updateLabelPriceAndButton(Settings.LEVEL_PET_BOMB, labelPriceBomb, buttonUpgradeBomb);
+                        if (Settings.getTotalCoins() >= calculatePrice(Settings.getLEVEL_PET_BOMB())) {
+                            Settings.setTotalCoins(Settings.getTotalCoins() - calculatePrice(Settings.getLEVEL_PET_BOMB()));
+                            Settings.setLEVEL_PET_BOMB(Settings.getLEVEL_PET_BOMB() + 1);
+                            updateLabelPriceAndButton(Settings.getLEVEL_PET_BOMB(), labelPriceBomb, buttonUpgradeBomb);
                             setArrays();
                         }
                     }
@@ -270,11 +272,11 @@ public class PetsSubMenu {
     }
 
     private void setArrays() {
-        for (int i = 0; i < Settings.LEVEL_PET_BIRD; i++) {
+        for (int i = 0; i < Settings.getLEVEL_PET_BIRD(); i++) {
             arrayBird[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 
-        for (int i = 0; i < Settings.LEVEL_PET_BOMB; i++) {
+        for (int i = 0; i < Settings.getLEVEL_PET_BOMB(); i++) {
             arrayBomb[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 

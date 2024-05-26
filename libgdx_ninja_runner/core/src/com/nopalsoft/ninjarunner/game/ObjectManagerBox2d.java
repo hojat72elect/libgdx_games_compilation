@@ -115,7 +115,7 @@ public class ObjectManagerBox2d {
     }
 
     public void createPet(float x, float y) {
-        myWorld.myPet = new Pet(x, y, Settings.selectedPet);
+        myWorld.myPet = new Pet(x, y, Settings.getSelectedPet());
 
         BodyDef bd = new BodyDef();
         bd.position.set(x, y);

@@ -55,20 +55,20 @@ public class UpgradesSubMenu {
         arrCoins = new Image[MAX_LEVEL];
         arrTreasureChest = new Image[MAX_LEVEL];
 
-        if (Settings.LEVEL_MAGNET < MAX_LEVEL)
-            lbPrecioMagnet = new Label(calcularPrecio(Settings.LEVEL_MAGNET) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_MAGNET() < MAX_LEVEL)
+            lbPrecioMagnet = new Label(calcularPrecio(Settings.getLEVEL_MAGNET()) + "", Assets.labelStyleSmall);
 
-        if (Settings.LEVEL_LIFE < MAX_LEVEL)
-            lbPrecioLife = new Label(calcularPrecio(Settings.LEVEL_LIFE) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_LIFE() < MAX_LEVEL)
+            lbPrecioLife = new Label(calcularPrecio(Settings.getLEVEL_LIFE()) + "", Assets.labelStyleSmall);
 
-        if (Settings.LEVEL_ENERGY < MAX_LEVEL)
-            lbPrecioEnergy = new Label(calcularPrecio(Settings.LEVEL_ENERGY) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_ENERGY() < MAX_LEVEL)
+            lbPrecioEnergy = new Label(calcularPrecio(Settings.getLEVEL_ENERGY()) + "", Assets.labelStyleSmall);
 
-        if (Settings.LEVEL_COINS < MAX_LEVEL)
-            lbPrecioCoins = new Label(calcularPrecio(Settings.LEVEL_COINS) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_COINS() < MAX_LEVEL)
+            lbPrecioCoins = new Label(calcularPrecio(Settings.getLEVEL_COINS()) + "", Assets.labelStyleSmall);
 
-        if (Settings.LEVEL_TREASURE_CHEST < MAX_LEVEL)
-            lbPrecioTreasureChest = new Label(calcularPrecio(Settings.LEVEL_TREASURE_CHEST) + "", Assets.labelStyleSmall);
+        if (Settings.getLEVEL_TREASURE_CHEST() < MAX_LEVEL)
+            lbPrecioTreasureChest = new Label(calcularPrecio(Settings.getLEVEL_TREASURE_CHEST()) + "", Assets.labelStyleSmall);
 
         inicializarBotones();
 
@@ -140,23 +140,23 @@ public class UpgradesSubMenu {
 
     private void inicializarBotones() {
         btUpgradeMagnet = new Button(Assets.styleButtonUpgrade);
-        btUpgradeMagnet.setUserObject(Settings.LEVEL_MAGNET);
+        btUpgradeMagnet.setUserObject(Settings.getLEVEL_MAGNET());
         initButton(btUpgradeMagnet, lbPrecioMagnet);
 
         btUpgradeLife = new Button(Assets.styleButtonUpgrade);
-        btUpgradeLife.setUserObject(Settings.LEVEL_LIFE);
+        btUpgradeLife.setUserObject(Settings.getLEVEL_LIFE());
         initButton(btUpgradeLife, lbPrecioLife);
 
         btUpgradeEnergy = new Button(Assets.styleButtonUpgrade);
-        btUpgradeEnergy.setUserObject(Settings.LEVEL_ENERGY);
+        btUpgradeEnergy.setUserObject(Settings.getLEVEL_ENERGY());
         initButton(btUpgradeEnergy, lbPrecioEnergy);
 
         btUpgradeCoins = new Button(Assets.styleButtonUpgrade);
-        btUpgradeCoins.setUserObject(Settings.LEVEL_COINS);
+        btUpgradeCoins.setUserObject(Settings.getLEVEL_COINS());
         initButton(btUpgradeCoins, lbPrecioCoins);
 
         btUpgradeTreasureChest = new Button(Assets.styleButtonUpgrade);
-        btUpgradeTreasureChest.setUserObject(Settings.LEVEL_TREASURE_CHEST);
+        btUpgradeTreasureChest.setUserObject(Settings.getLEVEL_TREASURE_CHEST());
         initButton(btUpgradeTreasureChest, lbPrecioTreasureChest);
 
     }
@@ -169,19 +169,19 @@ public class UpgradesSubMenu {
             public void clicked(InputEvent event, float x, float y) {
                 int levelActual = (Integer) btn.getUserObject();
 
-                if (Settings.totalCoins >= calcularPrecio(levelActual)) {
-                    Settings.totalCoins -= calcularPrecio(levelActual);
+                if (Settings.getTotalCoins() >= calcularPrecio(levelActual)) {
+                    Settings.setTotalCoins(Settings.getTotalCoins() - calcularPrecio(levelActual));
 
                     if (btn == btUpgradeMagnet) {
-                        Settings.LEVEL_MAGNET++;
+                        Settings.setLEVEL_MAGNET(Settings.getLEVEL_MAGNET() + 1);
                     } else if (btn == btUpgradeLife) {
-                        Settings.LEVEL_LIFE++;
+                        Settings.setLEVEL_LIFE(Settings.getLEVEL_LIFE() + 1);
                     } else if (btn == btUpgradeEnergy) {
-                        Settings.LEVEL_ENERGY++;
+                        Settings.setLEVEL_ENERGY(Settings.getLEVEL_ENERGY() + 1);
                     } else if (btn == btUpgradeCoins) {
-                        Settings.LEVEL_COINS++;
+                        Settings.setLEVEL_COINS(Settings.getLEVEL_COINS() + 1);
                     } else if (btn == btUpgradeTreasureChest) {
-                        Settings.LEVEL_TREASURE_CHEST++;
+                        Settings.setLEVEL_TREASURE_CHEST(Settings.getLEVEL_TREASURE_CHEST() + 1);
                     }
 
                     levelActual++;
@@ -227,23 +227,23 @@ public class UpgradesSubMenu {
     }
 
     private void setArrays() {
-        for (int i = 0; i < Settings.LEVEL_MAGNET; i++) {
+        for (int i = 0; i < Settings.getLEVEL_MAGNET(); i++) {
             arrMagnet[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 
-        for (int i = 0; i < Settings.LEVEL_LIFE; i++) {
+        for (int i = 0; i < Settings.getLEVEL_LIFE(); i++) {
             arrLife[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 
-        for (int i = 0; i < Settings.LEVEL_ENERGY; i++) {
+        for (int i = 0; i < Settings.getLEVEL_ENERGY(); i++) {
             arrEnergy[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 
-        for (int i = 0; i < Settings.LEVEL_COINS; i++) {
+        for (int i = 0; i < Settings.getLEVEL_COINS(); i++) {
             arrCoins[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 
-        for (int i = 0; i < Settings.LEVEL_TREASURE_CHEST; i++) {
+        for (int i = 0; i < Settings.getLEVEL_TREASURE_CHEST(); i++) {
             arrTreasureChest[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
         }
 

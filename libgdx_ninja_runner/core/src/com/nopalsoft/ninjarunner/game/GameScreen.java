@@ -45,7 +45,7 @@ public class GameScreen extends Screens {
         Runnable runAfterHideMenu = () -> {
             Runnable run = () -> {
                 state = STATE_RUNNING;
-                if (Settings.isMusicEnabled) {
+                if (Settings.isMusicEnabled()) {
                     Assets.music1.play();
                 }
 
@@ -100,8 +100,8 @@ public class GameScreen extends Screens {
 
     public void setNextGoalFrame(long puntos) {
         //Para que solo se muestren las personas que no haya superado aun
-        if (puntos < Settings.bestScore)
-            puntos = Settings.bestScore;
+        if (puntos < Settings.getBestScore())
+            puntos = Settings.getBestScore();
 
         game.arrayOfPersons.sort(); // Acomoda de mayor puntuacion a menor puntuacion
 
