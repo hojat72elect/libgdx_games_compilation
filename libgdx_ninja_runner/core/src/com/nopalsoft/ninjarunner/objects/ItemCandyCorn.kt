@@ -1,13 +1,9 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-public class ItemCandyCorn extends Item {
+class ItemCandyCorn : Item(WIDTH, HEIGHT) {
 
-    private static final float _WIDTH = .32f;
-    private static final float _HEIGHT = .40f;
-
-    public ItemCandyCorn() {
-        super(_WIDTH, _HEIGHT);
-
+    companion object {
+        private const val WIDTH = .32f
+        private const val HEIGHT = .40f
     }
-
 }
