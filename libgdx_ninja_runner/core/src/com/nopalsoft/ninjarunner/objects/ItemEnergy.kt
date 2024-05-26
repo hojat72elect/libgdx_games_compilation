@@ -1,13 +1,9 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-public class ItemEnergy extends Item {
+class ItemEnergy:Item(WIDTH, HEIGHT) {
 
-    private static final float _WIDTH = .25f;
-    private static final float _HEIGHT = .35f;
-
-    public ItemEnergy() {
-        super(_WIDTH, _HEIGHT);
-
+    companion object{
+        private const val WIDTH = .25f
+        private const val HEIGHT = .35f
     }
-
 }

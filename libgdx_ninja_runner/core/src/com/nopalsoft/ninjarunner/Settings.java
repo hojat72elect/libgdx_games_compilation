@@ -8,8 +8,8 @@ import com.nopalsoft.ninjarunner.objects.Player;
 public class Settings {
 
     private final static Preferences pref = Gdx.app.getPreferences("com.nopalsoft.ninjarunner.settings");
-    public static boolean isSoundEnabled = true;
-    public static boolean isMusicEnabled = true;
+    public static boolean isSoundEnabled = false;
+    public static boolean isMusicEnabled = false;
     public static int selectedSkin = Player.TYPE_NINJA;
     public static int totalCoins = 1500000;
     public static PetType selectedPet = PetType.PINK_BIRD;
