@@ -11,6 +11,9 @@ import com.nopalsoft.ninjarunner.game.GameScreen;
 import com.nopalsoft.ninjarunner.leaderboard.Person;
 import com.nopalsoft.ninjarunner.screens.Screens;
 
+/**
+ * It has already been made in KT. Don't do it again.
+ */
 public class MainGame extends Game {
 
 
