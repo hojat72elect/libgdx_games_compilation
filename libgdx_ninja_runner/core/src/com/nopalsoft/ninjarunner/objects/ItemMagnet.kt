@@ -1,13 +1,9 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-public class ItemMagnet extends Item {
+class ItemMagnet : Item(WIDTH, HEIGHT) {
 
-    private static final float _WIDTH = .35f;
-    private static final float _HEIGHT = .35f;
-
-    public ItemMagnet() {
-        super(_WIDTH, _HEIGHT);
-
+    companion object {
+        private const val WIDTH = .35f
+        private const val HEIGHT = .35f
     }
-
 }

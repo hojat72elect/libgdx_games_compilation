@@ -1,13 +1,9 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-public class ItemHearth extends Item {
+class ItemHearth : Item(WIDTH, HEIGHT) {
 
-    private static final float _WIDTH = .38f;
-    private static final float _HEIGHT = .29f;
-
-    public ItemHearth() {
-        super(_WIDTH, _HEIGHT);
-
+    companion object {
+        private const val WIDTH = .38f
+        private const val HEIGHT = .29f
     }
-
 }
