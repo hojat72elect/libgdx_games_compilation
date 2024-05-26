@@ -1,85 +1,87 @@
-package com.nopalsoft.ninjarunner.leaderboard;
+package com.nopalsoft.ninjarunner.leaderboard
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.ninjarunner.Assets;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.leaderboard.Person.DownloadImageCompleteListener
 
-public class NextGoalFrame extends Group {
+class NextGoalFrame(x: Float, y: Float) : Group() {
 
-    public static final float WIDTH = 170;
-    public static final float HEIGHT = 80;
-    public Person myPerson;
-    Label labelName;
-    Label labelPersonScore;
-    Label labelRemainingPointsToOvercome;
+    @JvmField
+    var myPerson: Person? = null
+    private val labelName = Label("", Assets.labelStyleSmall)
+    private val labelPersonScore = Label("", Assets.labelStyleSmall)
+    private val labelRemainingPointsToOvercome = Label("", Assets.labelStyleSmall)
 
+    init {
+        setBounds(x, y, WIDTH, HEIGHT)
 
-    public NextGoalFrame(float x, float y) {
-        setBounds(x, y, WIDTH, HEIGHT);
+        labelName.setFontScale(.5f)
+        labelName.setPosition(60f, 60f)
 
-        labelName = new Label("", Assets.labelStyleSmall);
-        labelName.setFontScale(.5f);
-        labelName.setPosition(60, 60);
+        labelPersonScore.setFontScale(.5f)
+        labelPersonScore.setPosition(60f, 40f)
 
-        labelPersonScore = new Label("", Assets.labelStyleSmall);
-        labelPersonScore.setFontScale(.5f);
-        labelPersonScore.setPosition(60, 40);
+        labelRemainingPointsToOvercome.setFontScale(.5f)
+        labelRemainingPointsToOvercome.setPosition(60f, 20f)
 
-        labelRemainingPointsToOvercome = new Label("", Assets.labelStyleSmall);
-        labelRemainingPointsToOvercome.setFontScale(.5f);
-        labelRemainingPointsToOvercome.setPosition(60, 20);
+        addActor(labelName)
+        addActor(labelPersonScore)
+        addActor(labelRemainingPointsToOvercome)
 
-        addActor(labelName);
-        addActor(labelPersonScore);
-        addActor(labelRemainingPointsToOvercome);
-
-
-        debug();
+        debug()
     }
 
     /**
      * Puts a new person in the frame.
      */
-    public void updatePerson(Person person) {
-        this.myPerson = person;
+    fun updatePerson(person: Person) {
 
-        labelName.setText(myPerson.name);
-        labelPersonScore.setText(myPerson.getScoreWithFormat());
+        this.myPerson = person
 
+        labelName.setText(myPerson?.name)
+        labelPersonScore.setText(myPerson?.scoreWithFormat)
 
-        if (myPerson.image != null)
-            setPicture(myPerson.image);
-        else {
-            myPerson.downloadImage(new Person.DownloadImageCompleteListener() {
-                @Override
-                public void imageDownloaded() {
-                    setPicture(myPerson.image);
+        if (myPerson?.image != null) {
+            setPicture(myPerson!!.image)
+        } else {
+            myPerson?.downloadImage(object : DownloadImageCompleteListener {
+                override fun imageDownloaded() {
+                    setPicture(myPerson!!.image)
                 }
 
-                @Override
-                public void imageDownloadFail() {
-                    setPicture(Assets.photoNA);
+                override fun imageDownloadFail() {
+                    setPicture(Assets.photoNA)
                 }
-            });
+            })
         }
 
     }
 
-    private void setPicture(TextureRegionDrawable drawable) {
+    private fun setPicture(drawable: TextureRegionDrawable) {
         /*
          * I use an image button because it can have a background and an image.
          */
-        ImageButton personImage = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
-        personImage.setSize(50, 50);
-        personImage.getImageCell().size(50);
-        personImage.setPosition(5, HEIGHT / 2f - personImage.getHeight() / 2f);
-        addActor(personImage);
+        val personImage =
+            ImageButton(ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null))
+        personImage.setSize(50f, 50f)
+        personImage.imageCell.size(50f)
+        personImage.setPosition(5f, HEIGHT / 2f - personImage.height / 2f)
+        addActor(personImage)
     }
 
-    public void updateScore(long score) {
-        if (myPerson != null)
-            labelRemainingPointsToOvercome.setText("Pa Ganar" + (myPerson.score - score));
+    fun updateScore(score: Long) {
+        if (myPerson != null) {
+            labelRemainingPointsToOvercome.setText("Pa Ganar" + (myPerson!!.score - score))
+        }
+    }
+
+
+    companion object {
+        const val WIDTH = 170f
+        const val HEIGHT = 80f
     }
 }
