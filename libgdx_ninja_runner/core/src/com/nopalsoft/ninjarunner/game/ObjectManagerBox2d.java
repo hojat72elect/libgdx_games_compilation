@@ -174,7 +174,7 @@ public class ObjectManagerBox2d {
 
         x += ObstacleBoxes4.DRAW_WIDTH / 2f;
 
-        obj.init(x, y);
+        obj.initializeObstacle(x, y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(x, y);
@@ -210,7 +210,7 @@ public class ObjectManagerBox2d {
 
         x += ObstacleBoxes7.DRAW_WIDTH / 2f;
 
-        obj.init(x, y);
+        obj.initializeObstacle(x, y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(x, y);

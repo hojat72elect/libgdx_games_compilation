@@ -18,7 +18,7 @@ public class Obstacle implements Poolable {
         position = new Vector2();
     }
 
-    public void init(float x, float y) {
+    public void initializeObstacle(float x, float y) {
         position.set(x, y);
         state = STATE_NORMAL;
         stateTime = 0;
