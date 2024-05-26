@@ -255,7 +255,7 @@ public class ObjectManagerBox2d {
         for (int i = 0; i < numberOfPlatforms; i++) {
             myPlatform = Pools.obtain(Platform.class);
             x += Platform.WIDTH / 2f;
-            myPlatform.init(x, yCenter);
+            myPlatform.initializePlatform(x, yCenter);
             myWorld.arrayPlatforms.add(myPlatform);
             // I subtract (-.01) so that there is one pixel on the left and the line does not
             // appear when two platforms are close together.
