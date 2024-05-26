@@ -25,7 +25,7 @@ public class Item implements Poolable {
 
     }
 
-    public void init(float x, float y) {
+    public void initializeItem(float x, float y) {
         position.set(x, y);
         velocity.set(0, 0);
         state = STATE_NORMAL;

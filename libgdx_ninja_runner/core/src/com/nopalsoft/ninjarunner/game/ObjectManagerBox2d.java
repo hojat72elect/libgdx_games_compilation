@@ -141,7 +141,7 @@ public class ObjectManagerBox2d {
         Item obj = Pools.obtain(itemClass);
         x += obj.WIDTH / 2f;
 
-        obj.init(x, y);
+        obj.initializeItem(x, y);
 
         BodyDef myBodyDefinition = new BodyDef();
         myBodyDefinition.position.set(obj.position.x, obj.position.y);
