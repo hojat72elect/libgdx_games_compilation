@@ -138,8 +138,8 @@ public class LeaderboardScreen extends Screens {
 
     public void updateLeaderboard() {
         table.clear();
-        for (Person persona : game.arrayOfPersons) {
-            LeaderBoardFrame frame = new LeaderBoardFrame(persona);
+        for (Person player : game.arrayOfPersons) {
+            LeaderBoardFrame frame = new LeaderBoardFrame(player);
             table.add(frame).expandX().fill();
             table.row();
         }

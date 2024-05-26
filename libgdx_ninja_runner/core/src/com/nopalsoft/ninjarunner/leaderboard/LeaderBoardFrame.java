@@ -9,53 +9,54 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.ninjarunner.Assets;
 
 public class LeaderBoardFrame extends Table {
-    Person oPersona;
-    Label lbNombre;
-    Label lbScore;
-    Table tbAux;//Es necesaria porque del lado izq va una foto y del lado derecho varios textField en renglones
+    Person myPlayer;
+    Label labelName;
+    Label labelScore;
+    Table tableAux;//It is necessary because on the left side there is a photo and on the right
+    // side there are several textFields in lines
     /**
-     * uso un image button porque puede tener fondo y una imagen
+     * I use an image button because it can have a background and an image.
      */
-    private ImageButton imagenPersona;
+    private ImageButton personImage;
 
-    public LeaderBoardFrame(Person persona) {
+    public LeaderBoardFrame(Person player) {
         setBackground(Assets.backgroundItemShop);
         pad(5);
-        this.oPersona = persona;
+        this.myPlayer = player;
 
 
-        lbNombre = new Label(oPersona.name, Assets.labelStyleSmall);
-        lbScore = new Label(oPersona.getScoreWithFormat(), new Label.LabelStyle(Assets.fontSmall, Color.RED));
+        labelName = new Label(myPlayer.name, Assets.labelStyleSmall);
+        labelScore = new Label(myPlayer.getScoreWithFormat(), new Label.LabelStyle(Assets.fontSmall, Color.RED));
 
-        tbAux = new Table();
-        tbAux.left();
+        tableAux = new Table();
+        tableAux.left();
 
-        tbAux.defaults().left();
-        tbAux.add(lbNombre).row();
-        tbAux.add(lbScore).row();
+        tableAux.defaults().left();
+        tableAux.add(labelName).row();
+        tableAux.add(labelScore).row();
 
-        Image imRedSocial = null;
-        switch (oPersona.accountType) {
+        Image imageSocialNetwork = null;
+        switch (myPlayer.accountType) {
             case GOOGLE_PLAY:
-                imRedSocial = new Image(Assets.imageGoogle);
+                imageSocialNetwork = new Image(Assets.imageGoogle);
                 break;
             case AMAZON:
-                imRedSocial = new Image(Assets.imageAmazon);
+                imageSocialNetwork = new Image(Assets.imageAmazon);
                 break;
             case FACEBOOK:
-                imRedSocial = new Image(Assets.imageFacebook);
+                imageSocialNetwork = new Image(Assets.imageFacebook);
                 break;
         }
-        tbAux.add(imRedSocial).size(25).row();
+        tableAux.add(imageSocialNetwork).size(25).row();
 
 
-        if (oPersona.image != null)
-            setPicture(oPersona.image);
+        if (myPlayer.image != null)
+            setPicture(myPlayer.image);
         else {
-            oPersona.downloadImage(new Person.DownloadImageCompleteListener() {
+            myPlayer.downloadImage(new Person.DownloadImageCompleteListener() {
                 @Override
                 public void imageDownloaded() {
-                    setPicture(oPersona.image);
+                    setPicture(myPlayer.image);
                 }
 
                 @Override
@@ -68,21 +69,21 @@ public class LeaderBoardFrame extends Table {
     }
 
     public void setPicture(TextureRegionDrawable drawable) {
-        imagenPersona = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
+        personImage = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
         refresh();
     }
 
     private void refresh() {
         clear();
         float size = 100;
-        if (imagenPersona != null) {
-            imagenPersona.getImageCell().size(size);
-            add(imagenPersona).size(size);
+        if (personImage != null) {
+            personImage.getImageCell().size(size);
+            add(personImage).size(size);
         } else {
             add().size(size);
         }
 
-        add(tbAux).padLeft(20).expandX().fill();
+        add(tableAux).padLeft(20).expandX().fill();
 
 
     }
