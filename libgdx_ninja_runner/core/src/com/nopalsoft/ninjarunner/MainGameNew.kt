@@ -11,6 +11,7 @@ import com.nopalsoft.ninjarunner.leaderboard.Person
 import com.nopalsoft.ninjarunner.screens.Screens
 import com.badlogic.gdx.utils.Array as GdxArray
 
+// TODO : it will replace MainGame in the future.
 class MainGameNew() : Game() {
     @JvmField
     val arrayOfPersons: GdxArray<Person> = GdxArray()
