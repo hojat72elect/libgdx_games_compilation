@@ -193,8 +193,8 @@ public class WorldGameRenderer {
                 spriteFrame.draw(batcher);
 
             } else {
-
-                obj.effect.draw(batcher, delta);
+                if (obj.effect != null)
+                    obj.effect.draw(batcher, delta);
 
             }
         }

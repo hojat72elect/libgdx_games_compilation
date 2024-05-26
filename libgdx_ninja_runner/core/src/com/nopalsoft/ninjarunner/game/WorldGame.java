@@ -222,7 +222,7 @@ public class WorldGame {
             } else if (body.getUserData() instanceof ObstacleBoxes4) {
                 ObstacleBoxes4 obj = (ObstacleBoxes4) body.getUserData();
 
-                if (obj.state == ObstacleBoxes4.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.effect != null && obj.state == ObstacleBoxes4.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrayObstacles.removeValue(obj, true);
                     Pools.free(obj);
@@ -231,7 +231,7 @@ public class WorldGame {
             } else if (body.getUserData() instanceof ObstacleBoxes7) {
                 ObstacleBoxes7 obj = (ObstacleBoxes7) body.getUserData();
 
-                if (obj.state == ObstacleBoxes7.STATE_DESTROY && obj.effect.isComplete()) {
+                if (obj.effect != null && obj.state == ObstacleBoxes7.STATE_DESTROY && obj.effect.isComplete()) {
                     obj.effect.free();
                     arrayObstacles.removeValue(obj, true);
                     Pools.free(obj);
