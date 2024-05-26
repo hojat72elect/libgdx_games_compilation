@@ -15,7 +15,7 @@ open class Item(@JvmField val width: Float, @JvmField val height: Float) : Poola
 
     @JvmField
     val position = Vector2()
-    var velocity = Vector2()
+    private var velocity = Vector2()
 
     fun initializeItem(x: Float, y: Float) {
         position.set(x, y)
