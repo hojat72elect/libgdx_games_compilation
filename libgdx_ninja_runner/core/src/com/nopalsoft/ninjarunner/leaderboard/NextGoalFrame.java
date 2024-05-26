@@ -42,8 +42,8 @@ public class NextGoalFrame extends Group {
     /**
      * Puts a new person in the frame.
      */
-    public void updatePersona(Person persona) {
-        this.myPerson = persona;
+    public void updatePerson(Person person) {
+        this.myPerson = person;
 
         labelName.setText(myPerson.name);
         labelPersonScore.setText(myPerson.getScoreWithFormat());
@@ -69,7 +69,7 @@ public class NextGoalFrame extends Group {
 
     private void setPicture(TextureRegionDrawable drawable) {
         /*
-         * I use an image button because it can have a background and an image
+         * I use an image button because it can have a background and an image.
          */
         ImageButton personImage = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
         personImage.setSize(50, 50);

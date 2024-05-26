@@ -132,7 +132,7 @@ public class GameScreen extends Screens {
 
 
         Runnable run = () -> {
-            nextGoalFrame.updatePersona(oPersona);
+            nextGoalFrame.updatePerson(oPersona);
             nextGoalFrame.addAction(Actions.sequence(Actions.moveTo(SCREEN_WIDTH - NextGoalFrame.WIDTH, nextGoalFrame.getY(), 1)));
 
         };
