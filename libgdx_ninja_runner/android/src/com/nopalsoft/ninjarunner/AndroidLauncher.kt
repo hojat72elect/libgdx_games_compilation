@@ -1,20 +1,16 @@
-package com.nopalsoft.ninjarunner;
+package com.nopalsoft.ninjarunner
 
-import android.os.Bundle;
+import android.os.Bundle
+import com.badlogic.gdx.backends.android.AndroidApplication
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+class AndroidLauncher : AndroidApplication() {
 
-public class AndroidLauncher extends AndroidApplication {
-
-    protected MainGame game;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        game = new MainGame();
-        initialize(game, config);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // the configuration
+        val config = AndroidApplicationConfiguration()
+        // Start the game
+        initialize(MainGame(), config)
     }
-
 }
