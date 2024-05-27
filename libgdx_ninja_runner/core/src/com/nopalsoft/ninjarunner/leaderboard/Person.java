@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Indicates the other persons playing this game in our social network
+ */
 public class Person implements Comparable<Person> {
     final public String id;
     public AccountType accountType;
