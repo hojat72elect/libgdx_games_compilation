@@ -8,13 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.nopalsoft.ninjarunner.Assets
-import com.nopalsoft.ninjarunner.leaderboard.Person.AccountType
-import com.nopalsoft.ninjarunner.leaderboard.Person.DownloadImageCompleteListener
+
 
 class LeaderBoardFrame(player: Person) : Table() {
     private val labelName = Label(player.name, Assets.labelStyleSmall)
     private val labelScore =
-        Label(player.scoreWithFormat, Label.LabelStyle(Assets.fontSmall, Color.RED))
+        Label(player.getScoreWithFormat(), Label.LabelStyle(Assets.fontSmall, Color.RED))
     private val tableAux =
         Table()//It is necessary because on the left side there is a photo and on the right
     // side there are several textFields in lines
@@ -32,9 +31,9 @@ class LeaderBoardFrame(player: Person) : Table() {
         tableAux.add(labelScore).row()
 
         val imageSocialNetwork: Image? = when (player.accountType) {
-            AccountType.GOOGLE_PLAY -> Image(Assets.imageGoogle)
-            AccountType.AMAZON -> Image(Assets.imageAmazon)
-            AccountType.FACEBOOK -> Image(Assets.imageFacebook)
+            Person.AccountType.GOOGLE_PLAY -> Image(Assets.imageGoogle)
+            Person.AccountType.AMAZON -> Image(Assets.imageAmazon)
+            Person.AccountType.FACEBOOK -> Image(Assets.imageFacebook)
         }
         tableAux.add(imageSocialNetwork).size(25f).row()
 
@@ -43,7 +42,7 @@ class LeaderBoardFrame(player: Person) : Table() {
             setPicture(player.image)
         } else {
 
-            player.downloadImage(object : DownloadImageCompleteListener {
+            player.downloadImage(object : Person.DownloadImageCompleteListener {
                 override fun imageDownloaded() {
                     setPicture(player.image)
                 }
@@ -56,7 +55,7 @@ class LeaderBoardFrame(player: Person) : Table() {
         refresh() //So that I can put the info later. If I delete it until the photo is posted, the info is posted.
     }
 
-    fun setPicture(drawable: TextureRegionDrawable) {
+    fun setPicture(drawable: TextureRegionDrawable?) {
         personImage =
             ImageButton(ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null))
         refresh()

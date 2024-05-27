@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.nopalsoft.ninjarunner.Assets
-import com.nopalsoft.ninjarunner.leaderboard.Person.DownloadImageCompleteListener
 
 class NextGoalFrame(x: Float, y: Float) : Group() {
 
@@ -43,12 +42,12 @@ class NextGoalFrame(x: Float, y: Float) : Group() {
         this.myPerson = person
 
         labelName.setText(myPerson?.name)
-        labelPersonScore.setText(myPerson?.scoreWithFormat)
+        labelPersonScore.setText(myPerson?.getScoreWithFormat())
 
         if (myPerson?.image != null) {
             setPicture(myPerson!!.image)
         } else {
-            myPerson?.downloadImage(object : DownloadImageCompleteListener {
+            myPerson?.downloadImage(object : Person.DownloadImageCompleteListener {
                 override fun imageDownloaded() {
                     setPicture(myPerson!!.image)
                 }
@@ -61,7 +60,7 @@ class NextGoalFrame(x: Float, y: Float) : Group() {
 
     }
 
-    private fun setPicture(drawable: TextureRegionDrawable) {
+    private fun setPicture(drawable: TextureRegionDrawable?) {
         /*
          * I use an image button because it can have a background and an image.
          */

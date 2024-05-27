@@ -1,105 +1,111 @@
-package com.nopalsoft.ninjarunner.leaderboard;
+package com.nopalsoft.ninjarunner.leaderboard
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.HttpMethods;
-import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.Net.HttpResponse;
-import com.badlogic.gdx.Net.HttpResponseListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Net
+import com.badlogic.gdx.Net.HttpMethods
+import com.badlogic.gdx.Net.HttpResponseListener
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 /**
- * Indicates the other persons playing this game in our social network
+ * Indicates the other persons playing this game in our social network.
  */
-public class Person implements Comparable<Person> {
-    final public String id;
-    public AccountType accountType;
-    public String name;
-    public long score;
-    public String imageURL;
-    public TextureRegionDrawable image;
-    public boolean isMe;// Indicates that this person is the user.
+class Person(
+    val accountType: AccountType,
+    private val id: String,
+    val name: String,
+    @JvmField
+    val score: Long,
+    private val imageURL: String
+) : Comparable<Person> {
 
-    public Person(AccountType accountType, String id, String name, long myScore, String imageURL) {
-        this.accountType = accountType;
-        this.id = id;
-        this.name = name;
-        this.score = myScore;
-        this.imageURL = imageURL;
+    var image: TextureRegionDrawable? = null
 
-    }
+    @JvmField
+    val isMe = false// Indicates that this person is the user.
 
-    public void downloadImage(final DownloadImageCompleteListener listener) {
-        if (image != null)// If it exists, do not download it again.
-            return;
-        HttpRequest request = new HttpRequest(HttpMethods.GET);
-        request.setUrl(imageURL);
-        Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(HttpResponse httpResponse) {
-                final byte[] bytes = httpResponse.getResult();
-                Gdx.app.postRunnable(() -> {
-                    Pixmap pixmap = new Pixmap(bytes, 0, bytes.length);
-                    Texture texture = new Texture(new PixmapTextureData(pixmap, pixmap.getFormat(), false, false, true));
-                    pixmap.dispose();
-                    image = new TextureRegionDrawable(new TextureRegion(texture));
-                    if (listener != null)
-                        listener.imageDownloaded();
-                });
+    fun downloadImage(listener: DownloadImageCompleteListener) {
+        if (image != null) // If it exists, do not download it again.
+            return
+
+        val request = Net.HttpRequest(HttpMethods.GET)
+        request.url = imageURL
+        Gdx.net.sendHttpRequest(request, object : HttpResponseListener {
+            override fun handleHttpResponse(httpResponse: Net.HttpResponse) {
+                val bytes = httpResponse.result
+                Gdx.app.postRunnable {
+                    val pixmap = Pixmap(bytes, 0, bytes.size)
+                    val texture = Texture(
+                        PixmapTextureData(
+                            pixmap,
+                            pixmap.format,
+                            false,
+                            false,
+                            true
+                        )
+                    )
+                    pixmap.dispose()
+                    image = TextureRegionDrawable(TextureRegion(texture))
+                    listener.imageDownloaded()
+                }
             }
 
-            @Override
-            public void failed(Throwable t) {
-                if (listener != null)
-                    listener.imageDownloadFail();
-                Gdx.app.log("EmptyDownloadTest", "Failed", t);
+            override fun failed(t: Throwable) {
+                listener.imageDownloadFail()
+                Gdx.app.log("EmptyDownloadTest", "Failed", t)
             }
 
-            @Override
-            public void cancelled() {
-                Gdx.app.log("EmptyDownloadTest", "Cancelled");
+            override fun cancelled() {
+                Gdx.app.log("EmptyDownloadTest", "Cancelled")
             }
-        });
+        })
     }
 
     // see: http://stackoverflow.com/a/15329259/3479489
-    public String getScoreWithFormat() {
-        String str = String.valueOf(score);
-        int floatPos = str.contains(".") ? str.length() - str.indexOf(".") : 0;
-        int nGroups = (str.length() - floatPos - 1 - (str.contains("-") ? 1 : 0)) / 3;
-        for (int i = 0; i < nGroups; i++) {
-            int commaPos = str.length() - i * 4 - 3 - floatPos;
-            str = str.substring(0, commaPos) + "," + str.substring(commaPos);
+    fun getScoreWithFormat(): String {
+        var str = score.toString()
+        val floatPos = if (str.contains(".")) {
+            str.length - str.indexOf(".")
+        } else {
+            0
         }
-        return str;
+        val nGroups = (str.length - floatPos - 1 - (if (str.contains("-")) 1 else 0)) / 3
+        for (i in 0 until nGroups) {
+            val commaPos = str.length - i * 4 - 3 - floatPos
+            str = str.substring(0, commaPos) + "," + str.substring(commaPos)
+        }
+        return str
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Person) {
-            Person objPerson = (Person) obj;
-            return id.equals(objPerson.id) && accountType == objPerson.accountType;
-
-        } else
-            return false;
+    override fun equals(other: Any?): Boolean {
+        return if (other is Person) {
+            (id == other.id) && (accountType == other.accountType)
+        } else false
     }
 
-    @Override
-    public int compareTo(Person o) {
-        return Long.compare(o.score, score);
+    override fun compareTo(other: Person) = other.score.compareTo(score)
+
+    override fun hashCode(): Int {
+        var result = accountType.hashCode()
+        result = 31 * result + id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + score.hashCode()
+        result = 31 * result + imageURL.hashCode()
+        result = 31 * result + (image?.hashCode() ?: 0)
+        result = 31 * result + isMe.hashCode()
+        return result
     }
 
-    public enum AccountType {
+    enum class AccountType {
         GOOGLE_PLAY, AMAZON, FACEBOOK
     }
 
-    public interface DownloadImageCompleteListener {
-        void imageDownloaded();
+    interface DownloadImageCompleteListener {
+        fun imageDownloaded()
 
-        void imageDownloadFail();
+        fun imageDownloadFail()
     }
-
 }
