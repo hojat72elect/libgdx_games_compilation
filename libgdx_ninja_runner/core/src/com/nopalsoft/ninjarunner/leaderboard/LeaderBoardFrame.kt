@@ -31,9 +31,9 @@ class LeaderBoardFrame(player: Person) : Table() {
         tableAux.add(labelScore).row()
 
         val imageSocialNetwork: Image? = when (player.accountType) {
-            Person.AccountType.GOOGLE_PLAY -> Image(Assets.imageGoogle)
-            Person.AccountType.AMAZON -> Image(Assets.imageAmazon)
-            Person.AccountType.FACEBOOK -> Image(Assets.imageFacebook)
+            AccountType.GOOGLE_PLAY -> Image(Assets.imageGoogle)
+            AccountType.AMAZON -> Image(Assets.imageAmazon)
+            AccountType.FACEBOOK -> Image(Assets.imageFacebook)
         }
         tableAux.add(imageSocialNetwork).size(25f).row()
 

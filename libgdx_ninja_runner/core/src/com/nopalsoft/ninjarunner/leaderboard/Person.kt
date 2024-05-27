@@ -99,10 +99,6 @@ class Person(
         return result
     }
 
-    enum class AccountType {
-        GOOGLE_PLAY, AMAZON, FACEBOOK
-    }
-
     interface DownloadImageCompleteListener {
         fun imageDownloaded()
 
