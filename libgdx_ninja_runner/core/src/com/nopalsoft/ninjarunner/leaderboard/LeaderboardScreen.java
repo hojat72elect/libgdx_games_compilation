@@ -14,6 +14,10 @@ import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.game.GameScreen;
 import com.nopalsoft.ninjarunner.screens.Screens;
 
+/**
+ * Shows all the top scoring users of the game. It doesn't matter which social network they have
+ * used for logging in to the game; here they are shown if they are leader board users of the game.
+ */
 public class LeaderboardScreen extends Screens {
 
     Table tableMenu;
