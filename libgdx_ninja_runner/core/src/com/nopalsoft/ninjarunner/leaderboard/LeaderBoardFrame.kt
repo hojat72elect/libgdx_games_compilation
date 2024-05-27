@@ -1,91 +1,78 @@
-package com.nopalsoft.ninjarunner.leaderboard;
+package com.nopalsoft.ninjarunner.leaderboard
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.ninjarunner.Assets;
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.leaderboard.Person.AccountType
+import com.nopalsoft.ninjarunner.leaderboard.Person.DownloadImageCompleteListener
 
-public class LeaderBoardFrame extends Table {
-    Person myPlayer;
-    Label labelName;
-    Label labelScore;
-    Table tableAux;//It is necessary because on the left side there is a photo and on the right
+class LeaderBoardFrame(player: Person) : Table() {
+    private val labelName = Label(player.name, Assets.labelStyleSmall)
+    private val labelScore =
+        Label(player.scoreWithFormat, Label.LabelStyle(Assets.fontSmall, Color.RED))
+    private val tableAux =
+        Table()//It is necessary because on the left side there is a photo and on the right
     // side there are several textFields in lines
-    /**
-     * I use an image button because it can have a background and an image.
-     */
-    private ImageButton personImage;
 
-    public LeaderBoardFrame(Person player) {
-        setBackground(Assets.backgroundItemShop);
-        pad(5);
-        this.myPlayer = player;
+    // I use an image button because it can have a background and an image.
+    private var personImage: ImageButton? = null
 
+    init {
+        background = Assets.backgroundItemShop
+        pad(5f)
 
-        labelName = new Label(myPlayer.name, Assets.labelStyleSmall);
-        labelScore = new Label(myPlayer.getScoreWithFormat(), new Label.LabelStyle(Assets.fontSmall, Color.RED));
+        tableAux.left()
+        tableAux.defaults().left()
+        tableAux.add(labelName).row()
+        tableAux.add(labelScore).row()
 
-        tableAux = new Table();
-        tableAux.left();
-
-        tableAux.defaults().left();
-        tableAux.add(labelName).row();
-        tableAux.add(labelScore).row();
-
-        Image imageSocialNetwork = null;
-        switch (myPlayer.accountType) {
-            case GOOGLE_PLAY:
-                imageSocialNetwork = new Image(Assets.imageGoogle);
-                break;
-            case AMAZON:
-                imageSocialNetwork = new Image(Assets.imageAmazon);
-                break;
-            case FACEBOOK:
-                imageSocialNetwork = new Image(Assets.imageFacebook);
-                break;
+        val imageSocialNetwork: Image? = when (player.accountType) {
+            AccountType.GOOGLE_PLAY -> Image(Assets.imageGoogle)
+            AccountType.AMAZON -> Image(Assets.imageAmazon)
+            AccountType.FACEBOOK -> Image(Assets.imageFacebook)
         }
-        tableAux.add(imageSocialNetwork).size(25).row();
+        tableAux.add(imageSocialNetwork).size(25f).row()
 
 
-        if (myPlayer.image != null)
-            setPicture(myPlayer.image);
-        else {
-            myPlayer.downloadImage(new Person.DownloadImageCompleteListener() {
-                @Override
-                public void imageDownloaded() {
-                    setPicture(myPlayer.image);
-                }
-
-                @Override
-                public void imageDownloadFail() {
-                    setPicture(Assets.photoNA);
-                }
-            });
-        }
-        refresh();//Para que ponga la info luego luego. si lo borro hasta que se ponga la photo se pone la info
-    }
-
-    public void setPicture(TextureRegionDrawable drawable) {
-        personImage = new ImageButton(new ImageButton.ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null));
-        refresh();
-    }
-
-    private void refresh() {
-        clear();
-        float size = 100;
-        if (personImage != null) {
-            personImage.getImageCell().size(size);
-            add(personImage).size(size);
+        if (player.image != null) {
+            setPicture(player.image)
         } else {
-            add().size(size);
+
+            player.downloadImage(object : DownloadImageCompleteListener {
+                override fun imageDownloaded() {
+                    setPicture(player.image)
+                }
+
+                override fun imageDownloadFail() {
+                    setPicture(Assets.photoNA)
+                }
+            })
+        }
+        refresh() //So that I can put the info later. If I delete it until the photo is posted, the info is posted.
+    }
+
+    fun setPicture(drawable: TextureRegionDrawable) {
+        personImage =
+            ImageButton(ImageButtonStyle(drawable, null, null, Assets.photoFrame, null, null))
+        refresh()
+    }
+
+    private fun refresh() {
+        clear()
+        val size = 100f
+        if (personImage != null) {
+            personImage!!.imageCell.size(size)
+            add(personImage).size(size)
+        } else {
+            add().size(size)
         }
 
-        add(tableAux).padLeft(20).expandX().fill();
-
-
+        add(tableAux).padLeft(20f).expandX().fill()
     }
 
 }
