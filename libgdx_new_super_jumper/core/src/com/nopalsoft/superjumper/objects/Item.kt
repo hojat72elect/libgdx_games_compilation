@@ -1,53 +1,55 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Pool.Poolable
 
-public class Item implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_TAKEN = 1;
-	public int state;
+class Item : Poolable {
 
-	public final static float DRAW_WIDTH = .27f;
-	public final static float DRAW_HEIGHT = .34f;
-	public final static float WIDTH = .25f;
-	public final static float HEIGHT = .32f;
+    @JvmField
+    val position = Vector2()
 
-	public final static int TYPE_JETPACK = 0;
-	public final static int TYPE_BUBBLE = 1;
-	public final static int TYPE_GUN = 2;
-	public int type;
+    @JvmField
+    var state = 0
 
-	public final Vector2 position;
+    @JvmField
+    var type = 0
+    var stateTime = 0f
 
-	public float stateTime;
 
-	public Item() {
-		position = new Vector2();
-	}
+    fun initializeItem(x: Float, y: Float) {
+        position.set(x, y)
+        state = STATE_NORMAL
+        stateTime = 0f
 
-	public void initializeItem(float x, float y) {
-		position.set(x, y);
-		state = STATE_NORMAL;
-		stateTime = 0;
+        type = MathUtils.random(2)
+    }
 
-		type = MathUtils.random(2);
-	}
 
-	public void update(float delta) {
-		stateTime += delta;
-	}
+    fun update(delta: Float) {
+        stateTime += delta
+    }
 
-	public void take() {
-		state = STATE_TAKEN;
-		stateTime = 0;
-	}
+    fun take() {
+        state = STATE_TAKEN
+        stateTime = 0f
+    }
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
 
-	}
+    override fun reset() {
+        // Nothing is happening in here.
+    }
 
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_TAKEN = 1
+        const val DRAW_WIDTH = .27f
+        const val DRAW_HEIGHT = .34f
+        const val WIDTH = .25f
+        const val HEIGHT = .32f
+
+        const val TYPE_JETPACK = 0
+        const val TYPE_BUBBLE = 1
+        const val TYPE_GUN = 2
+    }
 }
