@@ -1,60 +1,71 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
 
-public class PlatformPiece implements Poolable {
-    public final static int STATE_NORMAL = 0;
-    public final static int STATE_DESTROY = 1;
-    public static final float DRAW_WIDTH_NORMAL = Platform.DRAW_WIDTH_NORMAL / 2f;
-    public static final float DRAW_HEIGHT_NORMAL = Platform.DRAW_HEIGHT_NORMAL;
-    public static final float WIDTH_NORMAL = Platform.WIDTH_NORMAL / 2f;
-    public static final float HEIGHT_NORMAL = Platform.HEIGHT_NORMAL;
-    public static final int TYPE_LEFT = 0;
-    public static final int TYPE_RIGHT = 1;
-    public final Vector2 position;
-    public int state;
-    public int color;
-    public int type;
-    public float stateTime;
-    public float angleDegree;
+class PlatformPiece : Poolable {
 
-    public PlatformPiece() {
-        position = new Vector2();
+    @JvmField
+    val position = Vector2()
 
+    @JvmField
+    var state = 0
+
+    @JvmField
+    var color = 0
+
+    @JvmField
+    var type = 0
+    var stateTime = 0f
+
+    @JvmField
+    var angleDegree = 0f
+
+
+    fun initializePlatformPiece(x: Float, y: Float, type: Int, color: Int) {
+        position.set(x, y)
+        this.type = type
+        this.color = color
+        angleDegree = 0f
+        stateTime = 0f
+        state = STATE_NORMAL
     }
 
-    public void initializePlatformPiece(float x, float y, int type, int color) {
-        position.set(x, y);
-        this.type = type;
-        this.color = color;
-        angleDegree = 0;
-        stateTime = 0;
-        state = STATE_NORMAL;
-    }
 
-    public void update(float delta, Body body) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
-        angleDegree = MathUtils.radiansToDegrees * body.getAngle();
+    fun update(delta: Float, body: Body) {
+        position.x = body.position.x
+        position.y = body.position.y
+        angleDegree = MathUtils.radiansToDegrees * body.angle
 
         if (angleDegree > 90) {
-            body.setTransform(position, MathUtils.degreesToRadians * 90);
-            angleDegree = 90;
+            body.setTransform(position, MathUtils.degreesToRadians * 90)
+            angleDegree = 90f
         }
 
-        stateTime += delta;
-
+        stateTime += delta
     }
 
-    @Override
-    public void reset() {
-        // TODO Auto-generated method stub
+
+    override fun reset() {
+
+        // Nothing is happening in here.
     }
 
-    public void setDestroy() {
-        state = STATE_DESTROY;
+    fun setDestroy() {
+        state = STATE_DESTROY
+    }
+
+    companion object {
+
+        const val STATE_NORMAL = 0
+        const val STATE_DESTROY = 1
+        const val DRAW_WIDTH_NORMAL = Platform.DRAW_WIDTH_NORMAL / 2f
+        const val DRAW_HEIGHT_NORMAL = Platform.DRAW_HEIGHT_NORMAL
+        const val WIDTH_NORMAL = Platform.WIDTH_NORMAL / 2f
+        const val HEIGHT_NORMAL = Platform.HEIGHT_NORMAL
+        const val TYPE_LEFT = 0
+        const val TYPE_RIGHT = 1
     }
 }
