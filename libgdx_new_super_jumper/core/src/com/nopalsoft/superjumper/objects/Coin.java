@@ -31,7 +31,7 @@ public class Coin implements Poolable {
 		position = new Vector2();
 	}
 
-	public void init(float x, float y) {
+	public void initializeCoin(float x, float y) {
 		position.set(x, y);
 		state = STATE_NORMAL;
 		stateTime = 0;
@@ -46,24 +46,24 @@ public class Coin implements Poolable {
 		stateTime = 0;
 	}
 
-	final static float SEPARACION_MONEDAS = .025f;// Variable so that the coins are not stuck
+	final static float COINS_SEPARATION = .025f;// Variable so that the coins are not stuck
 
 	public static void createCoins(World worldBox, Array<Coin> coinsArray, float y) {
-		createCubo(worldBox, coinsArray, y);
+		createACoupleOfCoins(worldBox, coinsArray, y);
 	}
 
 	public static void createACoin(World worldBox, Array<Coin> arrayCoins, float y) {
 		createCoins(worldBox, arrayCoins, generaPosX(1), y);
 	}
 
-	private static void createCubo(World worldBox, Array<Coin> arrayCoins, float y) {
-		int renMax = MathUtils.random(25) + 1;
-		int colMax = MathUtils.random(6) + 1;
+	private static void createACoupleOfCoins(World worldBox, Array<Coin> arrayCoins, float y) {
+		int maxRow = MathUtils.random(25) + 1;
+		int maxColumn = MathUtils.random(6) + 1;
 
-		float x = generaPosX(colMax);
-		for (int col = 0; col < colMax; col++) {
-			for (int ren = 0; ren < renMax; ren++) {
-				createCoins(worldBox, arrayCoins, x + (col * (WIDTH + SEPARACION_MONEDAS)), y + (ren * (HEIGHT + SEPARACION_MONEDAS)));
+		float x = generaPosX(maxColumn);
+		for (int column = 0; column < maxColumn; column++) {
+			for (int row = 0; row < maxRow; row++) {
+				createCoins(worldBox, arrayCoins, x + (column * (WIDTH + COINS_SEPARATION)), y + (row * (HEIGHT + COINS_SEPARATION)));
 			}
 		}
 
@@ -74,8 +74,8 @@ public class Coin implements Poolable {
      */
 	private static float generaPosX(int numberOfLineCoins) {
 		float x = MathUtils.random(Screens.WORLD_WIDTH) + WIDTH / 2f;
-		if (x + (numberOfLineCoins * (WIDTH + SEPARACION_MONEDAS)) > Screens.WORLD_WIDTH) {
-			x -= (x + (numberOfLineCoins * (WIDTH + SEPARACION_MONEDAS))) - Screens.WORLD_WIDTH;// Make the difference from the width and what is happening.
+		if (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION)) > Screens.WORLD_WIDTH) {
+			x -= (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION))) - Screens.WORLD_WIDTH;// Make the difference from the width and what is happening.
 			x += WIDTH / 2f;// Adds half to be stuck.
 		}
 		return x;
@@ -83,7 +83,7 @@ public class Coin implements Poolable {
 
 	private static void createCoins(World worldBox, Array<Coin> arrayCoins, float x, float y) {
 		Coin coin = Pools.obtain(Coin.class);
-		coin.init(x, y);
+		coin.initializeCoin(x, y);
 
 		BodyDef bd = new BodyDef();
 		bd.position.x = x;
