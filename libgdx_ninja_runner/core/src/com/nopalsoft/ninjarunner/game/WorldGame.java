@@ -182,7 +182,7 @@ public class WorldGame {
         if (myPlayer.position.x > worldCreatedUpToX - 5)
             createNextPart();
 
-        if (myPlayer.state == Player.STATE_DEAD && myPlayer.stateTime >= Player.DURATION_DEAD)
+        if (myPlayer.state == Player.STATE_DEAD && myPlayer.stateTime >= Player.getDURATION_DEAD())
             state = STATE_GAMEOVER;
 
         timeToSpawnMissile += delta;
