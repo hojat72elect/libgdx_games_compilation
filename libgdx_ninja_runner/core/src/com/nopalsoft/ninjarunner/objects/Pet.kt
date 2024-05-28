@@ -1,70 +1,76 @@
-package com.nopalsoft.ninjarunner.objects;
+package com.nopalsoft.ninjarunner.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
 
-public class Pet {
-    public final static int STATE_NORMAL = 0;
+/**
+ * The pet that the user will have and follows them through the game.
+ */
+class Pet(x: Float, y: Float, @JvmField val petType: PetType) {
 
-    public final static float SPEED = 5f;
-    public static final float RADIUS = .25f;
-    public final PetType petType;
-    public final float drawWidth;
-    public final float drawHeight;
-    public final float dashDrawWidth;
-    public final float dashDrawHeight;
-    public final Vector2 position;
-    final public Vector2 targetPosition;
-    public int state;
-    public Vector2 velocity;
-    public float stateTime;
+    @JvmField
+    val position = Vector2(x, y)
+    private val targetPosition = Vector2(x, y)
+    private var velocity = Vector2()
 
-    public Pet(float x, float y, PetType petType) {
-        this.petType = petType;
-        position = new Vector2(x, y);
-        targetPosition = new Vector2(x, y);
-        velocity = new Vector2();
-        state = STATE_NORMAL;
-        stateTime = 0;
+    @JvmField
+    var stateTime = 0f
 
-        switch (petType) {
-            case PINK_BIRD:
-                drawWidth = .73f;
-                drawHeight = .66f;
-                dashDrawWidth = 2.36f;
-                dashDrawHeight = 1.25f;
-                break;
-            default:
-            case BOMB:
-                drawWidth = dashDrawWidth = .52f;
-                drawHeight = dashDrawHeight = .64f;
-                break;
+    @JvmField
+    var drawWidth = 0f
+
+    @JvmField
+    var drawHeight = 0f
+
+    @JvmField
+    var dashDrawWidth = 0f
+
+    @JvmField
+    var dashDrawHeight = 0f
+
+    init {
+        when (petType) {
+            PetType.PINK_BIRD -> {
+                drawWidth = .73f
+                drawHeight = .66f
+                dashDrawWidth = 2.36f
+                dashDrawHeight = 1.25f
+            }
+
+            PetType.BOMB -> {
+                dashDrawWidth = .52f
+                drawWidth = dashDrawWidth
+                dashDrawHeight = .64f
+                drawHeight = dashDrawHeight
+            }
 
         }
-
     }
 
-    public void update(Body body, float delta, float targetX, float targetY) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
+    fun update(body: Body, delta: Float, targetX: Float, targetY: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
 
-        targetPosition.set(targetX, targetY);
+        targetPosition.set(targetX, targetY)
 
-        velocity = body.getLinearVelocity();
-        velocity.set(targetPosition).sub(position).scl(SPEED);
-        body.setLinearVelocity(velocity);
-        stateTime += delta;
+        velocity = body.linearVelocity
+        velocity.set(targetPosition).sub(position).scl(SPEED)
+        body.linearVelocity = velocity
+        stateTime += delta
+    }
+
+    fun updateStateTime(delta: Float) {
+        stateTime += delta
     }
 
 
-    public void updateStateTime(float delta) {
-        stateTime += delta;
+    companion object {
 
+        const val SPEED = 5f
+        const val RADIUS = .25f
     }
 
-    public enum PetType {
+    enum class PetType {
         PINK_BIRD, BOMB
-
     }
-
 }

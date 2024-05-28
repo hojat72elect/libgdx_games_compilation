@@ -16,7 +16,7 @@ import com.nopalsoft.ninjarunner.AnimationSprite;
 import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.MainGame;
 import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.objects.Pet.PetType;
+import com.nopalsoft.ninjarunner.objects.Pet;
 import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor;
 
 public class PetsSubMenu {
@@ -131,12 +131,12 @@ public class PetsSubMenu {
         {
             {
                 buttonBuyOrSelectBird = new TextButton(textSelect, Assets.styleTextButtonPurchased);
-                if (Settings.getSelectedPet() == PetType.PINK_BIRD)
+                if (Settings.getSelectedPet() == Pet.PetType.PINK_BIRD)
                     buttonBuyOrSelectBird.setVisible(false);
                 buttonBuyOrSelectBird.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Settings.setSelectedPet(PetType.PINK_BIRD);
+                        Settings.setSelectedPet(Pet.PetType.PINK_BIRD);
                         setSelected(buttonBuyOrSelectBird);
                     }
                 });
@@ -167,14 +167,14 @@ public class PetsSubMenu {
                 else
                     buttonBuyBomb = new TextButton(textBuy, Assets.styleTextButtonBuy);
 
-                if (Settings.getSelectedPet() == PetType.BOMB)
+                if (Settings.getSelectedPet() == Pet.PetType.BOMB)
                     buttonBuyBomb.setVisible(false);
 
                 buttonBuyBomb.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         if (didBuyBomb) {
-                            Settings.setSelectedPet(PetType.BOMB);
+                            Settings.setSelectedPet(Pet.PetType.BOMB);
                             setSelected(buttonBuyBomb);
                         } else if (Settings.getTotalCoins() >= BOMB_PRICE) {
 

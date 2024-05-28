@@ -1,7 +1,7 @@
 package com.nopalsoft.ninjarunner
 
 import com.badlogic.gdx.Gdx
-import com.nopalsoft.ninjarunner.objects.Pet.PetType
+import com.nopalsoft.ninjarunner.objects.Pet
 import com.nopalsoft.ninjarunner.objects.Player
 
 object Settings {
@@ -20,7 +20,7 @@ object Settings {
     var totalCoins = 1_500_000
 
     @JvmStatic
-    var selectedPet = PetType.PINK_BIRD
+    var selectedPet = Pet.PetType.PINK_BIRD
 
     @JvmStatic
     var LEVEL_PET_BIRD = 0
