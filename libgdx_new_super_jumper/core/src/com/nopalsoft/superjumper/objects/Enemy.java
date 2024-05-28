@@ -7,77 +7,72 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.nopalsoft.superjumper.screens.Screens;
 
 public class Enemy implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DEAD = 1;
-	public int state;
+    public final static int STATE_NORMAL = 0;
+    public final static int STATE_DEAD = 1;
+    public final static float DRAW_WIDTH = .95f;
+    public final static float DRAW_HEIGHT = .6f;
+    public final static float WIDTH = .65f;
+    public final static float HEIGHT = .4f;
+    public final static float SPEED_X = 2;
+    final public Vector2 position;
+    public int state;
+    public Vector2 speed;
+    public float angleDegree;
 
-	public final static float DRAW_WIDTH = .95f;
-	public final static float DRAW_HEIGHT = .6f;
+    public float stateTime;
 
-	public final static float WIDTH = .65f;
-	public final static float HEIGHT = .4f;
+    public Enemy() {
+        position = new Vector2();
+        speed = new Vector2();
 
-	public final static float VELOCIDAD_X = 2;
+    }
 
-	final public Vector2 position;
-	public Vector2 speed;
-	public float angleDeg;
+    public void init(float x, float y) {
+        position.set(x, y);
+        speed.set(0, 0);// I set the speed from the method where I create it
+        stateTime = 0;
+        state = STATE_NORMAL;
+        angleDegree = 0;
 
-	public float stateTime;
+    }
 
-	public Enemy() {
-		position = new Vector2();
-		speed = new Vector2();
+    public void update(Body body, float delta) {
+        position.x = body.getPosition().x;
+        position.y = body.getPosition().y;
 
-	}
+        speed = body.getLinearVelocity();
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		speed.set(0, 0);// I set the speed from the method where I create it
-		stateTime = 0;
-		state = STATE_NORMAL;
-		angleDeg = 0;
+        if (state == STATE_NORMAL) {
 
-	}
+            if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
+                speed.x = speed.x * -1;
+            }
 
-	public void update(Body body, float delta) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
+        } else {
+            body.setAngularVelocity(MathUtils.degRad * 360);
+            if (speed.y < -5)
+                speed.y = -5;
+        }
 
-		speed = body.getLinearVelocity();
+        body.setLinearVelocity(speed);
 
-		if (state == STATE_NORMAL) {
+        angleDegree = body.getAngle() * MathUtils.radDeg;
 
-			if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
-				speed.x = speed.x * -1;
-			}
+        speed = body.getLinearVelocity();
+        stateTime += delta;
 
-		}
-		else {
-			body.setAngularVelocity(MathUtils.degRad * 360);
-			if (speed.y < -5)
-				speed.y = -5;
-		}
+    }
 
-		body.setLinearVelocity(speed);
+    public void hit() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DEAD;
+            stateTime = 0;
+        }
 
-		angleDeg = body.getAngle() * MathUtils.radDeg;
+    }
 
-		speed = body.getLinearVelocity();
-		stateTime += delta;
-
-	}
-
-	public void hit() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DEAD;
-			stateTime = 0;
-		}
-
-	}
-
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 
 }
