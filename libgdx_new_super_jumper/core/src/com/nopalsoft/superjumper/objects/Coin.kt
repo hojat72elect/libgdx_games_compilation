@@ -1,112 +1,120 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.badlogic.gdx.utils.Pools;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.Pool.Poolable
+import com.badlogic.gdx.utils.Pools
+import com.nopalsoft.superjumper.screens.Screens
 
-public class Coin implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_TAKEN = 1;
-	public int state;
+class Coin():Poolable {
 
-	public final static float DRAW_WIDTH = .27f;
-	public final static float DRAW_HEIGHT = .34f;
-	public final static float WIDTH = .25f;
-	public final static float HEIGHT = .32f;
+    @JvmField
+    var state = 0
+    @JvmField
+    val position = Vector2()
+    var stateTime = 0f
 
-	public final Vector2 position;
 
-	public float stateTime;
+    fun initializeCoin(x: Float, y: Float) {
+        position.set(x, y)
+        state = STATE_NORMAL
+        stateTime = 0f
+    }
 
-	public Coin() {
-		position = new Vector2();
-	}
+    fun update(delta: Float) {
+        stateTime += delta
+    }
 
-	public void initializeCoin(float x, float y) {
-		position.set(x, y);
-		state = STATE_NORMAL;
-		stateTime = 0;
-	}
+    fun take() {
+        state = STATE_TAKEN
+        stateTime = 0f
+    }
 
-	public void update(float delta) {
-		stateTime += delta;
-	}
+    override fun reset() {
+       // Nothing is happening in here.
+    }
 
-	public void take() {
-		state = STATE_TAKEN;
-		stateTime = 0;
-	}
+    companion object{
+        const val STATE_NORMAL = 0
+        const val STATE_TAKEN = 1
 
-	final static float COINS_SEPARATION = .025f;// Variable so that the coins are not stuck
+        const val DRAW_WIDTH = .27f
+        const val DRAW_HEIGHT = .34f
 
-	public static void createCoins(World worldBox, Array<Coin> coinsArray, float y) {
-		createACoupleOfCoins(worldBox, coinsArray, y);
-	}
+        const val WIDTH = .25f
+        const val HEIGHT = .32f
 
-	public static void createACoin(World worldBox, Array<Coin> arrayCoins, float y) {
-		createCoins(worldBox, arrayCoins, generaPosX(1), y);
-	}
+        const val COINS_SEPARATION = .025f // Variable so that the coins are not stuck
 
-	private static void createACoupleOfCoins(World worldBox, Array<Coin> arrayCoins, float y) {
-		int maxRow = MathUtils.random(25) + 1;
-		int maxColumn = MathUtils.random(6) + 1;
+        @JvmStatic
+        fun createCoins(worldBox: World, coinsArray: Array<Coin>, y: Float) {
+            createACoupleOfCoins(worldBox, coinsArray, y)
+        }
 
-		float x = generaPosX(maxColumn);
-		for (int column = 0; column < maxColumn; column++) {
-			for (int row = 0; row < maxRow; row++) {
-				createCoins(worldBox, arrayCoins, x + (column * (WIDTH + COINS_SEPARATION)), y + (row * (HEIGHT + COINS_SEPARATION)));
-			}
-		}
+        @JvmStatic
+        fun createACoin(worldBox: World, arrayCoins: Array<Coin>, y: Float) {
+            createCoins(worldBox, arrayCoins, generaPosX(1), y)
+        }
 
-	}
 
-	/**
-	 * It generates a position in X depending on the number of lines of the line so that they do not get out of the screen on the right or on the left.
-     */
-	private static float generaPosX(int numberOfLineCoins) {
-		float x = MathUtils.random(Screens.WORLD_WIDTH) + WIDTH / 2f;
-		if (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION)) > Screens.WORLD_WIDTH) {
-			x -= (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION))) - Screens.WORLD_WIDTH;// Make the difference from the width and what is happening.
-			x += WIDTH / 2f;// Adds half to be stuck.
-		}
-		return x;
-	}
+        private fun createACoupleOfCoins(worldBox: World, arrayCoins: Array<Coin>, y: Float) {
+            val maxRow = MathUtils.random(25) + 1
+            val maxColumn = MathUtils.random(6) + 1
 
-	private static void createCoins(World worldBox, Array<Coin> arrayCoins, float x, float y) {
-		Coin coin = Pools.obtain(Coin.class);
-		coin.initializeCoin(x, y);
+            val x = generaPosX(maxColumn)
+            for (column in 0 until maxColumn) {
+                for (row in 0 until maxRow) {
+                    createCoins(
+                        worldBox,
+                        arrayCoins,
+                        x + (column * (WIDTH + COINS_SEPARATION)),
+                        y + (row * (HEIGHT + COINS_SEPARATION))
+                    )
+                }
+            }
+        }
 
-		BodyDef bd = new BodyDef();
-		bd.position.x = x;
-		bd.position.y = y;
-		bd.type = BodyType.StaticBody;
-		Body oBody = worldBox.createBody(bd);
+        /**
+         * It generates a position in X depending on the number of lines of the line so
+         * that they do not get out of the screen on the right or on the left.
+         */
+        private fun generaPosX(numberOfLineCoins: Int): Float {
+            var x = MathUtils.random(Screens.WORLD_WIDTH) + (WIDTH / 2f)
+            if (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION)) > Screens.WORLD_WIDTH) {
+                x -= (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION))) - Screens.WORLD_WIDTH // Make the difference from the width and what is happening.
+                x += WIDTH / 2f // Adds half to be stuck.
+            }
+            return x
+        }
 
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(WIDTH / 2f, HEIGHT / 2f);
 
-		FixtureDef fixture = new FixtureDef();
-		fixture.shape = shape;
-		fixture.isSensor = true;
-		oBody.createFixture(fixture);
-		oBody.setUserData(coin);
-		shape.dispose();
-		arrayCoins.add(coin);
-	}
+        private fun createCoins(worldBox: World, arrayCoins: Array<Coin>, x: Float, y: Float) {
+            val coin = Pools.obtain(Coin::class.java)
+            coin.initializeCoin(x, y)
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
+            val bd = BodyDef()
+            bd.position.x = x
+            bd.position.y = y
+            bd.type = BodyType.StaticBody
+            val oBody = worldBox.createBody(bd)
 
-	}
+            val shape = PolygonShape()
+            shape.setAsBox(WIDTH / 2f, HEIGHT / 2f)
 
+            val fixture = FixtureDef()
+            fixture.shape = shape
+            fixture.isSensor = true
+            oBody.createFixture(fixture)
+            oBody.userData = coin
+            shape.dispose()
+            arrayCoins.add(coin)
+        }
+
+    }
 }
