@@ -36,7 +36,7 @@ public class BaseScreenGameover extends BaseScreen {
 		Label lbScore = new Label("Score", Assets.labelStyleChico);
 		lbScore.setAlignment(Align.left);
 
-		Label lblNumScore = new Label(oWorld.distanciaMax + "", Assets.labelStyleChico);
+		Label lblNumScore = new Label(oWorld.maxDistance + "", Assets.labelStyleChico);
 		lblNumScore.setAlignment(Align.right);
 
 		Label lbBestScore = new Label("Best Score", Assets.labelStyleChico);

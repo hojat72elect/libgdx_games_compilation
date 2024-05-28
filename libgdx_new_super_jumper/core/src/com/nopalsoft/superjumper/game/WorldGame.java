@@ -34,75 +34,75 @@ public class WorldGame {
 
     final public static int STATE_RUNNING = 0;
     final public static int STATE_GAMEOVER = 1;
-    private final Array<Body> arrBodies;
-    public World oWorldBox;
+    private final Array<Body> arrayBodies;
+    public World myWorldBox;
     public int coins;
-    public int distanciaMax;
+    public int maxDistance;
     int state;
-    float TIME_TO_CREATE_NUBE = 15;
-    float timeToCreateNube;
-    Player oPer;
-    Array<Platform> arrPlataformas;
-    Array<PlatformPiece> arrPiezasPlataformas;
-    Array<Coin> arrMonedas;
-    Array<Enemy> arrEnemigo;
-    Array<Item> arrItem;
-    Array<Cloud> arrNubes;
-    Array<Ray> arrRayos;
-    Array<Bullet> arrBullets;
-    float mundoCreadoHastaY;
+    float TIME_TO_CREATE_CLOUD = 15;
+    float timeToCreateCloud;
+    Player player;
+    Array<Platform> arrayPlatforms;
+    Array<PlatformPiece> arrayPlatformPieces;
+    Array<Coin> arrayCoins;
+    Array<Enemy> arrayEnemies;
+    Array<Item> arrayItem;
+    Array<Cloud> arrayClouds;
+    Array<Ray> arrayRays;
+    Array<Bullet> arrayBullets;
+    float worldCreatedUpToY;
 
     public WorldGame() {
-        oWorldBox = new World(new Vector2(0, -9.8f), true);
-        oWorldBox.setContactListener(new Colisiones());
+        myWorldBox = new World(new Vector2(0, -9.8f), true);
+        myWorldBox.setContactListener(new Colisiones());
 
-        arrBodies = new Array<>();
-        arrPlataformas = new Array<>();
-        arrPiezasPlataformas = new Array<>();
-        arrMonedas = new Array<>();
-        arrEnemigo = new Array<>();
-        arrItem = new Array<>();
-        arrNubes = new Array<>();
-        arrRayos = new Array<>();
-        arrBullets = new Array<>();
+        arrayBodies = new Array<>();
+        arrayPlatforms = new Array<>();
+        arrayPlatformPieces = new Array<>();
+        arrayCoins = new Array<>();
+        arrayEnemies = new Array<>();
+        arrayItem = new Array<>();
+        arrayClouds = new Array<>();
+        arrayRays = new Array<>();
+        arrayBullets = new Array<>();
 
-        timeToCreateNube = 0;
+        timeToCreateCloud = 0;
 
         state = STATE_RUNNING;
 
         crearPiso();
         crearPersonaje();
 
-        mundoCreadoHastaY = oPer.position.y;
+        worldCreatedUpToY = player.position.y;
         createNextPart();
 
     }
 
     private void createNextPart() {
-        float y = mundoCreadoHastaY + 2;
+        float y = worldCreatedUpToY + 2;
 
-        for (int i = 0; mundoCreadoHastaY < (y + 10); i++) {
-            mundoCreadoHastaY = y + (i * 2);
+        for (int i = 0; worldCreatedUpToY < (y + 10); i++) {
+            worldCreatedUpToY = y + (i * 2);
 
-            createPlatform(mundoCreadoHastaY);
-            createPlatform(mundoCreadoHastaY);
+            createPlatform(worldCreatedUpToY);
+            createPlatform(worldCreatedUpToY);
 
             if (MathUtils.random(100) < 5)
-                Coin.createCoins(oWorldBox, arrMonedas, mundoCreadoHastaY);
+                Coin.createCoins(myWorldBox, arrayCoins, worldCreatedUpToY);
 
             if (MathUtils.random(20) < 5)
-                Coin.createUnaMoneda(oWorldBox, arrMonedas, mundoCreadoHastaY + .5f);
+                Coin.createACoin(myWorldBox, arrayCoins, worldCreatedUpToY + .5f);
 
             if (MathUtils.random(20) < 5)
-                crearEnemigo(mundoCreadoHastaY + .5f);
+                crearEnemigo(worldCreatedUpToY + .5f);
 
-            if (timeToCreateNube >= TIME_TO_CREATE_NUBE) {
-                crearNubes(mundoCreadoHastaY + .7f);
-                timeToCreateNube = 0;
+            if (timeToCreateCloud >= TIME_TO_CREATE_CLOUD) {
+                crearNubes(worldCreatedUpToY + .7f);
+                timeToCreateCloud = 0;
             }
 
             if (MathUtils.random(50) < 5)
-                createItem(mundoCreadoHastaY + .5f);
+                createItem(worldCreatedUpToY + .5f);
         }
 
     }
@@ -114,7 +114,7 @@ public class WorldGame {
         BodyDef bd = new BodyDef();
         bd.type = BodyType.StaticBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         EdgeShape shape = new EdgeShape();
         shape.set(0, 0, Screens.WORLD_WIDTH, 0);
@@ -130,13 +130,13 @@ public class WorldGame {
     }
 
     private void crearPersonaje() {
-        oPer = new Player(2.4f, .5f);
+        player = new Player(2.4f, .5f);
 
         BodyDef bd = new BodyDef();
-        bd.position.set(oPer.position.x, oPer.position.y);
+        bd.position.set(player.position.x, player.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Player.WIDTH / 2f, Player.HEIGHT / 2f);
@@ -148,7 +148,7 @@ public class WorldGame {
         fixutre.restitution = 0;
 
         body.createFixture(fixutre);
-        body.setUserData(oPer);
+        body.setUserData(player);
         body.setFixedRotation(true);
 
         shape.dispose();
@@ -163,7 +163,7 @@ public class WorldGame {
         bd.position.set(oPlat.position.x, oPlat.position.y);
         bd.type = BodyType.KinematicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Platform.WIDTH_NORMAL / 2f, Platform.HEIGHT_NORMAL / 2f);
@@ -173,7 +173,7 @@ public class WorldGame {
 
         body.createFixture(fixutre);
         body.setUserData(oPlat);
-        arrPlataformas.add(oPlat);
+        arrayPlatforms.add(oPlat);
 
         shape.dispose();
 
@@ -207,7 +207,7 @@ public class WorldGame {
         bd.position.set(piece.position.x, piece.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(PlatformPiece.WIDTH_NORMAL / 2f, PlatformPiece.HEIGHT_NORMAL / 2f);
@@ -219,7 +219,7 @@ public class WorldGame {
         body.createFixture(fixutre);
         body.setUserData(piece);
         body.setAngularVelocity(MathUtils.degRad * angularVelocity);
-        arrPiezasPlataformas.add(piece);
+        arrayPlatformPieces.add(piece);
 
         shape.dispose();
     }
@@ -232,7 +232,7 @@ public class WorldGame {
         bd.position.set(oEn.position.x, oEn.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Enemy.WIDTH / 2f, Enemy.HEIGHT / 2f);
@@ -251,7 +251,7 @@ public class WorldGame {
             body.setLinearVelocity(velocidad, 0);
         else
             body.setLinearVelocity(-velocidad, 0);
-        arrEnemigo.add(oEn);
+        arrayEnemies.add(oEn);
 
         shape.dispose();
     }
@@ -263,7 +263,7 @@ public class WorldGame {
         BodyDef bd = new BodyDef();
         bd.position.set(oItem.position.x, oItem.position.y);
         bd.type = BodyType.StaticBody;
-        Body oBody = oWorldBox.createBody(bd);
+        Body oBody = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Item.WIDTH / 2f, Item.HEIGHT / 2f);
@@ -274,7 +274,7 @@ public class WorldGame {
         oBody.createFixture(fixture);
         oBody.setUserData(oItem);
         shape.dispose();
-        arrItem.add(oItem);
+        arrayItem.add(oItem);
     }
 
     private void crearNubes(float y) {
@@ -285,7 +285,7 @@ public class WorldGame {
         bd.position.set(cloud.position.x, cloud.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(com.nopalsoft.superjumper.objects.Cloud.WIDTH / 2f, com.nopalsoft.superjumper.objects.Cloud.HEIGHT / 2f);
@@ -304,7 +304,7 @@ public class WorldGame {
             body.setLinearVelocity(velocidad, 0);
         else
             body.setLinearVelocity(-velocidad, 0);
-        arrNubes.add(cloud);
+        arrayClouds.add(cloud);
 
         shape.dispose();
     }
@@ -317,7 +317,7 @@ public class WorldGame {
         bd.position.set(ray.position.x, ray.position.y);
         bd.type = BodyType.KinematicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(com.nopalsoft.superjumper.objects.Ray.WIDTH / 2f, com.nopalsoft.superjumper.objects.Ray.HEIGHT / 2f);
@@ -330,7 +330,7 @@ public class WorldGame {
         body.setUserData(ray);
 
         body.setLinearVelocity(0, com.nopalsoft.superjumper.objects.Ray.Y_SPEED);
-        arrRayos.add(ray);
+        arrayRays.add(ray);
 
         shape.dispose();
     }
@@ -343,7 +343,7 @@ public class WorldGame {
         bd.position.set(oBullet.position.x, oBullet.position.y);
         bd.type = BodyType.KinematicBody;
 
-        Body body = oWorldBox.createBody(bd);
+        Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Bullet.SIZE / 2f, Bullet.SIZE / 2f);
@@ -361,25 +361,25 @@ public class WorldGame {
 
         body.setLinearVelocity(destino.x, destino.y);
 
-        arrBullets.add(oBullet);
+        arrayBullets.add(oBullet);
 
         shape.dispose();
     }
 
     public void update(float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
-        oWorldBox.step(delta, 8, 4);
+        myWorldBox.step(delta, 8, 4);
 
         eliminarObjetos();
 
-        if (oPer.position.y + 10 > mundoCreadoHastaY) {
+        if (player.position.y + 10 > worldCreatedUpToY) {
             createNextPart();
         }
 
-        timeToCreateNube += delta;// Actualizo el tiempo para crear una nube
+        timeToCreateCloud += delta;// Actualizo el tiempo para crear una nube
 
-        oWorldBox.getBodies(arrBodies);
+        myWorldBox.getBodies(arrayBodies);
 
-        for (Body body : arrBodies) {
+        for (Body body : arrayBodies) {
             if (body.getUserData() instanceof Player) {
                 updatePersonaje(body, delta, acelX, fire, touchPositionWorldCoords);
             } else if (body.getUserData() instanceof Platform) {
@@ -402,31 +402,31 @@ public class WorldGame {
 
         }
 
-        if (distanciaMax < (oPer.position.y * 10)) {
-            distanciaMax = (int) (oPer.position.y * 10);
+        if (maxDistance < (player.position.y * 10)) {
+            maxDistance = (int) (player.position.y * 10);
         }
 
         // Si el personaje esta 5.5f mas abajo de la altura maxima se muere (Se multiplica por 10 porque la distancia se multiplica por 10 )
-        if (oPer.state == Player.STATE_NORMAL && distanciaMax - (5.5f * 10) > (oPer.position.y * 10)) {
-            oPer.die();
+        if (player.state == Player.STATE_NORMAL && maxDistance - (5.5f * 10) > (player.position.y * 10)) {
+            player.die();
         }
-        if (oPer.state == Player.STATE_DEAD && distanciaMax - (25 * 10) > (oPer.position.y * 10)) {
+        if (player.state == Player.STATE_DEAD && maxDistance - (25 * 10) > (player.position.y * 10)) {
             state = STATE_GAMEOVER;
         }
 
     }
 
     private void eliminarObjetos() {
-        oWorldBox.getBodies(arrBodies);
+        myWorldBox.getBodies(arrayBodies);
 
-        for (Body body : arrBodies) {
-            if (!oWorldBox.isLocked()) {
+        for (Body body : arrayBodies) {
+            if (!myWorldBox.isLocked()) {
 
                 if (body.getUserData() instanceof Platform) {
                     Platform oPlat = (Platform) body.getUserData();
                     if (oPlat.state == Platform.STATE_DESTROY) {
-                        arrPlataformas.removeValue(oPlat, true);
-                        oWorldBox.destroyBody(body);
+                        arrayPlatforms.removeValue(oPlat, true);
+                        myWorldBox.destroyBody(body);
                         if (oPlat.type == Platform.TYPE_BREAKABLE)
                             createPiecesOfPlatforms(oPlat);
                         com.badlogic.gdx.utils.Pools.free(oPlat);
@@ -434,55 +434,55 @@ public class WorldGame {
                 } else if (body.getUserData() instanceof Coin) {
                     Coin oMon = (Coin) body.getUserData();
                     if (oMon.state == Coin.STATE_TAKEN) {
-                        arrMonedas.removeValue(oMon, true);
-                        oWorldBox.destroyBody(body);
+                        arrayCoins.removeValue(oMon, true);
+                        myWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oMon);
                     }
                 } else if (body.getUserData() instanceof PlatformPiece) {
                     PlatformPiece oPiez = (PlatformPiece) body.getUserData();
                     if (oPiez.state == PlatformPiece.STATE_DESTROY) {
-                        arrPiezasPlataformas.removeValue(oPiez, true);
-                        oWorldBox.destroyBody(body);
+                        arrayPlatformPieces.removeValue(oPiez, true);
+                        myWorldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oPiez);
                     }
                 } else if (body.getUserData() instanceof Enemy) {
                     Enemy oEnemy = (Enemy) body.getUserData();
                     if (oEnemy.state == Enemy.STATE_DEAD) {
-                        arrEnemigo.removeValue(oEnemy, true);
-                        oWorldBox.destroyBody(body);
+                        arrayEnemies.removeValue(oEnemy, true);
+                        myWorldBox.destroyBody(body);
                         Pools.free(oEnemy);
                     }
                 } else if (body.getUserData() instanceof Item) {
                     Item oItem = (Item) body.getUserData();
                     if (oItem.state == Item.STATE_TAKEN) {
-                        arrItem.removeValue(oItem, true);
-                        oWorldBox.destroyBody(body);
+                        arrayItem.removeValue(oItem, true);
+                        myWorldBox.destroyBody(body);
                         Pools.free(oItem);
                     }
                 } else if (body.getUserData() instanceof Cloud) {
                     Cloud cloud = (Cloud) body.getUserData();
                     if (cloud.state == Cloud.STATE_DEAD) {
-                        arrNubes.removeValue(cloud, true);
-                        oWorldBox.destroyBody(body);
+                        arrayClouds.removeValue(cloud, true);
+                        myWorldBox.destroyBody(body);
                         Pools.free(cloud);
                     }
                 } else if (body.getUserData() instanceof Ray) {
                     Ray ray = (Ray) body.getUserData();
                     if (ray.state == Ray.STATE_DESTROY) {
-                        arrRayos.removeValue(ray, true);
-                        oWorldBox.destroyBody(body);
+                        arrayRays.removeValue(ray, true);
+                        myWorldBox.destroyBody(body);
                         Pools.free(ray);
                     }
                 } else if (body.getUserData() instanceof Bullet) {
                     Bullet oBullet = (Bullet) body.getUserData();
                     if (oBullet.getState() == Bullet.STATE_DESTROY) {
-                        arrBullets.removeValue(oBullet, true);
-                        oWorldBox.destroyBody(body);
+                        arrayBullets.removeValue(oBullet, true);
+                        myWorldBox.destroyBody(body);
                         Pools.free(oBullet);
                     }
                 } else if (body.getUserData().equals("piso")) {
-                    if (oPer.position.y - 5.5f > body.getPosition().y || oPer.state == Player.STATE_DEAD) {
-                        oWorldBox.destroyBody(body);
+                    if (player.position.y - 5.5f > body.getPosition().y || player.state == Player.STATE_DEAD) {
+                        myWorldBox.destroyBody(body);
                     }
                 }
             }
@@ -490,10 +490,10 @@ public class WorldGame {
     }
 
     private void updatePersonaje(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
-        oPer.update(body, delta, acelX);
+        player.update(body, delta, acelX);
 
         if (Settings.numBullets > 0 && fire) {
-            crearBullet(oPer.position.x, oPer.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
+            crearBullet(player.position.x, player.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
             Settings.numBullets--;
 
         }
@@ -503,7 +503,7 @@ public class WorldGame {
     private void updatePlataforma(Body body, float delta) {
         Platform obj = (Platform) body.getUserData();
         obj.update(delta);
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.setDestroy();
         }
     }
@@ -511,7 +511,7 @@ public class WorldGame {
     private void updatePiezaPlataforma(Body body, float delta) {
         PlatformPiece obj = (PlatformPiece) body.getUserData();
         obj.update(delta, body);
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.setDestroy();
         }
 
@@ -520,7 +520,7 @@ public class WorldGame {
     private void updateMoneda(Body body, float delta) {
         Coin obj = (Coin) body.getUserData();
         obj.update(delta);
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.take();
         }
 
@@ -529,7 +529,7 @@ public class WorldGame {
     private void updateEnemigo(Body body, float delta) {
         Enemy obj = (Enemy) body.getUserData();
         obj.update(body, delta);
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.hit();
         }
 
@@ -538,7 +538,7 @@ public class WorldGame {
     private void updateItem(Body body, float delta) {
         Item obj = (Item) body.getUserData();
         obj.update(delta);
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.take();
         }
     }
@@ -552,7 +552,7 @@ public class WorldGame {
             obj.fireLighting();
         }
 
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.destroy();
         }
     }
@@ -561,7 +561,7 @@ public class WorldGame {
         Ray obj = (Ray) body.getUserData();
         obj.update(body, delta);
 
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.destroy();
         }
     }
@@ -570,7 +570,7 @@ public class WorldGame {
         Bullet obj = (Bullet) body.getUserData();
         obj.update(body, delta);
 
-        if (oPer.position.y - 5.5f > obj.position.y) {
+        if (player.position.y - 5.5f > obj.position.y) {
             obj.destroy();
         }
     }
@@ -598,16 +598,16 @@ public class WorldGame {
             Object otraCosa = fixOtraCosa.getBody().getUserData();
 
             if (otraCosa.equals("piso")) {
-                oPer.jump();
+                player.jump();
 
-                if (oPer.state == Player.STATE_DEAD) {
+                if (player.state == Player.STATE_DEAD) {
                     state = STATE_GAMEOVER;
                 }
             } else if (otraCosa instanceof Platform) {
                 Platform obj = (Platform) otraCosa;
 
-                if (oPer.speed.y <= 0) {
-                    oPer.jump();
+                if (player.speed.y <= 0) {
+                    player.jump();
                     if (obj.type == Platform.TYPE_BREAKABLE) {
                         obj.setDestroy();
                     }
@@ -617,21 +617,21 @@ public class WorldGame {
                 Coin obj = (Coin) otraCosa;
                 obj.take();
                 coins++;
-                oPer.jump();
+                player.jump();
             } else if (otraCosa instanceof Enemy) {
-                oPer.hit();
+                player.hit();
             } else if (otraCosa instanceof Ray) {
-                oPer.hit();
+                player.hit();
             } else if (otraCosa instanceof Item) {
                 Item obj = (Item) otraCosa;
                 obj.take();
 
                 switch (obj.type) {
                     case Item.TYPE_BUBBLE:
-                        oPer.setBubble();
+                        player.setBubble();
                         break;
                     case Item.TYPE_JETPACK:
-                        oPer.setJetPack();
+                        player.setJetPack();
                         break;
                     case Item.TYPE_GUN:
                         Settings.numBullets += 10;
@@ -691,7 +691,7 @@ public class WorldGame {
                 if (ponyY < pisY)
                     contact.setEnabled(false);
 
-                if (obj.type == Platform.TYPE_NORMAL && oPer.state == Player.STATE_DEAD) {
+                if (obj.type == Platform.TYPE_NORMAL && player.state == Player.STATE_DEAD) {
                     contact.setEnabled(false);
                 }
 

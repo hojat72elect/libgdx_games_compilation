@@ -106,7 +106,7 @@ public class GameScreen extends Screens {
         myWorldGame.update(delta, acelX, didFire, touchPositionWorldCoords);
 
         labelCoins.setText("x" + myWorldGame.coins);
-        labelDistance.setText("Score " + myWorldGame.distanciaMax);
+        labelDistance.setText("Score " + myWorldGame.maxDistance);
         labelBullets.setText("x" + Settings.numBullets);
 
         if (myWorldGame.state == WorldGame.STATE_GAMEOVER) {
@@ -149,7 +149,7 @@ public class GameScreen extends Screens {
 
     private void setGameover() {
         state = STATE_GAME_OVER;
-        Settings.setBestScore(myWorldGame.distanciaMax);
+        Settings.setBestScore(myWorldGame.maxDistance);
         new com.nopalsoft.superjumper.scene2d.BaseScreenGameover(this).show(stage);
 
     }

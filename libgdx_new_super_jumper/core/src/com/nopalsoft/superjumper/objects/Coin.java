@@ -52,37 +52,36 @@ public class Coin implements Poolable {
 		createCubo(worldBox, coinsArray, y);
 	}
 
-	public static void createUnaMoneda(World worldBox, Array<Coin> arrMonedas, float y) {
-		createCoins(worldBox, arrMonedas, generaPosX(1), y);
+	public static void createACoin(World worldBox, Array<Coin> arrayCoins, float y) {
+		createCoins(worldBox, arrayCoins, generaPosX(1), y);
 	}
 
-	private static void createCubo(World worldBox, Array<Coin> arrMonedas, float y) {
+	private static void createCubo(World worldBox, Array<Coin> arrayCoins, float y) {
 		int renMax = MathUtils.random(25) + 1;
 		int colMax = MathUtils.random(6) + 1;
 
 		float x = generaPosX(colMax);
 		for (int col = 0; col < colMax; col++) {
 			for (int ren = 0; ren < renMax; ren++) {
-				createCoins(worldBox, arrMonedas, x + (col * (WIDTH + SEPARACION_MONEDAS)), y + (ren * (HEIGHT + SEPARACION_MONEDAS)));
+				createCoins(worldBox, arrayCoins, x + (col * (WIDTH + SEPARACION_MONEDAS)), y + (ren * (HEIGHT + SEPARACION_MONEDAS)));
 			}
 		}
 
 	}
 
 	/**
-	 * Genera una posicion en X dependiendo del numero de monedas del renglon para que no se salgan de la pantalla por la derecha o por la izquieda
-	 *
+	 * It generates a position in X depending on the number of lines of the line so that they do not get out of the screen on the right or on the left.
      */
-	private static float generaPosX(int numeroMonedasDelRenglon) {
+	private static float generaPosX(int numberOfLineCoins) {
 		float x = MathUtils.random(Screens.WORLD_WIDTH) + WIDTH / 2f;
-		if (x + (numeroMonedasDelRenglon * (WIDTH + SEPARACION_MONEDAS)) > Screens.WORLD_WIDTH) {
-			x -= (x + (numeroMonedasDelRenglon * (WIDTH + SEPARACION_MONEDAS))) - Screens.WORLD_WIDTH;// Saca la diferencia del ancho y lo que se pasa
-			x += WIDTH / 2f;// Le suma la mitad para que quede pegado
+		if (x + (numberOfLineCoins * (WIDTH + SEPARACION_MONEDAS)) > Screens.WORLD_WIDTH) {
+			x -= (x + (numberOfLineCoins * (WIDTH + SEPARACION_MONEDAS))) - Screens.WORLD_WIDTH;// Make the difference from the width and what is happening.
+			x += WIDTH / 2f;// Adds half to be stuck.
 		}
 		return x;
 	}
 
-	private static void createCoins(World worldBox, Array<Coin> arrMonedas, float x, float y) {
+	private static void createCoins(World worldBox, Array<Coin> arrayCoins, float x, float y) {
 		Coin coin = Pools.obtain(Coin.class);
 		coin.init(x, y);
 
@@ -101,7 +100,7 @@ public class Coin implements Poolable {
 		oBody.createFixture(fixture);
 		oBody.setUserData(coin);
 		shape.dispose();
-		arrMonedas.add(coin);
+		arrayCoins.add(coin);
 	}
 
 	@Override
