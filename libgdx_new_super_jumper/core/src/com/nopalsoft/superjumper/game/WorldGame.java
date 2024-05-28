@@ -157,7 +157,7 @@ public class WorldGame {
     private void createPlatform(float y) {
 
         Platform oPlat = Pools.obtain(Platform.class);
-        oPlat.init(MathUtils.random(Screens.WORLD_WIDTH), y, MathUtils.random(1));
+        oPlat.initializePlatform(MathUtils.random(Screens.WORLD_WIDTH), y, MathUtils.random(1));
 
         BodyDef bd = new BodyDef();
         bd.position.set(oPlat.position.x, oPlat.position.y);

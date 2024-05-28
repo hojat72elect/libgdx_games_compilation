@@ -40,7 +40,7 @@ public class Platform implements Poolable {
 
 	}
 
-	public void init(float x, float y, int type) {
+	public void initializePlatform(float x, float y, int type) {
 		position.set(x, y);
 		this.type = type;
 
