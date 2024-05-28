@@ -226,7 +226,7 @@ public class WorldGame {
 
     private void crearEnemigo(float y) {
         Enemy oEn = Pools.obtain(Enemy.class);
-        oEn.init(MathUtils.random(Screens.WORLD_WIDTH), y);
+        oEn.initializeEnemy(MathUtils.random(Screens.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(oEn.position.x, oEn.position.y);

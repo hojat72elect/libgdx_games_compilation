@@ -27,7 +27,7 @@ public class Enemy implements Poolable {
 
     }
 
-    public void init(float x, float y) {
+    public void initializeEnemy(float x, float y) {
         position.set(x, y);
         speed.set(0, 0);// I set the speed from the method where I create it
         stateTime = 0;
