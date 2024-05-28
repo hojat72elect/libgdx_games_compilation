@@ -258,7 +258,7 @@ public class WorldGame {
 
     private void createItem(float y) {
         Item oItem = Pools.obtain(Item.class);
-        oItem.init(MathUtils.random(Screens.WORLD_WIDTH), y);
+        oItem.initializeItem(MathUtils.random(Screens.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(oItem.position.x, oItem.position.y);
