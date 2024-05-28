@@ -245,7 +245,7 @@ public class WorldGame {
         body.setUserData(oEn);
         body.setGravityScale(0);
 
-        float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Enemy.SPEED_X);
+        float velocidad = MathUtils.random(1f, Enemy.SPEED_X);
 
         if (MathUtils.randomBoolean())
             body.setLinearVelocity(velocidad, 0);

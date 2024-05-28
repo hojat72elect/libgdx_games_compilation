@@ -1,78 +1,75 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
+import com.nopalsoft.superjumper.screens.Screens
 
-public class Enemy implements Poolable {
-    public final static int STATE_NORMAL = 0;
-    public final static int STATE_DEAD = 1;
-    public final static float DRAW_WIDTH = .95f;
-    public final static float DRAW_HEIGHT = .6f;
-    public final static float WIDTH = .65f;
-    public final static float HEIGHT = .4f;
-    public final static float SPEED_X = 2;
-    final public Vector2 position;
-    public int state;
-    public Vector2 speed;
-    public float angleDegree;
+class Enemy : Poolable {
 
-    public float stateTime;
+    @JvmField
+    val position = Vector2()
 
-    public Enemy() {
-        position = new Vector2();
-        speed = new Vector2();
+    @JvmField
+    var state = 0
+    private var speed = Vector2()
+    private var angleDegree = 0f
 
+    @JvmField
+    var stateTime = 0f
+
+
+    fun initializeEnemy(x: Float, y: Float) {
+        position.set(x, y)
+        speed.set(0f, 0f) // I set the speed from the method where I create it
+        stateTime = 0f
+        state = STATE_NORMAL
+        angleDegree = 0f
     }
 
-    public void initializeEnemy(float x, float y) {
-        position.set(x, y);
-        speed.set(0, 0);// I set the speed from the method where I create it
-        stateTime = 0;
-        state = STATE_NORMAL;
-        angleDegree = 0;
+    fun update(body: Body, delta: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
 
-    }
-
-    public void update(Body body, float delta) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
-
-        speed = body.getLinearVelocity();
+        speed = body.linearVelocity
 
         if (state == STATE_NORMAL) {
-
             if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
-                speed.x = speed.x * -1;
+                speed.x *= -1
             }
-
         } else {
-            body.setAngularVelocity(MathUtils.degRad * 360);
+            body.angularVelocity = MathUtils.degRad * 360
             if (speed.y < -5)
-                speed.y = -5;
+                speed.y = -5f
         }
 
-        body.setLinearVelocity(speed);
+        body.linearVelocity = speed
 
-        angleDegree = body.getAngle() * MathUtils.radDeg;
+        angleDegree = body.angle * MathUtils.radDeg
 
-        speed = body.getLinearVelocity();
-        stateTime += delta;
-
+        speed = body.linearVelocity
+        stateTime += delta
     }
 
-    public void hit() {
+    fun hit() {
         if (state == STATE_NORMAL) {
-            state = STATE_DEAD;
-            stateTime = 0;
+            state = STATE_DEAD
+            stateTime = 0f
         }
-
     }
 
-    @Override
-    public void reset() {
+    override fun reset() {
+        // Nothing is happening here.
     }
 
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DEAD = 1
+        const val DRAW_WIDTH = .95f
+        const val DRAW_HEIGHT = .6f
+        const val WIDTH = .65f
+        const val HEIGHT = .4f
+        const val SPEED_X = 2f
+    }
 }
