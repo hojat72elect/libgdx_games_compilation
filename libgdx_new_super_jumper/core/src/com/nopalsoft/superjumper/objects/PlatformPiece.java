@@ -26,7 +26,7 @@ public class PlatformPiece implements Poolable {
 
     }
 
-    public void init(float x, float y, int tipo, int color) {
+    public void initializePlatformPiece(float x, float y, int tipo, int color) {
         position.set(x, y);
         this.type = tipo;
         this.color = color;

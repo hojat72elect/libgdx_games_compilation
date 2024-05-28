@@ -201,7 +201,7 @@ public class WorldGame {
         }
 
         piece = Pools.obtain(PlatformPiece.class);
-        piece.init(x, oPla.position.y, type, oPla.color);
+        piece.initializePlatformPiece(x, oPla.position.y, type, oPla.color);
 
         BodyDef bd = new BodyDef();
         bd.position.set(piece.position.x, piece.position.y);
