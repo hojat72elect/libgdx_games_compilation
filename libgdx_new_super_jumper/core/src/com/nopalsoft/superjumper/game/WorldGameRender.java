@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.superjumper.Assets;
-import com.nopalsoft.superjumper.objects.Character;
 import com.nopalsoft.superjumper.objects.Coin;
 import com.nopalsoft.superjumper.objects.Enemy;
 import com.nopalsoft.superjumper.objects.Item;
@@ -71,7 +70,7 @@ public class WorldGameRender {
     private void renderCharacters() {
         AtlasRegion keyframe;
 
-        Character obj = oWorld.oPer;
+        com.nopalsoft.superjumper.objects.Player obj = oWorld.oPer;
 
         if (obj.speed.y > 0)
             keyframe = Assets.characterJump;
@@ -81,12 +80,12 @@ public class WorldGameRender {
         if (obj.speed.x > 0)
             batcher.draw(
                     keyframe,
-                    obj.position.x + Character.DRAW_WIDTH / 2f,
-                    obj.position.y - Character.DRAW_HEIGTH / 2f,
-                    -Character.DRAW_WIDTH / 2f,
-                    Character.DRAW_HEIGTH / 2f,
-                    -Character.DRAW_WIDTH,
-                    Character.DRAW_HEIGTH,
+                    obj.position.x + com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
+                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH,
                     1,
                     1,
                     obj.angleDeg
@@ -95,12 +94,12 @@ public class WorldGameRender {
         else
             batcher.draw(
                     keyframe,
-                    obj.position.x - Character.DRAW_WIDTH / 2f,
-                    obj.position.y - Character.DRAW_HEIGTH / 2f,
-                    Character.DRAW_WIDTH / 2f,
-                    Character.DRAW_HEIGTH / 2f,
-                    Character.DRAW_WIDTH,
-                    Character.DRAW_HEIGTH,
+                    obj.position.x - com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
+                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH,
                     1,
                     1,
                     obj.angleDeg

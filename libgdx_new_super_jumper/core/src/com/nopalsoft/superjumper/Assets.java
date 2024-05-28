@@ -18,7 +18,7 @@ public class Assets {
 	public static TextureRegionDrawable settings;
 
 	/**
-	 * Character
+	 * Player
 	 */
 	public static AtlasRegion characterJump;
 	public static AtlasRegion characterStand;

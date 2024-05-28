@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.nopalsoft.superjumper.screens.Screens;
 
-public class Character {
+public class Player {
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_DEAD = 1;
 	public int state;
@@ -14,7 +14,7 @@ public class Character {
 	public final static float DRAW_HEIGTH = .8f;
 
 	public final static float WIDTH = .4f;
-	public final static float HEIGTH = .6f;
+	public final static float HEIGHT = .6f;
 
 	final float JUMP_SPEED = 7.5f;
 	final float X_SPEED = 5;
@@ -35,7 +35,7 @@ public class Character {
 	public boolean isBubble;
 	public boolean isJetPack;
 
-	public Character(float x, float y) {
+	public Player(float x, float y) {
 		position = new Vector2(x, y);
 		speed = new Vector2();
 
