@@ -239,7 +239,7 @@ public class WorldGameRenderer {
         AnimationSprite animDizzy;
         AnimationSprite animDead;
 
-        switch (oPer.tipo) {
+        switch (oPer.type) {
             case Player.TYPE_GIRL:
             case Player.TYPE_BOY:
                 animIdle = Assets.playerIdleAnimation;

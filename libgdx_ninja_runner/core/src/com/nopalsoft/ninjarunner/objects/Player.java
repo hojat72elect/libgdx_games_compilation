@@ -6,7 +6,7 @@ import com.nopalsoft.ninjarunner.Assets;
 import com.nopalsoft.ninjarunner.Settings;
 
 public class Player {
-    public final static int STATE_NORMAL = 0;// NORMAL APLICA PARA RUN,DASH,SLIDE,JUMP
+    public final static int STATE_NORMAL = 0;// STATE_NORMAL applies to run, dash, slide, jump.
     public final static int STATE_HURT = 1;
     public final static int STATE_DIZZY = 2;
     public final static int STATE_DEAD = 3;
@@ -24,10 +24,10 @@ public class Player {
     public final static float DURATION_DEAD = Assets.playerDeadAnimation.animationDuration + .5f;
     public final static float DURATION_HURT = Assets.playerHurtAnimation.animationDuration + .1f;
     public final static float DURATION_DIZZY = 1.25f;
-    public static float VELOCIDAD_JUMP = 5;
-    public final int tipo;
-    public final float VELOCIDAD_SECOND_JUMP = 4;
-    public final int MAX_VIDAS = Settings.getLEVEL_LIFE() + 5;
+    public static float JUMP_SPEED = 5;
+    public final int type;
+    public final float SPEED_SECOND_JUMP = 4;
+    public final int MAX_LIVES = Settings.getLEVEL_LIFE() + 5;
     final float DURATION_MAGNET;
     final float DURATION_DASH = 5;
     final Vector2 initialPosition;
@@ -54,18 +54,18 @@ public class Player {
     private boolean canJump;
     private boolean canDoubleJump;
 
-    public Player(float x, float y, int tipo) {
+    public Player(float x, float y, int type) {
         position = new Vector2(x, y);
         initialPosition = new Vector2(x, y);
         state = STATE_NORMAL;
         stateTime = 0;
-        this.tipo = tipo;
+        this.type = type;
         canJump = true;
         canDoubleJump = true;
         didGetHurtAtLeastOnce = false;
         isIdle = true;
 
-        lives = MAX_VIDAS;
+        lives = MAX_LIVES;
         DURATION_MAGNET = 10;
 
     }
@@ -91,7 +91,7 @@ public class Player {
             isJumping = false;
             canDoubleJump = true;
             stateTime = 0;
-            lives = MAX_VIDAS;
+            lives = MAX_LIVES;
             initialPosition.y = 3;
             position.x = initialPosition.x;
             position.y = initialPosition.y;
@@ -121,11 +121,11 @@ public class Player {
         Vector2 velocity = body.getLinearVelocity();
 
         if (didJump && (canJump || canDoubleJump)) {
-            velocity.y = VELOCIDAD_JUMP;
+            velocity.y = JUMP_SPEED;
 
             if (!canJump) {
                 canDoubleJump = false;
-                velocity.y = VELOCIDAD_SECOND_JUMP;
+                velocity.y = SPEED_SECOND_JUMP;
             }
 
             canJump = false;
