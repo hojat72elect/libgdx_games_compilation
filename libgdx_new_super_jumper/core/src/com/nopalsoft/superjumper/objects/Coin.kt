@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Pool.Poolable
 import com.badlogic.gdx.utils.Pools
 import com.nopalsoft.superjumper.screens.Screens
 
-class Coin():Poolable {
+class Coin :Poolable {
 
     @JvmField
     var state = 0
@@ -47,10 +47,10 @@ class Coin():Poolable {
         const val DRAW_WIDTH = .27f
         const val DRAW_HEIGHT = .34f
 
-        const val WIDTH = .25f
-        const val HEIGHT = .32f
+        private const val WIDTH = .25f
+        private const val HEIGHT = .32f
 
-        const val COINS_SEPARATION = .025f // Variable so that the coins are not stuck
+        private const val COINS_SEPARATION = .025f // Variable so that the coins are not stuck
 
         @JvmStatic
         fun createCoins(worldBox: World, coinsArray: Array<Coin>, y: Float) {
