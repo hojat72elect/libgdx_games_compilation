@@ -1,53 +1,55 @@
-package com.nopalsoft.superjumper.scene2d;
+package com.nopalsoft.superjumper.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.I18NBundle;
-import com.nopalsoft.superjumper.MainSuperJumper;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.nopalsoft.superjumper.MainSuperJumper
+import com.nopalsoft.superjumper.screens.Screens
 
-public class BaseScreen extends Group {
-	public static final float ANIMATION_DURATION = .3f;
-	protected Screens screen;
-	protected I18NBundle languages;
-	protected MainSuperJumper game;
+open class BaseScreen(
+    @JvmField val screen: Screens,
+    width: Float,
+    height: Float,
+    positionY: Float
+) :
+    Group() {
 
-	private boolean isVisible = false;
+    @JvmField
+    protected var game: MainSuperJumper = screen.game
+    private var isVisible = false
 
-	public BaseScreen(Screens currentScreen, float width, float height, float positionY) {
-		screen = currentScreen;
-		game = currentScreen.game;
-		languages = game.languages;
-		setSize(width, height);
-		setY(positionY);
 
-	}
+    init {
+        setSize(width, height)
+        y = positionY
+    }
 
-	public void show(Stage stage) {
 
-		setOrigin(getWidth() / 2f, getHeight() / 2f);
-		setX(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f);
+   open fun show(stage: Stage) {
+        setOrigin(width / 2f, height / 2f)
+        x = Screens.SCREEN_WIDTH / 2f - width / 2f
 
-		setScale(.5f);
-		addAction(Actions.sequence(Actions.scaleTo(1, 1, ANIMATION_DURATION), Actions.run(this::endResize)));
+        setScale(.5f)
+        addAction(
+            Actions.sequence(
+                Actions.scaleTo(1f, 1f, ANIMATION_DURATION),
+                Actions.run { this.endResize() })
+        )
 
-		isVisible = true;
-		stage.addActor(this);
+        isVisible = true
+        stage.addActor(this)
+    }
 
-	}
+   open fun hide() {
+        isVisible = false
+        remove()
+    }
 
-	public boolean isVisible() {
-		return isVisible;
-	}
+    private fun endResize() {
+    }
 
-	public void hide() {
-		isVisible = false;
-		remove();
-	}
+    companion object {
+        const val ANIMATION_DURATION = .3f
 
-	protected void endResize() {
-
-	}
-
+    }
 }
