@@ -298,7 +298,7 @@ public class WorldGame {
         body.setUserData(cloud);
         body.setGravityScale(0);
 
-        float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Cloud.VELOCIDAD_X);
+        float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Cloud.SPEED_X);
 
         if (MathUtils.randomBoolean())
             body.setLinearVelocity(velocidad, 0);
@@ -547,7 +547,7 @@ public class WorldGame {
         Cloud obj = (Cloud) body.getUserData();
         obj.update(body, delta);
 
-        if (obj.isLighthing) {
+        if (obj.isLighthning) {
             crearRayo(obj.position.x, obj.position.y - .65f);
             obj.fireLighting();
         }

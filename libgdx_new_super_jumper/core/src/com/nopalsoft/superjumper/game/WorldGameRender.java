@@ -314,10 +314,10 @@ public class WorldGameRender {
             TextureRegion keyframe = null;
 
             switch (obj.guy) {
-                case Cloud.TIPO_ANGRY:
+                case Cloud.TYPE_ANGRY:
                     keyframe = Assets.cloudAngry;
                     break;
-                case Cloud.TIPO_HAPPY:
+                case Cloud.TYPE_HAPPY:
                     keyframe = Assets.cloudHappy;
                     break;
 

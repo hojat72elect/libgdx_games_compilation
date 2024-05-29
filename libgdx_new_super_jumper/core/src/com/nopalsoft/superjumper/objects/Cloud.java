@@ -7,10 +7,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.nopalsoft.superjumper.screens.Screens;
 
 /**
- * LAs nubes son indestructibles Todas empizan happy hasta que les disparas
- * 
- * @author Yayo
- * 
+ * The clouds are indestructible. They all start out happy until you shoot them.
  */
 public class Cloud implements Poolable {
 	public final static int STATE_NORMAL = 0;
@@ -23,10 +20,10 @@ public class Cloud implements Poolable {
 	public final static float WIDTH = .65f;
 	public final static float HEIGHT = .4f;
 
-	public final static float VELOCIDAD_X = .5f;
+	public final static float SPEED_X = .5f;
 
-	public final static int TIPO_HAPPY = 0;
-	public final static int TIPO_ANGRY = 1;
+	public final static int TYPE_HAPPY = 0;
+	public final static int TYPE_ANGRY = 1;
 	public int guy;
 
 	public final static float TIME_TO_BLOW = 2;
@@ -35,50 +32,50 @@ public class Cloud implements Poolable {
 	public final static float DURATION_BLOW = 3;
 	public float durationBlow;
 
-	public final static float TIME_FOR_RAYO = 5;
-	public float timeForRayo;
+	public final static float TIME_FOR_LIGHTNING = 5;
+	public float timeForLightning;
 
 	final public Vector2 position;
-	public Vector2 velocidad;
+	public Vector2 speed;
 
 	public boolean isBlowing;
-	public boolean isLighthing;
+	public boolean isLighthning;
 
 	public float stateTime;
 
 	public Cloud() {
 		position = new Vector2();
-		velocidad = new Vector2();
+		speed = new Vector2();
 
 	}
 
 	public void init(float x, float y) {
 		position.set(x, y);
-		velocidad.set(0, 0);// I set the speed from the method where I create it
+		speed.set(0, 0);// I set the speed from the method where I create it
 		stateTime = 0;
 		state = STATE_NORMAL;
-		guy = TIPO_HAPPY;
+		guy = TYPE_HAPPY;
 
-		isBlowing = isLighthing = false;
+		isBlowing = isLighthning = false;
 
 		timeToBlow = durationBlow = 0;
-		timeForRayo = MathUtils.random(TIME_FOR_RAYO);
+		timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING);
 	}
 
 	public void update(Body body, float delta) {
 		position.x = body.getPosition().x;
 		position.y = body.getPosition().y;
 
-		velocidad = body.getLinearVelocity();
+		speed = body.getLinearVelocity();
 
 		if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
-			velocidad.x = velocidad.x * -1;
+			speed.x = speed.x * -1;
 		}
 
-		body.setLinearVelocity(velocidad);
-		velocidad = body.getLinearVelocity();
+		body.setLinearVelocity(speed);
+		speed = body.getLinearVelocity();
 
-		if (guy == TIPO_ANGRY) {
+		if (guy == TYPE_ANGRY) {
 			timeToBlow += delta;
 			if (!isBlowing && timeToBlow >= TIME_TO_BLOW) {
 				if (MathUtils.randomBoolean())
@@ -96,10 +93,10 @@ public class Cloud implements Poolable {
 		}
 		else {// Happy Type
 
-			if (!isLighthing) {
-				timeForRayo += delta;
-				if (timeForRayo >= TIME_FOR_RAYO) {
-					isLighthing = true;
+			if (!isLighthning) {
+				timeForLightning += delta;
+				if (timeForLightning >= TIME_FOR_LIGHTNING) {
+					isLighthning = true;
 				}
 			}
 		}
@@ -109,13 +106,13 @@ public class Cloud implements Poolable {
 	}
 
 	public void fireLighting() {
-		isLighthing = false;
-		timeForRayo = MathUtils.random(TIME_FOR_RAYO);
+		isLighthning = false;
+		timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING);
 	}
 
 	public void hit() {
-		if (guy == TIPO_HAPPY) {
-			guy = TIPO_ANGRY;
+		if (guy == TYPE_HAPPY) {
+			guy = TYPE_ANGRY;
 			stateTime = timeToBlow = durationBlow = 0;
 		}
 	}
