@@ -29,7 +29,7 @@ public class MainMenuScreen extends Screens {
 
 		titulo.addAction(Actions.sequence(Actions.moveTo(titulo.getX(), 600, 1, Interpolation.bounceOut), Actions.run(() -> stage.addActor(lbBestScore))));
 
-		lbBestScore = new Label("Best score " + Settings.bestScore, Assets.labelStyleChico);
+		lbBestScore = new Label("Best score " + Settings.getBestScore(), Assets.labelStyleChico);
 		lbBestScore.setPosition(SCREEN_WIDTH / 2f - lbBestScore.getWidth() / 2f, 570);
 		lbBestScore.getColor().a = 0;
 		lbBestScore.addAction(Actions.alpha(1, .25f));

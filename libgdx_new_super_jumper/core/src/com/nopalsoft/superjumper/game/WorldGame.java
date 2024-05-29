@@ -25,9 +25,9 @@ import com.nopalsoft.superjumper.objects.Enemy;
 import com.nopalsoft.superjumper.objects.Item;
 import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
+import com.nopalsoft.superjumper.objects.Player;
 import com.nopalsoft.superjumper.objects.Ray;
 import com.nopalsoft.superjumper.screens.Screens;
-import com.nopalsoft.superjumper.objects.Player;
 
 public class WorldGame {
 
@@ -492,9 +492,9 @@ public class WorldGame {
     private void updatePersonaje(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
         player.update(body, delta, acelX);
 
-        if (Settings.numBullets > 0 && fire) {
+        if (Settings.getNumBullets() > 0 && fire) {
             crearBullet(player.position.x, player.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
-            Settings.numBullets--;
+            Settings.setNumBullets(Settings.getNumBullets() - 1);
 
         }
 
@@ -634,7 +634,7 @@ public class WorldGame {
                         player.setJetPack();
                         break;
                     case Item.TYPE_GUN:
-                        Settings.numBullets += 10;
+                        Settings.setNumBullets(Settings.getNumBullets() + 10);
                         break;
 
                 }

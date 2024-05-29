@@ -45,7 +45,7 @@ public class GameScreen extends Screens {
         touchPositionWorldCoords = new Vector3();
 
         state = STATE_RUNNING;
-        Settings.numberOfTimesPlayed++;
+        Settings.setNumberOfTimesPlayed(Settings.getNumberOfTimesPlayed()+1);
 
         Table menuMarker = new Table();
         menuMarker.setSize(SCREEN_WIDTH, 40);
@@ -107,7 +107,7 @@ public class GameScreen extends Screens {
 
         labelCoins.setText("x" + myWorldGame.coins);
         labelDistance.setText("Score " + myWorldGame.maxDistance);
-        labelBullets.setText("x" + Settings.numBullets);
+        labelBullets.setText("x" + Settings.getNumBullets());
 
         if (myWorldGame.state == WorldGame.STATE_GAMEOVER) {
             setGameover();
@@ -149,7 +149,7 @@ public class GameScreen extends Screens {
 
     private void setGameover() {
         state = STATE_GAME_OVER;
-        Settings.setBestScore(myWorldGame.maxDistance);
+        Settings.changeBestScore(myWorldGame.maxDistance);
         new com.nopalsoft.superjumper.scene2d.BaseScreenGameover(this).show(stage);
 
     }
@@ -159,7 +159,7 @@ public class GameScreen extends Screens {
         touchPositionWorldCoords.set(screenX, 0, 0);// Siempre como si hubiera tocado la parte mas alta de la pantalla
         renderer.unprojectToWorldCoords(touchPositionWorldCoords);
 
-        // oCam.unproject(touchPoint);
+
         didFire = true;
         return false;
     }

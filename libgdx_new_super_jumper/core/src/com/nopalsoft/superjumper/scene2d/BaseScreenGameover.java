@@ -42,7 +42,7 @@ public class BaseScreenGameover extends BaseScreen {
 		Label lbBestScore = new Label("Best Score", Assets.labelStyleChico);
 		lbScore.setAlignment(Align.left);
 
-		Label lbBestNumScore = new Label(Settings.bestScore + "", Assets.labelStyleChico);
+		Label lbBestNumScore = new Label(Settings.getBestScore() + "", Assets.labelStyleChico);
 		lblNumScore.setAlignment(Align.right);
 
 		scoreTable.pad(10);
