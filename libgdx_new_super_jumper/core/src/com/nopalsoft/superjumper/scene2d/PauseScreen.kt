@@ -1,81 +1,70 @@
-package com.nopalsoft.superjumper.scene2d;
+package com.nopalsoft.superjumper.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.nopalsoft.superjumper.Assets;
-import com.nopalsoft.superjumper.game.GameScreen;
-import com.nopalsoft.superjumper.game.WorldGame;
-import com.nopalsoft.superjumper.screens.MainMenuScreen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
+import com.nopalsoft.superjumper.Assets
+import com.nopalsoft.superjumper.game.GameScreen
+import com.nopalsoft.superjumper.screens.MainMenuScreen
 
-public class PauseScreen extends BaseScreen {
+class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 280f, 300f) {
 
-	TextButton btMenu, btResume;
-	WorldGame oWorld;
+    private var btMenu: TextButton? = null
+    private var btResume: TextButton? = null
 
-	public PauseScreen(final GameScreen currentScreen) {
-		super(currentScreen, 350, 280, 300);
-		oWorld = currentScreen.myWorldGame;
 
-		Label lbShop = new Label("Pause", Assets.labelStyleBig);
-		lbShop.setFontScale(1.5f);
-		lbShop.setAlignment(Align.center);
-		lbShop.setPosition(getWidth() / 2f - lbShop.getWidth() / 2f, 230);
-		addActor(lbShop);
+    init {
+        val lbShop = Label("Pause", Assets.labelStyleBig)
+        lbShop.setFontScale(1.5f)
+        lbShop.setAlignment(Align.center)
+        lbShop.setPosition(width / 2f - lbShop.width / 2f, 230f)
+        addActor(lbShop)
 
-		initButtons();
+        initButtons()
 
-		Table content = new Table();
+        val content = Table()
 
-		content.defaults().expandX().uniform().fill();
+        content.defaults().expandX().uniform().fill()
 
-		content.add(btResume);
-		content.row().padTop(20);
-		content.add(btMenu);
+        content.add(btResume)
+        content.row().padTop(20f)
+        content.add(btMenu)
 
-		content.pack();
-		content.setPosition(getWidth() / 2f - content.getWidth() / 2f, 50);
+        content.pack()
+        content.setPosition(width / 2f - content.width / 2f, 50f)
 
-		addActor(content);
+        addActor(content)
 
-	}
+    }
 
-	private void initButtons() {
-		btMenu = new TextButton("Menu", Assets.textButtonStyleBig);
-		btMenu.pad(15);
+    private fun initButtons() {
+        btMenu = TextButton("Menu", Assets.textButtonStyleBig)
+        btMenu?.pad(15f)
 
-		screen.addEfectoPress(btMenu);
-		btMenu.addListener(new ClickListener() {
-			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				hide();
-				screen.changeScreenWithFadeOut(MainMenuScreen.class, game);
-			}
-		});
+        screen.addEfectoPress(btMenu)
+        btMenu?.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                hide()
+                screen.changeScreenWithFadeOut(MainMenuScreen::class.java, game)
+            }
+        })
 
-		btResume = new TextButton("Resume", Assets.textButtonStyleBig);
-		btResume.pad(15);
+        btResume = TextButton("Resume", Assets.textButtonStyleBig)
+        btResume?.pad(15f)
 
-		screen.addEfectoPress(btResume);
-		btResume.addListener(new ClickListener() {
-			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				hide();
+        screen.addEfectoPress(btResume)
+        btResume?.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                hide()
+            }
+        })
+    }
 
-			}
-		});
-	}
-
-	@Override
-	public void show(Stage stage) {
-		super.show(stage);
-	}
-
-	@Override
-	public void hide() {
-		((GameScreen) screen).setRunning();
-		super.hide();
-	}
-
+    override fun hide() {
+        (screen as GameScreen).setRunning()
+        super.hide()
+    }
 }
