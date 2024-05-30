@@ -150,7 +150,7 @@ public class GameScreen extends Screens {
     private void setGameover() {
         state = STATE_GAME_OVER;
         Settings.changeBestScore(myWorldGame.maxDistance);
-        new com.nopalsoft.superjumper.scene2d.BaseScreenGameover(this).show(stage);
+        new com.nopalsoft.superjumper.scene2d.BaseScreenGameOver(this).show(stage);
 
     }
 
