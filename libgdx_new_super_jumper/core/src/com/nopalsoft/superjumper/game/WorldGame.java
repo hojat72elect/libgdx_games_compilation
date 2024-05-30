@@ -278,8 +278,8 @@ public class WorldGame {
     }
 
     private void crearNubes(float y) {
-        com.nopalsoft.superjumper.objects.Cloud cloud = Pools.obtain(com.nopalsoft.superjumper.objects.Cloud.class);
-        cloud.init(MathUtils.random(Screens.WORLD_WIDTH), y);
+        Cloud cloud = Pools.obtain(Cloud.class);
+        cloud.initializeCloud(MathUtils.random(Screens.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(cloud.position.x, cloud.position.y);
@@ -288,7 +288,7 @@ public class WorldGame {
         Body body = myWorldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(com.nopalsoft.superjumper.objects.Cloud.WIDTH / 2f, com.nopalsoft.superjumper.objects.Cloud.HEIGHT / 2f);
+        shape.setAsBox(Cloud.WIDTH / 2f, Cloud.HEIGHT / 2f);
 
         FixtureDef fixutre = new FixtureDef();
         fixutre.shape = shape;
@@ -298,7 +298,7 @@ public class WorldGame {
         body.setUserData(cloud);
         body.setGravityScale(0);
 
-        float velocidad = MathUtils.random(1f, com.nopalsoft.superjumper.objects.Cloud.SPEED_X);
+        float velocidad = MathUtils.random(1f, Cloud.SPEED_X);
 
         if (MathUtils.randomBoolean())
             body.setLinearVelocity(velocidad, 0);
@@ -547,7 +547,7 @@ public class WorldGame {
         Cloud obj = (Cloud) body.getUserData();
         obj.update(body, delta);
 
-        if (obj.isLighthning) {
+        if (obj.isLightning) {
             crearRayo(obj.position.x, obj.position.y - .65f);
             obj.fireLighting();
         }

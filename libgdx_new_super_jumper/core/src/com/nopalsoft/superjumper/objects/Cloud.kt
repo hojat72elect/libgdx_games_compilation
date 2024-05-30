@@ -1,131 +1,144 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.utils.Pool.Poolable
+import com.nopalsoft.superjumper.screens.Screens
 
 /**
  * The clouds are indestructible. They all start out happy until you shoot them.
  */
-public class Cloud implements Poolable {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DEAD = 1;
-	public int state;
+class Cloud : Poolable {
 
-	public final static float DRAW_WIDTH = .95f;
-	public final static float DRAW_HEIGHT = .6f;
+    @JvmField
+    var state = 0
 
-	public final static float WIDTH = .65f;
-	public final static float HEIGHT = .4f;
+    @JvmField
+    var guy = 0
+    private var timeToBlow = 0f
+    private var durationBlow = 0f
+    private var timeForLightning = 0f
 
-	public final static float SPEED_X = .5f;
+    @JvmField
+    val position = Vector2()
+    private var speed = Vector2()
 
-	public final static int TYPE_HAPPY = 0;
-	public final static int TYPE_ANGRY = 1;
-	public int guy;
+    @JvmField
+    var isBlowing = false
 
-	public final static float TIME_TO_BLOW = 2;
-	public float timeToBlow;
+    @JvmField
+    var isLightning = false
 
-	public final static float DURATION_BLOW = 3;
-	public float durationBlow;
+    var stateTime = 0f
 
-	public final static float TIME_FOR_LIGHTNING = 5;
-	public float timeForLightning;
 
-	final public Vector2 position;
-	public Vector2 speed;
+    fun initializeCloud(x: Float, y: Float) {
+        position.set(x, y)
+        speed.set(0f, 0f) // I set the speed from the method where I create it.
+        stateTime = 0f
+        state = STATE_NORMAL
+        guy = TYPE_HAPPY
 
-	public boolean isBlowing;
-	public boolean isLighthning;
+        isLightning = false
+        isBlowing = false
 
-	public float stateTime;
+        durationBlow = 0f
+        timeToBlow = 0f
+        timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING)
+    }
 
-	public Cloud() {
-		position = new Vector2();
-		speed = new Vector2();
 
-	}
+    fun update(body: Body, delta: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		speed.set(0, 0);// I set the speed from the method where I create it
-		stateTime = 0;
-		state = STATE_NORMAL;
-		guy = TYPE_HAPPY;
+        speed = body.linearVelocity
 
-		isBlowing = isLighthning = false;
+        if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
+            speed.x *= -1
+        }
 
-		timeToBlow = durationBlow = 0;
-		timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING);
-	}
+        body.linearVelocity = speed
+        speed = body.linearVelocity
 
-	public void update(Body body, float delta) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
+        if (guy == TYPE_ANGRY) {
+            timeToBlow += delta
+            if (!isBlowing && timeToBlow >= TIME_TO_BLOW) {
+                if (MathUtils.randomBoolean())
+                    isBlowing = true
+                timeToBlow = 0f
+            }
 
-		speed = body.getLinearVelocity();
+            if (isBlowing) {
+                durationBlow += delta
+                if (durationBlow >= DURATION_BLOW) {
+                    durationBlow = 0f
+                    isBlowing = false
+                }
+            }
+        } else { // Happy Type
 
-		if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
-			speed.x = speed.x * -1;
-		}
+            if (!isLightning) {
+                timeForLightning += delta
+                if (timeForLightning >= TIME_FOR_LIGHTNING) {
+                    isLightning = true
+                }
+            }
+        }
 
-		body.setLinearVelocity(speed);
-		speed = body.getLinearVelocity();
+        stateTime += delta
+    }
 
-		if (guy == TYPE_ANGRY) {
-			timeToBlow += delta;
-			if (!isBlowing && timeToBlow >= TIME_TO_BLOW) {
-				if (MathUtils.randomBoolean())
-					isBlowing = true;
-				timeToBlow = 0;
-			}
 
-			if (isBlowing) {
-				durationBlow += delta;
-				if (durationBlow >= DURATION_BLOW) {
-					durationBlow = 0;
-					isBlowing = false;
-				}
-			}
-		}
-		else {// Happy Type
+    fun fireLighting() {
+        isLightning = false
+        timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING)
+    }
 
-			if (!isLighthning) {
-				timeForLightning += delta;
-				if (timeForLightning >= TIME_FOR_LIGHTNING) {
-					isLighthning = true;
-				}
-			}
-		}
 
-		stateTime += delta;
+    fun hit() {
+        if (guy == TYPE_HAPPY) {
+            guy = TYPE_ANGRY
+            durationBlow = 0f
+            timeToBlow = 0f
+            stateTime = 0f
+        }
+    }
 
-	}
 
-	public void fireLighting() {
-		isLighthning = false;
-		timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING);
-	}
+    fun destroy() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DEAD
+            stateTime = 0f
+        }
+    }
 
-	public void hit() {
-		if (guy == TYPE_HAPPY) {
-			guy = TYPE_ANGRY;
-			stateTime = timeToBlow = durationBlow = 0;
-		}
-	}
 
-	public void destroy() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DEAD;
-			stateTime = 0;
-		}
-	}
+    override fun reset() {
+        // Nothing is happening in here
+    }
 
-	@Override
-	public void reset() {
-	}
 
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DEAD = 1
+
+        const val DRAW_WIDTH = .95f
+        const val DRAW_HEIGHT = .6f
+
+        const val WIDTH = .65f
+        const val HEIGHT = .4f
+
+        const val SPEED_X = .5f
+
+        const val TYPE_HAPPY = 0
+        const val TYPE_ANGRY = 1
+
+        const val TIME_TO_BLOW = 2f
+
+        const val DURATION_BLOW = 3f
+
+        const val TIME_FOR_LIGHTNING = 5f
+    }
 }
