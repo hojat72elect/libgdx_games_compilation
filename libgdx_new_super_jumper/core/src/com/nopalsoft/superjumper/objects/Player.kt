@@ -1,137 +1,144 @@
-package com.nopalsoft.superjumper.objects;
+package com.nopalsoft.superjumper.objects
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.nopalsoft.superjumper.screens.Screens
 
-public class Player {
-	public final static int STATE_NORMAL = 0;
-	public final static int STATE_DEAD = 1;
-	public int state;
+class Player(x: Float, y: Float) {
 
-	public final static float DRAW_WIDTH = .75f;
-	public final static float DRAW_HEIGHT = .8f;
+    @JvmField
+    var state = STATE_NORMAL
 
-	public final static float WIDTH = .4f;
-	public final static float HEIGHT = .6f;
 
-	final float JUMP_SPEED = 7.5f;
-	final float X_SPEED = 5;
+    @JvmField
+    var durationJetPack = 0f
 
-	public final float DURATION_BUBBLE = 3;
-	public float durationBubble;
+    @JvmField
+    val position = Vector2(x, y)
 
-	public final float DURATION_JETPACK = 3;
-	public float durationJetPack;
+    @JvmField
+    var speed = Vector2()
 
-	final public Vector2 position;
-	public Vector2 speed;
-	public float angleDeg;
+    @JvmField
+    var angleDeg = 0f
 
-	public float stateTime;
+    var stateTime = 0f
 
-	boolean didJump;
-	public boolean isBubble;
-	public boolean isJetPack;
+    var didJump = false
 
-	public Player(float x, float y) {
-		position = new Vector2(x, y);
-		speed = new Vector2();
+    @JvmField
+    var isBubble = false
 
-		stateTime = 0;
-		state = STATE_NORMAL;
+    @JvmField
+    var isJetPack = false
 
-	}
 
-	public void update(Body body, float delta, float acelX) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
+    fun update(body: Body, delta: Float, acelX: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
 
-		speed = body.getLinearVelocity();
+        speed = body.linearVelocity
 
-		if (state == STATE_NORMAL) {
+        if (state == STATE_NORMAL) {
+            if (didJump) {
+                didJump = false
+                stateTime = 0f
+                speed.y = JUMP_SPEED
+            }
 
-			if (didJump) {
-				didJump = false;
-				stateTime = 0;
-				speed.y = JUMP_SPEED;
+            speed.x = acelX * xSpeed
 
-			}
+            if (isBubble) {
+                durationBubble += delta
+                if (durationBubble >= DURATION_BUBBLE) {
+                    durationBubble = 0f
+                    isBubble = false
+                }
+            }
 
-			speed.x = acelX * X_SPEED;
+            if (isJetPack) {
+                durationJetPack += delta
+                if (durationJetPack >= DURATION_JETPACK) {
+                    durationJetPack = 0f
+                    isJetPack = false
+                }
+                speed.y = JUMP_SPEED
+            }
+        } else {
+            body.angularVelocity = MathUtils.degRad * 360
+            speed.x = 0f
+        }
 
-			if (isBubble) {
-				durationBubble += delta;
-				if (durationBubble >= DURATION_BUBBLE) {
-					durationBubble = 0;
-					isBubble = false;
-				}
-			}
+        body.linearVelocity = speed
 
-			if (isJetPack) {
-				durationJetPack += delta;
-				if (durationJetPack >= DURATION_JETPACK) {
-					durationJetPack = 0;
-					isJetPack = false;
-				}
-				speed.y = JUMP_SPEED;
-			}
+        if (position.x >= Screens.WORLD_WIDTH) {
+            position.x = 0f
+            body.setTransform(position, 0f)
+        } else if (position.x <= 0) {
+            position.x = Screens.WORLD_WIDTH
+            body.setTransform(position, 0f)
+        }
 
-		}
-		else {
-			body.setAngularVelocity(MathUtils.degRad * 360);
-			speed.x = 0;
-		}
+        angleDeg = body.angle * MathUtils.radDeg
 
-		body.setLinearVelocity(speed);
+        speed = body.linearVelocity
+        stateTime += delta
+    }
 
-		if (position.x >= Screens.WORLD_WIDTH) {
-			position.x = 0;
-			body.setTransform(position, 0);
-		}
-		else if (position.x <= 0) {
-			position.x = Screens.WORLD_WIDTH;
-			body.setTransform(position, 0);
-		}
 
-		angleDeg = body.getAngle() * MathUtils.radDeg;
+    fun jump() {
+        didJump = true
+    }
 
-		speed = body.getLinearVelocity();
-		stateTime += delta;
+    fun hit() {
+        if (state == STATE_NORMAL && !isBubble && !isJetPack) {
+            state = STATE_DEAD
+            stateTime = 0f
+        }
+    }
 
-	}
 
-	public void jump() {
-		didJump = true;
-	}
+    fun die() {
+        if (state == STATE_NORMAL) {
+            state = STATE_DEAD
+            stateTime = 0f
+        }
+    }
 
-	public void hit() {
-		if (state == STATE_NORMAL && !isBubble && !isJetPack) {
-			state = STATE_DEAD;
-			stateTime = 0;
 
-		}
-	}
+    fun setBubble() {
+        if (state == STATE_NORMAL) {
+            isBubble = true
+            durationBubble = 0f
+        }
+    }
 
-	public void die() {
-		if (state == STATE_NORMAL) {
-			state = STATE_DEAD;
-			stateTime = 0;
-		}
-	}
 
-	public void setBubble() {
-		if (state == STATE_NORMAL) {
-			isBubble = true;
-			durationBubble = 0;
-		}
-	}
+    fun setJetPack() {
+        if (state == STATE_NORMAL) {
+            isJetPack = true
+            durationJetPack = 0f
+        }
+    }
 
-	public void setJetPack() {
-		if (state == STATE_NORMAL) {
-			isJetPack = true;
-			durationJetPack = 0;
-		}
-	}
+
+    companion object {
+        const val STATE_NORMAL = 0
+        const val STATE_DEAD = 1
+
+        const val DRAW_WIDTH = .75f
+        const val DRAW_HEIGHT = .8f
+        private const val DURATION_BUBBLE = 3f
+        const val WIDTH = .4f
+        const val HEIGHT = .6f
+
+        private val JUMP_SPEED = 7.5f
+        private val xSpeed = 5f
+
+
+        private var durationBubble = 0f
+
+        private val DURATION_JETPACK = 3f
+    }
 }
