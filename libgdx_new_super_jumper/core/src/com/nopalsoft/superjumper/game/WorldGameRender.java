@@ -81,11 +81,11 @@ public class WorldGameRender {
             batcher.draw(
                     keyframe,
                     obj.position.x + com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
                     -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
                     -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT,
                     1,
                     1,
                     obj.angleDeg
@@ -95,11 +95,11 @@ public class WorldGameRender {
             batcher.draw(
                     keyframe,
                     obj.position.x - com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
                     com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH / 2f,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
                     com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGTH,
+                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT,
                     1,
                     1,
                     obj.angleDeg

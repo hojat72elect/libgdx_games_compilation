@@ -11,7 +11,7 @@ public class Player {
 	public int state;
 
 	public final static float DRAW_WIDTH = .75f;
-	public final static float DRAW_HEIGTH = .8f;
+	public final static float DRAW_HEIGHT = .8f;
 
 	public final static float WIDTH = .4f;
 	public final static float HEIGHT = .6f;
