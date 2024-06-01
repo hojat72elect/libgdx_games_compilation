@@ -44,7 +44,7 @@ class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 2
         btMenu = TextButton("Menu", Assets.textButtonStyleBig)
         btMenu?.pad(15f)
 
-        screen.addEfectoPress(btMenu)
+        screen.addPressEffect(btMenu)
         btMenu?.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
@@ -55,7 +55,7 @@ class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 2
         btResume = TextButton("Resume", Assets.textButtonStyleBig)
         btResume?.pad(15f)
 
-        screen.addEfectoPress(btResume)
+        screen.addPressEffect(btResume)
         btResume?.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()

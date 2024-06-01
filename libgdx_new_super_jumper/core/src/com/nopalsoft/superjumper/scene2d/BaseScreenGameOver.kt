@@ -73,7 +73,7 @@ class BaseScreenGameOver(currentScreen: GameScreen) :
         textButtonMenu = TextButton("Menu", Assets.textButtonStyleBig)
         textButtonMenu.pad(15f)
 
-        screen.addEfectoPress(textButtonMenu)
+        screen.addPressEffect(textButtonMenu)
         textButtonMenu.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
@@ -84,7 +84,7 @@ class BaseScreenGameOver(currentScreen: GameScreen) :
         textButtonTryAgain = TextButton("Try again", Assets.textButtonStyleBig)
         textButtonTryAgain.pad(15f)
 
-        screen.addEfectoPress(textButtonTryAgain)
+        screen.addPressEffect(textButtonTryAgain)
         textButtonTryAgain.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()

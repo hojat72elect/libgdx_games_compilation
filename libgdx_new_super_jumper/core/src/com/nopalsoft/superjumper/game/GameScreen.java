@@ -67,7 +67,7 @@ public class GameScreen extends Screens {
         buttonPause = new Button(Assets.btPause);
         buttonPause.setSize(35, 35);
         buttonPause.setPosition(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80);
-        addEfectoPress(buttonPause);
+        addPressEffect(buttonPause);
         buttonPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
