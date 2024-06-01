@@ -1,102 +1,95 @@
-package com.nopalsoft.superjumper.screens;
+package com.nopalsoft.superjumper.screens
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.superjumper.Assets;
-import com.nopalsoft.superjumper.MainSuperJumper;
-import com.nopalsoft.superjumper.Settings;
-import com.nopalsoft.superjumper.game.GameScreen;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.superjumper.Assets
+import com.nopalsoft.superjumper.MainSuperJumper
+import com.nopalsoft.superjumper.Settings
+import com.nopalsoft.superjumper.game.GameScreen
 
-public class MainMenuScreen extends Screens {
+class MainMenuScreen(game: MainSuperJumper) : Screens(game) {
 
-	Image title;
-
-	TextButton buttonShop, buttonPlay, buttonLeaderboard, buttonRate;
-	Label labelBestScore;
-
-	public MainMenuScreen(final MainSuperJumper game) {
-		super(game);
-
-		title = new Image(Assets.settings);
-		title.setPosition(SCREEN_WIDTH / 2f - title.getWidth() / 2f, 800);
-
-		title.addAction(Actions.sequence(Actions.moveTo(title.getX(), 600, 1, Interpolation.bounceOut), Actions.run(() -> stage.addActor(labelBestScore))));
-
-		labelBestScore = new Label("Best score " + Settings.getBestScore(), Assets.labelStyleChico);
-		labelBestScore.setPosition(SCREEN_WIDTH / 2f - labelBestScore.getWidth() / 2f, 570);
-		labelBestScore.getColor().a = 0;
-		labelBestScore.addAction(Actions.alpha(1, .25f));
-
-		buttonPlay = new TextButton("Play", Assets.textButtonStyleBig);
-		buttonPlay.setPosition(SCREEN_WIDTH / 2f - buttonPlay.getWidth() / 2f, 440);
-		buttonPlay.pad(10);
-		buttonPlay.pack();
-		addPressEffect(buttonPlay);
-		buttonPlay.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				changeScreenWithFadeOut(GameScreen.class, game);
-			}
-		});
-
-		buttonShop = new TextButton("Shop", Assets.textButtonStyleBig);
-		buttonShop.setPosition(SCREEN_WIDTH / 2f - buttonShop.getWidth() / 2f, 340);
-		buttonShop.pad(10);
-		buttonShop.pack();
-		addPressEffect(buttonShop);
+    var title=Image(Assets.settings)
+    var buttonShop=TextButton("Shop", Assets.textButtonStyleBig)
+    var buttonPlay=TextButton("Play", Assets.textButtonStyleBig)
+    var buttonLeaderboard=TextButton("Leaderboard", Assets.textButtonStyleBig)
+    var buttonRate=TextButton("Rate", Assets.textButtonStyleBig)
+    var labelBestScore=Label("Best score " + Settings.bestScore, Assets.labelStyleChico);
 
 
-		buttonRate = new TextButton("Rate", Assets.textButtonStyleBig);
-		buttonRate.setPosition(SCREEN_WIDTH / 2f - buttonRate.getWidth() / 2f, 340);
-		buttonRate.pad(10);
-		buttonRate.pack();
-		addPressEffect(buttonRate);
 
+    init {
+        title.setPosition(SCREEN_WIDTH / 2f - title.width / 2f, 800f)
+        title.addAction(
+            Actions.sequence(
+                Actions.moveTo(title.x, 600f, 1f, Interpolation.bounceOut),
+                Actions.run {
+                    stage.addActor(labelBestScore)
+                })
+        )
 
-		buttonLeaderboard = new TextButton("Leaderboard", Assets.textButtonStyleBig);
-		buttonLeaderboard.pad(10);
-		buttonLeaderboard.pack();
-		buttonLeaderboard.setPosition(SCREEN_WIDTH / 2f - buttonLeaderboard.getWidth() / 2f, 240);
+        labelBestScore.setPosition(SCREEN_WIDTH / 2f - labelBestScore.width / 2f, 570f)
+        labelBestScore.color.a = 0f
+        labelBestScore.addAction(Actions.alpha(1f, .25f))
 
-		addPressEffect(buttonLeaderboard);
+        buttonPlay.setPosition(SCREEN_WIDTH / 2f - buttonPlay.width / 2f, 440f)
+        buttonPlay.pad(10f)
+        buttonPlay.pack()
+        addPressEffect(buttonPlay)
+        buttonPlay.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                changeScreenWithFadeOut(GameScreen::class.java, game)
+            }
+        })
 
-		stage.addActor(title);
-		stage.addActor(buttonPlay);
-		stage.addActor(buttonRate);
-		stage.addActor(buttonLeaderboard);
+        buttonShop.setPosition(SCREEN_WIDTH / 2f - buttonShop.width / 2f, 340f)
+        buttonShop.pad(10f)
+        buttonShop.pack()
+        addPressEffect(buttonShop)
 
-	}
+        buttonRate.setPosition(SCREEN_WIDTH / 2f - buttonRate.width / 2f, 340f)
+        buttonRate.pad(10f)
+        buttonRate.pack()
+        addPressEffect(buttonRate)
 
-	@Override
-	public void update(float delta) {
+        buttonLeaderboard.pad(10f)
+        buttonLeaderboard.pack()
+        buttonLeaderboard.setPosition(SCREEN_WIDTH / 2f - buttonLeaderboard.width / 2f, 240f)
 
-	}
+        addPressEffect(buttonLeaderboard)
 
-	@Override
-	public void draw(float delta) {
-		batcher.begin();
-		batcher.draw(Assets.background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		batcher.draw(Assets.platformBeigeBroken, 100, 100, 125, 45);
-		batcher.draw(Assets.platformBlue, 350, 280, 125, 45);
-		batcher.draw(Assets.platformMulticolor, 25, 430, 125, 45);
-		batcher.draw(Assets.characterJump, 25, 270, 75, 80);
-		batcher.draw(Assets.cloudHappy, 350, 500, 95, 60);
-		batcher.end();
-	}
+        stage.addActor(title)
+        stage.addActor(buttonPlay)
+        stage.addActor(buttonRate)
+        stage.addActor(buttonLeaderboard)
+    }
 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-			Gdx.app.exit();
-		}
-		return super.keyDown(keycode);
-	}
+    override fun update(delta: Float) {
+        // Nothing happening in here.
+    }
 
+    override fun draw(delta: Float) {
+        batcher.begin()
+        batcher.draw(Assets.background, 0f, 0f, SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        batcher.draw(Assets.platformBeigeBroken, 100f, 100f, 125f, 45f)
+        batcher.draw(Assets.platformBlue, 350f, 280f, 125f, 45f)
+        batcher.draw(Assets.platformMulticolor, 25f, 430f, 125f, 45f)
+        batcher.draw(Assets.characterJump, 25f, 270f, 75f, 80f)
+        batcher.draw(Assets.cloudHappy, 350f, 500f, 95f, 60f)
+        batcher.end()
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+            Gdx.app.exit()
+        }
+        return super.keyDown(keycode)
+    }
 }
