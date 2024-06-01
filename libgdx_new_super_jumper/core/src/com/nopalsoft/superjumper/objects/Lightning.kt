@@ -5,9 +5,9 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool.Poolable
 
 /**
- * The ray that gets casted from cloud, downwards.
+ * The lightning that gets casted from cloud, downwards. If player gets hit by that, it will be killed.
  */
-class Ray : Poolable {
+class Lightning : Poolable {
 
     @JvmField
     val position = Vector2()

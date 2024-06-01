@@ -14,7 +14,7 @@ import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
 import com.nopalsoft.superjumper.screens.BasicScreen;
 import com.nopalsoft.superjumper.objects.Cloud;
-import com.nopalsoft.superjumper.objects.Ray;
+import com.nopalsoft.superjumper.objects.Lightning;
 import com.nopalsoft.superjumper.objects.Bullet;
 
 public class WorldGameRender {
@@ -333,10 +333,10 @@ public class WorldGameRender {
     }
 
     private void renderRay() {
-        for (Ray obj : oWorld.arrayRays) {
+        for (Lightning obj : oWorld.arrayRays) {
             TextureRegion keyframe = Assets.ray.getKeyFrame(obj.stateTime, true);
 
-            batcher.draw(keyframe, obj.position.x - Ray.DRAW_WIDTH / 2f, obj.position.y - Ray.DRAW_HEIGHT / 2f, Ray.DRAW_WIDTH, Ray.DRAW_HEIGHT);
+            batcher.draw(keyframe, obj.position.x - Lightning.DRAW_WIDTH / 2f, obj.position.y - Lightning.DRAW_HEIGHT / 2f, Lightning.DRAW_WIDTH, Lightning.DRAW_HEIGHT);
         }
     }
 

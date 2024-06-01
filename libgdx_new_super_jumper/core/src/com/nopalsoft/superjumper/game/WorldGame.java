@@ -26,7 +26,7 @@ import com.nopalsoft.superjumper.objects.Item;
 import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
 import com.nopalsoft.superjumper.objects.Player;
-import com.nopalsoft.superjumper.objects.Ray;
+import com.nopalsoft.superjumper.objects.Lightning;
 import com.nopalsoft.superjumper.screens.BasicScreen;
 
 public class WorldGame {
@@ -35,7 +35,7 @@ public class WorldGame {
     final public static int STATE_RUNNING = 0;
     final public static int STATE_GAMEOVER = 1;
     private final Array<Body> arrayBodies;
-    public World myWorldBox;
+    public World worldBox;
     public int coins;
     public int maxDistance;
     int state;
@@ -48,13 +48,13 @@ public class WorldGame {
     Array<Enemy> arrayEnemies;
     Array<Item> arrayItem;
     Array<Cloud> arrayClouds;
-    Array<Ray> arrayRays;
+    Array<Lightning> arrayRays;
     Array<Bullet> arrayBullets;
     float worldCreatedUpToY;
 
     public WorldGame() {
-        myWorldBox = new World(new Vector2(0, -9.8f), true);
-        myWorldBox.setContactListener(new Colisiones());
+        worldBox = new World(new Vector2(0, -9.8f), true);
+        worldBox.setContactListener(new Colisiones());
 
         arrayBodies = new Array<>();
         arrayPlatforms = new Array<>();
@@ -70,7 +70,7 @@ public class WorldGame {
 
         state = STATE_RUNNING;
 
-        crearPiso();
+        createFloor();
         crearPersonaje();
 
         worldCreatedUpToY = player.position.y;
@@ -88,16 +88,16 @@ public class WorldGame {
             createPlatform(worldCreatedUpToY);
 
             if (MathUtils.random(100) < 5)
-                Coin.createCoins(myWorldBox, arrayCoins, worldCreatedUpToY);
+                Coin.createCoins(worldBox, arrayCoins, worldCreatedUpToY);
 
             if (MathUtils.random(20) < 5)
-                Coin.createACoin(myWorldBox, arrayCoins, worldCreatedUpToY + .5f);
+                Coin.createACoin(worldBox, arrayCoins, worldCreatedUpToY + .5f);
 
             if (MathUtils.random(20) < 5)
                 crearEnemigo(worldCreatedUpToY + .5f);
 
             if (timeToCreateCloud >= TIME_TO_CREATE_CLOUD) {
-                crearNubes(worldCreatedUpToY + .7f);
+                createClouds(worldCreatedUpToY + .7f);
                 timeToCreateCloud = 0;
             }
 
@@ -108,21 +108,21 @@ public class WorldGame {
     }
 
     /**
-     * El piso solo aparece 1 vez, al principio del juego
+     * The floor only appears 1 time, at the beginning of the game.
      */
-    private void crearPiso() {
-        BodyDef bd = new BodyDef();
-        bd.type = BodyType.StaticBody;
+    private void createFloor() {
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.type = BodyType.StaticBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bodyDefinition);
 
         EdgeShape shape = new EdgeShape();
         shape.set(0, 0, BasicScreen.WORLD_WIDTH, 0);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
+        FixtureDef fixtureDefinition = new FixtureDef();
+        fixtureDefinition.shape = shape;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixtureDefinition);
         body.setUserData("piso");
 
         shape.dispose();
@@ -136,18 +136,18 @@ public class WorldGame {
         bd.position.set(player.position.x, player.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Player.WIDTH / 2f, Player.HEIGHT / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.density = 10;
-        fixutre.friction = 0;
-        fixutre.restitution = 0;
+        FixtureDef fixtureDefinition = new FixtureDef();
+        fixtureDefinition.shape = shape;
+        fixtureDefinition.density = 10;
+        fixtureDefinition.friction = 0;
+        fixtureDefinition.restitution = 0;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixtureDefinition);
         body.setUserData(player);
         body.setFixedRotation(true);
 
@@ -156,24 +156,24 @@ public class WorldGame {
 
     private void createPlatform(float y) {
 
-        Platform oPlat = Pools.obtain(Platform.class);
-        oPlat.initializePlatform(MathUtils.random(BasicScreen.WORLD_WIDTH), y, MathUtils.random(1));
+        Platform newPlatform = Pools.obtain(Platform.class);
+        newPlatform.initializePlatform(MathUtils.random(BasicScreen.WORLD_WIDTH), y, MathUtils.random(1));
 
-        BodyDef bd = new BodyDef();
-        bd.position.set(oPlat.position.x, oPlat.position.y);
-        bd.type = BodyType.KinematicBody;
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.set(newPlatform.position.x, newPlatform.position.y);
+        bodyDefinition.type = BodyType.KinematicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Platform.WIDTH_NORMAL / 2f, Platform.HEIGHT_NORMAL / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
 
-        body.createFixture(fixutre);
-        body.setUserData(oPlat);
-        arrayPlatforms.add(oPlat);
+        body.createFixture(fixture);
+        body.setUserData(newPlatform);
+        arrayPlatforms.add(newPlatform);
 
         shape.dispose();
 
@@ -207,7 +207,7 @@ public class WorldGame {
         bd.position.set(piece.position.x, piece.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(PlatformPiece.WIDTH_NORMAL / 2f, PlatformPiece.HEIGHT_NORMAL / 2f);
@@ -232,38 +232,38 @@ public class WorldGame {
         bd.position.set(oEn.position.x, oEn.position.y);
         bd.type = BodyType.DynamicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Enemy.WIDTH / 2f, Enemy.HEIGHT / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.isSensor = true;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.isSensor = true;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixture);
         body.setUserData(oEn);
         body.setGravityScale(0);
 
-        float velocidad = MathUtils.random(1f, Enemy.SPEED_X);
+        float speed = MathUtils.random(1f, Enemy.SPEED_X);
 
         if (MathUtils.randomBoolean())
-            body.setLinearVelocity(velocidad, 0);
+            body.setLinearVelocity(speed, 0);
         else
-            body.setLinearVelocity(-velocidad, 0);
+            body.setLinearVelocity(-speed, 0);
         arrayEnemies.add(oEn);
 
         shape.dispose();
     }
 
     private void createItem(float y) {
-        Item oItem = Pools.obtain(Item.class);
-        oItem.initializeItem(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
+        Item newItem = Pools.obtain(Item.class);
+        newItem.initializeItem(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
-        BodyDef bd = new BodyDef();
-        bd.position.set(oItem.position.x, oItem.position.y);
-        bd.type = BodyType.StaticBody;
-        Body oBody = myWorldBox.createBody(bd);
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.set(newItem.position.x, newItem.position.y);
+        bodyDefinition.type = BodyType.StaticBody;
+        Body body = worldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Item.WIDTH / 2f, Item.HEIGHT / 2f);
@@ -271,30 +271,30 @@ public class WorldGame {
         FixtureDef fixture = new FixtureDef();
         fixture.shape = shape;
         fixture.isSensor = true;
-        oBody.createFixture(fixture);
-        oBody.setUserData(oItem);
+        body.createFixture(fixture);
+        body.setUserData(newItem);
         shape.dispose();
-        arrayItem.add(oItem);
+        arrayItem.add(newItem);
     }
 
-    private void crearNubes(float y) {
+    private void createClouds(float y) {
         Cloud cloud = Pools.obtain(Cloud.class);
         cloud.initializeCloud(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
-        BodyDef bd = new BodyDef();
-        bd.position.set(cloud.position.x, cloud.position.y);
-        bd.type = BodyType.DynamicBody;
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.set(cloud.position.x, cloud.position.y);
+        bodyDefinition.type = BodyType.DynamicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Cloud.WIDTH / 2f, Cloud.HEIGHT / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.isSensor = true;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.isSensor = true;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixture);
         body.setUserData(cloud);
         body.setGravityScale(0);
 
@@ -309,28 +309,28 @@ public class WorldGame {
         shape.dispose();
     }
 
-    private void crearRayo(float x, float y) {
-        com.nopalsoft.superjumper.objects.Ray ray = Pools.obtain(com.nopalsoft.superjumper.objects.Ray.class);
-        ray.initializeRay(x, y);
+    private void createLightning(float x, float y) {
+        Lightning lightning = Pools.obtain(Lightning.class);
+        lightning.initializeRay(x, y);
 
         BodyDef bd = new BodyDef();
-        bd.position.set(ray.position.x, ray.position.y);
+        bd.position.set(lightning.position.x, lightning.position.y);
         bd.type = BodyType.KinematicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(com.nopalsoft.superjumper.objects.Ray.WIDTH / 2f, com.nopalsoft.superjumper.objects.Ray.HEIGHT / 2f);
+        shape.setAsBox(com.nopalsoft.superjumper.objects.Lightning.WIDTH / 2f, com.nopalsoft.superjumper.objects.Lightning.HEIGHT / 2f);
 
         FixtureDef fixutre = new FixtureDef();
         fixutre.shape = shape;
         fixutre.isSensor = true;
 
         body.createFixture(fixutre);
-        body.setUserData(ray);
+        body.setUserData(lightning);
 
-        body.setLinearVelocity(0, com.nopalsoft.superjumper.objects.Ray.Y_SPEED);
-        arrayRays.add(ray);
+        body.setLinearVelocity(0, com.nopalsoft.superjumper.objects.Lightning.Y_SPEED);
+        arrayRays.add(lightning);
 
         shape.dispose();
     }
@@ -343,7 +343,7 @@ public class WorldGame {
         bd.position.set(oBullet.position.x, oBullet.position.y);
         bd.type = BodyType.KinematicBody;
 
-        Body body = myWorldBox.createBody(bd);
+        Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Bullet.SIZE / 2f, Bullet.SIZE / 2f);
@@ -367,7 +367,7 @@ public class WorldGame {
     }
 
     public void update(float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
-        myWorldBox.step(delta, 8, 4);
+        worldBox.step(delta, 8, 4);
 
         eliminarObjetos();
 
@@ -377,7 +377,7 @@ public class WorldGame {
 
         timeToCreateCloud += delta;// Actualizo el tiempo para crear una nube
 
-        myWorldBox.getBodies(arrayBodies);
+        worldBox.getBodies(arrayBodies);
 
         for (Body body : arrayBodies) {
             if (body.getUserData() instanceof Player) {
@@ -394,7 +394,7 @@ public class WorldGame {
                 updateItem(body, delta);
             } else if (body.getUserData() instanceof Cloud) {
                 updateNube(body, delta);
-            } else if (body.getUserData() instanceof Ray) {
+            } else if (body.getUserData() instanceof Lightning) {
                 updateRayo(body, delta);
             } else if (body.getUserData() instanceof Bullet) {
                 updateBullet(body, delta);
@@ -417,16 +417,16 @@ public class WorldGame {
     }
 
     private void eliminarObjetos() {
-        myWorldBox.getBodies(arrayBodies);
+        worldBox.getBodies(arrayBodies);
 
         for (Body body : arrayBodies) {
-            if (!myWorldBox.isLocked()) {
+            if (!worldBox.isLocked()) {
 
                 if (body.getUserData() instanceof Platform) {
                     Platform oPlat = (Platform) body.getUserData();
                     if (oPlat.state == Platform.STATE_DESTROY) {
                         arrayPlatforms.removeValue(oPlat, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         if (oPlat.type == Platform.TYPE_BREAKABLE)
                             createPiecesOfPlatforms(oPlat);
                         com.badlogic.gdx.utils.Pools.free(oPlat);
@@ -435,54 +435,54 @@ public class WorldGame {
                     Coin oMon = (Coin) body.getUserData();
                     if (oMon.state == Coin.STATE_TAKEN) {
                         arrayCoins.removeValue(oMon, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oMon);
                     }
                 } else if (body.getUserData() instanceof PlatformPiece) {
                     PlatformPiece oPiez = (PlatformPiece) body.getUserData();
                     if (oPiez.state == PlatformPiece.STATE_DESTROY) {
                         arrayPlatformPieces.removeValue(oPiez, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         com.badlogic.gdx.utils.Pools.free(oPiez);
                     }
                 } else if (body.getUserData() instanceof Enemy) {
                     Enemy oEnemy = (Enemy) body.getUserData();
                     if (oEnemy.state == Enemy.STATE_DEAD) {
                         arrayEnemies.removeValue(oEnemy, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         Pools.free(oEnemy);
                     }
                 } else if (body.getUserData() instanceof Item) {
                     Item oItem = (Item) body.getUserData();
                     if (oItem.state == Item.STATE_TAKEN) {
                         arrayItem.removeValue(oItem, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         Pools.free(oItem);
                     }
                 } else if (body.getUserData() instanceof Cloud) {
                     Cloud cloud = (Cloud) body.getUserData();
                     if (cloud.state == Cloud.STATE_DEAD) {
                         arrayClouds.removeValue(cloud, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         Pools.free(cloud);
                     }
-                } else if (body.getUserData() instanceof Ray) {
-                    Ray ray = (Ray) body.getUserData();
-                    if (ray.state == Ray.STATE_DESTROY) {
-                        arrayRays.removeValue(ray, true);
-                        myWorldBox.destroyBody(body);
-                        Pools.free(ray);
+                } else if (body.getUserData() instanceof Lightning) {
+                    Lightning lightning = (Lightning) body.getUserData();
+                    if (lightning.state == Lightning.STATE_DESTROY) {
+                        arrayRays.removeValue(lightning, true);
+                        worldBox.destroyBody(body);
+                        Pools.free(lightning);
                     }
                 } else if (body.getUserData() instanceof Bullet) {
                     Bullet oBullet = (Bullet) body.getUserData();
                     if (oBullet.getState() == Bullet.STATE_DESTROY) {
                         arrayBullets.removeValue(oBullet, true);
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                         Pools.free(oBullet);
                     }
                 } else if (body.getUserData().equals("piso")) {
                     if (player.position.y - 5.5f > body.getPosition().y || player.state == Player.STATE_DEAD) {
-                        myWorldBox.destroyBody(body);
+                        worldBox.destroyBody(body);
                     }
                 }
             }
@@ -548,7 +548,7 @@ public class WorldGame {
         obj.update(body, delta);
 
         if (obj.isLightning) {
-            crearRayo(obj.position.x, obj.position.y - .65f);
+            createLightning(obj.position.x, obj.position.y - .65f);
             obj.fireLighting();
         }
 
@@ -558,7 +558,7 @@ public class WorldGame {
     }
 
     private void updateRayo(Body body, float delta) {
-        Ray obj = (Ray) body.getUserData();
+        Lightning obj = (Lightning) body.getUserData();
         obj.update(body, delta);
 
         if (player.position.y - 5.5f > obj.position.y) {
@@ -620,7 +620,7 @@ public class WorldGame {
                 player.jump();
             } else if (otraCosa instanceof Enemy) {
                 player.hit();
-            } else if (otraCosa instanceof Ray) {
+            } else if (otraCosa instanceof Lightning) {
                 player.hit();
             } else if (otraCosa instanceof Item) {
                 Item obj = (Item) otraCosa;
