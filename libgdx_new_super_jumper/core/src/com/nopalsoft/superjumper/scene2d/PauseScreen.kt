@@ -12,8 +12,8 @@ import com.nopalsoft.superjumper.screens.MainMenuScreen
 
 class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 280f, 300f) {
 
-    private var btMenu: TextButton? = null
-    private var btResume: TextButton? = null
+    private lateinit var btMenu: TextButton
+    private lateinit var btResume: TextButton
 
 
     init {

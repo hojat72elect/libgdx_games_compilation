@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nopalsoft.superjumper.screens.MainMenuScreen;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.screens.BasicScreen;
 
 public class MainSuperJumper extends Game {
 
@@ -22,7 +22,7 @@ public class MainSuperJumper extends Game {
 	@Override
 	public void create() {
 
-		stage = new Stage(new StretchViewport(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT));
+		stage = new Stage(new StretchViewport(BasicScreen.SCREEN_WIDTH, BasicScreen.SCREEN_HEIGHT));
 
 		batcher = new SpriteBatch();
 		Settings.load();

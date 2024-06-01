@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 import com.badlogic.gdx.utils.Pools
-import com.nopalsoft.superjumper.screens.Screens
+import com.nopalsoft.superjumper.screens.BasicScreen
 
 class Coin :Poolable {
 
@@ -85,9 +85,9 @@ class Coin :Poolable {
          * that they do not get out of the screen on the right or on the left.
          */
         private fun generaPosX(numberOfLineCoins: Int): Float {
-            var x = MathUtils.random(Screens.WORLD_WIDTH) + (WIDTH / 2f)
-            if (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION)) > Screens.WORLD_WIDTH) {
-                x -= (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION))) - Screens.WORLD_WIDTH // Make the difference from the width and what is happening.
+            var x = MathUtils.random(BasicScreen.WORLD_WIDTH) + (WIDTH / 2f)
+            if (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION)) > BasicScreen.WORLD_WIDTH) {
+                x -= (x + (numberOfLineCoins * (WIDTH + COINS_SEPARATION))) - BasicScreen.WORLD_WIDTH // Make the difference from the width and what is happening.
                 x += WIDTH / 2f // Adds half to be stuck.
             }
             return x

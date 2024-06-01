@@ -27,7 +27,7 @@ import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
 import com.nopalsoft.superjumper.objects.Player;
 import com.nopalsoft.superjumper.objects.Ray;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.screens.BasicScreen;
 
 public class WorldGame {
 
@@ -117,7 +117,7 @@ public class WorldGame {
         Body body = myWorldBox.createBody(bd);
 
         EdgeShape shape = new EdgeShape();
-        shape.set(0, 0, Screens.WORLD_WIDTH, 0);
+        shape.set(0, 0, BasicScreen.WORLD_WIDTH, 0);
 
         FixtureDef fixutre = new FixtureDef();
         fixutre.shape = shape;
@@ -157,7 +157,7 @@ public class WorldGame {
     private void createPlatform(float y) {
 
         Platform oPlat = Pools.obtain(Platform.class);
-        oPlat.initializePlatform(MathUtils.random(Screens.WORLD_WIDTH), y, MathUtils.random(1));
+        oPlat.initializePlatform(MathUtils.random(BasicScreen.WORLD_WIDTH), y, MathUtils.random(1));
 
         BodyDef bd = new BodyDef();
         bd.position.set(oPlat.position.x, oPlat.position.y);
@@ -226,7 +226,7 @@ public class WorldGame {
 
     private void crearEnemigo(float y) {
         Enemy oEn = Pools.obtain(Enemy.class);
-        oEn.initializeEnemy(MathUtils.random(Screens.WORLD_WIDTH), y);
+        oEn.initializeEnemy(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(oEn.position.x, oEn.position.y);
@@ -258,7 +258,7 @@ public class WorldGame {
 
     private void createItem(float y) {
         Item oItem = Pools.obtain(Item.class);
-        oItem.initializeItem(MathUtils.random(Screens.WORLD_WIDTH), y);
+        oItem.initializeItem(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(oItem.position.x, oItem.position.y);
@@ -279,7 +279,7 @@ public class WorldGame {
 
     private void crearNubes(float y) {
         Cloud cloud = Pools.obtain(Cloud.class);
-        cloud.initializeCloud(MathUtils.random(Screens.WORLD_WIDTH), y);
+        cloud.initializeCloud(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(cloud.position.x, cloud.position.y);

@@ -3,7 +3,7 @@ package com.nopalsoft.superjumper.objects
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.nopalsoft.superjumper.screens.Screens
+import com.nopalsoft.superjumper.screens.BasicScreen
 
 class Player(x: Float, y: Float) {
 
@@ -72,11 +72,11 @@ class Player(x: Float, y: Float) {
 
         body.linearVelocity = speed
 
-        if (position.x >= Screens.WORLD_WIDTH) {
+        if (position.x >= BasicScreen.WORLD_WIDTH) {
             position.x = 0f
             body.setTransform(position, 0f)
         } else if (position.x <= 0) {
-            position.x = Screens.WORLD_WIDTH
+            position.x = BasicScreen.WORLD_WIDTH
             body.setTransform(position, 0f)
         }
 

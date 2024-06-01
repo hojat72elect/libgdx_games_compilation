@@ -12,14 +12,14 @@ import com.nopalsoft.superjumper.objects.Enemy;
 import com.nopalsoft.superjumper.objects.Item;
 import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.screens.BasicScreen;
 import com.nopalsoft.superjumper.objects.Cloud;
 import com.nopalsoft.superjumper.objects.Ray;
 import com.nopalsoft.superjumper.objects.Bullet;
 
 public class WorldGameRender {
-    final float WIDTH = Screens.WORLD_WIDTH;
-    final float HEIGHT = Screens.WORLD_HEIGHT;
+    final float WIDTH = BasicScreen.WORLD_WIDTH;
+    final float HEIGHT = BasicScreen.WORLD_HEIGHT;
 
     WorldGame oWorld;
     SpriteBatch batcher;
@@ -44,8 +44,8 @@ public class WorldGameRender {
         if (oWorld.state == WorldGame.STATE_RUNNING)
             oCam.position.y = oWorld.player.position.y;
 
-        if (oCam.position.y < Screens.WORLD_HEIGHT / 2f) {
-            oCam.position.y = Screens.WORLD_HEIGHT / 2f;
+        if (oCam.position.y < BasicScreen.WORLD_HEIGHT / 2f) {
+            oCam.position.y = BasicScreen.WORLD_HEIGHT / 2f;
         }
 
         oCam.update();

@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.superjumper.Assets;
 import com.nopalsoft.superjumper.MainSuperJumper;
 import com.nopalsoft.superjumper.Settings;
-import com.nopalsoft.superjumper.screens.Screens;
+import com.nopalsoft.superjumper.screens.BasicScreen;
 import com.nopalsoft.superjumper.scene2d.PauseScreen;
 import com.nopalsoft.superjumper.scene2d.BaseScreenGameOver;
 
-public class GameScreen extends Screens {
+public class GameScreen extends BasicScreen {
 
     static final int STATE_RUNNING = 2;
     static final int STATE_PAUSED = 3;

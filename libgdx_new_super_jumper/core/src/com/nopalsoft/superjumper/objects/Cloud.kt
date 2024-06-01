@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool.Poolable
-import com.nopalsoft.superjumper.screens.Screens
+import com.nopalsoft.superjumper.screens.BasicScreen
 
 /**
  * The clouds are indestructible. They all start out happy until you shoot them.
@@ -55,7 +55,7 @@ class Cloud : Poolable {
 
         speed = body.linearVelocity
 
-        if (position.x >= Screens.WORLD_WIDTH || position.x <= 0) {
+        if (position.x >= BasicScreen.WORLD_WIDTH || position.x <= 0) {
             speed.x *= -1
         }
 

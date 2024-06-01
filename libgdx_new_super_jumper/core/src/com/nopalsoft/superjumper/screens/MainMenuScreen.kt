@@ -14,7 +14,7 @@ import com.nopalsoft.superjumper.MainSuperJumper
 import com.nopalsoft.superjumper.Settings
 import com.nopalsoft.superjumper.game.GameScreen
 
-class MainMenuScreen(game: MainSuperJumper) : Screens(game) {
+class MainMenuScreen(game: MainSuperJumper) : BasicScreen(game) {
 
     private val title = Image(Assets.settings)
     private val buttonShop = TextButton("Shop", Assets.textButtonStyleBig)

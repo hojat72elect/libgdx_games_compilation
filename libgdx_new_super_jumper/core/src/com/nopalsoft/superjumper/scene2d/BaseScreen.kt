@@ -4,10 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.nopalsoft.superjumper.MainSuperJumper
-import com.nopalsoft.superjumper.screens.Screens
+import com.nopalsoft.superjumper.screens.BasicScreen
 
 open class BaseScreen(
-    @JvmField val screen: Screens,
+    @JvmField val screen: BasicScreen,
     width: Float,
     height: Float,
     positionY: Float
@@ -27,7 +27,7 @@ open class BaseScreen(
 
    open fun show(stage: Stage) {
         setOrigin(width / 2f, height / 2f)
-        x = Screens.SCREEN_WIDTH / 2f - width / 2f
+        x = BasicScreen.SCREEN_WIDTH / 2f - width / 2f
 
         setScale(.5f)
         addAction(
