@@ -15,6 +15,7 @@ import com.nopalsoft.superjumper.MainSuperJumper;
 import com.nopalsoft.superjumper.Settings;
 import com.nopalsoft.superjumper.screens.Screens;
 import com.nopalsoft.superjumper.scene2d.PauseScreen;
+import com.nopalsoft.superjumper.scene2d.BaseScreenGameOver;
 
 public class GameScreen extends Screens {
 
@@ -150,7 +151,7 @@ public class GameScreen extends Screens {
     private void setGameover() {
         state = STATE_GAME_OVER;
         Settings.changeBestScore(myWorldGame.maxDistance);
-        new com.nopalsoft.superjumper.scene2d.BaseScreenGameOver(this).show(stage);
+        new BaseScreenGameOver(this).show(stage);
 
     }
 
