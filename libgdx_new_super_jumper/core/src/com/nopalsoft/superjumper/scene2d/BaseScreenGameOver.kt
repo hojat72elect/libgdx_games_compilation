@@ -15,8 +15,8 @@ import com.nopalsoft.superjumper.screens.MainMenuScreen
 class BaseScreenGameOver(currentScreen: GameScreen) :
     BaseScreen(currentScreen, 350f, 400f, 250f) {
 
-    private var textButtonMenu: TextButton? = null
-    private var textButtonTryAgain: TextButton? = null
+    private lateinit var textButtonMenu: TextButton
+    private lateinit var textButtonTryAgain: TextButton
     private val worldGame: WorldGame = currentScreen.myWorldGame
 
     private val labelShop = Label("Game over!", Assets.labelStyleBig)
@@ -71,10 +71,10 @@ class BaseScreenGameOver(currentScreen: GameScreen) :
 
     private fun initializeButtons() {
         textButtonMenu = TextButton("Menu", Assets.textButtonStyleBig)
-        textButtonMenu?.pad(15f)
+        textButtonMenu.pad(15f)
 
         screen.addEfectoPress(textButtonMenu)
-        textButtonMenu?.addListener(object : ClickListener() {
+        textButtonMenu.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
                 screen.changeScreenWithFadeOut(MainMenuScreen::class.java, game)
@@ -82,10 +82,10 @@ class BaseScreenGameOver(currentScreen: GameScreen) :
         })
 
         textButtonTryAgain = TextButton("Try again", Assets.textButtonStyleBig)
-        textButtonTryAgain?.pad(15f)
+        textButtonTryAgain.pad(15f)
 
         screen.addEfectoPress(textButtonTryAgain)
-        textButtonTryAgain?.addListener(object : ClickListener() {
+        textButtonTryAgain.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
                 screen.changeScreenWithFadeOut(GameScreen::class.java, game)
