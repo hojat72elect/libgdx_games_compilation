@@ -7,9 +7,11 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -21,16 +23,16 @@ import com.nopalsoft.superjumper.game.GameScreen
 abstract class BasicScreen(val game: MainSuperJumper) : InputAdapter(), Screen {
 
 
-    val oCam = OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT)
+    private val oCam = OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     @JvmField
-    val batcher = game.batcher
+    val batcher: SpriteBatch = game.batcher
 
     @JvmField
-    val stage = game.stage
+    val stage: Stage = game.stage
 
-    protected var music: Music? = null
-    var blackFadeOut: Image? = null
+    private var music: Music? = null
+    private var blackFadeOut: Image? = null
 
 
     init {
