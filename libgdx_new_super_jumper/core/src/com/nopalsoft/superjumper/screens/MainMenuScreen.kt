@@ -16,13 +16,12 @@ import com.nopalsoft.superjumper.game.GameScreen
 
 class MainMenuScreen(game: MainSuperJumper) : Screens(game) {
 
-    var title=Image(Assets.settings)
-    var buttonShop=TextButton("Shop", Assets.textButtonStyleBig)
-    var buttonPlay=TextButton("Play", Assets.textButtonStyleBig)
-    var buttonLeaderboard=TextButton("Leaderboard", Assets.textButtonStyleBig)
-    var buttonRate=TextButton("Rate", Assets.textButtonStyleBig)
-    var labelBestScore=Label("Best score " + Settings.bestScore, Assets.labelStyleChico);
-
+    private val title = Image(Assets.settings)
+    private val buttonShop = TextButton("Shop", Assets.textButtonStyleBig)
+    private val buttonPlay = TextButton("Play", Assets.textButtonStyleBig)
+    private val buttonLeaderboard = TextButton("Leaderboard", Assets.textButtonStyleBig)
+    private val buttonRate = TextButton("Rate", Assets.textButtonStyleBig)
+    private val labelBestScore = Label("Best score " + Settings.bestScore, Assets.labelStyleChico)
 
 
     init {
