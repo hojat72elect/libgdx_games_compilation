@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -16,8 +20,6 @@ import com.nopalsoft.slamthebird.shop.PersonajesSubMenu;
 
 public class Assets {
 
-    static TextureAtlas atlas;
-
     public static AtlasRegion titulo;
     public static AtlasRegion tapToPlay;
     public static AtlasRegion bestScore;
@@ -27,27 +29,20 @@ public class Assets {
     public static AtlasRegion shop;
     public static NinePatchDrawable separadorHorizontal;
     public static NinePatchDrawable separadorVertical;
-
     public static AtlasRegion fondo;
     public static AtlasRegion fondoGameover;
     public static AtlasRegion personaje;
-
     public static AtlasRegion personajeShopDefault;
     public static AtlasRegion personajeShopRojo;
     public static AtlasRegion personajeShopAzul;
-
-    public static Animation<TextureRegion> animPersonajeFall;
     public static Animation<TextureRegion> animPersonajeJump;
     public static Animation<TextureRegion> animPersonajeSlam;
     public static Animation<TextureRegion> animPersonajeHit;
     public static Animation<TextureRegion> slam;
-
     public static NinePatchDrawable pixelNegro;
-
     public static AtlasRegion plataforma;
     public static Animation<TextureRegion> animPlataformFire;
     public static Animation<TextureRegion> plataformBreakable;
-
     public static TextureRegionDrawable btAchievements;
     public static TextureRegionDrawable btLeaderboard;
     public static TextureRegionDrawable btMore;
@@ -59,31 +54,24 @@ public class Assets {
     public static TextureRegionDrawable btNoAds;
     public static ButtonStyle styleButtonMusica;
     public static ButtonStyle styleButtonSonido;
-
     public static TextureRegionDrawable upgradeOn;
     public static TextureRegionDrawable upgradeOff;
-
     public static TextureRegionDrawable fondoPuntuaciones;
-
     public static AtlasRegion flapSpawn;
     public static AtlasRegion flapAzul;
     public static Animation<TextureRegion> animflapAlasAzul;
     public static Animation<TextureRegion> animflapAlasRojo;
     public static Animation<TextureRegion> animEvolving;
-
     public static Animation<TextureRegion> animMoneda;
     public static AtlasRegion moneda;
     public static AtlasRegion pixelTransparente;
-
     public static AtlasRegion boostInvencible;
     public static AtlasRegion boostCoinRain;
     public static AtlasRegion boostIce;
     public static AtlasRegion boostSuperSalto;
     public static AtlasRegion boosts;
-
     public static Animation<TextureRegion> animBoostEndInvencible;
     public static Animation<TextureRegion> animBoostEndSuperSalto;
-
     public static AtlasRegion num0Grande;
     public static AtlasRegion num1Grande;
     public static AtlasRegion num2Grande;
@@ -94,7 +82,6 @@ public class Assets {
     public static AtlasRegion num7Grande;
     public static AtlasRegion num8Grande;
     public static AtlasRegion num9Grande;
-
     public static AtlasRegion num0Chico;
     public static AtlasRegion num1Chico;
     public static AtlasRegion num2Chico;
@@ -105,19 +92,16 @@ public class Assets {
     public static AtlasRegion num7Chico;
     public static AtlasRegion num8Chico;
     public static AtlasRegion num9Chico;
-
     public static BitmapFont font;
-
     public static TextButtonStyle styleTextButtonBuy;
     public static TextButtonStyle styleTextButtonPurchased;
     public static TextButtonStyle styleTextButtonSelected;
     public static ScrollPaneStyle styleScrollPane;
     public static LabelStyle styleLabelChico;
-
     public static Sound soundJump;
     public static Sound soundCoin;
     public static Sound soundBoost;
-
+    static TextureAtlas atlas;
     static Music musica;
 
     public static void loadEstilos() {
@@ -131,31 +115,32 @@ public class Assets {
 
         styleLabelChico = new LabelStyle(font, Color.WHITE);
 
-        /* Button Buy */
+        // Button Buy
         TextureRegionDrawable btBuy = new TextureRegionDrawable(
                 atlas.findRegion("Shop/btBuy"));
         styleTextButtonBuy = new TextButtonStyle(btBuy, null, null, font);
 
-        /* Button Purchased */
+
+        // Button Purchased
         TextureRegionDrawable btPurchased = new TextureRegionDrawable(
                 atlas.findRegion("Shop/btPurchased"));
         styleTextButtonPurchased = new TextButtonStyle(btPurchased, null, null,
                 font);
 
-        /* Button Selected */
+        // Button Selected
         TextureRegionDrawable btSelected = new TextureRegionDrawable(
                 atlas.findRegion("Shop/btSelected"));
         styleTextButtonSelected = new TextButtonStyle(btSelected, null, null,
                 font);
 
-        /* Button Musica */
+        // Button Musica
         TextureRegionDrawable btMusicOn = new TextureRegionDrawable(
                 atlas.findRegion("MenuPrincipal/btMusica"));
         TextureRegionDrawable btMusicOff = new TextureRegionDrawable(
                 atlas.findRegion("MenuPrincipal/btSinMusica"));
         styleButtonMusica = new ButtonStyle(btMusicOn, null, btMusicOff);
 
-        /* Boton Sonido */
+        // Boton Sonido
         TextureRegionDrawable botonSonidoOn = new TextureRegionDrawable(
                 atlas.findRegion("MenuPrincipal/btSonido"));
         TextureRegionDrawable botonSonidoOff = new TextureRegionDrawable(
@@ -187,7 +172,7 @@ public class Assets {
                 + "/personajeSlam3");
         AtlasRegion per4 = atlas.findRegion("Personajes/" + perSeleccionado
                 + "/personajeSlam4");
-        animPersonajeSlam = new Animation<TextureRegion>(.05f, per1, per2, per3, per4);
+        animPersonajeSlam = new Animation<>(.05f, per1, per2, per3, per4);
 
         per1 = atlas.findRegion("Personajes/" + perSeleccionado
                 + "/personajeJump1");
@@ -195,7 +180,7 @@ public class Assets {
                 + "/personajeJump1");
         per3 = atlas.findRegion("Personajes/" + perSeleccionado
                 + "/personajeJump1");
-        animPersonajeJump = new Animation<TextureRegion>(.1f, per1, per2, per3);
+        animPersonajeJump = new Animation<>(.1f, per1, per2, per3);
 
         per1 = atlas.findRegion("Personajes/" + perSeleccionado
                 + "/personajeHit");
@@ -203,7 +188,7 @@ public class Assets {
                 + "/personajeHit");
         per3 = atlas.findRegion("Personajes/" + perSeleccionado
                 + "/personajeHit");
-        animPersonajeHit = new Animation<TextureRegion>(.1f, per1, per2, per3);
+        animPersonajeHit = new Animation<>(.1f, per1, per2, per3);
 
         // Estos son los que aparecen en la tienda;
         personajeShopDefault = atlas
@@ -251,7 +236,7 @@ public class Assets {
         AtlasRegion per2 = atlas.findRegion("moneda2");
         AtlasRegion per3 = atlas.findRegion("moneda3");
         moneda = per1;
-        animMoneda = new Animation<TextureRegion>(.15f, per1, per2, per3, per2);
+        animMoneda = new Animation<>(.15f, per1, per2, per3, per2);
 
         flapAzul = atlas.findRegion("InGame/flapAzul");
         flapSpawn = atlas.findRegion("InGame/flapSpawn");
@@ -259,30 +244,30 @@ public class Assets {
         AtlasRegion flap1 = atlas.findRegion("InGame/flapAzulAlas1");
         AtlasRegion flap2 = atlas.findRegion("InGame/flapAzulAlas2");
         AtlasRegion flap3 = atlas.findRegion("InGame/flapAzulAlas3");
-        animflapAlasAzul = new Animation<TextureRegion>(.15f, flap1, flap2, flap3, flap2);
+        animflapAlasAzul = new Animation<>(.15f, flap1, flap2, flap3, flap2);
 
         flap1 = atlas.findRegion("InGame/flapRojoAlas1");
         flap2 = atlas.findRegion("InGame/flapRojoAlas2");
         flap3 = atlas.findRegion("InGame/flapRojoAlas3");
-        animflapAlasRojo = new Animation<TextureRegion>(.15f, flap1, flap2, flap3, flap2);
-        animEvolving = new Animation<TextureRegion>(.075f, flapAzul, flap1, flapAzul, flap2,
+        animflapAlasRojo = new Animation<>(.15f, flap1, flap2, flap3, flap2);
+        animEvolving = new Animation<>(.075f, flapAzul, flap1, flapAzul, flap2,
                 flapAzul, flap3);
 
         flap1 = atlas.findRegion("InGame/plataformFire1");
         flap2 = atlas.findRegion("InGame/plataformFire2");
         flap3 = atlas.findRegion("InGame/plataformFire3");
-        animPlataformFire = new Animation<TextureRegion>(.15f, flap1, flap2, flap3, flap2);
+        animPlataformFire = new Animation<>(.15f, flap1, flap2, flap3, flap2);
 
         flap1 = atlas.findRegion("InGame/plataforma2");
         flap2 = atlas.findRegion("InGame/plataforma3");
         flap3 = atlas.findRegion("InGame/plataforma4");
-        plataformBreakable = new Animation<TextureRegion>(.1f, flap1, flap2, flap3);
+        plataformBreakable = new Animation<>(.1f, flap1, flap2, flap3);
         plataforma = atlas.findRegion("InGame/plataforma1");
 
         flap1 = atlas.findRegion("InGame/slam1");
         flap2 = atlas.findRegion("InGame/slam2");
         flap3 = atlas.findRegion("InGame/slam3");
-        slam = new Animation<TextureRegion>(.1f, flap1, flap2, flap3);
+        slam = new Animation<>(.1f, flap1, flap2, flap3);
 
         boostInvencible = atlas.findRegion("InGame/boostInvencible");
         boostCoinRain = atlas.findRegion("InGame/boostCoinRain");
@@ -290,9 +275,9 @@ public class Assets {
         boostSuperSalto = atlas.findRegion("InGame/boostSuperSalto");
         boosts = atlas.findRegion("InGame/boosts");
 
-        animBoostEndInvencible = new Animation<TextureRegion>(.15f, boostInvencible,
+        animBoostEndInvencible = new Animation<>(.15f, boostInvencible,
                 pixelTransparente);
-        animBoostEndSuperSalto = new Animation<TextureRegion>(.15f, boostSuperSalto,
+        animBoostEndSuperSalto = new Animation<>(.15f, boostSuperSalto,
                 pixelTransparente);
 
         btAchievements = new TextureRegionDrawable(

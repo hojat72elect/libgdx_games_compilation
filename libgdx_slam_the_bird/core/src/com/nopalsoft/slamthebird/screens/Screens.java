@@ -1,7 +1,5 @@
 package com.nopalsoft.slamthebird.screens;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
@@ -16,12 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.MainSlamBird;
 import com.nopalsoft.slamthebird.Settings;
-import com.nopalsoft.slamthebird.game.GameScreen;
-import com.nopalsoft.slamthebird.shop.ShopScreen;
 
 public abstract class Screens extends InputAdapter implements Screen {
     public static final int SCREEN_WIDTH = 480;
@@ -36,7 +31,7 @@ public abstract class Screens extends InputAdapter implements Screen {
     public SpriteBatch batcher;
     public Stage stage;
 
-    Random oRan;
+    Image blackFadeOut;
 
     public Screens(MainSlamBird game) {
         this.stage = game.stage;
@@ -114,7 +109,7 @@ public abstract class Screens extends InputAdapter implements Screen {
         String score = String.valueOf(puntuacion);
 
         int len = score.length();
-        float charWidth = 22;
+        float charWidth;
         float textWidth = 0;
         for (int i = len - 1; i >= 0; i--) {
             AtlasRegion keyFrame;
@@ -187,25 +182,20 @@ public abstract class Screens extends InputAdapter implements Screen {
         }
     }
 
-    Image blackFadeOut;
-
     public void changeScreenWithFadeOut(final Class<?> newScreen,
                                         final MainSlamBird game) {
         blackFadeOut = new Image(Assets.pixelNegro);
         blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         blackFadeOut.getColor().a = 0;
         blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (newScreen == GameScreen.class)
-                            game.setScreen(new GameScreen(game));
-                        else if (newScreen == ShopScreen.class)
-                            game.setScreen(new ShopScreen(game));
+                Actions.run(() -> {
+                    if (newScreen == com.nopalsoft.slamthebird.game.GameScreen.class)
+                        game.setScreen(new com.nopalsoft.slamthebird.game.GameScreen(game));
+                    else if (newScreen == com.nopalsoft.slamthebird.shop.ShopScreen.class)
+                        game.setScreen(new com.nopalsoft.slamthebird.shop.ShopScreen(game));
 
-                        // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-                        // blackFadeout.remove();
-                    }
+                    // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
+                    // blackFadeout.remove();
                 })));
         stage.addActor(blackFadeOut);
     }

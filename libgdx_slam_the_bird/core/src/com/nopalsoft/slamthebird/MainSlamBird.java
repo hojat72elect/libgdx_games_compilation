@@ -12,14 +12,12 @@ import com.nopalsoft.slamthebird.screens.Screens;
 public class MainSlamBird extends Game {
     public final GameServicesHandler gameServiceHandler;
     public final RequestHandler reqHandler;
-
+    public Stage stage;
+    public SpriteBatch batcher;
     public MainSlamBird(RequestHandler reqHandler, GameServicesHandler gameServiceHandler) {
         this.reqHandler = reqHandler;
         this.gameServiceHandler = gameServiceHandler;
     }
-
-    public Stage stage;
-    public SpriteBatch batcher;
 
     @Override
     public void create() {

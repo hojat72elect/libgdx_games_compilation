@@ -4,36 +4,28 @@ public interface GameServicesHandler {
 
 	/**
 	 * Este metodo abstrae a GPGS o a AGC
-	 * 
-	 * @param tiempoLap
 	 */
-	public void submitScore(long score);
+	 void submitScore(long score);
 
 	/**
 	 * Este metodo abstrae a GPGS o a AGC
-	 * 
-	 * @param score
 	 */
-	public void unlockAchievement(String achievementId);
+	 void unlockAchievement(String achievementId);
 
 	/**
 	 * Este metodo abstrae a GPGS o a AGC
-	 * 
-	 * @param score
 	 */
-	public void getLeaderboard();
+	 void getLeaderboard();
 
 	/**
 	 * Este metodo abstrae a GPGS o a AGC
-	 * 
-	 * @param score
 	 */
-	public void getAchievements();
+	 void getAchievements();
 
-	public boolean isSignedIn();
+	 boolean isSignedIn();
 
-	public void signIn();
+	 void signIn();
 
-	public void signOut();
+
 
 }

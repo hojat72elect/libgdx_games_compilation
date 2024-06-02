@@ -277,7 +277,7 @@ public class WorldGame {
 			Body body = i.next();
 
 			if (body.getUserData() instanceof Robot) {
-				oRobo.updateReady(delta, body, acelX);
+				oRobo.updateReady(body, acelX);
 				break;
 			}
 		}

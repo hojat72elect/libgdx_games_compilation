@@ -76,7 +76,6 @@ public class ShopScreen extends Screens {
                 new PersonajesSubMenu(game, contenedor);
             }
 
-            ;
         });
 
         btPowerUps = new Button(new TextureRegionDrawable(Assets.boosts));
@@ -90,7 +89,6 @@ public class ShopScreen extends Screens {
                 new UpgradesSubMenu(game, contenedor);
             }
 
-            ;
         });
 
         btMonedas = new Button(new TextureRegionDrawable(Assets.moneda));
@@ -103,8 +101,6 @@ public class ShopScreen extends Screens {
                     float y) {
                 new GetCoinsSubMenu(game, contenedor);
             }
-
-            ;
         });
 
         btNoAds = new Button(new TextureRegionDrawable(Assets.btNoAds));
@@ -117,8 +113,6 @@ public class ShopScreen extends Screens {
                     float y) {
                 new NoAdsSubMenu(game, contenedor);
             }
-
-            ;
         });
 
         btAtras = new Button(new TextureRegionDrawable(Assets.btAtras));
@@ -131,8 +125,6 @@ public class ShopScreen extends Screens {
                     float y) {
                 changeScreenWithFadeOut(GameScreen.class, game);
             }
-
-            ;
         });
 
     }

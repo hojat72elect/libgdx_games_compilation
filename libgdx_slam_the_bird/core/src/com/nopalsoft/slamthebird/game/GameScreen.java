@@ -358,7 +358,7 @@ public class GameScreen extends Screens {
 
     @Override
     public void draw(float delta) {
-        renderer.render(delta);
+        renderer.render();
 
         oCam.update();
         batcher.setProjectionMatrix(oCam.combined);

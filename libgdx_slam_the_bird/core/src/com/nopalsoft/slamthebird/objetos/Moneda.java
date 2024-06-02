@@ -11,61 +11,59 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class Moneda implements Poolable {
 
-	public static final float RADIUS = .15f;
+    public static final float RADIUS = .15f;
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_TAKEN = 1;
+    public static float VELOCIDAD_MOVE = 1;
+    public int state;
 
-	public static float VELOCIDAD_MOVE = 1;
+    public Vector2 position;
+    public float stateTime;
 
-	public static final int STATE_NORMAL = 0;
-	public static final int STATE_TAKEN = 1;
-	public int state;
+    public Moneda() {
+        position = new Vector2();
+    }
 
-	public Vector2 position;
-	public float stateTime;
+    public static Body crearMoneda(World oWorldBox, float x, float y, float velocidadX) {
+        BodyDef bd = new BodyDef();
+        bd.position.x = x;
+        bd.position.y = y;
+        bd.type = BodyType.DynamicBody;
 
-	public Moneda() {
-		position = new Vector2();
-	}
+        Body oBody = oWorldBox.createBody(bd);
 
-	public void init(float x, float y) {
-		position.set(x, y);
-		stateTime = 0;
-		state = STATE_NORMAL;
-	}
+        CircleShape shape = new CircleShape();
+        shape.setRadius(RADIUS);
 
-	public void update(float delta, Body body) {
-		position.x = body.getPosition().x;
-		position.y = body.getPosition().y;
-		stateTime += delta;
-	}
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.density = 1;
+        fixture.restitution = .5f;
+        fixture.friction = 0;
+        fixture.filter.groupIndex = -1;
 
-	@Override
-	public void reset() {
+        oBody.setGravityScale(0);
+        oBody.createFixture(fixture);
+        oBody.setLinearVelocity(velocidadX, 0);
 
-	}
+        return oBody;
 
-	public static Body crearMoneda(World oWorldBox, float x, float y, float velocidadX) {
-		BodyDef bd = new BodyDef();
-		bd.position.x = x;
-		bd.position.y = y;
-		bd.type = BodyType.DynamicBody;
+    }
 
-		Body oBody = oWorldBox.createBody(bd);
+    public void init(float x, float y) {
+        position.set(x, y);
+        stateTime = 0;
+        state = STATE_NORMAL;
+    }
 
-		CircleShape shape = new CircleShape();
-		shape.setRadius(RADIUS);
+    public void update(float delta, Body body) {
+        position.x = body.getPosition().x;
+        position.y = body.getPosition().y;
+        stateTime += delta;
+    }
 
-		FixtureDef fixture = new FixtureDef();
-		fixture.shape = shape;
-		fixture.density = 1;
-		fixture.restitution = .5f;
-		fixture.friction = 0;
-		fixture.filter.groupIndex = -1;
+    @Override
+    public void reset() {
 
-		oBody.setGravityScale(0);
-		oBody.createFixture(fixture);
-		oBody.setLinearVelocity(velocidadX, 0);
-
-		return oBody;
-
-	}
+    }
 }
