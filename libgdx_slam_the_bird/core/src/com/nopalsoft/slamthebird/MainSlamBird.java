@@ -5,18 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nopalsoft.slamthebird.game.GameScreen;
-import com.nopalsoft.slamthebird.handlers.GameServicesHandler;
 import com.nopalsoft.slamthebird.handlers.RequestHandler;
 import com.nopalsoft.slamthebird.screens.Screens;
 
 public class MainSlamBird extends Game {
-    public final GameServicesHandler gameServiceHandler;
     public final RequestHandler reqHandler;
     public Stage stage;
     public SpriteBatch batcher;
-    public MainSlamBird(RequestHandler reqHandler, GameServicesHandler gameServiceHandler) {
+
+    public MainSlamBird(RequestHandler reqHandler) {
         this.reqHandler = reqHandler;
-        this.gameServiceHandler = gameServiceHandler;
     }
 
     @Override
@@ -25,10 +23,7 @@ public class MainSlamBird extends Game {
 
         batcher = new SpriteBatch();
         Assets.load();
-        Achievements.init(this);
-
-        if (Settings.didBuyNoAds)
-            reqHandler.removeAds();
+        Achievements.init();
 
         setScreen(new GameScreen(this));
     }

@@ -44,6 +44,7 @@ public class GameScreen extends Screens {
 
     VentanaRate ventanaRate;
     VentanaPause ventanaPause;
+    int combo;
 
     public GameScreen(MainSlamBird game) {
         super(game);
@@ -85,7 +86,7 @@ public class GameScreen extends Screens {
         bestScore = new Image(Assets.bestScore);
         bestScore.setSize(170, 25);
         bestScore
-                .setPosition(SCREEN_WIDTH / 2 - bestScore.getWidth() / 2f, 770);
+                .setPosition(SCREEN_WIDTH / 2f - bestScore.getWidth() / 2f, 770);
         bestScore.addAction(Actions.repeat(
                 Integer.MAX_VALUE,
                 Actions.sequence(Actions.alpha(.6f, .75f),
@@ -107,10 +108,6 @@ public class GameScreen extends Screens {
         btMore.setPosition(390, 730);
         addEfectoPress(btMore);
         btMore.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.reqHandler.showMoreGames();
-            }
         });
 
         btLeaderboard = new Button(Assets.btLeaderboard);
@@ -118,13 +115,6 @@ public class GameScreen extends Screens {
         btLeaderboard.setPosition(230 - 110, 310);
         addEfectoPress(btLeaderboard);
         btLeaderboard.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (game.gameServiceHandler.isSignedIn())
-                    game.gameServiceHandler.getLeaderboard();
-                else
-                    game.gameServiceHandler.signIn();
-            }
         });
 
         btAchievements = new Button(Assets.btAchievements);
@@ -132,13 +122,6 @@ public class GameScreen extends Screens {
         btAchievements.setPosition(250, 310);
         addEfectoPress(btAchievements);
         btAchievements.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (game.gameServiceHandler.isSignedIn())
-                    game.gameServiceHandler.getAchievements();
-                else
-                    game.gameServiceHandler.signIn();
-            }
         });
 
         btRate = new Button(Assets.btRate);
@@ -147,10 +130,6 @@ public class GameScreen extends Screens {
         btRate.setPosition(SCREEN_WIDTH / 2f - btRate.getWidth() / 2f - 25, 220);// Con el boton face y twitter cambia la pos
         addEfectoPress(btRate);
         btRate.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.reqHandler.showRater();
-            }
         });
 
         btShareFacebook = new Button(new TextureRegionDrawable(
@@ -159,12 +138,6 @@ public class GameScreen extends Screens {
         btShareFacebook.setPosition(280, 257);
         addEfectoPress(btShareFacebook);
         btShareFacebook.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.reqHandler
-                        .shareOnFacebook("My best score playing Slam the bird is "
-                                + Settings.bestScore + ", can you beat me?");
-            }
         });
 
         btShareTwitter = new Button(new TextureRegionDrawable(Assets.btTwitter));
@@ -172,12 +145,6 @@ public class GameScreen extends Screens {
         btShareTwitter.setPosition(280, 212);
         addEfectoPress(btShareTwitter);
         btShareTwitter.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.reqHandler
-                        .shareOnTwitter("My best score playing Slam the bird is "
-                                + Settings.bestScore + ", can you beat me?");
-            }
         });
 
         final Button btMusica, btSonido;
@@ -235,7 +202,7 @@ public class GameScreen extends Screens {
         tapToPlay = new Image(Assets.tapToPlay);
         tapToPlay.setSize(333, 40);
         tapToPlay
-                .setPosition(SCREEN_WIDTH / 2 - tapToPlay.getWidth() / 2f, 140);
+                .setPosition(SCREEN_WIDTH / 2f - tapToPlay.getWidth() / 2f, 140);
         tapToPlay.setOrigin(tapToPlay.getWidth() / 2f,
                 tapToPlay.getHeight() / 2f);
         float scaleTime = .75f;
@@ -264,13 +231,10 @@ public class GameScreen extends Screens {
         fondoGameover.setScale(2);
         fondoGameover.addAction(Actions.sequence(
                 Actions.scaleTo(1.1f, 1.1f, .25f), Actions.delay(1f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        fondoGameover.remove();
-                        fondoGameover.setScale(2);
-                        setTryAgain();
-                    }
+                Actions.run(() -> {
+                    fondoGameover.remove();
+                    fondoGameover.setScale(2);
+                    setTryAgain();
                 })));
 
     }
@@ -304,8 +268,6 @@ public class GameScreen extends Screens {
 
     }
 
-    int combo;
-
     private void updateRunning(float delta) {
         boolean slam = false;
         float acelX = Gdx.input.getAccelerometerX() * -1 / 5f;
@@ -315,12 +277,12 @@ public class GameScreen extends Screens {
         else if (Gdx.input.isKeyPressed(Keys.D)
                 || Gdx.input.isKeyPressed(Keys.RIGHT))
             acelX = 1;
-        Gdx.app.log("Slam is", " " + slam);
+        Gdx.app.log("Slam is", " " + false);
 
         if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE)
                 || Gdx.input.isKeyPressed(Keys.DOWN)) {
             slam = true;
-            Gdx.app.log("Slam is", " " + slam);
+            Gdx.app.log("Slam is", " " + true);
         }
 
         oWorld.update(delta, acelX, slam);
@@ -367,11 +329,11 @@ public class GameScreen extends Screens {
 
         switch (state) {
             case STATE_RUNNING:
-                drawRunning(delta);
+                drawRunning();
                 break;
             case STATE_READY:
             case STATE_TRY_AGAIN:
-                drawReady(delta);
+                drawReady();
                 break;
             default:
                 break;
@@ -380,7 +342,7 @@ public class GameScreen extends Screens {
 
     }
 
-    private void drawRunning(float delta) {
+    private void drawRunning() {
         drawNumGrandeCentradoX(SCREEN_WIDTH / 2f, 700, oWorld.scoreSlamed);
 
         batcher.draw(Assets.moneda, 449, 764, 30, 34);
@@ -388,7 +350,7 @@ public class GameScreen extends Screens {
 
     }
 
-    private void drawReady(float delta) {
+    private void drawReady() {
 
         drawNumChicoCentradoX(SCREEN_WIDTH / 2f, 730, Settings.bestScore);
 
@@ -427,27 +389,18 @@ public class GameScreen extends Screens {
         tituloApp.addAction(Actions.sequence(Actions.fadeOut(.5f),
                 Actions.removeActor()));
         botones.addAction(Actions.sequence(Actions.fadeOut(.5f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        botones.remove();
-                        groupTryAgain.remove();// POr el bug
-                        state = STATE_RUNNING;
-                        game.reqHandler.hideAdBanner();
-                    }
+                Actions.run(() -> {
+                    botones.remove();
+                    groupTryAgain.remove();// POr el bug
+                    state = STATE_RUNNING;
                 })));
 
     }
 
     private void setGameover() {
-
         Settings.setBestScores(oWorld.scoreSlamed);
-        game.gameServiceHandler.submitScore(oWorld.scoreSlamed);
-
         state = STATE_GAME_OVER;
         stage.addActor(fondoGameover);
-        game.reqHandler.showAdBanner();
-
     }
 
     private void setTryAgain() {
@@ -456,21 +409,17 @@ public class GameScreen extends Screens {
 
         groupTryAgain = new Group();
         groupTryAgain.setSize(420, 300);
-        groupTryAgain.setPosition(SCREEN_WIDTH / 2 - groupTryAgain.getWidth()
+        groupTryAgain.setPosition(SCREEN_WIDTH / 2f - groupTryAgain.getWidth()
                 / 2, 800);
         groupTryAgain.addAction(Actions.sequence(Actions.moveTo(
                 groupTryAgain.getX(), 410, 1, Interpolation.bounceOut), Actions
-                .run(new Runnable() {
+                .run(() -> {
+                    botones.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn(.5f));
+                    stage.addActor(botones);
 
-                    @Override
-                    public void run() {
-                        botones.addAction(Actions.fadeIn(.5f));
-                        stage.addActor(botones);
-
-                        if (Settings.numeroVecesJugadas % 7 == 0
-                                && !Settings.seCalifico) {
-                            ventanaRate.show(stage);
-                        }
+                    if (com.nopalsoft.slamthebird.Settings.numeroVecesJugadas % 7 == 0
+                            && !com.nopalsoft.slamthebird.Settings.seCalifico) {
+                        ventanaRate.show(stage);
                     }
                 })));
 
@@ -505,9 +454,6 @@ public class GameScreen extends Screens {
         renderer = new WorldGameRender(batcher, oWorld);
 
         stage.addActor(groupTryAgain);
-
-        if (Settings.numeroVecesJugadas % 10 == 0)
-            game.reqHandler.showInterstitial();
 
     }
 

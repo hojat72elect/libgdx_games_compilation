@@ -11,8 +11,7 @@ public class Achievements {
 
     static String SuperJump, SlamCombo, SuperSlam, InvencibleSlam, YouGotAnySpareChange, coinMaster;
 
-    public static void init(MainSlamBird game) {
-        gameHandler = game.gameServiceHandler;
+    public static void init() {
 
         if (gameHandler instanceof GoogleGameServicesHandler) {
             SuperJump = "CgkI5qq7_pkVEAIQBQ";

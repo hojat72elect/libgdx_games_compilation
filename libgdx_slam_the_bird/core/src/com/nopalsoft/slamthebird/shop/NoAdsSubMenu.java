@@ -43,7 +43,6 @@ public class NoAdsSubMenu {
                     Settings.didBuyNoAds = true;
                     lblNoAds.setVisible(false);
                     btNoAds.setVisible(false);
-                    game.reqHandler.removeAds();
                 }
             }
         });
