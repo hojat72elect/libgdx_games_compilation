@@ -443,7 +443,7 @@ public class GameScreen extends Screens {
         LabelMonedas lblMonedas = new LabelMonedas(385, 45,
                 oWorld.monedasTomadas);
 
-        Achievements.unlockCoins(oWorld.monedasTomadas);
+        Achievements.unlockCoins();
 
         groupTryAgain.addActor(score);
         groupTryAgain.addActor(lblScore);
