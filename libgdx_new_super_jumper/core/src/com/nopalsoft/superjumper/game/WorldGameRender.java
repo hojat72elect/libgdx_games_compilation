@@ -7,49 +7,50 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.superjumper.Assets;
+import com.nopalsoft.superjumper.objects.Bullet;
+import com.nopalsoft.superjumper.objects.Cloud;
 import com.nopalsoft.superjumper.objects.Coin;
 import com.nopalsoft.superjumper.objects.Enemy;
 import com.nopalsoft.superjumper.objects.Item;
+import com.nopalsoft.superjumper.objects.Lightning;
 import com.nopalsoft.superjumper.objects.Platform;
 import com.nopalsoft.superjumper.objects.PlatformPiece;
+import com.nopalsoft.superjumper.objects.Player;
 import com.nopalsoft.superjumper.screens.BasicScreen;
-import com.nopalsoft.superjumper.objects.Cloud;
-import com.nopalsoft.superjumper.objects.Lightning;
-import com.nopalsoft.superjumper.objects.Bullet;
 
 public class WorldGameRender {
     final float WIDTH = BasicScreen.WORLD_WIDTH;
     final float HEIGHT = BasicScreen.WORLD_HEIGHT;
 
-    WorldGame oWorld;
+    WorldGame worldGame;
     SpriteBatch batcher;
-    OrthographicCamera oCam;
+    OrthographicCamera camera;
     Box2DDebugRenderer boxRender;
 
-    public WorldGameRender(SpriteBatch batcher, WorldGame oWorld) {
-        this.oWorld = oWorld;
+    public WorldGameRender(SpriteBatch batcher, WorldGame worldGame) {
+        this.worldGame = worldGame;
         this.batcher = batcher;
 
-        oCam = new OrthographicCamera(WIDTH, HEIGHT);
-        oCam.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
 
         boxRender = new Box2DDebugRenderer();
     }
 
     public void unprojectToWorldCoords(Vector3 touchPoint) {
-        oCam.unproject(touchPoint);
+        camera.unproject(touchPoint);
     }
 
     public void render() {
-        if (oWorld.state == WorldGame.STATE_RUNNING)
-            oCam.position.y = oWorld.player.position.y;
+        if (worldGame.state == WorldGame.STATE_RUNNING)
+            camera.position.y = worldGame.player.position.y;
 
-        if (oCam.position.y < BasicScreen.WORLD_HEIGHT / 2f) {
-            oCam.position.y = BasicScreen.WORLD_HEIGHT / 2f;
+        if (camera.position.y < BasicScreen.WORLD_HEIGHT / 2f) {
+            camera.position.y = BasicScreen.WORLD_HEIGHT / 2f;
         }
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        camera.update();
+        batcher.setProjectionMatrix(camera.combined);
 
         batcher.begin();
 
@@ -70,7 +71,7 @@ public class WorldGameRender {
     private void renderCharacters() {
         AtlasRegion keyframe;
 
-        com.nopalsoft.superjumper.objects.Player obj = oWorld.player;
+        Player obj = worldGame.player;
 
         if (obj.speed.y > 0)
             keyframe = Assets.characterJump;
@@ -80,12 +81,12 @@ public class WorldGameRender {
         if (obj.speed.x > 0)
             batcher.draw(
                     keyframe,
-                    obj.position.x + com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
-                    -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
-                    -com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT,
+                    obj.position.x + Player.DRAW_WIDTH / 2f,
+                    obj.position.y - Player.DRAW_HEIGHT / 2f,
+                    -Player.DRAW_WIDTH / 2f,
+                    Player.DRAW_HEIGHT / 2f,
+                    -Player.DRAW_WIDTH,
+                    Player.DRAW_HEIGHT,
                     1,
                     1,
                     obj.angleDeg
@@ -94,12 +95,12 @@ public class WorldGameRender {
         else
             batcher.draw(
                     keyframe,
-                    obj.position.x - com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    obj.position.y - com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT / 2f,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_WIDTH,
-                    com.nopalsoft.superjumper.objects.Player.DRAW_HEIGHT,
+                    obj.position.x - Player.DRAW_WIDTH / 2f,
+                    obj.position.y - Player.DRAW_HEIGHT / 2f,
+                    Player.DRAW_WIDTH / 2f,
+                    Player.DRAW_HEIGHT / 2f,
+                    Player.DRAW_WIDTH,
+                    Player.DRAW_HEIGHT,
                     1,
                     1,
                     obj.angleDeg
@@ -140,7 +141,7 @@ public class WorldGameRender {
     }
 
     private void renderPlatforms() {
-        for (Platform obj : oWorld.arrayPlatforms) {
+        for (Platform obj : worldGame.arrayPlatforms) {
             AtlasRegion keyframe = null;
 
             if (obj.type == Platform.TYPE_BREAKABLE) {
@@ -212,7 +213,7 @@ public class WorldGameRender {
     }
 
     private void renderPlatformPieces() {
-        for (PlatformPiece obj : oWorld.arrayPlatformPieces) {
+        for (PlatformPiece obj : worldGame.arrayPlatformPieces) {
             AtlasRegion keyframe = null;
 
             if (obj.type == PlatformPiece.TYPE_LEFT) {
@@ -269,7 +270,7 @@ public class WorldGameRender {
     }
 
     private void renderCoins() {
-        for (Coin obj : oWorld.arrayCoins) {
+        for (Coin obj : worldGame.arrayCoins) {
             batcher.draw(Assets.coin, obj.position.x - Coin.DRAW_WIDTH / 2f, obj.position.y - Coin.DRAW_HEIGHT / 2f, Coin.DRAW_WIDTH,
                     Coin.DRAW_HEIGHT);
         }
@@ -277,7 +278,7 @@ public class WorldGameRender {
     }
 
     private void renderItems() {
-        for (Item obj : oWorld.arrayItem) {
+        for (Item obj : worldGame.arrayItem) {
             TextureRegion keyframe = null;
 
             switch (obj.type) {
@@ -300,8 +301,8 @@ public class WorldGameRender {
     }
 
     private void renderEnemy() {
-        for (Enemy obj : oWorld.arrayEnemies) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyframe = com.nopalsoft.superjumper.Assets.enemy.getKeyFrame(obj.stateTime, true);
+        for (Enemy obj : worldGame.arrayEnemies) {
+            TextureRegion keyframe = Assets.enemy.getKeyFrame(obj.stateTime, true);
 
             batcher.draw(keyframe, obj.position.x - Enemy.DRAW_WIDTH / 2f, obj.position.y - Enemy.DRAW_HEIGHT / 2f, Enemy.DRAW_WIDTH,
                     Enemy.DRAW_HEIGHT);
@@ -310,7 +311,7 @@ public class WorldGameRender {
     }
 
     private void renderCloud() {
-        for (Cloud obj : oWorld.arrayClouds) {
+        for (Cloud obj : worldGame.arrayClouds) {
             TextureRegion keyframe = null;
 
             switch (obj.guy) {
@@ -333,7 +334,7 @@ public class WorldGameRender {
     }
 
     private void renderRay() {
-        for (Lightning obj : oWorld.arrayRays) {
+        for (Lightning obj : worldGame.arrayRays) {
             TextureRegion keyframe = Assets.ray.getKeyFrame(obj.stateTime, true);
 
             batcher.draw(keyframe, obj.position.x - Lightning.DRAW_WIDTH / 2f, obj.position.y - Lightning.DRAW_HEIGHT / 2f, Lightning.DRAW_WIDTH, Lightning.DRAW_HEIGHT);
@@ -341,7 +342,7 @@ public class WorldGameRender {
     }
 
     private void renderBullet() {
-        for (Bullet obj : oWorld.arrayBullets) {
+        for (Bullet obj : worldGame.arrayBullets) {
             batcher.draw(Assets.bullet, obj.position.x - Bullet.SIZE / 2f, obj.position.y - Bullet.SIZE / 2f, Bullet.SIZE, Bullet.SIZE);
         }
     }

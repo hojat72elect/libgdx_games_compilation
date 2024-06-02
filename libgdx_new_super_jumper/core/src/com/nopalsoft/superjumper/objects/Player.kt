@@ -10,7 +10,6 @@ class Player(x: Float, y: Float) {
     @JvmField
     var state = STATE_NORMAL
 
-
     @JvmField
     var durationJetPack = 0f
 
@@ -25,7 +24,7 @@ class Player(x: Float, y: Float) {
 
     var stateTime = 0f
 
-    var didJump = false
+    private var didJump = false
 
     @JvmField
     var isBubble = false
@@ -34,7 +33,7 @@ class Player(x: Float, y: Float) {
     var isJetPack = false
 
 
-    fun update(body: Body, delta: Float, acelX: Float) {
+    fun update(body: Body, delta: Float, accelerationX: Float) {
         position.x = body.position.x
         position.y = body.position.y
 
@@ -47,7 +46,7 @@ class Player(x: Float, y: Float) {
                 speed.y = JUMP_SPEED
             }
 
-            speed.x = acelX * xSpeed
+            speed.x = accelerationX * X_SPEED
 
             if (isBubble) {
                 durationBubble += delta
@@ -133,12 +132,12 @@ class Player(x: Float, y: Float) {
         const val WIDTH = .4f
         const val HEIGHT = .6f
 
-        private val JUMP_SPEED = 7.5f
-        private val xSpeed = 5f
+        private const val JUMP_SPEED = 7.5f
+        private const val X_SPEED = 5f
 
 
         private var durationBubble = 0f
 
-        private val DURATION_JETPACK = 3f
+        private const val DURATION_JETPACK = 3f
     }
 }

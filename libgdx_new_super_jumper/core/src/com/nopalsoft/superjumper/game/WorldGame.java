@@ -298,12 +298,12 @@ public class WorldGame {
         body.setUserData(cloud);
         body.setGravityScale(0);
 
-        float velocidad = MathUtils.random(1f, Cloud.SPEED_X);
+        float speed = MathUtils.random(1f, Cloud.SPEED_X);
 
         if (MathUtils.randomBoolean())
-            body.setLinearVelocity(velocidad, 0);
+            body.setLinearVelocity(speed, 0);
         else
-            body.setLinearVelocity(-velocidad, 0);
+            body.setLinearVelocity(-speed, 0);
         arrayClouds.add(cloud);
 
         shape.dispose();
@@ -320,27 +320,27 @@ public class WorldGame {
         Body body = worldBox.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(com.nopalsoft.superjumper.objects.Lightning.WIDTH / 2f, com.nopalsoft.superjumper.objects.Lightning.HEIGHT / 2f);
+        shape.setAsBox(Lightning.WIDTH / 2f, Lightning.HEIGHT / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.isSensor = true;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.isSensor = true;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixture);
         body.setUserData(lightning);
 
-        body.setLinearVelocity(0, com.nopalsoft.superjumper.objects.Lightning.Y_SPEED);
+        body.setLinearVelocity(0, Lightning.Y_SPEED);
         arrayRays.add(lightning);
 
         shape.dispose();
     }
 
-    private void crearBullet(float origenX, float origenY, float destinoX, float destinoY) {
-        Bullet oBullet = Pools.obtain(Bullet.class);
-        oBullet.initializeBullet(origenX, origenY);
+    private void createBullet(float originX, float originY, float destinationX, float destinationY) {
+        Bullet bullet = Pools.obtain(Bullet.class);
+        bullet.initializeBullet(originX, originY);
 
         BodyDef bd = new BodyDef();
-        bd.position.set(oBullet.position.x, oBullet.position.y);
+        bd.position.set(bullet.position.x, bullet.position.y);
         bd.type = BodyType.KinematicBody;
 
         Body body = worldBox.createBody(bd);
@@ -348,20 +348,20 @@ public class WorldGame {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Bullet.SIZE / 2f, Bullet.SIZE / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.isSensor = true;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.isSensor = true;
 
-        body.createFixture(fixutre);
-        body.setUserData(oBullet);
+        body.createFixture(fixture);
+        body.setUserData(bullet);
         body.setBullet(true);
 
-        Vector2 destino = new Vector2(destinoX, destinoY);
-        destino.sub(oBullet.position).nor().scl(Bullet.XY_SPEED);
+        Vector2 destination = new Vector2(destinationX, destinationY);
+        destination.sub(bullet.position).nor().scl(Bullet.XY_SPEED);
 
-        body.setLinearVelocity(destino.x, destino.y);
+        body.setLinearVelocity(destination.x, destination.y);
 
-        arrayBullets.add(oBullet);
+        arrayBullets.add(bullet);
 
         shape.dispose();
     }
@@ -369,7 +369,7 @@ public class WorldGame {
     public void update(float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
         worldBox.step(delta, 8, 4);
 
-        eliminarObjetos();
+        removeObjects();
 
         if (player.position.y + 10 > worldCreatedUpToY) {
             createNextPart();
@@ -381,7 +381,7 @@ public class WorldGame {
 
         for (Body body : arrayBodies) {
             if (body.getUserData() instanceof Player) {
-                updatePersonaje(body, delta, acelX, fire, touchPositionWorldCoords);
+                updatePlayer(body, delta, acelX, fire, touchPositionWorldCoords);
             } else if (body.getUserData() instanceof Platform) {
                 updatePlataforma(body, delta);
             } else if (body.getUserData() instanceof PlatformPiece) {
@@ -406,7 +406,8 @@ public class WorldGame {
             maxDistance = (int) (player.position.y * 10);
         }
 
-        // Si el personaje esta 5.5f mas abajo de la altura maxima se muere (Se multiplica por 10 porque la distancia se multiplica por 10 )
+        // If the character is 5.5f below the maximum height he dies (It is multiplied by 10
+        // because the distance is multiplied by 10)
         if (player.state == Player.STATE_NORMAL && maxDistance - (5.5f * 10) > (player.position.y * 10)) {
             player.die();
         }
@@ -416,34 +417,34 @@ public class WorldGame {
 
     }
 
-    private void eliminarObjetos() {
+    private void removeObjects() {
         worldBox.getBodies(arrayBodies);
 
         for (Body body : arrayBodies) {
             if (!worldBox.isLocked()) {
 
                 if (body.getUserData() instanceof Platform) {
-                    Platform oPlat = (Platform) body.getUserData();
-                    if (oPlat.state == Platform.STATE_DESTROY) {
-                        arrayPlatforms.removeValue(oPlat, true);
+                    Platform platform = (Platform) body.getUserData();
+                    if (platform.state == Platform.STATE_DESTROY) {
+                        arrayPlatforms.removeValue(platform, true);
                         worldBox.destroyBody(body);
-                        if (oPlat.type == Platform.TYPE_BREAKABLE)
-                            createPiecesOfPlatforms(oPlat);
-                        com.badlogic.gdx.utils.Pools.free(oPlat);
+                        if (platform.type == Platform.TYPE_BREAKABLE)
+                            createPiecesOfPlatforms(platform);
+                        Pools.free(platform);
                     }
                 } else if (body.getUserData() instanceof Coin) {
-                    Coin oMon = (Coin) body.getUserData();
-                    if (oMon.state == Coin.STATE_TAKEN) {
-                        arrayCoins.removeValue(oMon, true);
+                    Coin coin = (Coin) body.getUserData();
+                    if (coin.state == Coin.STATE_TAKEN) {
+                        arrayCoins.removeValue(coin, true);
                         worldBox.destroyBody(body);
-                        com.badlogic.gdx.utils.Pools.free(oMon);
+                        Pools.free(coin);
                     }
                 } else if (body.getUserData() instanceof PlatformPiece) {
-                    PlatformPiece oPiez = (PlatformPiece) body.getUserData();
-                    if (oPiez.state == PlatformPiece.STATE_DESTROY) {
-                        arrayPlatformPieces.removeValue(oPiez, true);
+                    PlatformPiece platformPiece = (PlatformPiece) body.getUserData();
+                    if (platformPiece.state == PlatformPiece.STATE_DESTROY) {
+                        arrayPlatformPieces.removeValue(platformPiece, true);
                         worldBox.destroyBody(body);
-                        com.badlogic.gdx.utils.Pools.free(oPiez);
+                        Pools.free(platformPiece);
                     }
                 } else if (body.getUserData() instanceof Enemy) {
                     Enemy oEnemy = (Enemy) body.getUserData();
@@ -489,11 +490,11 @@ public class WorldGame {
         }
     }
 
-    private void updatePersonaje(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
+    private void updatePlayer(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
         player.update(body, delta, acelX);
 
         if (Settings.getNumBullets() > 0 && fire) {
-            crearBullet(player.position.x, player.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
+            createBullet(player.position.x, player.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
             Settings.setNumBullets(Settings.getNumBullets() - 1);
 
         }
