@@ -54,7 +54,7 @@ public class WorldGame {
 
     public WorldGame() {
         worldBox = new World(new Vector2(0, -9.8f), true);
-        worldBox.setContactListener(new Colisiones());
+        worldBox.setContactListener(new com.nopalsoft.superjumper.game.WorldGame.Collision());
 
         arrayBodies = new Array<>();
         arrayPlatforms = new Array<>();
@@ -94,7 +94,7 @@ public class WorldGame {
                 Coin.createACoin(worldBox, arrayCoins, worldCreatedUpToY + .5f);
 
             if (MathUtils.random(20) < 5)
-                crearEnemigo(worldCreatedUpToY + .5f);
+                createEnemy(worldCreatedUpToY + .5f);
 
             if (timeToCreateCloud >= TIME_TO_CREATE_CLOUD) {
                 createClouds(worldCreatedUpToY + .7f);
@@ -188,35 +188,35 @@ public class WorldGame {
 
     }
 
-    private void createPiecesOfPlatforms(Platform oPla, int type) {
+    private void createPiecesOfPlatforms(Platform platform, int type) {
         PlatformPiece piece;
         float x;
         float angularVelocity = 100;
 
         if (type == PlatformPiece.TYPE_LEFT) {
-            x = oPla.position.x - PlatformPiece.WIDTH_NORMAL / 2f;
+            x = platform.position.x - PlatformPiece.WIDTH_NORMAL / 2f;
             angularVelocity *= -1;
         } else {
-            x = oPla.position.x + PlatformPiece.WIDTH_NORMAL / 2f;
+            x = platform.position.x + PlatformPiece.WIDTH_NORMAL / 2f;
         }
 
         piece = Pools.obtain(PlatformPiece.class);
-        piece.initializePlatformPiece(x, oPla.position.y, type, oPla.color);
+        piece.initializePlatformPiece(x, platform.position.y, type, platform.color);
 
-        BodyDef bd = new BodyDef();
-        bd.position.set(piece.position.x, piece.position.y);
-        bd.type = BodyType.DynamicBody;
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.set(piece.position.x, piece.position.y);
+        bodyDefinition.type = BodyType.DynamicBody;
 
-        Body body = worldBox.createBody(bd);
+        Body body = worldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(PlatformPiece.WIDTH_NORMAL / 2f, PlatformPiece.HEIGHT_NORMAL / 2f);
 
-        FixtureDef fixutre = new FixtureDef();
-        fixutre.shape = shape;
-        fixutre.isSensor = true;
+        FixtureDef fixture = new FixtureDef();
+        fixture.shape = shape;
+        fixture.isSensor = true;
 
-        body.createFixture(fixutre);
+        body.createFixture(fixture);
         body.setUserData(piece);
         body.setAngularVelocity(MathUtils.degRad * angularVelocity);
         arrayPlatformPieces.add(piece);
@@ -224,15 +224,15 @@ public class WorldGame {
         shape.dispose();
     }
 
-    private void crearEnemigo(float y) {
-        Enemy oEn = Pools.obtain(Enemy.class);
-        oEn.initializeEnemy(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
+    private void createEnemy(float y) {
+        Enemy enemy = Pools.obtain(Enemy.class);
+        enemy.initializeEnemy(MathUtils.random(BasicScreen.WORLD_WIDTH), y);
 
-        BodyDef bd = new BodyDef();
-        bd.position.set(oEn.position.x, oEn.position.y);
-        bd.type = BodyType.DynamicBody;
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.set(enemy.position.x, enemy.position.y);
+        bodyDefinition.type = BodyType.DynamicBody;
 
-        Body body = worldBox.createBody(bd);
+        Body body = worldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Enemy.WIDTH / 2f, Enemy.HEIGHT / 2f);
@@ -242,7 +242,7 @@ public class WorldGame {
         fixture.isSensor = true;
 
         body.createFixture(fixture);
-        body.setUserData(oEn);
+        body.setUserData(enemy);
         body.setGravityScale(0);
 
         float speed = MathUtils.random(1f, Enemy.SPEED_X);
@@ -251,7 +251,7 @@ public class WorldGame {
             body.setLinearVelocity(speed, 0);
         else
             body.setLinearVelocity(-speed, 0);
-        arrayEnemies.add(oEn);
+        arrayEnemies.add(enemy);
 
         shape.dispose();
     }
@@ -389,13 +389,13 @@ public class WorldGame {
             } else if (body.getUserData() instanceof Coin) {
                 updateMoneda(body, delta);
             } else if (body.getUserData() instanceof Enemy) {
-                updateEnemigo(body, delta);
+                updateEnemy(body, delta);
             } else if (body.getUserData() instanceof Item) {
                 updateItem(body, delta);
             } else if (body.getUserData() instanceof Cloud) {
                 updateNube(body, delta);
             } else if (body.getUserData() instanceof Lightning) {
-                updateRayo(body, delta);
+                updateLightning(body, delta);
             } else if (body.getUserData() instanceof Bullet) {
                 updateBullet(body, delta);
             }
@@ -490,8 +490,8 @@ public class WorldGame {
         }
     }
 
-    private void updatePlayer(Body body, float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
-        player.update(body, delta, acelX);
+    private void updatePlayer(Body body, float delta, float accelerationX, boolean fire, Vector3 touchPositionWorldCoords) {
+        player.update(body, delta, accelerationX);
 
         if (Settings.getNumBullets() > 0 && fire) {
             createBullet(player.position.x, player.position.y, touchPositionWorldCoords.x, touchPositionWorldCoords.y);
@@ -527,11 +527,11 @@ public class WorldGame {
 
     }
 
-    private void updateEnemigo(Body body, float delta) {
-        Enemy obj = (Enemy) body.getUserData();
-        obj.update(body, delta);
-        if (player.position.y - 5.5f > obj.position.y) {
-            obj.hit();
+    private void updateEnemy(Body body, float delta) {
+        Enemy enemy = (Enemy) body.getUserData();
+        enemy.update(body, delta);
+        if (player.position.y - 5.5f > enemy.position.y) {
+            enemy.hit();
         }
 
     }
@@ -558,12 +558,12 @@ public class WorldGame {
         }
     }
 
-    private void updateRayo(Body body, float delta) {
-        Lightning obj = (Lightning) body.getUserData();
-        obj.update(body, delta);
+    private void updateLightning(Body body, float delta) {
+        Lightning lightning = (Lightning) body.getUserData();
+        lightning.update(body, delta);
 
-        if (player.position.y - 5.5f > obj.position.y) {
-            obj.destroy();
+        if (player.position.y - 5.5f > lightning.position.y) {
+            lightning.destroy();
         }
     }
 
@@ -576,7 +576,7 @@ public class WorldGame {
         }
     }
 
-    class Colisiones implements ContactListener {
+    class Collision implements ContactListener {
 
         @Override
         public void beginContact(Contact contact) {
@@ -584,9 +584,9 @@ public class WorldGame {
             Fixture b = contact.getFixtureB();
 
             if (a.getBody().getUserData() instanceof Player)
-                beginContactPersonaje(b);
+                beginContactPlayer(b);
             else if (b.getBody().getUserData() instanceof Player)
-                beginContactPersonaje(a);
+                beginContactPlayer(a);
 
             if (a.getBody().getUserData() instanceof Bullet)
                 beginContactBullet(a, b);
@@ -595,17 +595,17 @@ public class WorldGame {
 
         }
 
-        private void beginContactPersonaje(Fixture fixOtraCosa) {
-            Object otraCosa = fixOtraCosa.getBody().getUserData();
+        private void beginContactPlayer(Fixture otherFixture) {
+            Object otherObject = otherFixture.getBody().getUserData();
 
-            if (otraCosa.equals("piso")) {
+            if (otherObject.equals("piso")) {
                 player.jump();
 
                 if (player.state == Player.STATE_DEAD) {
                     state = STATE_GAMEOVER;
                 }
-            } else if (otraCosa instanceof Platform) {
-                Platform obj = (Platform) otraCosa;
+            } else if (otherObject instanceof Platform) {
+                Platform obj = (Platform) otherObject;
 
                 if (player.speed.y <= 0) {
                     player.jump();
@@ -614,17 +614,17 @@ public class WorldGame {
                     }
                 }
 
-            } else if (otraCosa instanceof Coin) {
-                Coin obj = (Coin) otraCosa;
+            } else if (otherObject instanceof Coin) {
+                Coin obj = (Coin) otherObject;
                 obj.take();
                 coins++;
                 player.jump();
-            } else if (otraCosa instanceof Enemy) {
+            } else if (otherObject instanceof Enemy) {
                 player.hit();
-            } else if (otraCosa instanceof Lightning) {
+            } else if (otherObject instanceof Lightning) {
                 player.hit();
-            } else if (otraCosa instanceof Item) {
-                Item obj = (Item) otraCosa;
+            } else if (otherObject instanceof Item) {
+                Item obj = (Item) otherObject;
                 obj.take();
 
                 switch (obj.type) {
@@ -645,18 +645,18 @@ public class WorldGame {
         }
 
         private void beginContactBullet(Fixture fixBullet, Fixture fixOtraCosa) {
-            Object otraCosa = fixOtraCosa.getBody().getUserData();
-            Bullet oBullet = (Bullet) fixBullet.getBody().getUserData();
+            Object otherObject = fixOtraCosa.getBody().getUserData();
+            Bullet bullet = (Bullet) fixBullet.getBody().getUserData();
 
-            if (otraCosa instanceof Enemy) {
-                Enemy obj = (Enemy) otraCosa;
-                obj.hit();
-                oBullet.destroy();
+            if (otherObject instanceof Enemy) {
+                Enemy enemy = (Enemy) otherObject;
+                enemy.hit();
+                bullet.destroy();
 
-            } else if (otraCosa instanceof Cloud) {
-                Cloud obj = (Cloud) otraCosa;
+            } else if (otherObject instanceof Cloud) {
+                Cloud obj = (Cloud) otherObject;
                 obj.hit();
-                oBullet.destroy();
+                bullet.destroy();
 
             }
         }
@@ -702,8 +702,7 @@ public class WorldGame {
 
         @Override
         public void postSolve(Contact contact, ContactImpulse impulse) {
-            // TODO Auto-generated method stub
-
+            // Nothing happens in here.
         }
 
     }

@@ -95,16 +95,16 @@ public class GameScreen extends BasicScreen {
 
     private void updateRunning(float delta) {
 
-        float acelX;
+        float accelarationX;
 
-        acelX = -(Gdx.input.getAccelerometerX() / 3f);
+        accelarationX = -(Gdx.input.getAccelerometerX() / 3f);
 
         if (Gdx.input.isKeyPressed(Keys.A))
-            acelX = -1;
+            accelarationX = -1;
         else if (Gdx.input.isKeyPressed(Keys.D))
-            acelX = 1;
+            accelarationX = 1;
 
-        myWorldGame.update(delta, acelX, didFire, touchPositionWorldCoords);
+        myWorldGame.update(delta, accelarationX, didFire, touchPositionWorldCoords);
 
         labelCoins.setText("x" + myWorldGame.coins);
         labelDistance.setText("Score " + myWorldGame.maxDistance);
@@ -157,9 +157,8 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touchPositionWorldCoords.set(screenX, 0, 0);// Siempre como si hubiera tocado la parte mas alta de la pantalla
+        touchPositionWorldCoords.set(screenX, 0, 0);// Always as if I had touched the highest part of the screen.
         renderer.unprojectToWorldCoords(touchPositionWorldCoords);
-
 
         didFire = true;
         return false;
