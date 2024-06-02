@@ -5,16 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nopalsoft.slamthebird.game.GameScreen;
-import com.nopalsoft.slamthebird.handlers.RequestHandler;
 import com.nopalsoft.slamthebird.screens.Screens;
 
 public class MainSlamBird extends Game {
-    public final RequestHandler reqHandler;
     public Stage stage;
     public SpriteBatch batcher;
 
-    public MainSlamBird(RequestHandler reqHandler) {
-        this.reqHandler = reqHandler;
+    public MainSlamBird() {
     }
 
     @Override

@@ -52,7 +52,6 @@ public class GetCoinsSubMenu {
                                         .setStyle(com.nopalsoft.slamthebird.Assets.styleTextButtonSelected);
                             })));
                 }
-                game.reqHandler.showFacebook();
             }
         });
 

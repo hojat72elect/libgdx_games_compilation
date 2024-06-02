@@ -2,10 +2,8 @@ package com.nopalsoft.slamthebird;
 
 import android.os.Bundle;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.nopalsoft.slamthebird.MainSlamBird;
 import com.nopalsoft.slamthebird.handlers.GameServicesHandler;
 import com.nopalsoft.slamthebird.handlers.RequestHandler;
 
@@ -14,7 +12,7 @@ public class AndroidLauncher extends AndroidApplication implements RequestHandle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new MainSlamBird(this, this), config);
+        initialize(new MainSlamBird(this), config);
     }
 
     @Override
