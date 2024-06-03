@@ -292,7 +292,7 @@ class WorldGameRender(
     }
 
     private fun renderLightning() {
-        for (lightning in worldGame.arrayRays) {
+        for (lightning in worldGame.arrayLightnings) {
             val keyframe: TextureRegion = Assets.ray!!.getKeyFrame(lightning.stateTime, true)
 
             batcher.draw(
