@@ -69,7 +69,7 @@ class WorldGameRender(
     }
 
     private fun renderPlayer() {
-        val keyframe: AtlasRegion
+        val keyframe: AtlasRegion?
 
         val player = worldGame.player
 
@@ -116,7 +116,7 @@ class WorldGameRender(
                 .7f
             )
 
-            val fireFrame: TextureRegion = Assets.jetpackFire.getKeyFrame(
+            val fireFrame: TextureRegion = Assets.jetpackFire!!.getKeyFrame(
                 player.durationJetPack,
                 true
             )
@@ -251,7 +251,7 @@ class WorldGameRender(
 
     private fun renderEnemy() {
         for (enemy in worldGame.arrayEnemies) {
-            val keyframe: TextureRegion = Assets.enemy.getKeyFrame(enemy.stateTime, true)
+            val keyframe: TextureRegion = Assets.enemy!!.getKeyFrame(enemy.stateTime, true)
 
             batcher.draw(
                 keyframe,
@@ -293,7 +293,7 @@ class WorldGameRender(
 
     private fun renderLightning() {
         for (lightning in worldGame.arrayRays) {
-            val keyframe: TextureRegion = Assets.ray.getKeyFrame(lightning.stateTime, true)
+            val keyframe: TextureRegion = Assets.ray!!.getKeyFrame(lightning.stateTime, true)
 
             batcher.draw(
                 keyframe,

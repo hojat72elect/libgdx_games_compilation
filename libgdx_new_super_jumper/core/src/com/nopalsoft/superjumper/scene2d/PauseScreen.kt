@@ -42,10 +42,10 @@ class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 2
 
     private fun initButtons() {
         btMenu = TextButton("Menu", Assets.textButtonStyleBig)
-        btMenu?.pad(15f)
+        btMenu.pad(15f)
 
         screen.addPressEffect(btMenu)
-        btMenu?.addListener(object : ClickListener() {
+        btMenu.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
                 screen.changeScreenWithFadeOut(MainMenuScreen::class.java, game)
@@ -53,10 +53,10 @@ class PauseScreen(currentScreen: GameScreen) : BaseScreen(currentScreen, 350f, 2
         })
 
         btResume = TextButton("Resume", Assets.textButtonStyleBig)
-        btResume?.pad(15f)
+        btResume.pad(15f)
 
         screen.addPressEffect(btResume)
-        btResume?.addListener(object : ClickListener() {
+        btResume.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 hide()
             }

@@ -76,7 +76,7 @@ class MainMenuScreen(game: MainSuperJumper) : BasicScreen(game) {
 
     override fun draw(delta: Float) {
         batcher.begin()
-        batcher.draw(Assets.background, 0f, 0f, SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        batcher.draw(Assets.background, 0f, 0f, SCREEN_WIDTH, SCREEN_HEIGHT)
         batcher.draw(Assets.platformBeigeBroken, 100f, 100f, 125f, 45f)
         batcher.draw(Assets.platformBlue, 350f, 280f, 125f, 45f)
         batcher.draw(Assets.platformMulticolor, 25f, 430f, 125f, 45f)
