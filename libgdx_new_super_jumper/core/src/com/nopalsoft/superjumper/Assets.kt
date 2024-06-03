@@ -14,20 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 object Assets {
 
-    private var fontSmall: BitmapFont? = null
-    private var fontBig: BitmapFont? = null
+    private lateinit var fontSmall: BitmapFont
+    private lateinit var fontBig: BitmapFont
 
-    var background: AtlasRegion? = null
-    var settings: TextureRegionDrawable? = null
+    lateinit var background: AtlasRegion
+    lateinit var settings: TextureRegionDrawable
 
     // Player
-    var characterJump: AtlasRegion? = null
-    var characterStand: AtlasRegion? = null
-    private var characterWalk: Animation<AtlasRegion>? = null
+    lateinit var characterJump: AtlasRegion
+    lateinit var characterStand: AtlasRegion
 
-    var coin: AtlasRegion? = null
-    var gun: AtlasRegion? = null
-    var bullet: AtlasRegion? = null
+
+    lateinit var coin: AtlasRegion
+    lateinit var gun: AtlasRegion
+    lateinit var bullet: AtlasRegion
     private var spring: AtlasRegion? = null
     var bubbleSmall: AtlasRegion? = null
     var jetpackSmall: AtlasRegion? = null
@@ -121,7 +121,7 @@ object Assets {
 
         val walk1 = atlas.findRegion("personajeWalk1")
         val walk2 = atlas.findRegion("personajeWalk2")
-        characterWalk = Animation(.5f, walk1, walk2)
+        Animation(.5f, walk1, walk2)
 
         coin = atlas.findRegion("Coin")
         gun = atlas.findRegion("Pistol")
