@@ -19,22 +19,22 @@ import com.nopalsoft.superjumper.objects.Player;
 import com.nopalsoft.superjumper.screens.BasicScreen;
 
 public class WorldGameRender {
-    final float WIDTH = BasicScreen.WORLD_WIDTH;
-    final float HEIGHT = BasicScreen.WORLD_HEIGHT;
 
-    WorldGame worldGame;
-    SpriteBatch batcher;
-    OrthographicCamera camera;
-    Box2DDebugRenderer boxRender;
+    private final WorldGame worldGame;
+    private final SpriteBatch batcher;
+    private final OrthographicCamera camera;
 
     public WorldGameRender(SpriteBatch batcher, WorldGame worldGame) {
         this.worldGame = worldGame;
         this.batcher = batcher;
 
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        camera.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
+        float width = BasicScreen.WORLD_WIDTH;
+        float height = BasicScreen.WORLD_HEIGHT;
+        camera = new OrthographicCamera(width, height);
+        camera.position.set(width / 2f, height / 2f, 0);
 
-        boxRender = new Box2DDebugRenderer();
+        // Sets up the debug renderer.
+        new Box2DDebugRenderer();
     }
 
     public void unProjectToWorldCoords(Vector3 touchPoint) {
