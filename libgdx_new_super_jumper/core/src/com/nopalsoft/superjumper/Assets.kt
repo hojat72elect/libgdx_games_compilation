@@ -24,54 +24,52 @@ object Assets {
     lateinit var characterJump: AtlasRegion
     lateinit var characterStand: AtlasRegion
 
-
     lateinit var coin: AtlasRegion
     lateinit var gun: AtlasRegion
     lateinit var bullet: AtlasRegion
-    private var spring: AtlasRegion? = null
-    var bubbleSmall: AtlasRegion? = null
-    var jetpackSmall: AtlasRegion? = null
-    var bubble: AtlasRegion? = null
-    var jetpack: AtlasRegion? = null
-    var jetpackFire: Animation<AtlasRegion>? = null
 
-    var enemy: Animation<AtlasRegion>? = null
+    lateinit var bubbleSmall: AtlasRegion
+    lateinit var jetpackSmall: AtlasRegion
+    lateinit var bubble: AtlasRegion
+    lateinit var jetpack: AtlasRegion
+    lateinit var jetpackFire: Animation<AtlasRegion>
 
-    var cloudHappy: AtlasRegion? = null
-    var cloudAngry: AtlasRegion? = null
+    lateinit var enemy: Animation<AtlasRegion>
 
-    var ray: Animation<AtlasRegion>? = null
-    var cloudWind: AtlasRegion? = null
+    lateinit var cloudHappy: AtlasRegion
+    lateinit var cloudAngry: AtlasRegion
+
+    lateinit var ray: Animation<AtlasRegion>
+    lateinit var cloudWind: AtlasRegion
 
     // Platforms
-    var platformBeige: AtlasRegion? = null
-    var platformBeigeLight: AtlasRegion? = null
-    var platformBeigeBroken: AtlasRegion? = null
-    var platformBeigeLeft: AtlasRegion? = null
-    var platformBeigeRight: AtlasRegion? = null
+    lateinit var platformBeige: AtlasRegion
+    lateinit var platformBeigeLight: AtlasRegion
+    lateinit var platformBeigeBroken: AtlasRegion
+    lateinit var platformBeigeLeft: AtlasRegion
+    lateinit var platformBeigeRight: AtlasRegion
+    lateinit var platformBlue: AtlasRegion
+    lateinit var platformBlueLight: AtlasRegion
+    lateinit var platformBlueBroken: AtlasRegion
+    lateinit var platformBlueLeft: AtlasRegion
+    lateinit var platformBlueRight: AtlasRegion
 
-    var platformBlue: AtlasRegion? = null
-    var platformBlueLight: AtlasRegion? = null
-    var platformBlueBroken: AtlasRegion? = null
-    var platformBlueLeft: AtlasRegion? = null
-    var platformBlueRight: AtlasRegion? = null
+    lateinit var platformGray: AtlasRegion
+    lateinit var platformGrayLight: AtlasRegion
+    lateinit var platformGrayBroken: AtlasRegion
+    lateinit var platformGrayLeft: AtlasRegion
+    lateinit var platformGrayRight: AtlasRegion
+    lateinit var platformGreen: AtlasRegion
+    lateinit var platformGreenLight: AtlasRegion
+    lateinit var platformGreenBroken: AtlasRegion
+    lateinit var platformGreenLeft: AtlasRegion
+    lateinit var platformGreenRight: AtlasRegion
 
-    var platformGray: AtlasRegion? = null
-    var platformGrayLight: AtlasRegion? = null
-    var platformGrayBroken: AtlasRegion? = null
-    var platformGrayLeft: AtlasRegion? = null
-    var platformGrayRight: AtlasRegion? = null
-    var platformGreen: AtlasRegion? = null
-    var platformGreenLight: AtlasRegion? = null
-    var platformGreenBroken: AtlasRegion? = null
-    var platformGreenLeft: AtlasRegion? = null
-    var platformGreenRight: AtlasRegion? = null
-
-    var platformMulticolor: AtlasRegion? = null
-    var platformMulticolorLight: AtlasRegion? = null
-    var platformMulticolorBroken: AtlasRegion? = null
-    var platformMulticolorLeft: AtlasRegion? = null
-    var platformMulticolorRight: AtlasRegion? = null
+    lateinit var platformMulticolor: AtlasRegion
+    lateinit var platformMulticolorLight: AtlasRegion
+    lateinit var platformMulticolorBroken: AtlasRegion
+    lateinit var platformMulticolorLeft: AtlasRegion
+    lateinit var platformMulticolorRight: AtlasRegion
 
     var platformPink: AtlasRegion? = null
     var platformPinkLight: AtlasRegion? = null
@@ -126,7 +124,8 @@ object Assets {
         coin = atlas.findRegion("Coin")
         gun = atlas.findRegion("Pistol")
         bullet = atlas.findRegion("Bullet")
-        spring = atlas.findRegion("Spring")
+        atlas.findRegion("Spring")
+
         bubbleSmall = atlas.findRegion("Bubble_Small")
         jetpackSmall = atlas.findRegion("Jetpack_Small")
         bubble = atlas.findRegion("Bubble_Big")
