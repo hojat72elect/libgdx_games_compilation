@@ -3,31 +3,27 @@ package com.nopalsoft.superjumper;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nopalsoft.superjumper.screens.MainMenuScreen;
 import com.nopalsoft.superjumper.screens.BasicScreen;
+import com.nopalsoft.superjumper.screens.MainMenuScreen;
 
 public class MainSuperJumper extends Game {
 
-	public I18NBundle languages;
+    public Stage stage;
+    public SpriteBatch batcher;
+    public MainSuperJumper() {
 
-	public MainSuperJumper( ) {
+    }
 
-	}
+    @Override
+    public void create() {
 
-	public Stage stage;
-	public SpriteBatch batcher;
+        stage = new Stage(new StretchViewport(BasicScreen.SCREEN_WIDTH, BasicScreen.SCREEN_HEIGHT));
 
-	@Override
-	public void create() {
+        batcher = new SpriteBatch();
+        Settings.load();
+        Assets.load();
 
-		stage = new Stage(new StretchViewport(BasicScreen.SCREEN_WIDTH, BasicScreen.SCREEN_HEIGHT));
-
-		batcher = new SpriteBatch();
-		Settings.load();
-		Assets.load();
-
-		setScreen(new MainMenuScreen(this));
-	}
+        setScreen(new MainMenuScreen(this));
+    }
 }
