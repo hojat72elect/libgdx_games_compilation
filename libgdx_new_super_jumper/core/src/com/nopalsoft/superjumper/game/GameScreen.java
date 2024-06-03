@@ -158,7 +158,7 @@ public class GameScreen extends BasicScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPositionWorldCoords.set(screenX, 0, 0);// Always as if I had touched the highest part of the screen.
-        renderer.unprojectToWorldCoords(touchPositionWorldCoords);
+        renderer.unProjectToWorldCoords(touchPositionWorldCoords);
 
         didFire = true;
         return false;

@@ -37,7 +37,7 @@ public class WorldGameRender {
         boxRender = new Box2DDebugRenderer();
     }
 
-    public void unprojectToWorldCoords(Vector3 touchPoint) {
+    public void unProjectToWorldCoords(Vector3 touchPoint) {
         camera.unproject(touchPoint);
     }
 
