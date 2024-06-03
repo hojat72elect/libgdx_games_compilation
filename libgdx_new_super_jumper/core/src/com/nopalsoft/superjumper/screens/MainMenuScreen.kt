@@ -21,7 +21,7 @@ class MainMenuScreen(game: MainSuperJumper) : BasicScreen(game) {
     private val buttonPlay = TextButton("Play", Assets.textButtonStyleBig)
     private val buttonLeaderboard = TextButton("Leaderboard", Assets.textButtonStyleBig)
     private val buttonRate = TextButton("Rate", Assets.textButtonStyleBig)
-    private val labelBestScore = Label("Best score " + Settings.bestScore, Assets.labelStyleChico)
+    private val labelBestScore = Label("Best score " + Settings.bestScore, Assets.labelStyleSmall)
 
 
     init {

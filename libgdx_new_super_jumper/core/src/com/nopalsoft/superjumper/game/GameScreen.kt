@@ -28,7 +28,7 @@ class GameScreen(game: MainSuperJumper) : BasicScreen(game) {
     private val labelCoins = Label("", Assets.labelStyleBig)
     private val labelBullets = Label("", Assets.labelStyleBig)
 
-    private val buttonPause = Button(Assets.btPause)
+    private val buttonPause = Button(Assets.buttonPause)
 
     private val pauseScreen = PauseScreen(this)
     private val menuMarker = Table()

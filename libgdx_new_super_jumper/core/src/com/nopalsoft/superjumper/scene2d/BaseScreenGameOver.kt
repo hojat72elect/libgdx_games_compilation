@@ -33,16 +33,16 @@ class BaseScreenGameOver(currentScreen: GameScreen) :
         scoreTable.setSize(width, 130f)
         scoreTable.y = 230f
 
-        val labelScore = Label("Score", Assets.labelStyleChico)
+        val labelScore = Label("Score", Assets.labelStyleSmall)
         labelScore.setAlignment(Align.left)
 
-        val labelNumScore = Label(worldGame.maxDistance.toString(), Assets.labelStyleChico)
+        val labelNumScore = Label(worldGame.maxDistance.toString(), Assets.labelStyleSmall)
         labelNumScore.setAlignment(Align.right)
 
-        val labelBestScore = Label("Best Score", Assets.labelStyleChico)
+        val labelBestScore = Label("Best Score", Assets.labelStyleSmall)
         labelScore.setAlignment(Align.left)
 
-        val lbBestNumScore = Label(Settings.bestScore.toString(), Assets.labelStyleChico)
+        val lbBestNumScore = Label(Settings.bestScore.toString(), Assets.labelStyleSmall)
         labelNumScore.setAlignment(Align.right)
 
         scoreTable.pad(10f)

@@ -84,7 +84,7 @@ abstract class BasicScreen(val game: MainSuperJumper) : InputAdapter(), Screen {
 
 
     fun changeScreenWithFadeOut(newScreen: Class<*>, game: MainSuperJumper) {
-        blackFadeOut = Image(Assets.pixelNegro)
+        blackFadeOut = Image(Assets.pixelBlack)
         blackFadeOut?.setSize(SCREEN_WIDTH, SCREEN_HEIGHT)
         blackFadeOut?.color?.a = 0f
         blackFadeOut?.addAction(Actions.sequence(Actions.fadeIn(.5f), Actions.run {

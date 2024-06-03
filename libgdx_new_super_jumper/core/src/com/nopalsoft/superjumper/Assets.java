@@ -17,9 +17,7 @@ public class Assets {
 	public static AtlasRegion background;
 	public static TextureRegionDrawable settings;
 
-	/**
-	 * Player
-	 */
+	// Player
 	public static AtlasRegion characterJump;
 	public static AtlasRegion characterStand;
 	public static Animation<AtlasRegion> characterWalk;
@@ -42,9 +40,7 @@ public class Assets {
 	public static Animation<AtlasRegion> ray;
 	public static AtlasRegion cloudWind;
 
-	/**
-	 * Platforms.
-	 */
+	// Platforms
 	public static AtlasRegion platformBeige;
 	public static AtlasRegion platformBeigeLight;
 	public static AtlasRegion platformBeigeBroken;
@@ -80,23 +76,23 @@ public class Assets {
 	public static AtlasRegion platformPinkLeft;
 	public static AtlasRegion platformPinkRight;
 
-	public static TextureRegionDrawable btPause;
+	public static TextureRegionDrawable buttonPause;
 
-	public static LabelStyle labelStyleChico;
+	public static LabelStyle labelStyleSmall;
 	public static LabelStyle labelStyleBig;
 	public static TextButtonStyle textButtonStyleBig;
 
-	public static NinePatchDrawable pixelNegro;
+	public static NinePatchDrawable pixelBlack;
 
 	public static void loadStyles(TextureAtlas atlas) {
 		// Label Style
-		labelStyleChico = new LabelStyle(fontSmall, Color.WHITE);
+		labelStyleSmall = new LabelStyle(fontSmall, Color.WHITE);
 		labelStyleBig = new LabelStyle(fontBig, Color.WHITE);
 
 		TextureRegionDrawable button = new TextureRegionDrawable(atlas.findRegion("button"));
 		textButtonStyleBig = new TextButtonStyle(button, button, null, fontBig);
 
-		pixelNegro = new NinePatchDrawable(new NinePatch(atlas.findRegion("pixelNegro"), 1, 1, 0, 0));
+		pixelBlack = new NinePatchDrawable(new NinePatch(atlas.findRegion("pixelNegro"), 1, 1, 0, 0));
 	}
 
 	public static void load() {
@@ -107,7 +103,7 @@ public class Assets {
 
 		loadStyles(atlas);
 
-		btPause = new TextureRegionDrawable(atlas.findRegion("btPause"));
+		buttonPause = new TextureRegionDrawable(atlas.findRegion("btPause"));
 
 		background = atlas.findRegion("Background");
 		settings = new TextureRegionDrawable(atlas.findRegion("titulo"));
