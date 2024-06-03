@@ -365,7 +365,7 @@ public class WorldGame {
         shape.dispose();
     }
 
-    public void update(float delta, float acelX, boolean fire, Vector3 touchPositionWorldCoords) {
+    public void update(float delta, float accelerationX, boolean fire, Vector3 touchPositionWorldCoords) {
         worldBox.step(delta, 8, 4);
 
         removeObjects();
@@ -380,7 +380,7 @@ public class WorldGame {
 
         for (Body body : arrayBodies) {
             if (body.getUserData() instanceof Player) {
-                updatePlayer(body, delta, acelX, fire, touchPositionWorldCoords);
+                updatePlayer(body, delta, accelerationX, fire, touchPositionWorldCoords);
             } else if (body.getUserData() instanceof Platform) {
                 updatePlatform(body, delta);
             } else if (body.getUserData() instanceof PlatformPiece) {
@@ -643,9 +643,9 @@ public class WorldGame {
 
         }
 
-        private void beginContactBullet(Fixture fixBullet, Fixture fixOtraCosa) {
-            Object otherObject = fixOtraCosa.getBody().getUserData();
-            Bullet bullet = (Bullet) fixBullet.getBody().getUserData();
+        private void beginContactBullet(Fixture bulletFixture, Fixture otherFixture) {
+            Object otherObject = otherFixture.getBody().getUserData();
+            Bullet bullet = (Bullet) bulletFixture.getBody().getUserData();
 
             if (otherObject instanceof Enemy) {
                 Enemy enemy = (Enemy) otherObject;
