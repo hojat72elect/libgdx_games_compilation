@@ -1,349 +1,319 @@
-package com.nopalsoft.superjumper.game;
+package com.nopalsoft.superjumper.game
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.nopalsoft.superjumper.Assets;
-import com.nopalsoft.superjumper.objects.Bullet;
-import com.nopalsoft.superjumper.objects.Cloud;
-import com.nopalsoft.superjumper.objects.Coin;
-import com.nopalsoft.superjumper.objects.Enemy;
-import com.nopalsoft.superjumper.objects.Item;
-import com.nopalsoft.superjumper.objects.Lightning;
-import com.nopalsoft.superjumper.objects.Platform;
-import com.nopalsoft.superjumper.objects.PlatformPiece;
-import com.nopalsoft.superjumper.objects.Player;
-import com.nopalsoft.superjumper.screens.BasicScreen;
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
+import com.nopalsoft.superjumper.Assets
+import com.nopalsoft.superjumper.objects.Bullet
+import com.nopalsoft.superjumper.objects.Cloud
+import com.nopalsoft.superjumper.objects.Coin
+import com.nopalsoft.superjumper.objects.Enemy
+import com.nopalsoft.superjumper.objects.Item
+import com.nopalsoft.superjumper.objects.Lightning
+import com.nopalsoft.superjumper.objects.Platform
+import com.nopalsoft.superjumper.objects.PlatformPiece
+import com.nopalsoft.superjumper.objects.Player
+import com.nopalsoft.superjumper.screens.BasicScreen
 
-public class WorldGameRender {
+class WorldGameRender(
+    private val batcher: SpriteBatch,
+    private val worldGame: WorldGame
+) {
 
-    private final WorldGame worldGame;
-    private final SpriteBatch batcher;
-    private final OrthographicCamera camera;
 
-    public WorldGameRender(SpriteBatch batcher, WorldGame worldGame) {
-        this.worldGame = worldGame;
-        this.batcher = batcher;
+    private val width = BasicScreen.WORLD_WIDTH
+    private val height = BasicScreen.WORLD_HEIGHT
+    private val camera = OrthographicCamera(width, height)
 
-        float width = BasicScreen.WORLD_WIDTH;
-        float height = BasicScreen.WORLD_HEIGHT;
-        camera = new OrthographicCamera(width, height);
-        camera.position.set(width / 2f, height / 2f, 0);
+
+    init {
+        camera.position.set(width / 2, height / 2, 0f)
+
 
         // Sets up the debug renderer.
-        new Box2DDebugRenderer();
+        Box2DDebugRenderer()
     }
 
-    public void unProjectToWorldCoords(Vector3 touchPoint) {
-        camera.unproject(touchPoint);
+    fun unProjectToWorldCoords(touchPoint: Vector3) {
+        camera.unproject(touchPoint)
     }
 
-    public void render() {
-        if (worldGame.state == WorldGame.STATE_RUNNING)
-            camera.position.y = worldGame.player.position.y;
+    fun render() {
+        if (worldGame.state == WorldGame.STATE_RUNNING) {
+            camera.position.y = worldGame.player.position.y
+        }
 
         if (camera.position.y < BasicScreen.WORLD_HEIGHT / 2f) {
-            camera.position.y = BasicScreen.WORLD_HEIGHT / 2f;
+            camera.position.y = BasicScreen.WORLD_HEIGHT / 2f
         }
 
-        camera.update();
-        batcher.setProjectionMatrix(camera.combined);
+        camera.update()
+        batcher.setProjectionMatrix(camera.combined)
 
-        batcher.begin();
+        batcher.begin()
 
-        renderCharacters();
-        renderPlatforms();
-        renderPlatformPieces();
-        renderCoins();
-        renderItems();
-        renderEnemy();
-        renderCloud();
-        renderRay();
-        renderBullet();
+        renderPlayer()
+        renderPlatforms()
+        renderPlatformPieces()
+        renderCoins()
+        renderItems()
+        renderEnemy()
+        renderCloud()
+        renderLightning()
+        renderBullet()
 
-        batcher.end();
-
+        batcher.end()
     }
 
-    private void renderCharacters() {
-        AtlasRegion keyframe;
+    private fun renderPlayer() {
+        val keyframe: AtlasRegion
 
-        Player obj = worldGame.player;
+        val player = worldGame.player
 
-        if (obj.speed.y > 0)
-            keyframe = Assets.characterJump;
-        else
-            keyframe = Assets.characterStand;
-
-        if (obj.speed.x > 0)
-            batcher.draw(
-                    keyframe,
-                    obj.position.x + Player.DRAW_WIDTH / 2f,
-                    obj.position.y - Player.DRAW_HEIGHT / 2f,
-                    -Player.DRAW_WIDTH / 2f,
-                    Player.DRAW_HEIGHT / 2f,
-                    -Player.DRAW_WIDTH,
-                    Player.DRAW_HEIGHT,
-                    1,
-                    1,
-                    obj.angleDeg
-            );
-
-        else
-            batcher.draw(
-                    keyframe,
-                    obj.position.x - Player.DRAW_WIDTH / 2f,
-                    obj.position.y - Player.DRAW_HEIGHT / 2f,
-                    Player.DRAW_WIDTH / 2f,
-                    Player.DRAW_HEIGHT / 2f,
-                    Player.DRAW_WIDTH,
-                    Player.DRAW_HEIGHT,
-                    1,
-                    1,
-                    obj.angleDeg
-            );
-
-        if (obj.isJetPack) {
-            batcher.draw(
-                    Assets.jetpack,
-                    obj.position.x - .45f / 2f,
-                    obj.position.y - .7f / 2f,
-                    .45f,
-                    .7f
-            );
-
-            TextureRegion fireFrame = Assets.jetpackFire.getKeyFrame(
-                    obj.durationJetPack,
-                    true
-            );
-            batcher.draw(
-                    fireFrame,
-                    obj.position.x - .35f / 2f,
-                    obj.position.y - .95f,
-                    .35f,
-                    .6f
-            );
-
-        }
-        if (obj.isBubble) {
-            batcher.draw(
-                    Assets.bubble,
-                    obj.position.x - .5f,
-                    obj.position.y - .5f,
-                    1,
-                    1
-            );
+        keyframe = if (player.speed.y > 0) {
+            Assets.characterJump
+        } else {
+            Assets.characterStand
         }
 
+        if (player.speed.x > 0) {
+            batcher.draw(
+                keyframe,
+                player.position.x + Player.DRAW_WIDTH / 2f,
+                player.position.y - Player.DRAW_HEIGHT / 2f,
+                -Player.DRAW_WIDTH / 2f,
+                Player.DRAW_HEIGHT / 2f,
+                -Player.DRAW_WIDTH,
+                Player.DRAW_HEIGHT,
+                1f,
+                1f,
+                player.angleDeg
+            )
+        } else {
+            batcher.draw(
+                keyframe,
+                player.position.x - Player.DRAW_WIDTH / 2f,
+                player.position.y - Player.DRAW_HEIGHT / 2f,
+                Player.DRAW_WIDTH / 2f,
+                Player.DRAW_HEIGHT / 2f,
+                Player.DRAW_WIDTH,
+                Player.DRAW_HEIGHT,
+                1f,
+                1f,
+                player.angleDeg
+            )
+        }
+
+        if (player.isJetPack) {
+            batcher.draw(
+                Assets.jetpack,
+                player.position.x - .45f / 2f,
+                player.position.y - .7f / 2f,
+                .45f,
+                .7f
+            )
+
+            val fireFrame: TextureRegion = Assets.jetpackFire.getKeyFrame(
+                player.durationJetPack,
+                true
+            )
+            batcher.draw(
+                fireFrame,
+                player.position.x - .35f / 2f,
+                player.position.y - .95f,
+                .35f,
+                .6f
+            )
+        }
+        if (player.isBubble) {
+            batcher.draw(
+                Assets.bubble,
+                player.position.x - .5f,
+                player.position.y - .5f,
+                1f,
+                1f
+            )
+        }
     }
 
-    private void renderPlatforms() {
-        for (Platform obj : worldGame.arrayPlatforms) {
-            AtlasRegion keyframe = null;
+    private fun renderPlatforms() {
+        for (platform in worldGame.arrayPlatforms) {
+            var keyframe: AtlasRegion? = null
 
-            if (obj.type == Platform.TYPE_BREAKABLE) {
-                switch (obj.color) {
-                    case Platform.COLOR_BEIGE:
-                        keyframe = Assets.platformBeigeBroken;
-                        break;
-                    case Platform.COLOR_BLUE:
-                        keyframe = Assets.platformBlueBroken;
-                        break;
-                    case Platform.COLOR_GRAY:
-                        keyframe = Assets.platformGrayBroken;
-                        break;
-                    case Platform.COLOR_GREEN:
-                        keyframe = Assets.platformGreenBroken;
-                        break;
-                    case Platform.COLOR_MULTICOLOR:
-                        keyframe = Assets.platformMulticolorBroken;
-                        break;
-                    case Platform.COLOR_PINK:
-                        keyframe = Assets.platformPinkBroken;
-                        break;
-
+            if (platform.type == Platform.TYPE_BREAKABLE) {
+                when (platform.color) {
+                    Platform.COLOR_BEIGE -> keyframe = Assets.platformBeigeBroken
+                    Platform.COLOR_BLUE -> keyframe = Assets.platformBlueBroken
+                    Platform.COLOR_GRAY -> keyframe = Assets.platformGrayBroken
+                    Platform.COLOR_GREEN -> keyframe = Assets.platformGreenBroken
+                    Platform.COLOR_MULTICOLOR -> keyframe = Assets.platformMulticolorBroken
+                    Platform.COLOR_PINK -> keyframe = Assets.platformPinkBroken
                 }
             } else {
-                switch (obj.color) {
-                    case Platform.COLOR_BEIGE:
-                        keyframe = Assets.platformBeige;
-                        break;
-                    case Platform.COLOR_BLUE:
-                        keyframe = Assets.platformBlue;
-                        break;
-                    case Platform.COLOR_GRAY:
-                        keyframe = Assets.platformGray;
-                        break;
-                    case Platform.COLOR_GREEN:
-                        keyframe = Assets.platformGreen;
-                        break;
-                    case Platform.COLOR_MULTICOLOR:
-                        keyframe = Assets.platformMulticolor;
-                        break;
-                    case Platform.COLOR_PINK:
-                        keyframe = Assets.platformPink;
-                        break;
-                    case Platform.COLOR_BEIGE_LIGHT:
-                        keyframe = Assets.platformBeigeLight;
-                        break;
-                    case Platform.COLOR_BLUE_LIGHT:
-                        keyframe = Assets.platformBlueLight;
-                        break;
-                    case Platform.COLOR_GRAY_LIGHT:
-                        keyframe = Assets.platformGrayLight;
-                        break;
-                    case Platform.COLOR_GREEN_LIGHT:
-                        keyframe = Assets.platformGreenLight;
-                        break;
-                    case Platform.COLOR_MULTICOLOR_LIGHT:
-                        keyframe = Assets.platformMulticolorLight;
-                        break;
-                    case Platform.COLOR_PINK_LIGHT:
-                        keyframe = Assets.platformPinkLight;
-                        break;
+                when (platform.color) {
+                    Platform.COLOR_BEIGE -> keyframe = Assets.platformBeige
+                    Platform.COLOR_BLUE -> keyframe = Assets.platformBlue
+                    Platform.COLOR_GRAY -> keyframe = Assets.platformGray
+                    Platform.COLOR_GREEN -> keyframe = Assets.platformGreen
+                    Platform.COLOR_MULTICOLOR -> keyframe = Assets.platformMulticolor
+                    Platform.COLOR_PINK -> keyframe = Assets.platformPink
+                    Platform.COLOR_BEIGE_LIGHT -> keyframe = Assets.platformBeigeLight
+                    Platform.COLOR_BLUE_LIGHT -> keyframe = Assets.platformBlueLight
+                    Platform.COLOR_GRAY_LIGHT -> keyframe = Assets.platformGrayLight
+                    Platform.COLOR_GREEN_LIGHT -> keyframe = Assets.platformGreenLight
+                    Platform.COLOR_MULTICOLOR_LIGHT -> keyframe = Assets.platformMulticolorLight
+                    Platform.COLOR_PINK_LIGHT -> keyframe = Assets.platformPinkLight
                 }
-
             }
-            batcher.draw(keyframe, obj.position.x - Platform.DRAW_WIDTH_NORMAL / 2f, obj.position.y - Platform.DRAW_HEIGHT_NORMAL / 2f,
-                    Platform.DRAW_WIDTH_NORMAL, Platform.DRAW_HEIGHT_NORMAL);
+            batcher.draw(
+                keyframe,
+                platform.position.x - Platform.DRAW_WIDTH_NORMAL / 2f,
+                platform.position.y - Platform.DRAW_HEIGHT_NORMAL / 2f,
+                Platform.DRAW_WIDTH_NORMAL,
+                Platform.DRAW_HEIGHT_NORMAL
+            )
         }
     }
 
-    private void renderPlatformPieces() {
-        for (PlatformPiece obj : worldGame.arrayPlatformPieces) {
-            AtlasRegion keyframe = null;
+    private fun renderPlatformPieces() {
+        for (platformPiece in worldGame.arrayPlatformPieces) {
+            var keyframe: AtlasRegion? = null
 
-            if (obj.type == PlatformPiece.TYPE_LEFT) {
-                switch (obj.color) {
-                    case Platform.COLOR_BEIGE:
-                        keyframe = Assets.platformBeigeLeft;
-                        break;
-                    case Platform.COLOR_BLUE:
-                        keyframe = Assets.platformBlueLeft;
-                        break;
-                    case Platform.COLOR_GRAY:
-                        keyframe = Assets.platformGrayLeft;
-                        break;
-                    case Platform.COLOR_GREEN:
-                        keyframe = Assets.platformGreenLeft;
-                        break;
-                    case Platform.COLOR_MULTICOLOR:
-                        keyframe = Assets.platformMulticolorLeft;
-                        break;
-                    case Platform.COLOR_PINK:
-                        keyframe = Assets.platformPinkLeft;
-                        break;
-
+            if (platformPiece.type == PlatformPiece.TYPE_LEFT) {
+                when (platformPiece.color) {
+                    Platform.COLOR_BEIGE -> keyframe = Assets.platformBeigeLeft
+                    Platform.COLOR_BLUE -> keyframe = Assets.platformBlueLeft
+                    Platform.COLOR_GRAY -> keyframe = Assets.platformGrayLeft
+                    Platform.COLOR_GREEN -> keyframe = Assets.platformGreenLeft
+                    Platform.COLOR_MULTICOLOR -> keyframe = Assets.platformMulticolorLeft
+                    Platform.COLOR_PINK -> keyframe = Assets.platformPinkLeft
                 }
             } else {
-                switch (obj.color) {
-                    case Platform.COLOR_BEIGE:
-                        keyframe = Assets.platformBeigeRight;
-                        break;
-                    case Platform.COLOR_BLUE:
-                        keyframe = Assets.platformBlueRight;
-                        break;
-                    case Platform.COLOR_GRAY:
-                        keyframe = Assets.platformGrayRight;
-                        break;
-                    case Platform.COLOR_GREEN:
-                        keyframe = Assets.platformGreenRight;
-                        break;
-                    case Platform.COLOR_MULTICOLOR:
-                        keyframe = Assets.platformMulticolorRight;
-                        break;
-                    case Platform.COLOR_PINK:
-                        keyframe = Assets.platformPinkRight;
-                        break;
-
+                when (platformPiece.color) {
+                    Platform.COLOR_BEIGE -> keyframe = Assets.platformBeigeRight
+                    Platform.COLOR_BLUE -> keyframe = Assets.platformBlueRight
+                    Platform.COLOR_GRAY -> keyframe = Assets.platformGrayRight
+                    Platform.COLOR_GREEN -> keyframe = Assets.platformGreenRight
+                    Platform.COLOR_MULTICOLOR -> keyframe = Assets.platformMulticolorRight
+                    Platform.COLOR_PINK -> keyframe = Assets.platformPinkRight
                 }
             }
 
-            batcher.draw(keyframe, obj.position.x - PlatformPiece.DRAW_WIDTH_NORMAL / 2f, obj.position.y - PlatformPiece.DRAW_HEIGHT_NORMAL
-                            / 2f, PlatformPiece.DRAW_WIDTH_NORMAL / 2f, PlatformPiece.DRAW_HEIGHT_NORMAL / 2f, PlatformPiece.DRAW_WIDTH_NORMAL,
-                    PlatformPiece.DRAW_HEIGHT_NORMAL, 1, 1, obj.angleDegree);
-
+            batcher.draw(
+                keyframe,
+                platformPiece.position.x - PlatformPiece.DRAW_WIDTH_NORMAL / 2f,
+                platformPiece.position.y - PlatformPiece.DRAW_HEIGHT_NORMAL
+                        / 2f,
+                PlatformPiece.DRAW_WIDTH_NORMAL / 2f,
+                PlatformPiece.DRAW_HEIGHT_NORMAL / 2f,
+                PlatformPiece.DRAW_WIDTH_NORMAL,
+                PlatformPiece.DRAW_HEIGHT_NORMAL,
+                1f,
+                1f,
+                platformPiece.angleDegree
+            )
         }
     }
 
-    private void renderCoins() {
-        for (Coin obj : worldGame.arrayCoins) {
-            batcher.draw(Assets.coin, obj.position.x - Coin.DRAW_WIDTH / 2f, obj.position.y - Coin.DRAW_HEIGHT / 2f, Coin.DRAW_WIDTH,
-                    Coin.DRAW_HEIGHT);
+    private fun renderCoins() {
+        for (coin in worldGame.arrayCoins) {
+            batcher.draw(
+                Assets.coin,
+                coin.position.x - Coin.DRAW_WIDTH / 2f,
+                coin.position.y - Coin.DRAW_HEIGHT / 2f,
+                Coin.DRAW_WIDTH,
+                Coin.DRAW_HEIGHT
+            )
         }
-
     }
 
-    private void renderItems() {
-        for (Item obj : worldGame.arrayItem) {
-            TextureRegion keyframe = null;
+    private fun renderItems() {
+        for (item in worldGame.arrayItem) {
+            var keyframe: TextureRegion? = null
 
-            switch (obj.type) {
-                case Item.TYPE_BUBBLE:
-                    keyframe = Assets.bubbleSmall;
-                    break;
-                case Item.TYPE_JETPACK:
-                    keyframe = Assets.jetpackSmall;
-                    break;
-                case Item.TYPE_GUN:
-                    keyframe = Assets.gun;
-                    break;
-
+            when (item.type) {
+                Item.TYPE_BUBBLE -> keyframe = Assets.bubbleSmall
+                Item.TYPE_JETPACK -> keyframe = Assets.jetpackSmall
+                Item.TYPE_GUN -> keyframe = Assets.gun
             }
-
-            batcher.draw(keyframe, obj.position.x - Item.DRAW_WIDTH / 2f, obj.position.y - Item.DRAW_HEIGHT / 2f, Item.DRAW_WIDTH, Item.DRAW_HEIGHT);
-
+            batcher.draw(
+                keyframe,
+                item.position.x - Item.DRAW_WIDTH / 2f,
+                item.position.y - Item.DRAW_HEIGHT / 2f,
+                Item.DRAW_WIDTH,
+                Item.DRAW_HEIGHT
+            )
         }
-
     }
 
-    private void renderEnemy() {
-        for (Enemy obj : worldGame.arrayEnemies) {
-            TextureRegion keyframe = Assets.enemy.getKeyFrame(obj.stateTime, true);
+    private fun renderEnemy() {
+        for (enemy in worldGame.arrayEnemies) {
+            val keyframe: TextureRegion = Assets.enemy.getKeyFrame(enemy.stateTime, true)
 
-            batcher.draw(keyframe, obj.position.x - Enemy.DRAW_WIDTH / 2f, obj.position.y - Enemy.DRAW_HEIGHT / 2f, Enemy.DRAW_WIDTH,
-                    Enemy.DRAW_HEIGHT);
+            batcher.draw(
+                keyframe,
+                enemy.position.x - Enemy.DRAW_WIDTH / 2f,
+                enemy.position.y - Enemy.DRAW_HEIGHT / 2f,
+                Enemy.DRAW_WIDTH,
+                Enemy.DRAW_HEIGHT
+            )
         }
-
     }
 
-    private void renderCloud() {
-        for (Cloud obj : worldGame.arrayClouds) {
-            TextureRegion keyframe = null;
+    private fun renderCloud() {
+        for (cloud in worldGame.arrayClouds) {
+            var keyframe: TextureRegion? = null
 
-            switch (obj.guy) {
-                case Cloud.TYPE_ANGRY:
-                    keyframe = Assets.cloudAngry;
-                    break;
-                case Cloud.TYPE_HAPPY:
-                    keyframe = Assets.cloudHappy;
-                    break;
-
+            when (cloud.guy) {
+                Cloud.TYPE_ANGRY -> keyframe = Assets.cloudAngry
+                Cloud.TYPE_HAPPY -> keyframe = Assets.cloudHappy
             }
+            batcher.draw(
+                keyframe,
+                cloud.position.x - Cloud.DRAW_WIDTH / 2f,
+                cloud.position.y - Cloud.DRAW_HEIGHT / 2f,
+                Cloud.DRAW_WIDTH,
+                Cloud.DRAW_HEIGHT
+            )
 
-            batcher.draw(keyframe, obj.position.x - Cloud.DRAW_WIDTH / 2f, obj.position.y - Cloud.DRAW_HEIGHT / 2f, Cloud.DRAW_WIDTH, Cloud.DRAW_HEIGHT);
-
-            if (obj.isBlowing) {
-                batcher.draw(Assets.cloudWind, obj.position.x - .35f, obj.position.y - .85f, .6f, .8f);
+            if (cloud.isBlowing) {
+                batcher.draw(
+                    Assets.cloudWind,
+                    cloud.position.x - .35f,
+                    cloud.position.y - .85f,
+                    .6f,
+                    .8f
+                )
             }
         }
-
     }
 
-    private void renderRay() {
-        for (Lightning obj : worldGame.arrayRays) {
-            TextureRegion keyframe = Assets.ray.getKeyFrame(obj.stateTime, true);
+    private fun renderLightning() {
+        for (lightning in worldGame.arrayRays) {
+            val keyframe: TextureRegion = Assets.ray.getKeyFrame(lightning.stateTime, true)
 
-            batcher.draw(keyframe, obj.position.x - Lightning.DRAW_WIDTH / 2f, obj.position.y - Lightning.DRAW_HEIGHT / 2f, Lightning.DRAW_WIDTH, Lightning.DRAW_HEIGHT);
+            batcher.draw(
+                keyframe,
+                lightning.position.x - Lightning.DRAW_WIDTH / 2f,
+                lightning.position.y - Lightning.DRAW_HEIGHT / 2f,
+                Lightning.DRAW_WIDTH,
+                Lightning.DRAW_HEIGHT
+            )
         }
     }
 
-    private void renderBullet() {
-        for (Bullet obj : worldGame.arrayBullets) {
-            batcher.draw(Assets.bullet, obj.position.x - Bullet.SIZE / 2f, obj.position.y - Bullet.SIZE / 2f, Bullet.SIZE, Bullet.SIZE);
+    private fun renderBullet() {
+        for (bullet in worldGame.arrayBullets) {
+            batcher.draw(
+                Assets.bullet,
+                bullet.position.x - Bullet.SIZE / 2f,
+                bullet.position.y - Bullet.SIZE / 2f,
+                Bullet.SIZE,
+                Bullet.SIZE
+            )
         }
     }
 
