@@ -71,19 +71,19 @@ object Assets {
     lateinit var platformMulticolorLeft: AtlasRegion
     lateinit var platformMulticolorRight: AtlasRegion
 
-    var platformPink: AtlasRegion? = null
-    var platformPinkLight: AtlasRegion? = null
-    var platformPinkBroken: AtlasRegion? = null
-    var platformPinkLeft: AtlasRegion? = null
-    var platformPinkRight: AtlasRegion? = null
+    lateinit var platformPink: AtlasRegion
+    lateinit var platformPinkLight: AtlasRegion
+    lateinit var platformPinkBroken: AtlasRegion
+    lateinit var platformPinkLeft: AtlasRegion
+    lateinit var platformPinkRight: AtlasRegion
 
-    var buttonPause: TextureRegionDrawable? = null
+    lateinit var buttonPause: TextureRegionDrawable
 
-    var labelStyleSmall: LabelStyle? = null
-    var labelStyleBig: LabelStyle? = null
-    var textButtonStyleBig: TextButtonStyle? = null
+    lateinit var labelStyleSmall: LabelStyle
+    lateinit var labelStyleBig: LabelStyle
+    lateinit var textButtonStyleBig: TextButtonStyle
 
-    var pixelBlack: NinePatchDrawable? = null
+    lateinit var pixelBlack: NinePatchDrawable
 
 
     private fun loadStyles(atlas: TextureAtlas) {
