@@ -27,11 +27,6 @@ public class GameUI extends Group {
         this.gameScreen = gameScreen;
         this.myWorld = myWorld;
 
-        init();
-
-    }
-
-    private void init() {
 
         buttonJump = new Button(new ButtonStyle(null, null, null));
         buttonJump.setSize(getWidth() / 2f, getHeight());
@@ -73,7 +68,6 @@ public class GameUI extends Group {
 
         addActor(buttonJump);
         addActor(buttonSlide);
-
 
     }
 
