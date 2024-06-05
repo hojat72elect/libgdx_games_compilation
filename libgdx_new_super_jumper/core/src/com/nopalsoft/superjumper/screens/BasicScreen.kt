@@ -7,11 +7,9 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -24,8 +22,8 @@ abstract class BasicScreen(val game: MainSuperJumper) : InputAdapter(), Screen {
 
 
     private val oCam = OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT)
-    val batcher: SpriteBatch = game.batcher
-    val stage: Stage = game.stage
+    val batcher = game.batcher
+    val stage = game.stage
     private var music: Music? = null
     private var blackFadeOut: Image? = null
 

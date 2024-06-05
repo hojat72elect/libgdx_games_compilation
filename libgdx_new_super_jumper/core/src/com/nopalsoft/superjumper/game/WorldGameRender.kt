@@ -28,10 +28,8 @@ class WorldGameRender(
     private val height = BasicScreen.WORLD_HEIGHT
     private val camera = OrthographicCamera(width, height)
 
-
     init {
         camera.position.set(width / 2, height / 2, 0f)
-
 
         // Sets up the debug renderer.
         Box2DDebugRenderer()
