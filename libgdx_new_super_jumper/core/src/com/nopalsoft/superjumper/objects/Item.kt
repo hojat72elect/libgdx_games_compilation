@@ -6,13 +6,8 @@ import com.badlogic.gdx.utils.Pool.Poolable
 
 class Item : Poolable {
 
-    @JvmField
     val position = Vector2()
-
-    @JvmField
     var state = 0
-
-    @JvmField
     var type = 0
     var stateTime = 0f
 

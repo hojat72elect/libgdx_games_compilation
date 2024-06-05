@@ -6,19 +6,11 @@ import com.badlogic.gdx.utils.Pool.Poolable
 
 class Platform : Poolable {
 
-    @JvmField
     var state = 0
-
-    @JvmField
     var type = 0
-
-    @JvmField
     var color = 0
-
-    @JvmField
     val position = Vector2()
     var stateTime = 0f
-
 
     fun initializePlatform(x: Float, y: Float, type: Int) {
         position.set(x, y)
@@ -33,11 +25,9 @@ class Platform : Poolable {
         stateTime = 0f
     }
 
-
     fun update(delta: Float) {
         stateTime += delta
     }
-
 
     fun setDestroy() {
         if (state == STATE_NORMAL) {
@@ -45,7 +35,6 @@ class Platform : Poolable {
             stateTime = 0f
         }
     }
-
 
     override fun reset() {
         // Nothing is happening in here.

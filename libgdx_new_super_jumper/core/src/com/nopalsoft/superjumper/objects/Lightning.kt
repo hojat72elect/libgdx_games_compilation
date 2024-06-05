@@ -9,13 +9,8 @@ import com.badlogic.gdx.utils.Pool.Poolable
  */
 class Lightning : Poolable {
 
-    @JvmField
     val position = Vector2()
-
-    @JvmField
     var stateTime = 0f
-
-    @JvmField
     var state = 0
 
     fun initializeLightning(x: Float, y: Float) {

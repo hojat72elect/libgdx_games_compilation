@@ -11,27 +11,16 @@ import com.nopalsoft.superjumper.screens.BasicScreen
  */
 class Cloud : Poolable {
 
-    @JvmField
     var state = 0
-
-    @JvmField
     var guy = 0
     private var timeToBlow = 0f
     private var durationBlow = 0f
     private var timeForLightning = 0f
-
-    @JvmField
     val position = Vector2()
     private var speed = Vector2()
-
-    @JvmField
     var isBlowing = false
-
-    @JvmField
     var isLightning = false
-
     var stateTime = 0f
-
 
     fun initializeCloud(x: Float, y: Float) {
         position.set(x, y)
@@ -47,7 +36,6 @@ class Cloud : Poolable {
         timeToBlow = 0f
         timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING)
     }
-
 
     fun update(body: Body, delta: Float) {
         position.x = body.position.x
@@ -90,12 +78,10 @@ class Cloud : Poolable {
         stateTime += delta
     }
 
-
     fun fireLighting() {
         isLightning = false
         timeForLightning = MathUtils.random(TIME_FOR_LIGHTNING)
     }
-
 
     fun hit() {
         if (guy == TYPE_HAPPY) {
@@ -106,7 +92,6 @@ class Cloud : Poolable {
         }
     }
 
-
     fun destroy() {
         if (state == STATE_NORMAL) {
             state = STATE_DEAD
@@ -114,11 +99,9 @@ class Cloud : Poolable {
         }
     }
 
-
     override fun reset() {
         // Nothing is happening in here
     }
-
 
     companion object {
         const val STATE_NORMAL = 0

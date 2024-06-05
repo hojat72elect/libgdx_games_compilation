@@ -7,22 +7,12 @@ import com.badlogic.gdx.utils.Pool.Poolable
 
 class PlatformPiece : Poolable {
 
-    @JvmField
     val position = Vector2()
-
-    @JvmField
     var state = 0
-
-    @JvmField
     var color = 0
-
-    @JvmField
     var type = 0
     var stateTime = 0f
-
-    @JvmField
     var angleDegree = 0f
-
 
     fun initializePlatformPiece(x: Float, y: Float, type: Int, color: Int) {
         position.set(x, y)

@@ -8,10 +8,8 @@ import com.nopalsoft.superjumper.screens.BasicScreen
 
 class Enemy : Poolable {
 
-    @JvmField
-    val position = Vector2()
 
-    @JvmField
+    val position = Vector2()
     var state = 0
     private var speed = Vector2()
     private var angleDegree = 0f

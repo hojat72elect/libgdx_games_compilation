@@ -11,18 +11,15 @@ open class BaseScreen(
     width: Float,
     height: Float,
     positionY: Float
-) :
-    Group() {
+) : Group() {
 
     protected var game: MainSuperJumper = screen.game
     private var isVisible = false
-
 
     init {
         setSize(width, height)
         y = positionY
     }
-
 
     open fun show(stage: Stage) {
         setOrigin(width / 2f, height / 2f)

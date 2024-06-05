@@ -5,10 +5,9 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool.Poolable
 
 class Bullet : Poolable {
+
     var state = 0
     var stateTime = 0f
-
-    @JvmField
     val position = Vector2()
 
 

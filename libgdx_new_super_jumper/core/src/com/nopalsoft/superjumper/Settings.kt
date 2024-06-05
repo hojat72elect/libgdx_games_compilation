@@ -7,21 +7,13 @@ object Settings {
 
     private var isMusicOn = true
     private var isSoundOn = true
-
     private var didBuyNoAds = false
     private var didLikeFacebook = false
     private var didRate = false
-
-
     var numberOfTimesPlayed = 0
-
     private var coinsTotal = 0
-
-    @JvmStatic
     var numBullets = 0
-
     var bestScore = 0
-
     private var LEVEL_LIFE = 0
     private var LEVEL_SHIELD = 0
     private var LEVEL_SECOND_JUMP = 0

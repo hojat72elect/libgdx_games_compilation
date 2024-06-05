@@ -14,13 +14,9 @@ import com.nopalsoft.superjumper.screens.BasicScreen
 
 class Coin : Poolable {
 
-    @JvmField
     var state = 0
-
-    @JvmField
     val position = Vector2()
     var stateTime = 0f
-
 
     private fun initializeCoin(x: Float, y: Float) {
         position.set(x, y)
@@ -53,12 +49,12 @@ class Coin : Poolable {
 
         private const val COINS_SEPARATION = .025f // Variable so that the coins are not stuck
 
-        @JvmStatic
+
         fun createCoins(worldBox: World, coinsArray: Array<Coin>, y: Float) {
             createACoupleOfCoins(worldBox, coinsArray, y)
         }
 
-        @JvmStatic
+
         fun createACoin(worldBox: World, arrayCoins: Array<Coin>, y: Float) {
             createCoins(worldBox, arrayCoins, generaPosX(1), y)
         }

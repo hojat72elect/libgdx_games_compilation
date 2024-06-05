@@ -7,25 +7,15 @@ import com.nopalsoft.superjumper.screens.BasicScreen
 
 class Player(x: Float, y: Float) {
 
-    @JvmField
+
     var state = STATE_NORMAL
-
     var durationJetPack = 0f
-
-    @JvmField
     val position = Vector2(x, y)
-
-    @JvmField
     var speed = Vector2()
-
     var angleDeg = 0f
-
     var stateTime = 0f
-
     private var didJump = false
-
     var isBubble = false
-
     var isJetPack = false
 
     fun update(body: Body, delta: Float, accelerationX: Float) {
