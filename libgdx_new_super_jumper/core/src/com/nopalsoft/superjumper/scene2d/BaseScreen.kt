@@ -7,14 +7,13 @@ import com.nopalsoft.superjumper.MainSuperJumper
 import com.nopalsoft.superjumper.screens.BasicScreen
 
 open class BaseScreen(
-    @JvmField val screen: BasicScreen,
+    val screen: BasicScreen,
     width: Float,
     height: Float,
     positionY: Float
 ) :
     Group() {
 
-    @JvmField
     protected var game: MainSuperJumper = screen.game
     private var isVisible = false
 
@@ -25,7 +24,7 @@ open class BaseScreen(
     }
 
 
-   open fun show(stage: Stage) {
+    open fun show(stage: Stage) {
         setOrigin(width / 2f, height / 2f)
         x = BasicScreen.SCREEN_WIDTH / 2f - width / 2f
 
@@ -40,7 +39,7 @@ open class BaseScreen(
         stage.addActor(this)
     }
 
-   open fun hide() {
+    open fun hide() {
         isVisible = false
         remove()
     }

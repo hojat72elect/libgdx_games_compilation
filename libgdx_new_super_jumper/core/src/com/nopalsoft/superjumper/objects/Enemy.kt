@@ -15,8 +15,6 @@ class Enemy : Poolable {
     var state = 0
     private var speed = Vector2()
     private var angleDegree = 0f
-
-    @JvmField
     var stateTime = 0f
 
 

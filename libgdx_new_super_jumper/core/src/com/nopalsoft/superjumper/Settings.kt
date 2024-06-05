@@ -12,7 +12,7 @@ object Settings {
     private var didLikeFacebook = false
     private var didRate = false
 
-    @JvmStatic
+
     var numberOfTimesPlayed = 0
 
     private var coinsTotal = 0
@@ -20,7 +20,6 @@ object Settings {
     @JvmStatic
     var numBullets = 0
 
-    @JvmStatic
     var bestScore = 0
 
     private var LEVEL_LIFE = 0
@@ -30,7 +29,6 @@ object Settings {
 
     private val pref = Gdx.app.getPreferences("com.nopalsoft.superjumper")
 
-    @JvmStatic
     fun save() {
         pref.putBoolean("isMusicOn", isMusicOn)
         pref.putBoolean("isSoundOn", isSoundOn)
@@ -52,7 +50,7 @@ object Settings {
         pref.flush()
     }
 
-    @JvmStatic
+
     fun load() {
         isMusicOn = pref.getBoolean("isMusicOn", true)
         isSoundOn = pref.getBoolean("isSoundOn", true)
@@ -73,7 +71,6 @@ object Settings {
         LEVEL_SHIELD = pref.getInteger("LEVEL_SHIELD", 0)
     }
 
-    @JvmStatic
     fun changeBestScore(distance: Int) {
         if (bestScore < distance) {
             bestScore = distance

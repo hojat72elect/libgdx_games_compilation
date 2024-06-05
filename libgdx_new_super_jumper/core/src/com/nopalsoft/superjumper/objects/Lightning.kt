@@ -18,7 +18,7 @@ class Lightning : Poolable {
     @JvmField
     var state = 0
 
-    fun initializeRay(x: Float, y: Float) {
+    fun initializeLightning(x: Float, y: Float) {
         position.set(x, y)
         stateTime = 0f
         state = STATE_NORMAL

@@ -49,7 +49,6 @@ class PlatformPiece : Poolable {
 
 
     override fun reset() {
-
         // Nothing is happening in here.
     }
 

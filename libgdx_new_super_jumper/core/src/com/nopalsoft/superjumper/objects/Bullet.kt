@@ -13,7 +13,7 @@ class Bullet : Poolable {
 
 
     override fun reset() {
-        // TODO -> "Not yet implemented"
+        // Nothing is happening in here
     }
 
     fun initializeBullet(x: Float, y: Float) {

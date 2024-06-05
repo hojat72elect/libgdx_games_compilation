@@ -310,7 +310,7 @@ public class WorldGame {
 
     private void createLightning(float x, float y) {
         Lightning lightning = Pools.obtain(Lightning.class);
-        lightning.initializeRay(x, y);
+        lightning.initializeLightning(x, y);
 
         BodyDef bd = new BodyDef();
         bd.position.set(lightning.position.x, lightning.position.y);

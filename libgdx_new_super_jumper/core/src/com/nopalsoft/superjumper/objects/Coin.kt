@@ -12,16 +12,17 @@ import com.badlogic.gdx.utils.Pool.Poolable
 import com.badlogic.gdx.utils.Pools
 import com.nopalsoft.superjumper.screens.BasicScreen
 
-class Coin :Poolable {
+class Coin : Poolable {
 
     @JvmField
     var state = 0
+
     @JvmField
     val position = Vector2()
     var stateTime = 0f
 
 
-    fun initializeCoin(x: Float, y: Float) {
+    private fun initializeCoin(x: Float, y: Float) {
         position.set(x, y)
         state = STATE_NORMAL
         stateTime = 0f
@@ -37,10 +38,10 @@ class Coin :Poolable {
     }
 
     override fun reset() {
-       // Nothing is happening in here.
+        // Nothing is happening in here.
     }
 
-    companion object{
+    companion object {
         const val STATE_NORMAL = 0
         const val STATE_TAKEN = 1
 

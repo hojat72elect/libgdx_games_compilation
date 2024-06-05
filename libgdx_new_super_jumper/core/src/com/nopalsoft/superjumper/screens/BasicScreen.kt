@@ -24,13 +24,8 @@ abstract class BasicScreen(val game: MainSuperJumper) : InputAdapter(), Screen {
 
 
     private val oCam = OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-    @JvmField
     val batcher: SpriteBatch = game.batcher
-
-    @JvmField
     val stage: Stage = game.stage
-
     private var music: Music? = null
     private var blackFadeOut: Image? = null
 

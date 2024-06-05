@@ -10,7 +10,6 @@ class Player(x: Float, y: Float) {
     @JvmField
     var state = STATE_NORMAL
 
-    @JvmField
     var durationJetPack = 0f
 
     @JvmField
@@ -19,19 +18,15 @@ class Player(x: Float, y: Float) {
     @JvmField
     var speed = Vector2()
 
-    @JvmField
     var angleDeg = 0f
 
     var stateTime = 0f
 
     private var didJump = false
 
-    @JvmField
     var isBubble = false
 
-    @JvmField
     var isJetPack = false
-
 
     fun update(body: Body, delta: Float, accelerationX: Float) {
         position.x = body.position.x
