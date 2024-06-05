@@ -43,7 +43,7 @@ class WorldGameRender(
 
     fun render() {
         if (worldGame.state == WorldGame.STATE_RUNNING) {
-            camera.position.y = worldGame.player.position.y
+            camera.position.y = worldGame.player!!.position.y
         }
 
         if (camera.position.y < BasicScreen.WORLD_HEIGHT / 2f) {
@@ -73,7 +73,7 @@ class WorldGameRender(
 
         val player = worldGame.player
 
-        keyframe = if (player.speed.y > 0) {
+        keyframe = if (player!!.speed.y > 0) {
             Assets.characterJump
         } else {
             Assets.characterStand
@@ -131,7 +131,7 @@ class WorldGameRender(
         if (player.isBubble) {
             batcher.draw(
                 Assets.bubble,
-                player.position.x - .5f,
+                player!!.position.x - .5f,
                 player.position.y - .5f,
                 1f,
                 1f
