@@ -1,88 +1,97 @@
-package com.nopalsoft.ninjarunner.scene2d;
+package com.nopalsoft.ninjarunner.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.ninjarunner.Assets;
-import com.nopalsoft.ninjarunner.game.GameScreen;
-import com.nopalsoft.ninjarunner.game.WorldGame;
-import com.nopalsoft.ninjarunner.screens.Screens;
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.game.GameScreen
+import com.nopalsoft.ninjarunner.game.WorldGame
+import com.nopalsoft.ninjarunner.screens.Screens
 
-public class GameUI extends Group {
-    public static final float ANIMATION_TIME = .35f;
-    public boolean didJump, didSlide, didDash;
-    GameScreen gameScreen;
-    WorldGame myWorld;
-    Table tableHeader;
-    Label labelScore;
-    Button buttonJump, buttonSlide;
+class GameUI(val gameScreen: GameScreen, val myWorld: WorldGame) : Group() {
 
-    public GameUI(final GameScreen gameScreen, WorldGame myWorld) {
-        setBounds(0, 0, Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT);
-        this.gameScreen = gameScreen;
-        this.myWorld = myWorld;
+    @JvmField
+    var didJump = false
+
+    @JvmField
+    var didSlide = false
+
+    @JvmField
+    var didDash = false
+
+    var tableHeader = Table()
+    var labelScore = Label("0", Assets.labelStyleSmall);
+    var buttonJump = Button(ButtonStyle(null, null, null))
+    var buttonSlide = Button(ButtonStyle(null, null, null));
 
 
-        buttonJump = new Button(new ButtonStyle(null, null, null));
-        buttonJump.setSize(getWidth() / 2f, getHeight());
-        buttonJump.setPosition(0, 0);
-        buttonJump.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                didJump = true;
-                return false;
+    init {
+        setBounds(0f, 0f, Screens.SCREEN_WIDTH.toFloat(), Screens.SCREEN_HEIGHT.toFloat())
 
+        buttonJump.setSize(width / 2f, height)
+        buttonJump.setPosition(0f, 0f)
+        buttonJump.addListener(object : ClickListener() {
+            override fun touchDown(
+                event: InputEvent,
+                x: Float,
+                y: Float,
+                pointer: Int,
+                button: Int
+            ): Boolean {
+                didJump = true
+                return false
             }
-        });
+        })
 
-        buttonSlide = new Button(new ButtonStyle(null, null, null));
-        buttonSlide.setSize(getWidth() / 2f, getHeight());
-        buttonSlide.setPosition(getWidth() / 2f + 1, 0);
-        buttonSlide.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                didSlide = true;
-                return true;
-
+        buttonSlide.setSize(width / 2f, height)
+        buttonSlide.setPosition(width / 2f + 1, 0f)
+        buttonSlide.addListener(object : ClickListener() {
+            override fun touchDown(
+                event: InputEvent,
+                x: Float,
+                y: Float,
+                pointer: Int,
+                button: Int
+            ): Boolean {
+                didSlide = true
+                return true
             }
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                didSlide = false;
+            override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+                didSlide = false
             }
-        });
+        })
 
-        tableHeader = new Table();
-        tableHeader.setSize(Screens.SCREEN_WIDTH, 50);
-        tableHeader.setPosition(0, Screens.SCREEN_HEIGHT - tableHeader.getHeight());
+        tableHeader.setSize(Screens.SCREEN_WIDTH.toFloat(), 50f)
+        tableHeader.setPosition(0f, Screens.SCREEN_HEIGHT - tableHeader.height)
 
-        labelScore = new Label("0", Assets.labelStyleSmall);
-        tableHeader.add(labelScore).fill();
+        tableHeader.add(labelScore).fill()
 
-        addActor(tableHeader);
+        addActor(tableHeader)
 
-        addActor(buttonJump);
-        addActor(buttonSlide);
-
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    private void addInActions() {
+        addActor(buttonJump)
+        addActor(buttonSlide)
     }
 
 
-    public void show(Stage stage) {
-        addInActions();
-        stage.addActor(this);
+    override fun act(delta: Float) {
+        super.act(delta)
     }
 
+    private fun addInActions() {
+    }
+
+    fun show(stage: Stage) {
+        addInActions()
+        stage.addActor(this)
+    }
+
+    companion object {
+        const val ANIMATION_TIME = .35f
+    }
 }
