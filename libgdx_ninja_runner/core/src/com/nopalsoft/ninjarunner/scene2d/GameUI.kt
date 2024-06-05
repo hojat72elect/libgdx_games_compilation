@@ -9,11 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.nopalsoft.ninjarunner.Assets
-import com.nopalsoft.ninjarunner.game.GameScreen
-import com.nopalsoft.ninjarunner.game.WorldGame
 import com.nopalsoft.ninjarunner.screens.Screens
 
-class GameUI(val gameScreen: GameScreen, val myWorld: WorldGame) : Group() {
+class GameUI : Group() {
 
     @JvmField
     var didJump = false
@@ -24,10 +22,10 @@ class GameUI(val gameScreen: GameScreen, val myWorld: WorldGame) : Group() {
     @JvmField
     var didDash = false
 
-    var tableHeader = Table()
-    var labelScore = Label("0", Assets.labelStyleSmall);
-    var buttonJump = Button(ButtonStyle(null, null, null))
-    var buttonSlide = Button(ButtonStyle(null, null, null));
+    private val tableHeader = Table()
+    private val labelScore = Label("0", Assets.labelStyleSmall)
+    private val buttonJump = Button(ButtonStyle(null, null, null))
+    private val buttonSlide = Button(ButtonStyle(null, null, null))
 
 
     init {
@@ -78,10 +76,6 @@ class GameUI(val gameScreen: GameScreen, val myWorld: WorldGame) : Group() {
         addActor(buttonSlide)
     }
 
-
-    override fun act(delta: Float) {
-        super.act(delta)
-    }
 
     private fun addInActions() {
     }

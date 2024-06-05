@@ -29,7 +29,7 @@ public class GameScreen extends Screens {
         super(_game);
         myWorld = new WorldGame();
         renderer = new WorldGameRenderer(batcher, myWorld);
-        gameUI = new GameUI(this, myWorld);
+        gameUI = new GameUI();
         menuUI = new MenuUI(this, myWorld);
 
         if (showMainMenu) {
