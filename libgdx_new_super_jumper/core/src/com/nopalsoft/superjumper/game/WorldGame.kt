@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.Manifold
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.physics.box2d.World
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pools
 import com.nopalsoft.superjumper.Settings.numBullets
 import com.nopalsoft.superjumper.objects.Bullet
@@ -30,48 +29,35 @@ import com.nopalsoft.superjumper.objects.Platform
 import com.nopalsoft.superjumper.objects.PlatformPiece
 import com.nopalsoft.superjumper.objects.Player
 import com.nopalsoft.superjumper.screens.BasicScreen
+import com.badlogic.gdx.utils.Array as GdxArray
 
 class WorldGame {
-    private val arrayBodies: Array<Body>
-    var worldBox: World = World(Vector2(0f, -9.8f), true)
-    var coins: Int = 0
-    var maxDistance: Int = 0
+    private val arrayBodies: GdxArray<Body> = GdxArray()
+    private var worldBox = World(Vector2(0f, -9.8f), true)
+    var coins = 0
+    var maxDistance = 0
     var state: Int
-    var TIME_TO_CREATE_CLOUD: Float = 15f
-    var timeToCreateCloud: Float
+    private var timeToCreateCloud: Float
     var player: Player? = null
-    var arrayPlatforms: Array<Platform>
-    var arrayPlatformPieces: Array<PlatformPiece>
-    var arrayCoins: Array<Coin>
-    var arrayEnemies: Array<Enemy>
-    var arrayItem: Array<Item>
-    var arrayClouds: Array<Cloud>
-    var arrayLightnings: Array<Lightning>
-    var arrayBullets: Array<Bullet>
-    var worldCreatedUpToY: Float
+    var arrayPlatforms: GdxArray<Platform> = GdxArray()
+    var arrayPlatformPieces: GdxArray<PlatformPiece> = GdxArray()
+    var arrayCoins: GdxArray<Coin> = GdxArray()
+    var arrayEnemies: GdxArray<Enemy> = GdxArray()
+    var arrayItem: GdxArray<Item> = GdxArray()
+    var arrayClouds: GdxArray<Cloud> = GdxArray()
+    var arrayLightnings: GdxArray<Lightning> = GdxArray()
+    var arrayBullets: GdxArray<Bullet> = GdxArray()
+    private var worldCreatedUpToY: Float
 
     init {
         worldBox.setContactListener(Collision())
-
-        arrayBodies = Array()
-        arrayPlatforms = Array()
-        arrayPlatformPieces = Array()
-        arrayCoins = Array()
-        arrayEnemies = Array()
-        arrayItem = Array()
-        arrayClouds = Array()
-        arrayLightnings = Array()
-        arrayBullets = Array()
-
         timeToCreateCloud = 0f
-
         state = STATE_RUNNING
 
         createFloor()
         createPlayer()
-
-        worldCreatedUpToY = player!!.position.y
         createNextPart()
+        worldCreatedUpToY = player!!.position.y
     }
 
     private fun createNextPart() {
@@ -382,24 +368,42 @@ class WorldGame {
         worldBox.getBodies(arrayBodies)
 
         for (body in arrayBodies) {
-            if (body.userData is Player) {
-                updatePlayer(body, delta, accelerationX, fire, touchPositionWorldCoords)
-            } else if (body.userData is Platform) {
-                updatePlatform(body, delta)
-            } else if (body.userData is PlatformPiece) {
-                updatePlatformPieces(body, delta)
-            } else if (body.userData is Coin) {
-                updateCoins(body, delta)
-            } else if (body.userData is Enemy) {
-                updateEnemy(body, delta)
-            } else if (body.userData is Item) {
-                updateItem(body, delta)
-            } else if (body.userData is Cloud) {
-                updateCloud(body, delta)
-            } else if (body.userData is Lightning) {
-                updateLightning(body, delta)
-            } else if (body.userData is Bullet) {
-                updateBullet(body, delta)
+            when (body.userData) {
+                is Player -> {
+                    updatePlayer(body, delta, accelerationX, fire, touchPositionWorldCoords)
+                }
+
+                is Platform -> {
+                    updatePlatform(body, delta)
+                }
+
+                is PlatformPiece -> {
+                    updatePlatformPieces(body, delta)
+                }
+
+                is Coin -> {
+                    updateCoins(body, delta)
+                }
+
+                is Enemy -> {
+                    updateEnemy(body, delta)
+                }
+
+                is Item -> {
+                    updateItem(body, delta)
+                }
+
+                is Cloud -> {
+                    updateCloud(body, delta)
+                }
+
+                is Lightning -> {
+                    updateLightning(body, delta)
+                }
+
+                is Bullet -> {
+                    updateBullet(body, delta)
+                }
             }
         }
 
@@ -506,7 +510,7 @@ class WorldGame {
                 touchPositionWorldCoords.x,
                 touchPositionWorldCoords.y
             )
-            numBullets = numBullets - 1
+            numBullets--
         }
     }
 
@@ -604,12 +608,11 @@ class WorldGame {
                     state = STATE_GAMEOVER
                 }
             } else if (otherObject is Platform) {
-                val obj = otherObject
 
                 if (player!!.speed.y <= 0) {
                     player!!.jump()
-                    if (obj.type == Platform.TYPE_BREAKABLE) {
-                        obj.setDestroy()
+                    if (otherObject.type == Platform.TYPE_BREAKABLE) {
+                        otherObject.setDestroy()
                     }
                 }
             } else if (otherObject is Coin) {
@@ -621,13 +624,12 @@ class WorldGame {
             } else if (otherObject is Lightning) {
                 player!!.hit()
             } else if (otherObject is Item) {
-                val obj = otherObject
-                obj.take()
+                otherObject.take()
 
-                when (obj.type) {
+                when (otherObject.type) {
                     Item.TYPE_BUBBLE -> player!!.setBubble()
                     Item.TYPE_JETPACK -> player!!.setJetPack()
-                    Item.TYPE_GUN -> numBullets = numBullets + 10
+                    Item.TYPE_GUN -> numBullets += 10
                 }
             }
         }
@@ -681,7 +683,8 @@ class WorldGame {
     }
 
     companion object {
-        const val STATE_RUNNING: Int = 0
-        const val STATE_GAMEOVER: Int = 1
+        const val STATE_RUNNING = 0
+        const val STATE_GAMEOVER = 1
+        private const val TIME_TO_CREATE_CLOUD = 15f
     }
 }
