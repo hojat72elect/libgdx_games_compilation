@@ -1,56 +1,40 @@
-package com.nopalsoft.slamthebird;
+package com.nopalsoft.slamthebird
 
-import com.nopalsoft.slamthebird.handlers.GameServicesHandler;
-import org.robovm.apple.foundation.NSAutoreleasePool;
-import org.robovm.apple.uikit.UIApplication;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication
+import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration
+import com.nopalsoft.slamthebird.handlers.GameServicesHandler
+import org.robovm.apple.foundation.NSAutoreleasePool
+import org.robovm.apple.uikit.UIApplication
 
-import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-
-public class IOSLauncher extends IOSApplication.Delegate implements  GameServicesHandler {
-    @Override
-    protected IOSApplication createApplication() {
-        IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new MainSlamBird(), config);
+class IOSLauncher : IOSApplication.Delegate(), GameServicesHandler {
+    override fun createApplication(): IOSApplication {
+        val config = IOSApplicationConfiguration()
+        return IOSApplication(MainSlamBird(), config)
     }
 
-    public static void main(String[] argv) {
-        NSAutoreleasePool pool = new NSAutoreleasePool();
-        UIApplication.main(argv, null, IOSLauncher.class);
-        pool.close();
+    override fun submitScore(score: Long) {
     }
 
-    @Override
-    public void submitScore(long score) {
-
+    override fun unlockAchievement(achievementId: String) {
     }
 
-    @Override
-    public void unlockAchievement(String achievementId) {
-
+    override fun getLeaderboard() {
     }
 
-    @Override
-    public void getLeaderboard() {
-
+    override fun getAchievements() {
     }
 
-    @Override
-    public void getAchievements() {
-
+    override fun isSignedIn(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSignedIn() {
-        return false;
+    override fun signIn() {
     }
 
-    @Override
-    public void signIn() {
+}
 
-    }
-
-
-
-
+fun main(argv: Array<String>) {
+    val pool = NSAutoreleasePool()
+    UIApplication.main<UIApplication, IOSLauncher>(argv, null, IOSLauncher::class.java)
+    pool.close()
 }
