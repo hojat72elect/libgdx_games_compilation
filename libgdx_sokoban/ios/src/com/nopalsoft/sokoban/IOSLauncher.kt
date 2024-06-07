@@ -1,21 +1,16 @@
-package com.nopalsoft.sokoban;
+package com.nopalsoft.sokoban
 
-import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication
+import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration
+import org.robovm.apple.foundation.NSAutoreleasePool
+import org.robovm.apple.uikit.UIApplication
 
-import org.robovm.apple.foundation.NSAutoreleasePool;
-import org.robovm.apple.uikit.UIApplication;
+class IOSLauncher : IOSApplication.Delegate() {
+    override fun createApplication() = IOSApplication(MainSokoban(), IOSApplicationConfiguration())
+}
 
-public class IOSLauncher extends IOSApplication.Delegate {
-    @Override
-    protected IOSApplication createApplication() {
-        IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new MainSokoban(), config);
-    }
-
-    public static void main(String[] argv) {
-        NSAutoreleasePool pool = new NSAutoreleasePool();
-        UIApplication.main(argv, null, IOSLauncher.class);
-        pool.close();
-    }
+fun main(args: Array<String>) {
+    val pool = NSAutoreleasePool()
+    UIApplication.main<UIApplication, IOSLauncher>(args, null, IOSLauncher::class.java)
+    pool.close()
 }
