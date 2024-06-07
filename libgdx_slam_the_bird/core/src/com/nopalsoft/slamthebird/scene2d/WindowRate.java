@@ -8,27 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.screens.Screens;
 
-public class VentanaRate extends Ventana {
+public class WindowRate extends Window {
 
-    public VentanaRate(Screens currentScreen) {
+    public WindowRate(Screens currentScreen) {
         super(currentScreen);
         setSize(390, 260);
         setY(300);
         setBackGround();
 
-        Label lbTitle = new Label("Support this game", Assets.styleLabelChico);
-        lbTitle.setPosition(getWidth() / 2f - lbTitle.getWidth() / 2f, 210);
+        Label labelTitle = new Label("Support this game", Assets.labelStyleSmall);
+        labelTitle.setPosition(getWidth() / 2f - labelTitle.getWidth() / 2f, 210);
 
         Label lbContenido = new Label(
                 "Hello, thank you for playing Slam the Bird.\nHelp us to support this game. Just rate us at the app store.",
-                Assets.styleLabelChico);
+                Assets.labelStyleSmall);
         lbContenido.setSize(getWidth() - 20, 170);
         lbContenido.setPosition(getWidth() / 2f - lbContenido.getWidth() / 2f,
                 50);
         lbContenido.setWrap(true);
 
         TextButton btRate = new TextButton("Rate",
-                Assets.styleTextButtonPurchased);
+                Assets.textButtonStylePurchased);
         screen.addEfectoPress(btRate);
         btRate.getLabel().setWrap(true);
         btRate.addListener(new ClickListener() {
@@ -40,7 +40,7 @@ public class VentanaRate extends Ventana {
         });
 
         TextButton btNotNow = new TextButton("Not now",
-                Assets.styleTextButtonSelected);
+                Assets.textButtonStyleSelected);
         screen.addEfectoPress(btNotNow);
         btNotNow.getLabel().setWrap(true);
         btNotNow.addListener(new ClickListener() {
@@ -61,7 +61,7 @@ public class VentanaRate extends Ventana {
 
         addActor(lbContenido);
         addActor(tbBotones);
-        addActor(lbTitle);
+        addActor(labelTitle);
 
     }
 

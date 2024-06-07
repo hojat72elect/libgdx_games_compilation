@@ -33,10 +33,10 @@ public class GetCoinsSubMenu {
         this.contenedor = contenedor;
         contenedor.clear();
 
-        btLikeFacebook = new TextButton("Like us", Assets.styleTextButtonBuy);
+        btLikeFacebook = new TextButton("Like us", Assets.textButtonStyleBuy);
         if (Settings.didLikeFacebook)
             btLikeFacebook = new TextButton("Visit Us",
-                    Assets.styleTextButtonSelected);
+                    Assets.textButtonStyleSelected);
         addEfectoPress(btLikeFacebook);
         btLikeFacebook.addListener(new ClickListener() {
             @Override
@@ -46,47 +46,47 @@ public class GetCoinsSubMenu {
                     Settings.didLikeFacebook = true;
                     game.stage.addAction(Actions.sequence(Actions.delay(1),
                             Actions.run(() -> {
-                                com.nopalsoft.slamthebird.Settings.monedasActuales += monedasLikeFacebook;
+                                com.nopalsoft.slamthebird.Settings.currentCoins += monedasLikeFacebook;
                                 btLikeFacebook.setText("Visit us");
                                 btLikeFacebook
-                                        .setStyle(com.nopalsoft.slamthebird.Assets.styleTextButtonSelected);
+                                        .setStyle(com.nopalsoft.slamthebird.Assets.textButtonStyleSelected);
                             })));
                 }
             }
         });
 
-        btBuy5milCoins = new TextButton("Buy", Assets.styleTextButtonBuy);
+        btBuy5milCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
         addEfectoPress(btBuy5milCoins);
         btBuy5milCoins.addListener(new ClickListener() {
         });
 
-        btBuy15MilCoins = new TextButton("Buy", Assets.styleTextButtonBuy);
+        btBuy15MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
         addEfectoPress(btBuy15MilCoins);
         btBuy15MilCoins.addListener(new ClickListener() {
         });
 
-        btBuy30MilCoins = new TextButton("Buy", Assets.styleTextButtonBuy);
+        btBuy30MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
         addEfectoPress(btBuy30MilCoins);
         btBuy30MilCoins.addListener(new ClickListener() {
         });
 
-        btBuy50MilCoins = new TextButton("Buy", Assets.styleTextButtonBuy);
+        btBuy50MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
         addEfectoPress(btBuy50MilCoins);
         btBuy50MilCoins.addListener(new ClickListener() {
         });
 
         // Facebook Like
-        contenedor.add(new Image(Assets.separadorHorizontal)).expandX().fill()
+        contenedor.add(new Image(Assets.horizontalSeparator)).expandX().fill()
                 .height(5);
         contenedor.row();
         contenedor
                 .add(agregarPersonajeTabla(monedasLikeFacebook,
-                        Assets.btFacebook, "Like us on facebook and get "
+                        Assets.buttonFacebook, "Like us on facebook and get "
                                 + monedasLikeFacebook + " coins",
                         btLikeFacebook)).expandX().fill();
         contenedor.row();
 
-        TextureRegionDrawable moneda = new TextureRegionDrawable(Assets.moneda);
+        TextureRegionDrawable moneda = new TextureRegionDrawable(Assets.coin);
         // Venta de monedas
 
 
@@ -130,18 +130,18 @@ public class GetCoinsSubMenu {
     private Table agregarPersonajeTabla(int numMonedasToGet,
                                         TextureRegionDrawable imagen, String descripcion, TextButton boton) {
 
-        Image moneda = new Image(Assets.moneda);
+        Image moneda = new Image(Assets.coin);
         Image imgPersonaje = new Image(imagen);
 
         Table tbBarraTitulo = new Table();
         tbBarraTitulo
-                .add(new Label("Get " + numMonedasToGet, Assets.styleLabelChico))
+                .add(new Label("Get " + numMonedasToGet, Assets.labelStyleSmall))
                 .left().padLeft(5);
         tbBarraTitulo.add(moneda).left().expandX().padLeft(5);
 
         Table tbDescrip = new Table();
         tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label(descripcion, Assets.styleLabelChico);
+        Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
         lblDescripcion.setWrap(true);
         tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
 
@@ -154,7 +154,7 @@ public class GetCoinsSubMenu {
         tbContent.add(boton).right().padRight(10).size(120, 45);
 
         tbContent.row().colspan(2);
-        tbContent.add(new Image(Assets.separadorHorizontal)).expandX().fill()
+        tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill()
                 .height(5).padTop(15);
 
         return tbContent;

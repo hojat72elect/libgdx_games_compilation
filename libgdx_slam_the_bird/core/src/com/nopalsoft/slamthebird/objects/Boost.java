@@ -1,4 +1,4 @@
-package com.nopalsoft.slamthebird.objetos;
+package com.nopalsoft.slamthebird.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,24 +24,24 @@ public class Boost implements Poolable {
 
     public Vector2 position;
     public float stateTime;
-    public int tipo;
+    public int type;
 
     public Boost() {
         position = new Vector2();
     }
 
-    public void init(WorldGame oWorld, float x, float y, int tipo) {
-        this.tipo = tipo;
+    public void init(WorldGame worldGame, float x, float y, int type) {
+        this.type = type;
         position.set(x, y);
         stateTime = 0;
         state = STATE_NORMAL;
 
-        BodyDef bd = new BodyDef();
-        bd.position.x = x;
-        bd.position.y = y;
-        bd.type = BodyType.KinematicBody;
+        BodyDef bodyDefinition = new BodyDef();
+        bodyDefinition.position.x = x;
+        bodyDefinition.position.y = y;
+        bodyDefinition.type = BodyType.KinematicBody;
 
-        Body oBody = oWorld.oWorldBox.createBody(bd);
+        Body body = worldGame.oWorldBox.createBody(bodyDefinition);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(.15f, .15f);
@@ -53,9 +53,9 @@ public class Boost implements Poolable {
         fixture.friction = 0;
         fixture.isSensor = true;
 
-        oBody.createFixture(fixture);
+        body.createFixture(fixture);
 
-        oBody.setUserData(this);
+        body.setUserData(this);
         shape.dispose();
     }
 

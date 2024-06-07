@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.objetos.Boost;
-import com.nopalsoft.slamthebird.objetos.Enemigo;
-import com.nopalsoft.slamthebird.objetos.Moneda;
-import com.nopalsoft.slamthebird.objetos.Plataforma;
-import com.nopalsoft.slamthebird.objetos.Robot;
+import com.nopalsoft.slamthebird.objects.Boost;
+import com.nopalsoft.slamthebird.objects.Robot;
+import com.nopalsoft.slamthebird.objects.Coin;
 import com.nopalsoft.slamthebird.screens.Screens;
+import com.nopalsoft.slamthebird.objects.Enemy;
 
 public class WorldGameRender {
 
@@ -18,59 +17,59 @@ public class WorldGameRender {
     final float HEIGHT = Screens.WORLD_SCREEN_HEIGHT;
 
     SpriteBatch batcher;
-    WorldGame oWorld;
+    WorldGame worldGame;
 
-    OrthographicCamera oCam;
+    OrthographicCamera camera;
 
     Box2DDebugRenderer renderBox;
 
-    public WorldGameRender(SpriteBatch batcher, WorldGame oWorld) {
+    public WorldGameRender(SpriteBatch batcher, WorldGame worldGame) {
 
-        this.oCam = new OrthographicCamera(WIDTH, HEIGHT);
-        this.oCam.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
+        this.camera = new OrthographicCamera(WIDTH, HEIGHT);
+        this.camera.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
 
         this.batcher = batcher;
-        this.oWorld = oWorld;
+        this.worldGame = worldGame;
         this.renderBox = new Box2DDebugRenderer();
     }
 
     public void render() {
 
-        oCam.position.y = oWorld.oRobo.position.y;
+        camera.position.y = worldGame.robot.position.y;
 
-        if (oCam.position.y < HEIGHT / 2f)
-            oCam.position.y = HEIGHT / 2f;
-        else if (oCam.position.y > HEIGHT / 2f + 3)
-            oCam.position.y = HEIGHT / 2f + 3;
+        if (camera.position.y < HEIGHT / 2f)
+            camera.position.y = HEIGHT / 2f;
+        else if (camera.position.y > HEIGHT / 2f + 3)
+            camera.position.y = HEIGHT / 2f + 3;
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        camera.update();
+        batcher.setProjectionMatrix(camera.combined);
 
         batcher.begin();
 
         batcher.enableBlending();
 
-        renderFondo();
-        renderPlataformas();
+        renderBackground();
+        renderPlatforms();
         renderBoost();
-        renderMonedas();
-        renderEnemigos();
+        renderCoins();
+        renderEnemies();
         renderPersonaje();
 
         batcher.end();
-//		renderBox.render(oWorld.oWorldBox, oCam.combined);
+
     }
 
-    private void renderFondo() {
-        batcher.draw(Assets.fondo, 0, 0, WIDTH, HEIGHT + 3);
+    private void renderBackground() {
+        batcher.draw(Assets.background, 0, 0, WIDTH, HEIGHT + 3);
     }
 
-    private void renderPlataformas() {
+    private void renderPlatforms() {
 
-        for (Plataforma obj : oWorld.arrPlataformas) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyFrame = com.nopalsoft.slamthebird.Assets.plataforma;
+        for (com.nopalsoft.slamthebird.objects.Platform obj : worldGame.arrayPlatforms) {
+            TextureRegion keyFrame = Assets.plataforma;
 
-            if (obj.state == Plataforma.STATE_BROKEN) {
+            if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_BROKEN) {
                 if (obj.stateTime < Assets.plataformBreakable.getAnimationDuration())
                     keyFrame = Assets.plataformBreakable.getKeyFrame(
                             obj.stateTime, false);
@@ -78,19 +77,19 @@ public class WorldGameRender {
                     continue;
             }
 
-            if (obj.state == com.nopalsoft.slamthebird.objetos.Plataforma.STATE_BREAKABLE)
-                keyFrame = com.nopalsoft.slamthebird.Assets.plataformBreakable.getKeyFrame(0);
+            if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_BREAKABLE)
+                keyFrame = Assets.plataformBreakable.getKeyFrame(0);
 
-            if (obj.state == com.nopalsoft.slamthebird.objetos.Plataforma.STATE_CHANGING)
+            if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_CHANGING)
                 batcher.draw(keyFrame, obj.position.x - .5f,
                         obj.position.y - .1f, .5f, .15f, 1f, .3f,
-                        obj.changinScale, obj.changinScale, 0);
+                        obj.changingScale, obj.changingScale, 0);
             else
                 batcher.draw(keyFrame, obj.position.x - .5f,
                         obj.position.y - .15f, 1f, .3f);
 
-            if (obj.state == com.nopalsoft.slamthebird.objetos.Plataforma.STATE_FIRE)
-                batcher.draw(com.nopalsoft.slamthebird.Assets.animPlataformFire.getKeyFrame(
+            if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_FIRE)
+                batcher.draw(Assets.animPlataformFire.getKeyFrame(
                                 obj.stateTime, true), obj.position.x - .5f,
                         obj.position.y + .1f, 1f, .3f);
         }
@@ -99,23 +98,23 @@ public class WorldGameRender {
 
     private void renderBoost() {
 
-        for (Boost obj : oWorld.arrBoost) {
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyFrame;
-            switch (obj.tipo) {
+        for (Boost obj : worldGame.arrayBoost) {
+            TextureRegion keyFrame;
+            switch (obj.type) {
                 case Boost.TIPO_COIN_RAIN:
-                    keyFrame = Assets.boostCoinRain;
+                    keyFrame = Assets.coinRainBoost;
                     break;
                 case Boost.TIPO_ICE:
-                    keyFrame = Assets.boostIce;
+                    keyFrame = Assets.IceBoost;
                     break;
 
                 case Boost.TIPO_SUPERJUMP:
-                    keyFrame = Assets.boostSuperSalto;
+                    keyFrame = Assets.superJumpBoost;
                     break;
                 case Boost.TIPO_INVENCIBLE:
 
                 default:
-                    keyFrame = Assets.boostInvencible;
+                    keyFrame = Assets.invincibleBoost;
                     break;
             }
 
@@ -125,39 +124,39 @@ public class WorldGameRender {
 
     }
 
-    private void renderMonedas() {
+    private void renderCoins() {
 
-        for (Moneda obj : oWorld.arrMonedas) {
-            batcher.draw(Assets.animMoneda.getKeyFrame(obj.stateTime, true),
+        for (Coin obj : worldGame.arrayCoins) {
+            batcher.draw(Assets.animationCoin.getKeyFrame(obj.stateTime, true),
                     obj.position.x - .15f, obj.position.y - .15f, .3f, .34f);
         }
 
     }
 
-    public void renderEnemigos() {
-        for (Enemigo obj : oWorld.arrEnemigos) {
-            if (obj.state == Enemigo.STATE_JUST_APPEAR) {
+    public void renderEnemies() {
+        for (Enemy obj : worldGame.arrayEnemies) {
+            if (obj.state == Enemy.STATE_JUST_APPEAR) {
                 batcher.draw(Assets.flapSpawn, obj.position.x - .25f,
                         obj.position.y - .25f, .25f, .25f, .5f, .5f,
                         obj.appearScale, obj.appearScale, 0);
                 continue;
             }
 
-            com.badlogic.gdx.graphics.g2d.TextureRegion keyFrame;
-            if (obj.state == Enemigo.STATE_FLYING) {
-                if (obj.vidas >= 3)
-                    keyFrame = Assets.animflapAlasRojo.getKeyFrame(
+            TextureRegion keyFrame;
+            if (obj.state == Enemy.STATE_FLYING) {
+                if (obj.lives >= 3)
+                    keyFrame = Assets.animationRedBirdFlap.getKeyFrame(
                             obj.stateTime, true);
                 else
-                    keyFrame = Assets.animflapAlasAzul.getKeyFrame(
+                    keyFrame = Assets.animationBlueBirdFlap.getKeyFrame(
                             obj.stateTime, true);
-            } else if (obj.state == Enemigo.STATE_EVOLVING) {
-                keyFrame = Assets.animEvolving.getKeyFrame(obj.stateTime, true);
+            } else if (obj.state == Enemy.STATE_EVOLVING) {
+                keyFrame = Assets.animationEvolving.getKeyFrame(obj.stateTime, true);
             } else {
                 keyFrame = Assets.flapAzul;
             }
 
-            if (obj.velocidad.x > 0)
+            if (obj.speed.x > 0)
                 batcher.draw(keyFrame, obj.position.x - .285f,
                         obj.position.y - .21f, .57f, .42f);
             else
@@ -169,7 +168,7 @@ public class WorldGameRender {
 
     private void renderPersonaje() {
 
-        Robot obj = oWorld.oRobo;
+        Robot obj = worldGame.robot;
         TextureRegion keyFrame;
 
         if (obj.slam && obj.state == Robot.STATE_FALLING) {
@@ -185,10 +184,10 @@ public class WorldGameRender {
 
         // c
 
-        if (obj.velocidad.x > .1f)
+        if (obj.speed.x > .1f)
             batcher.draw(keyFrame, obj.position.x - .3f, obj.position.y - .3f,
                     .3f, .3f, .6f, .6f, 1, 1, obj.angleGrad);
-        else if (obj.velocidad.x < -.1f)
+        else if (obj.speed.x < -.1f)
             batcher.draw(keyFrame, obj.position.x + .3f, obj.position.y - .3f,
                     -.3f, .3f, -.6f, .6f, 1, 1, obj.angleGrad);
         else
@@ -204,21 +203,21 @@ public class WorldGameRender {
     }
 
     private void renderBoostActivo(Robot obj) {
-        if (obj.isInvencible || obj.isSuperJump) {
+        if (obj.isInvincible || obj.isSuperJump) {
             float timeToAlert = 2.5f;// Tiempo para que empieze a parpaderar el boost
             TextureRegion boostKeyFrame;
-            if (obj.isInvencible) {
-                if (obj.DURATION_INVENCIBLE - obj.durationInvencible <= timeToAlert) {
-                    boostKeyFrame = Assets.animBoostEndInvencible.getKeyFrame(
+            if (obj.isInvincible) {
+                if (obj.DURATION_INVINCIBLE - obj.durationInvincible <= timeToAlert) {
+                    boostKeyFrame = Assets.animationInvincibleBoostEnd.getKeyFrame(
                             obj.stateTime, true);// anim
                 } else
-                    boostKeyFrame = Assets.boostInvencible;
+                    boostKeyFrame = Assets.invincibleBoost;
             } else {// jump
                 if (obj.DURATION_SUPER_JUMP - obj.durationSuperJump <= timeToAlert) {
-                    boostKeyFrame = Assets.animBoostEndSuperSalto.getKeyFrame(
+                    boostKeyFrame = Assets.animationSuperJumpBoostEnd.getKeyFrame(
                             obj.stateTime, true);// anim
                 } else
-                    boostKeyFrame = Assets.boostSuperSalto;
+                    boostKeyFrame = Assets.superJumpBoost;
             }
 
             batcher.draw(boostKeyFrame, obj.position.x - .175f,

@@ -1,4 +1,4 @@
-package com.nopalsoft.slamthebird.objetos;
+package com.nopalsoft.slamthebird.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -6,17 +6,17 @@ import com.nopalsoft.slamthebird.Settings;
 
 import java.util.Random;
 
-public class Enemigo {
+public class Enemy {
     public static float WIDTH = .4f;
     public static float HEIGHT = .4f;
 
     public static int STATE_JUST_APPEAR = 0;
     public static int STATE_FLYING = 1;
     public static int STATE_HIT = 2;
-    public static int STATE_EVOLVING = 3;// PAra que vuele otra vez
+    public static int STATE_EVOLVING = 3;// For it to fly again
     public static int STATE_DEAD = 4;
-    public static float MAX_VELOCIDAD_AZUL = 1.75f;
-    public static float MAX_VELOCIDAD_ROJO = 3.25f;
+    public static float MAX_SPEED_BLUE = 1.75f;
+    public static float MAX_SPEED_RED = 3.25f;
     public float TIME_JUST_APPEAR = 1.7f;
     public float TIME_TO_CHANGE_VEL = 3;
     public float timeToChangeVel;
@@ -28,27 +28,27 @@ public class Enemigo {
 
     public float DURARTION_FROZEN = 5f;
     public Vector2 position;
-    public Vector2 velocidad;
+    public Vector2 speed;
     public boolean isFrozen;
     public int state;
     public float stateTime;
-    public int vidas;
+    public int lives;
     public float appearScale;
     float durationFrozen;
 
-    public Enemigo(float x, float y) {
+    public Enemy(float x, float y) {
         position = new Vector2(x, y);
         state = STATE_JUST_APPEAR;
-        vidas = 2;
+        lives = 2;
         stateTime = 0;
-        velocidad = new Vector2();
+        speed = new Vector2();
         isFrozen = false;
         durationFrozen = 0;
-        DURARTION_FROZEN += Settings.NIVEL_BOOST_ICE;
+        DURARTION_FROZEN += Settings.LEVEL_BOOST_ICE;
 
     }
 
-    public void update(float delta, Body body, Random oRan) {
+    public void update(float delta, Body body, Random random) {
         position.x = body.getPosition().x;
         position.y = body.getPosition().y;
 
@@ -57,24 +57,24 @@ public class Enemigo {
             if (durationFrozen >= DURARTION_FROZEN) {
                 isFrozen = false;
                 durationFrozen = 0;
-                setNewVelocity(body, oRan, false);
+                setNewVelocity(body, random, false);
             }
             durationFrozen += delta;
-            return;// Ya no se hace nada mas si esta congelado. No se mueve, no cambia de velocidad, no evoluciona, no nada.
+            return;// Nothing more is done if it is frozen. It doesn't move, it doesn't change speed, it doesn't evolve, it doesn't swim.
         }
 
-        // Pase lo que pase no quiero que este mas arriba de 10f
+        // Whatever happens, I don't want it to be above 10f.
         if (position.y > 10f) {
-            velocidad = body.getLinearVelocity();
-            body.setLinearVelocity(velocidad.x, velocidad.y * -1);
+            speed = body.getLinearVelocity();
+            body.setLinearVelocity(speed.x, speed.y * -1);
         }
         if (state == STATE_JUST_APPEAR) {
-            appearScale = stateTime * 1.5f / TIME_JUST_APPEAR;// 1.5f escala maxima
+            appearScale = stateTime * 1.5f / TIME_JUST_APPEAR;// 1.5f maximum scale
 
             if (stateTime >= TIME_JUST_APPEAR) {
                 state = STATE_FLYING;
                 stateTime = 0;
-                setNewVelocity(body, oRan, false);
+                setNewVelocity(body, random, false);
             }
         }
 
@@ -86,12 +86,12 @@ public class Enemigo {
 
                 Vector2 vel = body.getLinearVelocity();
 
-                // Cambio en X
-                if (oRan.nextBoolean())
+                // Change in X
+                if (random.nextBoolean())
                     vel.x *= -1;
 
                 if (state == STATE_FLYING) {
-                    if (oRan.nextBoolean())
+                    if (random.nextBoolean())
                         vel.y *= -1;
                 }
                 body.setLinearVelocity(vel);
@@ -111,67 +111,67 @@ public class Enemigo {
         if (state == STATE_EVOLVING && stateTime >= DURARTION_EVOLVING) {
             state = STATE_FLYING;
             body.setGravityScale(0);
-            setNewVelocity(body, oRan, true);
-            vidas = 3;
+            setNewVelocity(body, random, true);
+            lives = 3;
             stateTime = 0;
         }
 
-        velocidad = body.getLinearVelocity();
+        speed = body.getLinearVelocity();
 
-        controlarVelocidad(body);
-        velocidad = body.getLinearVelocity();
+        limitSpeed(body);
+        speed = body.getLinearVelocity();
 
         stateTime += delta;
     }
 
     /*
-     * Limita la velocidad porque a veces la fuerza resultande te la colision ponia loco al enemigo
+     * Limit the speed because sometimes the force resulting from the collision drove the enemy crazy.
      */
-    private void controlarVelocidad(Body body) {
-        float vel = MAX_VELOCIDAD_AZUL;
-        if (vidas == 3)
-            vel = MAX_VELOCIDAD_ROJO;
+    private void limitSpeed(Body body) {
+        float vel = MAX_SPEED_BLUE;
+        if (lives == 3)
+            vel = MAX_SPEED_RED;
 
-        if (velocidad.x > vel) {
-            velocidad.x = vel;
-        } else if (velocidad.x < -vel) {
-            velocidad.x = -vel;
+        if (speed.x > vel) {
+            speed.x = vel;
+        } else if (speed.x < -vel) {
+            speed.x = -vel;
         }
 
-        if (vidas > 1) {// Asi el pajaro cai rapido si le quito las alas
-            if (velocidad.y > vel) {
-                velocidad.y = vel;
-            } else if (velocidad.y < -vel) {
-                velocidad.y = -vel;
+        if (lives > 1) {// So the bird fell quickly if I took off its wings.
+            if (speed.y > vel) {
+                speed.y = vel;
+            } else if (speed.y < -vel) {
+                speed.y = -vel;
             }
         }
-        body.setLinearVelocity(velocidad);
+        body.setLinearVelocity(speed);
 
     }
 
     /**
-     * Si esta tocando el piso hago que la velocidad en Y siempre se genere positiva.
+     * If it is touching the floor I make the Y velocity always generated positive.
      */
-    private void setNewVelocity(Body body, Random oRan, boolean isTouchingFLoor) {
-        float vel = MAX_VELOCIDAD_AZUL;
-        if (vidas == 3)
-            vel = MAX_VELOCIDAD_ROJO;
+    private void setNewVelocity(Body body, Random random, boolean isTouchingFLoor) {
+        float vel = MAX_SPEED_BLUE;
+        if (lives == 3)
+            vel = MAX_SPEED_RED;
 
-        float velX = oRan.nextFloat() * vel * 2 - vel;
-        float velY;
+        float velocityX = random.nextFloat() * vel * 2 - vel;
+        float velocityY;
         if (isTouchingFLoor)
-            velY = oRan.nextFloat() * vel;
+            velocityY = random.nextFloat() * vel;
         else
-            velY = oRan.nextFloat() * vel * 2 - vel;
+            velocityY = random.nextFloat() * vel * 2 - vel;
 
-        body.setLinearVelocity(velX, velY);
+        body.setLinearVelocity(velocityX, velocityY);
     }
 
     public void hit() {
-        vidas--;
-        if (vidas == 1)
+        lives--;
+        if (lives == 1)
             state = STATE_HIT;
-        else if (vidas == 0)
+        else if (lives == 0)
             state = STATE_DEAD;
 
         stateTime = 0;
@@ -179,7 +179,7 @@ public class Enemigo {
     }
 
     public void die() {
-        vidas = 0;
+        lives = 0;
         state = STATE_DEAD;
         stateTime = 0;
     }

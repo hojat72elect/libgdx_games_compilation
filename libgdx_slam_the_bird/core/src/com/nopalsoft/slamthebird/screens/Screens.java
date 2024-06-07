@@ -78,25 +78,25 @@ public abstract class Screens extends InputAdapter implements Screen {
             char character = score.charAt(i);
 
             if (character == '0') {
-                keyFrame = Assets.num0Grande;
+                keyFrame = Assets.num0Big;
             } else if (character == '1') {
-                keyFrame = Assets.num1Grande;
+                keyFrame = Assets.num1Big;
             } else if (character == '2') {
-                keyFrame = Assets.num2Grande;
+                keyFrame = Assets.num2Big;
             } else if (character == '3') {
-                keyFrame = Assets.num3Grande;
+                keyFrame = Assets.num3Big;
             } else if (character == '4') {
-                keyFrame = Assets.num4Grande;
+                keyFrame = Assets.num4Big;
             } else if (character == '5') {
-                keyFrame = Assets.num5Grande;
+                keyFrame = Assets.num5Big;
             } else if (character == '6') {
-                keyFrame = Assets.num6Grande;
+                keyFrame = Assets.num6Big;
             } else if (character == '7') {
-                keyFrame = Assets.num7Grande;
+                keyFrame = Assets.num7Big;
             } else if (character == '8') {
-                keyFrame = Assets.num8Grande;
+                keyFrame = Assets.num8Big;
             } else {// 9
-                keyFrame = Assets.num9Grande;
+                keyFrame = Assets.num9Big;
             }
 
             batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,
@@ -118,26 +118,26 @@ public abstract class Screens extends InputAdapter implements Screen {
             char character = score.charAt(i);
 
             if (character == '0') {
-                keyFrame = Assets.num0Chico;
+                keyFrame = Assets.num0Small;
             } else if (character == '1') {
-                keyFrame = Assets.num1Chico;
+                keyFrame = Assets.num1Small;
                 charWidth = 11f;
             } else if (character == '2') {
-                keyFrame = Assets.num2Chico;
+                keyFrame = Assets.num2Small;
             } else if (character == '3') {
-                keyFrame = Assets.num3Chico;
+                keyFrame = Assets.num3Small;
             } else if (character == '4') {
-                keyFrame = Assets.num4Chico;
+                keyFrame = Assets.num4Small;
             } else if (character == '5') {
-                keyFrame = Assets.num5Chico;
+                keyFrame = Assets.num5Small;
             } else if (character == '6') {
-                keyFrame = Assets.num6Chico;
+                keyFrame = Assets.num6Small;
             } else if (character == '7') {
-                keyFrame = Assets.num7Chico;
+                keyFrame = Assets.num7Small;
             } else if (character == '8') {
-                keyFrame = Assets.num8Chico;
+                keyFrame = Assets.num8Small;
             } else {// 9
-                keyFrame = Assets.num9Chico;
+                keyFrame = Assets.num9Small;
             }
             textWidth += charWidth;
             batcher.draw(keyFrame, x - textWidth, y, charWidth, 32);
@@ -156,25 +156,25 @@ public abstract class Screens extends InputAdapter implements Screen {
             char character = score.charAt(i);
 
             if (character == '0') {
-                keyFrame = Assets.num0Chico;
+                keyFrame = Assets.num0Small;
             } else if (character == '1') {
-                keyFrame = Assets.num1Chico;
+                keyFrame = Assets.num1Small;
             } else if (character == '2') {
-                keyFrame = Assets.num2Chico;
+                keyFrame = Assets.num2Small;
             } else if (character == '3') {
-                keyFrame = Assets.num3Chico;
+                keyFrame = Assets.num3Small;
             } else if (character == '4') {
-                keyFrame = Assets.num4Chico;
+                keyFrame = Assets.num4Small;
             } else if (character == '5') {
-                keyFrame = Assets.num5Chico;
+                keyFrame = Assets.num5Small;
             } else if (character == '6') {
-                keyFrame = Assets.num6Chico;
+                keyFrame = Assets.num6Small;
             } else if (character == '7') {
-                keyFrame = Assets.num7Chico;
+                keyFrame = Assets.num7Small;
             } else if (character == '8') {
-                keyFrame = Assets.num8Chico;
+                keyFrame = Assets.num8Small;
             } else {// 9
-                keyFrame = Assets.num9Chico;
+                keyFrame = Assets.num9Small;
             }
 
             batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,

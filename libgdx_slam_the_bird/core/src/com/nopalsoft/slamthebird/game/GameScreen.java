@@ -15,11 +15,11 @@ import com.nopalsoft.slamthebird.Achievements;
 import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.MainSlamBird;
 import com.nopalsoft.slamthebird.Settings;
+import com.nopalsoft.slamthebird.scene2d.LabelCoins;
 import com.nopalsoft.slamthebird.scene2d.LabelCombo;
-import com.nopalsoft.slamthebird.scene2d.LabelMonedas;
 import com.nopalsoft.slamthebird.scene2d.LabelScore;
-import com.nopalsoft.slamthebird.scene2d.VentanaPause;
-import com.nopalsoft.slamthebird.scene2d.VentanaRate;
+import com.nopalsoft.slamthebird.scene2d.WindowPause;
+import com.nopalsoft.slamthebird.scene2d.WindowRate;
 import com.nopalsoft.slamthebird.screens.Screens;
 import com.nopalsoft.slamthebird.shop.ShopScreen;
 
@@ -32,124 +32,120 @@ public class GameScreen extends Screens {
 
     static int state;
 
-    WorldGame oWorld;
+    WorldGame worldGame;
     WorldGameRender renderer;
-
-    Image fondoGameover;
-
+    Image imageGameOver;
     Group groupTryAgain;
-    Group botones;
-    Image tituloApp;
-    boolean sideComboText;// Esta variable hace que apareza el texto del combo a la izq luego derecha luego izq,der,izq
+    Group groupButtons;
+    Image imageAppTitle;
+    boolean sideComboText;// Create new scratch file from selection.
 
-    VentanaRate ventanaRate;
-    VentanaPause ventanaPause;
+    WindowRate windowRate;
+    WindowPause windowPause;
     int combo;
 
     public GameScreen(MainSlamBird game) {
         super(game);
-        oWorld = new WorldGame();
-        renderer = new WorldGameRender(batcher, oWorld);
+        worldGame = new WorldGame();
+        renderer = new WorldGameRender(batcher, worldGame);
 
         groupTryAgain = new Group();
-        ventanaRate = new VentanaRate(this);
-        ventanaPause = new VentanaPause(this);
+        windowRate = new WindowRate(this);
+        windowPause = new WindowPause(this);
 
-        setUpBotones();
+        setUpButtons();
         setUpGameover();
-
         setReady();
 
     }
 
-    private void setUpBotones() {
-        botones = new Group();
-        botones.setSize(stage.getWidth(), stage.getHeight());
-        botones.addListener(new InputListener() {
+    private void setUpButtons() {
+        groupButtons = new Group();
+        groupButtons.setSize(stage.getWidth(), stage.getHeight());
+        groupButtons.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
-                if (ventanaRate.isVisible())
+                if (windowRate.isVisible())
                     return false;
 
                 setRunning();
-                Settings.numeroVecesJugadas++;
+                Settings.numberOfTimesPlayed++;
                 return true;
             }
         });
 
-        Button btAchievements, btLeaderboard, btMore, btRate, btShop;
-        Button btShareFacebook, btShareTwitter;
+        Button buttonAchievements, buttonLeaderboard, buttonMore, buttonRate, buttonShop;
+        Button buttonShareFacebook, buttonShareTwitter;
 
         Image tapToPlay, bestScore;
 
         bestScore = new Image(Assets.bestScore);
         bestScore.setSize(170, 25);
-        bestScore
-                .setPosition(SCREEN_WIDTH / 2f - bestScore.getWidth() / 2f, 770);
+        bestScore.setPosition(SCREEN_WIDTH / 2f - bestScore.getWidth() / 2f, 770);
         bestScore.addAction(Actions.repeat(
                 Integer.MAX_VALUE,
                 Actions.sequence(Actions.alpha(.6f, .75f),
                         Actions.alpha(1, .75f))));
 
-        btShop = new Button(Assets.btShop);
-        btShop.setSize(90, 70);
-        btShop.setPosition(0, 730);
-        addEfectoPress(btShop);
-        btShop.addListener(new ClickListener() {
+        buttonShop = new Button(Assets.buttonShop);
+        buttonShop.setSize(90, 70);
+        buttonShop.setPosition(0, 730);
+        addEfectoPress(buttonShop);
+        buttonShop.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 changeScreenWithFadeOut(ShopScreen.class, game);
             }
         });
 
-        btMore = new Button(Assets.btMore);
-        btMore.setSize(90, 70);
-        btMore.setPosition(390, 730);
-        addEfectoPress(btMore);
-        btMore.addListener(new ClickListener() {
+        buttonMore = new Button(Assets.buttonMore);
+        buttonMore.setSize(90, 70);
+        buttonMore.setPosition(390, 730);
+        addEfectoPress(buttonMore);
+        buttonMore.addListener(new ClickListener() {
         });
 
-        btLeaderboard = new Button(Assets.btLeaderboard);
-        btLeaderboard.setSize(110, 75);
-        btLeaderboard.setPosition(230 - 110, 310);
-        addEfectoPress(btLeaderboard);
-        btLeaderboard.addListener(new ClickListener() {
+        buttonLeaderboard = new Button(Assets.buttonLeaderBoard);
+        buttonLeaderboard.setSize(110, 75);
+        buttonLeaderboard.setPosition(230 - 110, 310);
+        addEfectoPress(buttonLeaderboard);
+        buttonLeaderboard.addListener(new ClickListener() {
         });
 
-        btAchievements = new Button(Assets.btAchievements);
-        btAchievements.setSize(110, 75);
-        btAchievements.setPosition(250, 310);
-        addEfectoPress(btAchievements);
-        btAchievements.addListener(new ClickListener() {
+        buttonAchievements = new Button(Assets.buttonAchievements);
+        buttonAchievements.setSize(110, 75);
+        buttonAchievements.setPosition(250, 310);
+        addEfectoPress(buttonAchievements);
+        buttonAchievements.addListener(new ClickListener() {
         });
 
-        btRate = new Button(Assets.btRate);
-        btRate.setSize(110, 75);
+        buttonRate = new Button(Assets.buttonRate);
+        buttonRate.setSize(110, 75);
 
-        btRate.setPosition(SCREEN_WIDTH / 2f - btRate.getWidth() / 2f - 25, 220);// Con el boton face y twitter cambia la pos
-        addEfectoPress(btRate);
-        btRate.addListener(new ClickListener() {
+        buttonRate.setPosition(SCREEN_WIDTH / 2f - buttonRate.getWidth() / 2f - 25, 220);// Con el boton face y twitter cambia la pos
+        addEfectoPress(buttonRate);
+        buttonRate.addListener(new ClickListener() {
         });
 
-        btShareFacebook = new Button(new TextureRegionDrawable(
-                Assets.btFacebook));
-        btShareFacebook.setSize(40, 40);
-        btShareFacebook.setPosition(280, 257);
-        addEfectoPress(btShareFacebook);
-        btShareFacebook.addListener(new ClickListener() {
+        buttonShareFacebook = new Button(new TextureRegionDrawable(
+                Assets.buttonFacebook));
+        buttonShareFacebook.setSize(40, 40);
+        buttonShareFacebook.setPosition(280, 257);
+        addEfectoPress(buttonShareFacebook);
+        buttonShareFacebook.addListener(new ClickListener() {
         });
 
-        btShareTwitter = new Button(new TextureRegionDrawable(Assets.btTwitter));
-        btShareTwitter.setSize(40, 40);
-        btShareTwitter.setPosition(280, 212);
-        addEfectoPress(btShareTwitter);
-        btShareTwitter.addListener(new ClickListener() {
+        buttonShareTwitter = new Button(new TextureRegionDrawable(Assets.buttonTwitter));
+        buttonShareTwitter.setSize(40, 40);
+        buttonShareTwitter.setPosition(280, 212);
+        addEfectoPress(buttonShareTwitter);
+        buttonShareTwitter.addListener(new ClickListener() {
         });
 
         final Button btMusica, btSonido;
 
-        btMusica = new Button(Assets.styleButtonMusica);
+        btMusica = new Button(Assets.buttonStyleMusic);
         btMusica.setPosition(5, 100);
         btMusica.setChecked(!Settings.isMusicOn);
         btMusica.addListener(new InputListener() {
@@ -176,7 +172,7 @@ public class GameScreen extends Screens {
             }
         });
 
-        btSonido = new Button(Assets.styleButtonSonido);
+        btSonido = new Button(Assets.buttonStyleSound);
         btSonido.setPosition(5, 180);
         btSonido.setChecked(!Settings.isSoundOn);
         btSonido.addListener(new InputListener() {
@@ -211,29 +207,29 @@ public class GameScreen extends Screens {
                 Actions.scaleTo(1f, 1f, scaleTime))));
 
 
-        botones.addActor(tapToPlay);
-        botones.addActor(bestScore);
-        botones.addActor(btShop);
-        botones.addActor(btMore);
-        botones.addActor(btLeaderboard);
-        botones.addActor(btAchievements);
-        botones.addActor(btRate);
-        botones.addActor(btMusica);
-        botones.addActor(btSonido);
-        botones.addActor(btShareFacebook);
-        botones.addActor(btShareTwitter);
+        groupButtons.addActor(tapToPlay);
+        groupButtons.addActor(bestScore);
+        groupButtons.addActor(buttonShop);
+        groupButtons.addActor(buttonMore);
+        groupButtons.addActor(buttonLeaderboard);
+        groupButtons.addActor(buttonAchievements);
+        groupButtons.addActor(buttonRate);
+        groupButtons.addActor(btMusica);
+        groupButtons.addActor(btSonido);
+        groupButtons.addActor(buttonShareFacebook);
+        groupButtons.addActor(buttonShareTwitter);
     }
 
     private void setUpGameover() {
-        fondoGameover = new Image(Assets.fondoGameover);
-        fondoGameover.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        fondoGameover.setOrigin(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
-        fondoGameover.setScale(2);
-        fondoGameover.addAction(Actions.sequence(
+        imageGameOver = new Image(Assets.backgroundGameOver);
+        imageGameOver.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        imageGameOver.setOrigin(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
+        imageGameOver.setScale(2);
+        imageGameOver.addAction(Actions.sequence(
                 Actions.scaleTo(1.1f, 1.1f, .25f), Actions.delay(1f),
                 Actions.run(() -> {
-                    fondoGameover.remove();
-                    fondoGameover.setScale(2);
+                    imageGameOver.remove();
+                    imageGameOver.setScale(2);
                     setTryAgain();
                 })));
 
@@ -264,7 +260,7 @@ public class GameScreen extends Screens {
         else if (Gdx.input.isKeyPressed(Keys.D))
             acelX = 1;
 
-        oWorld.updateReady(delta, acelX);
+        worldGame.updateReady(delta, acelX);
 
     }
 
@@ -285,21 +281,21 @@ public class GameScreen extends Screens {
             Gdx.app.log("Slam is", " " + true);
         }
 
-        oWorld.update(delta, acelX, slam);
+        worldGame.update(delta, acelX, slam);
 
-        if (oWorld.state == WorldGame.STATE_GAME_OVER) {
+        if (worldGame.state == WorldGame.STATE_GAME_OVER) {
             setGameover();
         }
 
-        if (oWorld.combo == 0)
+        if (worldGame.combo == 0)
             combo = 0;
 
-        if (oWorld.combo > combo) {
+        if (worldGame.combo > combo) {
             stage.getBatch().setColor(1, 1, 1, 1);// Un BUG que no pone el alpha en 1 otra vez
 
-            combo = oWorld.combo;
-            LabelCombo lblCombo = new LabelCombo(oWorld.oRobo.position.x * 100,
-                    oWorld.oRobo.position.y * 100 - 50, combo);
+            combo = worldGame.combo;
+            LabelCombo lblCombo = new LabelCombo(worldGame.robot.position.x * 100,
+                    worldGame.robot.position.y * 100 - 50, combo);
 
             float sideToMove;
             if (sideComboText) {
@@ -343,10 +339,10 @@ public class GameScreen extends Screens {
     }
 
     private void drawRunning() {
-        drawNumGrandeCentradoX(SCREEN_WIDTH / 2f, 700, oWorld.scoreSlamed);
+        drawNumGrandeCentradoX(SCREEN_WIDTH / 2f, 700, worldGame.scoreSlammed);
 
-        batcher.draw(Assets.moneda, 449, 764, 30, 34);
-        drawPuntuacionChicoOrigenDerecha(445, 764, oWorld.monedasTomadas);
+        batcher.draw(Assets.coin, 449, 764, 30, 34);
+        drawPuntuacionChicoOrigenDerecha(445, 764, worldGame.takenCoins);
 
     }
 
@@ -359,7 +355,7 @@ public class GameScreen extends Screens {
     private void setPaused() {
         if (state == STATE_RUNNING) {
             state = STATE_PAUSED;
-            ventanaPause.show(stage);
+            windowPause.show(stage);
         }
 
     }
@@ -372,13 +368,13 @@ public class GameScreen extends Screens {
     }
 
     private void setReady() {
-        tituloApp = new Image(Assets.titulo);
-        tituloApp.setSize(400, 290);
-        tituloApp.setPosition(SCREEN_WIDTH / 2f - tituloApp.getWidth() / 2f,
+        imageAppTitle = new Image(Assets.title);
+        imageAppTitle.setSize(400, 290);
+        imageAppTitle.setPosition(SCREEN_WIDTH / 2f - imageAppTitle.getWidth() / 2f,
                 415);
         state = STATE_READY;
-        stage.addActor(botones);
-        stage.addActor(tituloApp);
+        stage.addActor(groupButtons);
+        stage.addActor(imageAppTitle);
 
     }
 
@@ -386,11 +382,11 @@ public class GameScreen extends Screens {
 
         groupTryAgain.addAction(Actions.sequence(Actions.fadeOut(.5f),
                 Actions.removeActor()));
-        tituloApp.addAction(Actions.sequence(Actions.fadeOut(.5f),
+        imageAppTitle.addAction(Actions.sequence(Actions.fadeOut(.5f),
                 Actions.removeActor()));
-        botones.addAction(Actions.sequence(Actions.fadeOut(.5f),
+        groupButtons.addAction(Actions.sequence(Actions.fadeOut(.5f),
                 Actions.run(() -> {
-                    botones.remove();
+                    groupButtons.remove();
                     groupTryAgain.remove();// POr el bug
                     state = STATE_RUNNING;
                 })));
@@ -398,9 +394,9 @@ public class GameScreen extends Screens {
     }
 
     private void setGameover() {
-        Settings.setBestScores(oWorld.scoreSlamed);
+        Settings.setBestScores(worldGame.scoreSlammed);
         state = STATE_GAME_OVER;
-        stage.addActor(fondoGameover);
+        stage.addActor(imageGameOver);
     }
 
     private void setTryAgain() {
@@ -414,23 +410,22 @@ public class GameScreen extends Screens {
         groupTryAgain.addAction(Actions.sequence(Actions.moveTo(
                 groupTryAgain.getX(), 410, 1, Interpolation.bounceOut), Actions
                 .run(() -> {
-                    botones.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn(.5f));
-                    stage.addActor(botones);
+                    groupButtons.addAction(Actions.fadeIn(.5f));
+                    stage.addActor(groupButtons);
 
-                    if (com.nopalsoft.slamthebird.Settings.numeroVecesJugadas % 7 == 0
-                            && !com.nopalsoft.slamthebird.Settings.seCalifico) {
-                        ventanaRate.show(stage);
+                    if (Settings.numberOfTimesPlayed % 7 == 0
+                            && !Settings.isQualified) {
+                        windowRate.show(stage);
                     }
                 })));
 
-        Image background = new Image(Assets.fondoPuntuaciones);
+        Image background = new Image(Assets.buttonScores);
         background.setSize(groupTryAgain.getWidth(), groupTryAgain.getHeight());
         groupTryAgain.addActor(background);
 
         /*
          * Aqui voy a agregar lo de mas del try agai
          */
-
         Image score = new Image(Assets.score);
         score.setSize(225, 70);
         score.setPosition(420 / 2f - score.getWidth() / 2f, 200);
@@ -439,19 +434,18 @@ public class GameScreen extends Screens {
         coinsEarned.setSize(243, 25);
         coinsEarned.setPosition(25, 47);
 
-        LabelScore lblScore = new LabelScore(420 / 2f, 120, oWorld.scoreSlamed);
-        LabelMonedas lblMonedas = new LabelMonedas(385, 45,
-                oWorld.monedasTomadas);
+        LabelScore labelScore = new LabelScore(420 / 2f, 120, worldGame.scoreSlammed);
+        LabelCoins labelCoins = new LabelCoins(385, 45, worldGame.takenCoins);
 
         Achievements.unlockCoins();
 
         groupTryAgain.addActor(score);
-        groupTryAgain.addActor(lblScore);
-        groupTryAgain.addActor(lblMonedas);
+        groupTryAgain.addActor(labelScore);
+        groupTryAgain.addActor(labelCoins);
         groupTryAgain.addActor(coinsEarned);
 
-        oWorld = new WorldGame();
-        renderer = new WorldGameRender(batcher, oWorld);
+        worldGame = new WorldGame();
+        renderer = new WorldGameRender(batcher, worldGame);
 
         stage.addActor(groupTryAgain);
 

@@ -16,7 +16,7 @@ import com.nopalsoft.slamthebird.screens.Screens;
 
 public class ShopScreen extends Screens {
 
-    Button btPersonajes, btPowerUps, btMonedas, btNoAds, btAtras;
+    Button btPersonajes, btPowerUps, buttonCoins, btNoAds, btAtras;
 
     ScrollPane scroll;
     Table contenedor;
@@ -27,12 +27,12 @@ public class ShopScreen extends Screens {
         shop.setSize(135, 50);
         shop.setPosition(3, 747);
 
-        Image separadorH = new Image(Assets.separadorHorizontal);
+        Image separadorH = new Image(Assets.horizontalSeparator);
         separadorH.setSize(SCREEN_WIDTH, 5);
         separadorH.setColor(Color.LIGHT_GRAY);
         separadorH.setPosition(0, 740);
 
-        Image separadorV = new Image(Assets.separadorVertical);
+        Image separadorV = new Image(Assets.verticalSeparator);
         separadorV.setSize(5, 745);
         separadorV.setColor(Color.LIGHT_GRAY);
         separadorV.setPosition(90, 0);
@@ -40,8 +40,7 @@ public class ShopScreen extends Screens {
         initButtons();
 
         contenedor = new Table();
-        // contenedor.debug();
-        scroll = new ScrollPane(contenedor, Assets.styleScrollPane);
+        scroll = new ScrollPane(contenedor, Assets.scrollPaneStyle);
         scroll.setSize(SCREEN_WIDTH - 95, (SCREEN_HEIGHT - 62));
         scroll.setPosition(95, 0);
 
@@ -50,14 +49,14 @@ public class ShopScreen extends Screens {
         stage.addActor(separadorH);
         stage.addActor(btPersonajes);
         stage.addActor(btPowerUps);
-        stage.addActor(btMonedas);
+        stage.addActor(buttonCoins);
         stage.addActor(btNoAds);
         stage.addActor(btAtras);
         stage.addActor(scroll);
 
-        new PersonajesSubMenu(game, contenedor);
+        new PlayersSubMenu(game, contenedor);
 
-        btMonedas.remove();
+        buttonCoins.remove();
 
     }
 
@@ -71,7 +70,7 @@ public class ShopScreen extends Screens {
             public void clicked(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y) {
-                new PersonajesSubMenu(game, contenedor);
+                new PlayersSubMenu(game, contenedor);
             }
 
         });
@@ -89,11 +88,11 @@ public class ShopScreen extends Screens {
 
         });
 
-        btMonedas = new Button(new TextureRegionDrawable(Assets.moneda));
-        btMonedas.setSize(55, 55);
-        btMonedas.setPosition(17, 480);
-        addEfectoPress(btMonedas);
-        btMonedas.addListener(new ClickListener() {
+        buttonCoins = new Button(new TextureRegionDrawable(Assets.coin));
+        buttonCoins.setSize(55, 55);
+        buttonCoins.setPosition(17, 480);
+        addEfectoPress(buttonCoins);
+        buttonCoins.addListener(new ClickListener() {
             public void clicked(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y) {
@@ -101,7 +100,7 @@ public class ShopScreen extends Screens {
             }
         });
 
-        btNoAds = new Button(new TextureRegionDrawable(Assets.btNoAds));
+        btNoAds = new Button(new TextureRegionDrawable(Assets.buttonNoAds));
         btNoAds.setSize(55, 55);
         btNoAds.setPosition(17, 390);
         addEfectoPress(btNoAds);
@@ -113,7 +112,7 @@ public class ShopScreen extends Screens {
             }
         });
 
-        btAtras = new Button(new TextureRegionDrawable(Assets.btAtras));
+        btAtras = new Button(new TextureRegionDrawable(Assets.buttonBack));
         btAtras.setSize(55, 55);
         btAtras.setPosition(17, 10);
         addEfectoPress(btAtras);
@@ -133,8 +132,8 @@ public class ShopScreen extends Screens {
         batcher.setProjectionMatrix(oCam.combined);
 
         batcher.begin();
-        batcher.draw(Assets.moneda, 449, 764, 30, 34);
-        drawPuntuacionChicoOrigenDerecha(445, 764, Settings.monedasActuales);
+        batcher.draw(Assets.coin, 449, 764, 30, 34);
+        drawPuntuacionChicoOrigenDerecha(445, 764, Settings.currentCoins);
         batcher.end();
     }
 

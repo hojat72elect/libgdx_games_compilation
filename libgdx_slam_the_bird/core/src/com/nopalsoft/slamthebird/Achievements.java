@@ -12,12 +12,12 @@ public class Achievements {
     public static void init() {
 
 
-            SuperJump = "20274";
-            SlamCombo = "20276";
-            SuperSlam = "20278";
-            InvencibleSlam = "20280";
-            YouGotAnySpareChange = "20282";
-            coinMaster = "20284";
+        SuperJump = "20274";
+        SlamCombo = "20276";
+        SuperSlam = "20278";
+        InvencibleSlam = "20280";
+        YouGotAnySpareChange = "20282";
+        coinMaster = "20284";
 
         didInit = true;
     }

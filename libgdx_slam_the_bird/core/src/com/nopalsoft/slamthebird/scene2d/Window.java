@@ -8,20 +8,20 @@ import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.MainSlamBird;
 import com.nopalsoft.slamthebird.screens.Screens;
 
-public class Ventana extends Group {
-    public static final float DURACION_ANIMATION = .3f;
+public class Window extends Group {
+    public static final float DURATION_ANIMATION = .3f;
     Screens screen;
     MainSlamBird game;
 
     private boolean isVisible = false;
 
-    public Ventana(Screens currentScreen) {
+    public Window(Screens currentScreen) {
         screen = currentScreen;
         game = currentScreen.game;
     }
 
     public void setBackGround() {
-        Image img = new Image(Assets.fondoPuntuaciones);
+        Image img = new Image(Assets.buttonScores);
         img.setSize(getWidth(), getHeight());
         addActor(img);
 
@@ -33,7 +33,7 @@ public class Ventana extends Group {
         setX(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f);
 
         setScale(.5f);
-        addAction(Actions.sequence(Actions.scaleTo(1, 1, DURACION_ANIMATION),
+        addAction(Actions.sequence(Actions.scaleTo(1, 1, DURATION_ANIMATION),
                 Actions.run(this::endResize)));
 
         isVisible = true;

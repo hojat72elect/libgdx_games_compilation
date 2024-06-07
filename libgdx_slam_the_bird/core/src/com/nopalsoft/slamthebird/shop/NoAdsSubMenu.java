@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.MainSlamBird;
 import com.nopalsoft.slamthebird.Settings;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class NoAdsSubMenu {
 
@@ -29,17 +29,17 @@ public class NoAdsSubMenu {
         contenedor.clear();
 
         if (!Settings.didBuyNoAds)
-            lblNoAds = new Label(priceNoAds + "", Assets.styleLabelChico);
+            lblNoAds = new Label(priceNoAds + "", Assets.labelStyleSmall);
 
-        btNoAds = new TextButton("Buy", Assets.styleTextButtonBuy);
+        btNoAds = new TextButton("Buy", Assets.textButtonStyleBuy);
         if (Settings.didBuyNoAds)
             btNoAds.setVisible(false);
         addEfectoPress(btNoAds);
         btNoAds.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.monedasActuales >= priceNoAds) {
-                    Settings.monedasActuales -= priceNoAds;
+                if (Settings.currentCoins >= priceNoAds) {
+                    Settings.currentCoins -= priceNoAds;
                     Settings.didBuyNoAds = true;
                     lblNoAds.setVisible(false);
                     btNoAds.setVisible(false);
@@ -48,10 +48,10 @@ public class NoAdsSubMenu {
         });
 
         // Upgrade BoostTime
-        contenedor.add(new Image(Assets.separadorHorizontal)).expandX().fill().height(5);
+        contenedor.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5);
         contenedor.row();
         contenedor
-                .add(agregarPersonajeTabla(lblNoAds, Assets.btNoAds,
+                .add(agregarPersonajeTabla(lblNoAds, Assets.buttonNoAds,
                         btNoAds)).expandX().fill();
         contenedor.row();
 
@@ -60,20 +60,20 @@ public class NoAdsSubMenu {
     private Table agregarPersonajeTabla(Label lblPrecio, TextureRegionDrawable imagen,
                                         com.badlogic.gdx.scenes.scene2d.ui.TextButton boton) {
 
-        Image moneda = new Image(Assets.moneda);
+        Image moneda = new Image(Assets.coin);
         Image imgPersonaje = new Image(imagen);
 
         if (lblPrecio == null)
             moneda.setVisible(false);
 
         Table tbBarraTitulo = new Table();
-        tbBarraTitulo.add(new Label("No more ads", Assets.styleLabelChico)).expandX().left().padLeft(5);
+        tbBarraTitulo.add(new Label("No more ads", Assets.labelStyleSmall)).expandX().left().padLeft(5);
         tbBarraTitulo.add(moneda).right();
         tbBarraTitulo.add(lblPrecio).right().padRight(10);
 
         Table tbDescrip = new Table();
         tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label("Buy it and no more ads will apper in the app", Assets.styleLabelChico);
+        Label lblDescripcion = new Label("Buy it and no more ads will apper in the app", Assets.labelStyleSmall);
         lblDescripcion.setWrap(true);
         tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
 
@@ -86,7 +86,7 @@ public class NoAdsSubMenu {
         tbContent.add(boton).right().padRight(10).size(120, 45);
 
         tbContent.row().colspan(2);
-        tbContent.add(new Image(Assets.separadorHorizontal)).expandX().fill().height(5).padTop(15);
+        tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5).padTop(15);
 
         return tbContent;
 

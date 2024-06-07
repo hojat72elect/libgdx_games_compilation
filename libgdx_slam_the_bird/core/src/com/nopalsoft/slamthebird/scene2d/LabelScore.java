@@ -31,25 +31,25 @@ public class LabelScore extends Actor {
             char character = score.charAt(i);
 
             if (character == '0') {
-                keyFrame = Assets.num0Grande;
+                keyFrame = Assets.num0Big;
             } else if (character == '1') {
-                keyFrame = Assets.num1Grande;
+                keyFrame = Assets.num1Big;
             } else if (character == '2') {
-                keyFrame = Assets.num2Grande;
+                keyFrame = Assets.num2Big;
             } else if (character == '3') {
-                keyFrame = Assets.num3Grande;
+                keyFrame = Assets.num3Big;
             } else if (character == '4') {
-                keyFrame = Assets.num4Grande;
+                keyFrame = Assets.num4Big;
             } else if (character == '5') {
-                keyFrame = Assets.num5Grande;
+                keyFrame = Assets.num5Big;
             } else if (character == '6') {
-                keyFrame = Assets.num6Grande;
+                keyFrame = Assets.num6Big;
             } else if (character == '7') {
-                keyFrame = Assets.num7Grande;
+                keyFrame = Assets.num7Big;
             } else if (character == '8') {
-                keyFrame = Assets.num8Grande;
+                keyFrame = Assets.num8Big;
             } else {// 9
-                keyFrame = Assets.num9Grande;
+                keyFrame = Assets.num9Big;
             }
             batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f, y, charWidth, 64);
         }

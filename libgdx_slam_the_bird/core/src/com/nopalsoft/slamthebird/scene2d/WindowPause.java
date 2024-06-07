@@ -8,11 +8,11 @@ import com.nopalsoft.slamthebird.Assets;
 import com.nopalsoft.slamthebird.game.GameScreen;
 import com.nopalsoft.slamthebird.screens.Screens;
 
-public class VentanaPause extends Ventana {
+public class WindowPause extends Window {
 
     GameScreen gameScreen;
 
-    public VentanaPause(Screens currentScreen) {
+    public WindowPause(Screens currentScreen) {
         super(currentScreen);
         setSize(350, 260);
         setY(300);
@@ -20,11 +20,11 @@ public class VentanaPause extends Ventana {
 
         gameScreen = (GameScreen) currentScreen;
 
-        Label lbTitle = new Label("Paused", Assets.styleLabelChico);
+        Label lbTitle = new Label("Paused", Assets.labelStyleSmall);
         lbTitle.setPosition(getWidth() / 2f - lbTitle.getWidth() / 2f, 210);
 
         TextButton btResume = new TextButton("Resume",
-                Assets.styleTextButtonPurchased);
+                Assets.textButtonStylePurchased);
         screen.addEfectoPress(btResume);
         btResume.setSize(150, 50);
         btResume.setPosition(getWidth() / 2f - btResume.getWidth() / 2f, 130);
@@ -39,7 +39,7 @@ public class VentanaPause extends Ventana {
         });
 
         TextButton btMainMenu = new TextButton("Menu",
-                Assets.styleTextButtonPurchased);
+                Assets.textButtonStylePurchased);
         screen.addEfectoPress(btMainMenu);
         btMainMenu.setSize(150, 50);
         btMainMenu.setPosition(getWidth() / 2f - btResume.getWidth() / 2f, 40);
