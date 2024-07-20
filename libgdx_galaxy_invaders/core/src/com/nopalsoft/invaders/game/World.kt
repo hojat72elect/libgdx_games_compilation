@@ -123,14 +123,14 @@ class World {
             oAlienShip.update(deltaTime)
 
             /* Add Bullets to Aliens */
-            if (oRan.nextInt(5000) < (1 + probs) && oAlienShip.state != AlienShip.EXPLOTING) {
+            if (oRan.nextInt(5000) < (1 + probs) && oAlienShip.state != AlienShip.EXPLODING) {
                 val x = oAlienShip.position.x
                 val y = oAlienShip.position.y
                 alienBullets.add(Bullet(x, y))
             }
 
             /* I delete if they have already exploded */
-            if (oAlienShip.state == AlienShip.EXPLOTING && oAlienShip.stateTime > AlienShip.TIEMPO_EXPLODE) {
+            if (oAlienShip.state == AlienShip.EXPLODING && oAlienShip.stateTime > AlienShip.TIEMPO_EXPLODE) {
                 it.remove()
             }
 
@@ -238,11 +238,11 @@ class World {
                 if (Intersector.overlaps(
                         oAlien.boundsCircle,
                         oBala.boundsRectangle
-                    ) && (oAlien.state != AlienShip.EXPLOTING)
+                    ) && (oAlien.state != AlienShip.EXPLODING)
                 ) {
-                    oBala.hitTarget(oAlien.vidasLeft)
+                    oBala.hitTarget(oAlien.livesLeft)
                     oAlien.beingHit()
-                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                    if (oAlien.state == AlienShip.EXPLODING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
                         score += oAlien.punctuation // I update the score
                         addBoost(
                             oAlien.position.x,
@@ -261,11 +261,11 @@ class World {
                 if (oMissile.state == Missile.STATE_TRIGGERED && Intersector.overlaps(
                         oAlien.boundsCircle,
                         oMissile.boundsRectangle
-                    ) && oAlien.state != AlienShip.EXPLOTING
+                    ) && oAlien.state != AlienShip.EXPLODING
                 ) {
                     oMissile.hitTarget()
                     oAlien.beingHit()
-                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                    if (oAlien.state == AlienShip.EXPLODING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
                         score += oAlien.punctuation // I update the score
                         addBoost(
                             oAlien.position.x,
@@ -278,10 +278,10 @@ class World {
                 if (oMissile.state == Missile.STATE_EXPLODING && Intersector.overlaps(
                         oAlien.boundsCircle,
                         oMissile.boundsCircle
-                    ) && oAlien.state != AlienShip.EXPLOTING
+                    ) && oAlien.state != AlienShip.EXPLODING
                 ) {
                     oAlien.beingHit()
-                    if (oAlien.state == AlienShip.EXPLOTING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
+                    if (oAlien.state == AlienShip.EXPLODING) { // I only increase the score and add boost if it is already exploding, not if I decrease its life
                         score += oAlien.punctuation // I update the score
                         addBoost(
                             oAlien.position.x,

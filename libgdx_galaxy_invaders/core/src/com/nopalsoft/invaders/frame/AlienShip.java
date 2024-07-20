@@ -9,7 +9,7 @@ public class AlienShip extends DynamicGameObject {
 
 	public static final int MOVE_SIDES = 0;
 	public static final int MOVE_DOWN = 2;
-	public static final int EXPLOTING = 3;
+	public static final int EXPLODING = 3;
 	public static final float SPEED = 4f;
 	public static final float SPEED_DOWN = -3.5f;
 
@@ -17,28 +17,28 @@ public class AlienShip extends DynamicGameObject {
 	public static final float MOVE_RANGO_DOWN = 1.2f;
 	public static final float TIEMPO_EXPLODE = 0.05f * 19;
 
-	public final int PUNTUACION_SIMPLE = 10;
+	public final int SIMPLE_SCORE = 10;
 
-	public int vidasLeft;
+	public int livesLeft;
 	public int punctuation;
 	public float stateTime;
 	public int state;
 	float movedDistance;
 	float increaseSpeed;
 
-	public AlienShip(int vida, float increaseSpeed, float x, float y) {
+	public AlienShip(int life, float increaseSpeed, float x, float y) {
 		super(x, y, RADIUS);
 		stateTime = 0;
 		state = MOVE_SIDES;
 		velocity.set(SPEED, SPEED_DOWN);
 		movedDistance = 0;
-		punctuation = PUNTUACION_SIMPLE;
-		vidasLeft = vida;
+		punctuation = SIMPLE_SCORE;
+		livesLeft = life;
 		this.increaseSpeed = 1 + increaseSpeed;
 	}
 
 	public void update(float deltaTime) {
-		if (state != EXPLOTING) {
+		if (state != EXPLODING) {
 			switch (state) {
 				case MOVE_SIDES:
 					position.x += velocity.x * deltaTime * increaseSpeed;
@@ -66,9 +66,9 @@ public class AlienShip extends DynamicGameObject {
 	}
 
 	public void beingHit(int poderBala) {
-		vidasLeft--;
-		if (vidasLeft <= 0) {
-			state = EXPLOTING;
+		livesLeft--;
+		if (livesLeft <= 0) {
+			state = EXPLODING;
 			velocity.add(0, 0);
 			stateTime = 0;
 		}

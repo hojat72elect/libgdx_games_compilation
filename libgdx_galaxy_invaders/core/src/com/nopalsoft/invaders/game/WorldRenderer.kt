@@ -90,12 +90,12 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         val len = oWorld.alienShips.size
         for (i in 0 until len) {
             val oAlienShip = oWorld.alienShips[i]
-            val keyFrame = if (oAlienShip.state == AlienShip.EXPLOTING) {
+            val keyFrame = if (oAlienShip.state == AlienShip.EXPLODING) {
                 Assets.explosionFuego.getKeyFrame(oAlienShip.stateTime, false)
             } else {
-                if (oAlienShip.vidasLeft >= 10) Assets.alien4
-                else if (oAlienShip.vidasLeft >= 5) Assets.alien3
-                else if (oAlienShip.vidasLeft >= 2) Assets.alien2
+                if (oAlienShip.livesLeft >= 10) Assets.alien4
+                else if (oAlienShip.livesLeft >= 5) Assets.alien3
+                else if (oAlienShip.livesLeft >= 2) Assets.alien2
                 else Assets.alien1
             }
 
