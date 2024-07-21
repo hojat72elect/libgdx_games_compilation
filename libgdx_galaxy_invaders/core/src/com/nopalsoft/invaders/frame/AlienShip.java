@@ -13,9 +13,9 @@ public class AlienShip extends DynamicGameObject {
 	public static final float SPEED = 4f;
 	public static final float SPEED_DOWN = -3.5f;
 
-	public static final float MOVE_RANGO_SIDES = 6.7f;
-	public static final float MOVE_RANGO_DOWN = 1.2f;
-	public static final float TIEMPO_EXPLODE = 0.05f * 19;
+	public static final float MOVE_RANGE_SIDES = 6.7f;
+	public static final float MOVE_RANGE_DOWN = 1.2f;
+	public static final float EXPLODE_TIME = 0.05f * 19;
 
 	public final int SIMPLE_SCORE = 10;
 
@@ -43,7 +43,7 @@ public class AlienShip extends DynamicGameObject {
 				case MOVE_SIDES:
 					position.x += velocity.x * deltaTime * increaseSpeed;
 					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
-					if (movedDistance > MOVE_RANGO_SIDES) {
+					if (movedDistance > MOVE_RANGE_SIDES) {
 						state = MOVE_DOWN;
 						velocity.x *= -1;
 						movedDistance = 0;
@@ -52,7 +52,7 @@ public class AlienShip extends DynamicGameObject {
 				case MOVE_DOWN:
 					position.y += velocity.y * deltaTime * increaseSpeed;
 					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
-					if (movedDistance > MOVE_RANGO_DOWN) {
+					if (movedDistance > MOVE_RANGE_DOWN) {
 						state = MOVE_SIDES;
 						movedDistance = 0;
 					}
@@ -65,7 +65,7 @@ public class AlienShip extends DynamicGameObject {
 		stateTime += deltaTime;
 	}
 
-	public void beingHit(int poderBala) {
+	public void beingHit(int powerBullet) {
 		livesLeft--;
 		if (livesLeft <= 0) {
 			state = EXPLODING;
@@ -75,7 +75,7 @@ public class AlienShip extends DynamicGameObject {
 	}
 
 	/**
-	 * Llamar este metodo es poder de bala 1
+	 * Call this method is bullet power 1.
 	 */
 	public void beingHit() {
 		beingHit(1);

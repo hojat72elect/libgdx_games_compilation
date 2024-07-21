@@ -130,7 +130,7 @@ class World {
             }
 
             /* I delete if they have already exploded */
-            if (oAlienShip.state == AlienShip.EXPLODING && oAlienShip.stateTime > AlienShip.TIEMPO_EXPLODE) {
+            if (oAlienShip.state == AlienShip.EXPLODING && oAlienShip.stateTime > AlienShip.EXPLODE_TIME) {
                 it.remove()
             }
 
