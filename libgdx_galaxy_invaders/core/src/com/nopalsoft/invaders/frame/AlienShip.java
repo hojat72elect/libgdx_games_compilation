@@ -65,7 +65,7 @@ public class AlienShip extends DynamicGameObject {
 		stateTime += deltaTime;
 	}
 
-	public void beingHit(int powerBullet) {
+	public void beingHit() {
 		livesLeft--;
 		if (livesLeft <= 0) {
 			state = EXPLODING;
@@ -74,10 +74,5 @@ public class AlienShip extends DynamicGameObject {
 		}
 	}
 
-	/**
-	 * Call this method is bullet power 1.
-	 */
-	public void beingHit() {
-		beingHit(1);
-	}
+
 }
