@@ -1,498 +1,477 @@
-package com.nopalsoft.invaders.game;
+package com.nopalsoft.invaders.game
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.nopalsoft.invaders.Assets;
-import com.nopalsoft.invaders.MainInvaders;
-import com.nopalsoft.invaders.Settings;
-import com.nopalsoft.invaders.screens.MainMenuScreen;
-import com.nopalsoft.invaders.screens.Screens;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
+import com.nopalsoft.invaders.Assets
+import com.nopalsoft.invaders.Assets.boost1
+import com.nopalsoft.invaders.Assets.boost2
+import com.nopalsoft.invaders.Assets.boost3
+import com.nopalsoft.invaders.Assets.btFireDown
+import com.nopalsoft.invaders.Assets.btMissil
+import com.nopalsoft.invaders.Assets.btMissilDown
+import com.nopalsoft.invaders.Assets.clickHelp
+import com.nopalsoft.invaders.Assets.clickSound
+import com.nopalsoft.invaders.Assets.font10
+import com.nopalsoft.invaders.Assets.font15
+import com.nopalsoft.invaders.Assets.font45
+import com.nopalsoft.invaders.Assets.getTextWidth
+import com.nopalsoft.invaders.Assets.help1
+import com.nopalsoft.invaders.Assets.languages
+import com.nopalsoft.invaders.Assets.missile
+import com.nopalsoft.invaders.Assets.parallaxBackground
+import com.nopalsoft.invaders.Assets.playSound
+import com.nopalsoft.invaders.Assets.recuadroInGameStatus
+import com.nopalsoft.invaders.Assets.ship
+import com.nopalsoft.invaders.Assets.styleDialogPause
+import com.nopalsoft.invaders.Assets.styleImageButtonPause
+import com.nopalsoft.invaders.Assets.styleLabel
+import com.nopalsoft.invaders.Assets.styleLabelDialog
+import com.nopalsoft.invaders.Assets.styleTextButton
+import com.nopalsoft.invaders.Assets.styleTextButtonFacebook
+import com.nopalsoft.invaders.Assets.upgLife
+import com.nopalsoft.invaders.MainInvaders
+import com.nopalsoft.invaders.Settings.addScore
+import com.nopalsoft.invaders.Settings.numberOfTimesGameHasBeenPlayed
+import com.nopalsoft.invaders.Settings.tiltControlEnabled
+import com.nopalsoft.invaders.screens.MainMenuScreen
+import com.nopalsoft.invaders.screens.Screens
 
-public class GameScreen extends Screens {
-    public static final int GAME_RUNNING = 1;
-    public static final int GAME_PAUSE = 3;
-    static final int GAME_READY = 0;
-    static final int GAME_OVER = 2;
-    public static int state;
-    public final int GAME_TUTORIAL = 4;
+class GameScreen(game: MainInvaders) : Screens(game) {
+    val GAME_TUTORIAL: Int = 4
 
-    int screenTutorial; // If it is on screen 1 or 2 of the tutorial
-    World oWorld;
-    WorldRenderer renderer;
-    boolean isItShotItself = false;
-    boolean didItFireMissile = false;
-    Vector3 touchPoint;
-    Rectangle leftButton;
-    Rectangle rightButton;
-    Dialog dialogPause, dialogGameOver;
-    Table scoresBar;
-    Label lbLevel, lbScore, lbNumVidas;
-    ImageButton btPause;
-    ImageButton btLeft, btRight, btFire;
-    TextButton buttonMissile;
-    Group groupTutorial;
-    Label labelTiltYourDevice;
-    float accel;
+    var screenTutorial: Int = 0 // If it is on screen 1 or 2 of the tutorial
+    var oWorld: World
+    var renderer: WorldRenderer
+    var isItShotItself: Boolean = false
+    var didItFireMissile: Boolean = false
+    var touchPoint: Vector3
+    var leftButton: Rectangle
+    var rightButton: Rectangle
+    var dialogPause: Dialog
+    var dialogGameOver: Dialog
+    var scoresBar: Table
+    var lbLevel: Label
+    var lbScore: Label
+    var lbNumVidas: Label
+    var btPause: ImageButton
+    var btLeft: ImageButton
+    var btRight: ImageButton
+    var btFire: ImageButton
+    var buttonMissile: TextButton
+    var groupTutorial: Group? = null
+    var labelTiltYourDevice: Label? = null
+    var accel: Float
 
-    int level;
-    float rotation = 0;
-    float addRotation = .3f;
+    var level: Int
+    var rotation: Float = 0f
+    var addRotation: Float = .3f
 
-    public GameScreen(final MainInvaders game) {
-        super(game);
-        Settings.setNumberOfTimesGameHasBeenPlayed(Settings.getNumberOfTimesGameHasBeenPlayed() + 1);
-        state = GAME_READY;
-        if (Settings.getNumberOfTimesGameHasBeenPlayed() < 3) {// It will be shown 2 times, time zero and time 1.
-            state = GAME_TUTORIAL;
-            screenTutorial = 0;
-            setUpTutorial();
+    init {
+        numberOfTimesGameHasBeenPlayed = numberOfTimesGameHasBeenPlayed + 1
+        state = GAME_READY
+        if (numberOfTimesGameHasBeenPlayed < 3) { // It will be shown 2 times, time zero and time 1.
+            state = GAME_TUTORIAL
+            screenTutorial = 0
+            setUpTutorial()
         }
-        touchPoint = new Vector3();
+        touchPoint = Vector3()
 
-        oWorld = new World();
-        renderer = new WorldRenderer(batcher, oWorld);
-        leftButton = new Rectangle(0, 0, 160, 480);
-        rightButton = new Rectangle(161, 0, 160, 480);
+        oWorld = World()
+        renderer = WorldRenderer(batcher!!, oWorld)
+        leftButton = Rectangle(0f, 0f, 160f, 480f)
+        rightButton = Rectangle(161f, 0f, 160f, 480f)
 
         // OnScreen Controls
-        accel = 0;
-        level = oWorld.currentLevel;
-        btLeft = new ImageButton(Assets.getBtLeft());
-        btLeft.setSize(65, 50);
-        btLeft.setPosition(10, 5);
-        btLeft.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                accel = 5;
+        accel = 0f
+        level = oWorld.currentLevel
+        btLeft = ImageButton(Assets.btLeft)
+        btLeft.setSize(65f, 50f)
+        btLeft.setPosition(10f, 5f)
+        btLeft.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor) {
+                accel = 5f
             }
 
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                accel = 0;
-                super.exit(event, x, y, pointer, toActor);
+            override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor) {
+                accel = 0f
+                super.exit(event, x, y, pointer, toActor)
+            }
+        })
+        btRight = ImageButton(Assets.btRight)
+        btRight.setSize(65f, 50f)
+        btRight.setPosition(85f, 5f)
+        btRight.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor) {
+                accel = -5f
             }
 
-        });
-        btRight = new ImageButton(Assets.getBtRight());
-        btRight.setSize(65, 50);
-        btRight.setPosition(85, 5);
-        btRight.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                accel = -5;
-
+            override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor) {
+                accel = 0f
+                super.exit(event, x, y, pointer, toActor)
             }
+        })
 
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                accel = 0;
-                super.exit(event, x, y, pointer, toActor);
+        buttonMissile =
+            TextButton(oWorld.missileCount.toString() + "", TextButtonStyle(btMissil, btMissilDown, null, font10))
+        buttonMissile.label.color = Color.GREEN
+        buttonMissile.setSize(60f, 60f)
+        buttonMissile.setPosition((SCREEN_WIDTH - 5 - 60 - 20 - 60).toFloat(), 5f)
+        buttonMissile.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                didItFireMissile = true
             }
-
-        });
-
-        buttonMissile = new TextButton(oWorld.missileCount + "", new TextButtonStyle(Assets.getBtMissil(), Assets.getBtMissilDown(), null, Assets.getFont10()));
-        buttonMissile.getLabel().setColor(Color.GREEN);
-        buttonMissile.setSize(60, 60);
-        buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
-        buttonMissile.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                didItFireMissile = true;
+        })
+        btFire = ImageButton(Assets.btFire, btFireDown)
+        btFire.setSize(60f, 60f)
+        btFire.setPosition((SCREEN_WIDTH - 60 - 5).toFloat(), 5f)
+        btFire.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                isItShotItself = true
             }
-        });
-        btFire = new ImageButton(Assets.getBtFire(), Assets.getBtFireDown());
-        btFire.setSize(60, 60);
-        btFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
-        btFire.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                isItShotItself = true;
-            }
-        });
+        })
 
         // End OnScreen Controls
         // Start dialog Pause
-        dialogPause = new Dialog(Assets.getLanguages().get("game_paused"), Assets.getStyleDialogPause());
+        dialogPause = Dialog(languages!!["game_paused"], styleDialogPause)
 
-        TextButton btContinue = new TextButton(Assets.getLanguages().get("continue"), Assets.getStyleTextButton());
-        TextButton btMenu = new TextButton(Assets.getLanguages().get("main_menu"), Assets.getStyleTextButton());
+        val btContinue = TextButton(languages!!["continue"], styleTextButton)
+        val btMenu = TextButton(languages!!["main_menu"], styleTextButton)
 
-        btContinue.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                state = GAME_RUNNING;
-                oWorld.state = World.STATE_RUNNING;
-                dialogPause.hide();
-
+        btContinue.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                state = GAME_RUNNING
+                oWorld.state = World.STATE_RUNNING
+                dialogPause.hide()
             }
-        });
+        })
 
-        btMenu.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new MainMenuScreen(game));
-                dialogPause.hide();
-
+        btMenu.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = MainMenuScreen(game)
+                dialogPause.hide()
             }
-        });
+        })
 
-        dialogPause.getButtonTable().pad(15);
-        dialogPause.getButtonTable().add(btContinue).minWidth(160).minHeight(40).expand().padBottom(20);
-        dialogPause.getButtonTable().row();
-        dialogPause.getButtonTable().add(btMenu).minWidth(160).minHeight(40).expand();
+        dialogPause.buttonTable.pad(15f)
+        dialogPause.buttonTable.add(btContinue).minWidth(160f).minHeight(40f).expand().padBottom(20f)
+        dialogPause.buttonTable.row()
+        dialogPause.buttonTable.add(btMenu).minWidth(160f).minHeight(40f).expand()
 
         // Inicio dialogGameOver
+        dialogGameOver = Dialog("Game Over", styleDialogPause)
 
-        dialogGameOver = new Dialog("Game Over", Assets.getStyleDialogPause());
+        val btTryAgain = TextButton(languages!!["try_again"], styleTextButton)
+        val btMenu2 = TextButton(languages!!["main_menu"], styleTextButton)
+        val btShare = TextButton(languages!!["share"], styleTextButtonFacebook)
 
-        TextButton btTryAgain = new TextButton(Assets.getLanguages().get("try_again"), Assets.getStyleTextButton());
-        TextButton btMenu2 = new TextButton(Assets.getLanguages().get("main_menu"), Assets.getStyleTextButton());
-        TextButton btShare = new TextButton(Assets.getLanguages().get("share"), Assets.getStyleTextButtonFacebook());
-
-        btTryAgain.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new GameScreen(game));
-                dialogGameOver.hide();
-
+        btTryAgain.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = GameScreen(game)
+                dialogGameOver.hide()
             }
-        });
+        })
 
-        btMenu2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new MainMenuScreen(game));
-                dialogGameOver.hide();
-
+        btMenu2.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = MainMenuScreen(game)
+                dialogGameOver.hide()
             }
-        });
-        btShare.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                String text = Assets.getLanguages().format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score);
-                Gdx.app.log("Share text", text);
-                Assets.playSound(Assets.getClickSound());
+        })
+        btShare.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                val text =
+                    languages!!.format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score)
+                Gdx.app.log("Share text", text)
+                playSound(clickSound!!)
             }
-        });
+        })
 
-        dialogGameOver.getButtonTable().pad(15);
-        dialogGameOver.getButtonTable().add(btTryAgain).minWidth(160).minHeight(40).expand().padBottom(20);
-        dialogGameOver.getButtonTable().row();
-        dialogGameOver.getButtonTable().add(btMenu2).minWidth(160).minHeight(40).expand();
-        dialogGameOver.getButtonTable().row();
-
-
-        Label lbShare = new Label(Assets.getLanguages().get("share_your_score_on_facebook"), Assets.getStyleLabelDialog());
-        lbShare.setAlignment(Align.center);
-        lbShare.setWrap(true);
-        dialogGameOver.getButtonTable().add(lbShare).width(200).expand();
-        dialogGameOver.getButtonTable().row();
-        dialogGameOver.getButtonTable().add(btShare).expand();
+        dialogGameOver.buttonTable.pad(15f)
+        dialogGameOver.buttonTable.add(btTryAgain).minWidth(160f).minHeight(40f).expand().padBottom(20f)
+        dialogGameOver.buttonTable.row()
+        dialogGameOver.buttonTable.add(btMenu2).minWidth(160f).minHeight(40f).expand()
+        dialogGameOver.buttonTable.row()
 
 
-        if (Settings.getNumberOfTimesGameHasBeenPlayed() % 5 == 0) {
-            game.dialogs.showDialogRate();
+        val lbShare = Label(languages!!["share_your_score_on_facebook"], styleLabelDialog)
+        lbShare.setAlignment(Align.center)
+        lbShare.wrap = true
+        dialogGameOver.buttonTable.add(lbShare).width(200f).expand()
+        dialogGameOver.buttonTable.row()
+        dialogGameOver.buttonTable.add(btShare).expand()
+
+
+        if (numberOfTimesGameHasBeenPlayed % 5 == 0) {
+            game.dialogs!!.showDialogRate()
         }
 
-        btPause = new ImageButton(Assets.getStyleImageButtonPause());
-        btPause.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                setPaused();
+        btPause = ImageButton(styleImageButtonPause)
+        btPause.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                setPaused()
             }
-        });
+        })
 
-        lbLevel = new Label(Assets.getLanguages().get("level") + " " + oWorld.currentLevel, Assets.getStyleLabel());
-        lbScore = new Label(Assets.getLanguages().get("score") + " " + oWorld.score, Assets.getStyleLabel());
-        lbNumVidas = new Label("x" + oWorld.myShip.lives, Assets.getStyleLabel());
-        Image imVida = new Image(Assets.getShip());
+        lbLevel = Label(languages!!["level"] + " " + oWorld.currentLevel, styleLabel)
+        lbScore = Label(languages!!["score"] + " " + oWorld.score, styleLabel)
+        lbNumVidas = Label("x" + oWorld.myShip.lives, styleLabel)
+        val imVida = Image(ship)
 
-        scoresBar = new Table();
-        scoresBar.setBackground(Assets.getRecuadroInGameStatus());
-        scoresBar.setWidth(SCREEN_WIDTH);
-        scoresBar.setHeight(30);
-        scoresBar.setPosition(0, SCREEN_HEIGHT - 30);
+        scoresBar = Table()
+        scoresBar.background = recuadroInGameStatus
+        scoresBar.width = SCREEN_WIDTH.toFloat()
+        scoresBar.height = 30f
+        scoresBar.setPosition(0f, (SCREEN_HEIGHT - 30).toFloat())
 
-        scoresBar.add(lbLevel).left();
+        scoresBar.add(lbLevel).left()
 
-        scoresBar.add(lbScore).center().expandX();
+        scoresBar.add(lbScore).center().expandX()
 
-        scoresBar.add(imVida).size(20).right();
-        scoresBar.add(lbNumVidas).right();
-        scoresBar.add(btPause).size(26).right().padLeft(8);
+        scoresBar.add(imVida).size(20f).right()
+        scoresBar.add(lbNumVidas).right()
+        scoresBar.add(btPause).size(26f).right().padLeft(8f)
+
         // scoresBar.debug();
-
-        stage.addActor(scoresBar);
-
+        stage!!.addActor(scoresBar)
     }
 
-    private void setUpTutorial() {
+    private fun setUpTutorial() {
+        labelTiltYourDevice =
+            Label(languages!!["tilt_your_device_to_move_horizontally"], LabelStyle(font45, Color.GREEN))
+        labelTiltYourDevice!!.wrap = true
+        labelTiltYourDevice!!.setAlignment(Align.center)
+        labelTiltYourDevice!!.setPosition(0f, 120f)
+        labelTiltYourDevice!!.width = SCREEN_WIDTH.toFloat()
+        stage!!.addActor(labelTiltYourDevice)
 
-        labelTiltYourDevice = new Label(Assets.getLanguages().get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.getFont45(), Color.GREEN));
-        labelTiltYourDevice.setWrap(true);
-        labelTiltYourDevice.setAlignment(Align.center);
-        labelTiltYourDevice.setPosition(0, 120);
-        labelTiltYourDevice.setWidth(SCREEN_WIDTH);
-        stage.addActor(labelTiltYourDevice);
+        groupTutorial = Group()
 
-        groupTutorial = new Group();
         // gpTutorial.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        val boostTable = Table()
+        groupTutorial!!.addActor(boostTable)
 
-        Table boostTable = new Table();
-        groupTutorial.addActor(boostTable);
+        val vida = Image(upgLife)
+        val boostBomba = Image(boost2)
+        val boostEscudo = Image(boost3)
+        val boostUpgradeWeapon = Image(boost1)
 
-        Image vida = new Image(Assets.getUpgLife());
-        Image boostBomba = new Image(Assets.getBoost2());
-        Image boostEscudo = new Image(Assets.getBoost3());
-        Image boostUpgradeWeapon = new Image(Assets.getBoost1());
+        val lblVida = Label(languages!!["get_one_extra_life"], styleLabel)
+        val lblBomba = Label(languages!!["get_one_extra_missil"], styleLabel)
+        val lblShield = Label(languages!!["get_a_shield"], styleLabel)
+        val lblUpgradeWeapn = Label(languages!!["upgrade_your_weapon"], styleLabel)
 
-        Label lblVida = new Label(Assets.getLanguages().get("get_one_extra_life"), Assets.getStyleLabel());
-        Label lblBomba = new Label(Assets.getLanguages().get("get_one_extra_missil"), Assets.getStyleLabel());
-        Label lblShield = new Label(Assets.getLanguages().get("get_a_shield"), Assets.getStyleLabel());
-        Label lblUpgradeWeapn = new Label(Assets.getLanguages().get("upgrade_your_weapon"), Assets.getStyleLabel());
+        boostTable.setPosition(0f, 340f)
+        boostTable.width = SCREEN_WIDTH.toFloat()
 
-        boostTable.setPosition(0, 340);
-        boostTable.setWidth(SCREEN_WIDTH);
+        val iconSize = 40
+        boostTable.add(vida).size(iconSize.toFloat())
+        boostTable.add(lblVida).padLeft(15f).left()
+        boostTable.row().padTop(10f)
+        boostTable.add(boostBomba).size(iconSize.toFloat())
+        boostTable.add(lblBomba).padLeft(15f).left()
+        boostTable.row().padTop(10f)
+        boostTable.add(boostEscudo).size(iconSize.toFloat())
+        boostTable.add(lblShield).padLeft(15f).left()
+        boostTable.row().padTop(10f)
+        boostTable.add(boostUpgradeWeapon).size(iconSize.toFloat())
+        boostTable.add(lblUpgradeWeapn).padLeft(15f).left()
+        val touchLeft =
+            Label(languages!!["touch_left_side_to_fire_missils"], styleLabel)
+        touchLeft.wrap = true
+        touchLeft.width = 160f
+        touchLeft.setAlignment(Align.center)
+        touchLeft.setPosition(0f, 50f)
 
-        int iconSize = 40;
-        boostTable.add(vida).size(iconSize);
-        boostTable.add(lblVida).padLeft(15).left();
-        boostTable.row().padTop(10);
-        boostTable.add(boostBomba).size(iconSize);
-        boostTable.add(lblBomba).padLeft(15).left();
-        boostTable.row().padTop(10);
-        boostTable.add(boostEscudo).size(iconSize);
-        boostTable.add(lblShield).padLeft(15).left();
-        boostTable.row().padTop(10);
-        boostTable.add(boostUpgradeWeapon).size(iconSize);
-        boostTable.add(lblUpgradeWeapn).padLeft(15).left();
+        val touchRight = Label(languages!!["touch_right_side_to_fire"], styleLabel)
+        touchRight.wrap = true
+        touchRight.width = 160f
+        touchRight.setAlignment(Align.center)
+        touchRight.setPosition(165f, 50f)
 
-        Label touchLeft, touchRight;
-        touchLeft = new Label(Assets.getLanguages().get("touch_left_side_to_fire_missils"), Assets.getStyleLabel());
-        touchLeft.setWrap(true);
-        touchLeft.setWidth(160);
-        touchLeft.setAlignment(Align.center);
-        touchLeft.setPosition(0, 50);
-
-        touchRight = new Label(Assets.getLanguages().get("touch_right_side_to_fire"), Assets.getStyleLabel());
-        touchRight.setWrap(true);
-        touchRight.setWidth(160);
-        touchRight.setAlignment(Align.center);
-        touchRight.setPosition(165, 50);
-
-        groupTutorial.addActor(touchRight);
-        groupTutorial.addActor(touchLeft);
-
+        groupTutorial!!.addActor(touchRight)
+        groupTutorial!!.addActor(touchLeft)
     }
 
-    @Override
-    public void update(float deltaTime) {
+    override fun update(deltaTime: Float) {
         // if (deltaTime > 0.1f) deltaTime = 0.1f;
-        switch (state) {
-            case GAME_TUTORIAL:
-                updateTutorial();
-                break;
-            case GAME_READY:
-                updateReady();
-                break;
-            case GAME_RUNNING:
-                updateRunning(deltaTime);
-                break;
-
+        when (state) {
+            GAME_TUTORIAL -> updateTutorial()
+            GAME_READY -> updateReady()
+            GAME_RUNNING -> updateRunning(deltaTime)
         }
-
     }
 
-    private void updateTutorial() {
+    private fun updateTutorial() {
         if (Gdx.input.justTouched()) {
             if (screenTutorial == 0) {
-                screenTutorial++;
-                labelTiltYourDevice.remove();
-                stage.addActor(groupTutorial);
+                screenTutorial++
+                labelTiltYourDevice!!.remove()
+                stage!!.addActor(groupTutorial)
             } else {
-                state = GAME_READY;
-                groupTutorial.remove();
+                state = GAME_READY
+                groupTutorial!!.remove()
             }
-
         }
     }
 
-    private void updateReady() {
-        if (Gdx.input.justTouched() && !game.dialogs.isDialogShown()) {
-            state = GAME_RUNNING;
+    private fun updateReady() {
+        if (Gdx.input.justTouched() && !game.dialogs!!.isDialogShown) {
+            state = GAME_RUNNING
 
-            if (!Settings.getTiltControlEnabled()) {
-                stage.addActor(btLeft);
-                stage.addActor(btRight);
-                stage.addActor(buttonMissile);
-                stage.addActor(btFire);
+            if (!tiltControlEnabled) {
+                stage!!.addActor(btLeft)
+                stage.addActor(btRight)
+                stage.addActor(buttonMissile)
+                stage.addActor(btFire)
             }
-
         }
     }
 
-    private void updateRunning(float deltaTime) {
+    private fun updateRunning(deltaTime: Float) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(
+                Input.Keys.DPAD_RIGHT
+            ) || Gdx.input.isKeyPressed(Input.Keys.D)
+        ) {
+            accel = 0f
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) accel = 5f
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) accel = -5f
 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
-            accel = 0;
-            if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Keys.A))
-                accel = 5f;
-            if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Keys.D))
-                accel = -5f;
-
-            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile);
-        } else if (Settings.getTiltControlEnabled()) {
+            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile)
+        } else if (tiltControlEnabled) {
             if (Gdx.input.justTouched()) {
-                myCamera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+                myCamera.unproject(touchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
                 if (leftButton.contains(touchPoint.x, touchPoint.y)) {
-                    didItFireMissile = true;
+                    didItFireMissile = true
                 }
                 if (rightButton.contains(touchPoint.x, touchPoint.y)) {
-                    isItShotItself = true;
+                    isItShotItself = true
                 }
             }
-            oWorld.update(deltaTime, Gdx.input.getAccelerometerX(), isItShotItself, didItFireMissile);
+            oWorld.update(deltaTime, Gdx.input.accelerometerX, isItShotItself, didItFireMissile)
         } else {
-            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile);
+            oWorld.update(deltaTime, accel, isItShotItself, didItFireMissile)
         }
 
         if (level != oWorld.currentLevel) {
-            level = oWorld.currentLevel;
-            lbLevel.setText(Assets.getLanguages().get("level") + " " + level);
+            level = oWorld.currentLevel
+            lbLevel.setText(languages!!["level"] + " " + level)
         }
 
-        lbScore.setText(Assets.getLanguages().get("score") + " " + oWorld.score);
-        lbNumVidas.setText("x" + oWorld.myShip.lives);
+        lbScore.setText(languages!!["score"] + " " + oWorld.score)
+        lbNumVidas.setText("x" + oWorld.myShip.lives)
 
         if (oWorld.state == World.STATE_GAME_OVER) {
-            state = GAME_OVER;
-            dialogGameOver.show(stage);
+            state = GAME_OVER
+            dialogGameOver.show(stage)
         }
 
-        buttonMissile.setText(oWorld.missileCount + "");
+        buttonMissile.setText(oWorld.missileCount.toString() + "")
 
-        isItShotItself = false;
-        didItFireMissile = false;
+        isItShotItself = false
+        didItFireMissile = false
     }
 
-    private void setPaused() {
-        Assets.playSound(Assets.getClickSound());
-        state = GAME_PAUSE;
-        oWorld.state = World.STATE_PAUSED;
-        dialogPause.show(stage);
+    private fun setPaused() {
+        playSound(clickSound!!)
+        state = GAME_PAUSE
+        oWorld.state = World.STATE_PAUSED
+        dialogPause.show(stage)
     }
 
-    @Override
-    public void draw(float delta) {
+    override fun draw(delta: Float) {
+        if (state != GAME_TUTORIAL) renderer.render(delta)
+        else parallaxBackground!!.render(delta)
+        myCamera.update()
+        batcher!!.projectionMatrix = myCamera.combined
+        batcher.enableBlending()
+        batcher.begin()
 
-        if (state != GAME_TUTORIAL)
-            renderer.render(delta);
-        else
-            Assets.getParallaxBackground().render(delta);
-        myCamera.update();
-        batcher.setProjectionMatrix(myCamera.combined);
-        batcher.enableBlending();
-        batcher.begin();
-
-        switch (state) {
-            case GAME_TUTORIAL:
-                presentTurorial();
-                break;
-            case GAME_READY:
-                presentReady();
-                break;
-            case GAME_RUNNING:
-                presentRunning();
-                break;
+        when (state) {
+            GAME_TUTORIAL -> presentTurorial()
+            GAME_READY -> presentReady()
+            GAME_RUNNING -> presentRunning()
         }
-        batcher.end();
-
-
+        batcher.end()
     }
 
-    private void presentTurorial() {
-        if (screenTutorial == 0 && Settings.getTiltControlEnabled()) {
-            if (rotation < -20 || rotation > 20)
-                addRotation *= -1;
-            rotation += addRotation;
-            batcher.draw(Assets.getHelp1(), SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotation);
+    private fun presentTurorial() {
+        if (screenTutorial == 0 && tiltControlEnabled) {
+            if (rotation < -20 || rotation > 20) addRotation *= -1f
+            rotation += addRotation
+            batcher!!.draw(help1, SCREEN_WIDTH / 2f - 51, 190f, 51f, 0f, 102f, 200f, 1f, 1f, rotation)
         } else {
-            batcher.draw(Assets.getClickHelp(), 155, 0, 10, 125);
-
-        }
-
-    }
-
-    private void presentReady() {
-        String touchToStart = Assets.getLanguages().get("touch_to_start");
-        float textWidth = Assets.getTextWidth(Assets.getFont45(), touchToStart);
-        Assets.getFont45().draw(batcher, touchToStart, (SCREEN_WIDTH / 2f) - (textWidth / 2f), 220);
-    }
-
-    private void presentRunning() {
-        if (oWorld.missileCount > 0 && Settings.getTiltControlEnabled()) {
-            batcher.draw(Assets.getMissile().getKeyFrame(0), 1, 1, 8, 28);
-            Assets.getFont15().draw(batcher, "X" + oWorld.missileCount, 10, 25);
+            batcher!!.draw(clickHelp, 155f, 0f, 10f, 125f)
         }
     }
 
-    @Override
-    public void hide() {
-        com.nopalsoft.invaders.Settings.addScore(oWorld.score);
-        super.hide();
+    private fun presentReady() {
+        val touchToStart = languages!!["touch_to_start"]
+        val textWidth = getTextWidth(font45, touchToStart)
+        font45!!.draw(batcher, touchToStart, (SCREEN_WIDTH / 2f) - (textWidth / 2f), 220f)
     }
 
-    @Override
-    public void pause() {
-        setPaused();
-        super.pause();
+    private fun presentRunning() {
+        if (oWorld.missileCount > 0 && tiltControlEnabled) {
+            batcher!!.draw(missile!!.getKeyFrame(0f), 1f, 1f, 8f, 28f)
+            font15!!.draw(batcher, "X" + oWorld.missileCount, 10f, 25f)
+        }
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-            Assets.playSound(Assets.getClickSound());
+    override fun hide() {
+        addScore(oWorld.score)
+        super.hide()
+    }
+
+    override fun pause() {
+        setPaused()
+        super.pause()
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.BACK || keycode == Input.Keys.ESCAPE) {
+            playSound(clickSound!!)
             if (state == GAME_RUNNING) {
-                setPaused();
-                return true;
+                setPaused()
+                return true
             } else if (state == GAME_PAUSE) {
-                game.setScreen(new MainMenuScreen(game));
-                return true;
+                game.screen = MainMenuScreen(game)
+                return true
             }
-        } else if (keycode == Keys.MENU) {
-            setPaused();
-            return true;
-        } else if (keycode == Keys.SPACE) {
-            isItShotItself = true;
+        } else if (keycode == Input.Keys.MENU) {
+            setPaused()
+            return true
+        } else if (keycode == Input.Keys.SPACE) {
+            isItShotItself = true
 
-            return true;
-        } else if (keycode == Keys.ALT_LEFT) {
-            didItFireMissile = true;
-            return true;
+            return true
+        } else if (keycode == Input.Keys.ALT_LEFT) {
+            didItFireMissile = true
+            return true
         }
-        return false;
+        return false
     }
 
+    companion object {
+        const val GAME_RUNNING: Int = 1
+        const val GAME_PAUSE: Int = 3
+        const val GAME_READY: Int = 0
+        const val GAME_OVER: Int = 2
+        var state =0
+    }
 }

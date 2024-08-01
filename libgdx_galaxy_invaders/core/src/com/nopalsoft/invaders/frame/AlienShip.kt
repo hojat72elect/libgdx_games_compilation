@@ -1,78 +1,79 @@
-package com.nopalsoft.invaders.frame;
+package com.nopalsoft.invaders.frame
 
-public class AlienShip extends DynamicGameObject {
+import kotlin.math.abs
 
-	public static final float RADIUS = 1.5f;
+class AlienShip(life: Int, increaseSpeed: Float, x: Float, y: Float) : DynamicGameObject(x, y, RADIUS) {
+    val SIMPLE_SCORE: Int = 10
 
-	public static final float DRAW_WIDTH = 3.5f;
-	public static final float DRAW_HEIGHT = 3.5f;
+    var livesLeft: Int
+    var punctuation: Int
+    var stateTime: Float = 0f
+    var state: Int
+    var movedDistance: Float
+    var increaseSpeed: Float
 
-	public static final int MOVE_SIDES = 0;
-	public static final int MOVE_DOWN = 2;
-	public static final int EXPLODING = 3;
-	public static final float SPEED = 4f;
-	public static final float SPEED_DOWN = -3.5f;
+    init {
+        state = MOVE_SIDES
+        velocity[SPEED] = SPEED_DOWN
+        movedDistance = 0f
+        punctuation = SIMPLE_SCORE
+        livesLeft = life
+        this.increaseSpeed = 1 + increaseSpeed
+    }
 
-	public static final float MOVE_RANGE_SIDES = 6.7f;
-	public static final float MOVE_RANGE_DOWN = 1.2f;
-	public static final float EXPLODE_TIME = 0.05f * 19;
+    fun update(deltaTime: Float) {
+        if (state != EXPLODING) {
+            when (state) {
+                MOVE_SIDES -> {
+                    position.x += velocity.x * deltaTime * increaseSpeed
+                    movedDistance += abs((velocity.x * deltaTime)) * increaseSpeed
+                    if (movedDistance > MOVE_RANGE_SIDES) {
+                        state = MOVE_DOWN
+                        velocity.x *= -1f
+                        movedDistance = 0f
+                    }
+                }
 
-	public final int SIMPLE_SCORE = 10;
+                MOVE_DOWN -> {
+                    position.y += velocity.y * deltaTime * increaseSpeed
+                    movedDistance += abs((velocity.x * deltaTime)) * increaseSpeed
+                    if (movedDistance > MOVE_RANGE_DOWN) {
+                        state = MOVE_SIDES
+                        movedDistance = 0f
+                    }
+                }
+            }
+        }
 
-	public int livesLeft;
-	public int punctuation;
-	public float stateTime;
-	public int state;
-	float movedDistance;
-	float increaseSpeed;
+        boundsCircle!!.x = position.x
+        boundsCircle!!.y = position.y
+        stateTime += deltaTime
+    }
 
-	public AlienShip(int life, float increaseSpeed, float x, float y) {
-		super(x, y, RADIUS);
-		stateTime = 0;
-		state = MOVE_SIDES;
-		velocity.set(SPEED, SPEED_DOWN);
-		movedDistance = 0;
-		punctuation = SIMPLE_SCORE;
-		livesLeft = life;
-		this.increaseSpeed = 1 + increaseSpeed;
-	}
-
-	public void update(float deltaTime) {
-		if (state != EXPLODING) {
-			switch (state) {
-				case MOVE_SIDES:
-					position.x += velocity.x * deltaTime * increaseSpeed;
-					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
-					if (movedDistance > MOVE_RANGE_SIDES) {
-						state = MOVE_DOWN;
-						velocity.x *= -1;
-						movedDistance = 0;
-					}
-					break;
-				case MOVE_DOWN:
-					position.y += velocity.y * deltaTime * increaseSpeed;
-					movedDistance += Math.abs(velocity.x * deltaTime) * increaseSpeed;
-					if (movedDistance > MOVE_RANGE_DOWN) {
-						state = MOVE_SIDES;
-						movedDistance = 0;
-					}
-					break;
-			}
-		}
-
-		boundsCircle.x = position.x;
-		boundsCircle.y = position.y;
-		stateTime += deltaTime;
-	}
-
-	public void beingHit() {
-		livesLeft--;
-		if (livesLeft <= 0) {
-			state = EXPLODING;
-			velocity.add(0, 0);
-			stateTime = 0;
-		}
-	}
+    fun beingHit() {
+        livesLeft--
+        if (livesLeft <= 0) {
+            state = EXPLODING
+            velocity.add(0f, 0f)
+            stateTime = 0f
+        }
+    }
 
 
+    companion object {
+        const val RADIUS: Float = 1.5f
+
+        const val DRAW_WIDTH: Float = 3.5f
+        const val DRAW_HEIGHT: Float = 3.5f
+
+        const val MOVE_SIDES: Int = 0
+        const val MOVE_DOWN: Int = 2
+        const val EXPLODING: Int = 3
+        const val SPEED: Float = 4f
+        const val SPEED_DOWN: Float = -3.5f
+
+        const val MOVE_RANGE_SIDES: Float = 6.7f
+        const val MOVE_RANGE_DOWN: Float = 1.2f
+        const val EXPLODE_TIME: Float = 0.05f * 19
+    }
 }
