@@ -5,11 +5,8 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
 open class GameObject {
-    @JvmField
     val position: Vector2
-    @JvmField
     val boundsRectangle: Rectangle?
-    @JvmField
     var boundsCircle: Circle?
 
 

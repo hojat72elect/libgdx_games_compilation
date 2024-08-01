@@ -5,11 +5,10 @@ class Bullet : DynamicGameObject {
     var level: Int = 1
     private var stateTime: Float
 
-    @JvmField
     var state: Int
 
     /**
-     * Space ship bullet
+     * spaceship bullet
      */
     constructor(x: Float, y: Float, boostLevel: Int) : super(x, y, WIDTH, HEIGHT) {
         state = STATE_DISPARADO

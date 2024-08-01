@@ -8,16 +8,9 @@ import com.nopalsoft.invaders.screens.MainMenuScreen
 import com.nopalsoft.invaders.screens.Screens
 
 class MainInvaders : Game() {
-    @JvmField
+
     var stage: Stage? = null
-
-    @JvmField
-    var oAssets: Assets? = null
-
-    @JvmField
     var spriteBatch: SpriteBatch? = null
-
-    @JvmField
     var dialogs: DialogSingInGGS? = null
 
     override fun create() {

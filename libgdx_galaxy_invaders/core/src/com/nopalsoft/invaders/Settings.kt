@@ -4,29 +4,17 @@ import com.badlogic.gdx.Gdx
 
 object Settings {
 
-    @JvmStatic
     val highScores = intArrayOf(0, 0, 0, 0, 0)// only 5 scores are saved
-    private const val prefName = "com.tiarsoft.droid.Settings"
-    private val pref = Gdx.app.getPreferences(prefName)
+    private const val SHARED_PREFERENCES_NAME = "com.tiarsoft.droid.Settings"
+    private val pref = Gdx.app.getPreferences(SHARED_PREFERENCES_NAME)
 
-    const val drawDebugLines = false
-
-    @JvmStatic
+    const val DRAW_DEBUG_LINES = false
     var soundEnabled = false
-
-    @JvmStatic
     var musicEnabled = false
-
-    @JvmStatic
     var tiltControlEnabled = true
-
-    @JvmStatic
     var accelerometerSensitivity = 10
-
-    @JvmStatic
     var numberOfTimesGameHasBeenPlayed = 0
 
-    @JvmStatic
     fun load() {
         tiltControlEnabled = pref.getBoolean("isTiltControl", true)
         soundEnabled = pref.getBoolean("sonidoActivado", false)
@@ -42,7 +30,6 @@ object Settings {
             pref.getInteger("numeroDeVecesQueSeHaJugado", 0)
     }
 
-    @JvmStatic
     fun save() {
         pref.putBoolean("isTiltControl", tiltControlEnabled)
 
@@ -60,7 +47,6 @@ object Settings {
         pref.flush()
     }
 
-    @JvmStatic
     fun addScore(puntuacion: Int) {
         for (i in 0..4) {
             if (highScores[i] < puntuacion) {

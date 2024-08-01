@@ -3,14 +3,14 @@ package com.nopalsoft.invaders.frame
 import kotlin.math.abs
 
 class AlienShip(life: Int, increaseSpeed: Float, x: Float, y: Float) : DynamicGameObject(x, y, RADIUS) {
-    val SIMPLE_SCORE: Int = 10
+
 
     var livesLeft: Int
     var punctuation: Int
     var stateTime: Float = 0f
     var state: Int
-    var movedDistance: Float
-    var increaseSpeed: Float
+    private var movedDistance: Float
+    private var increaseSpeed: Float
 
     init {
         state = MOVE_SIDES
@@ -71,7 +71,7 @@ class AlienShip(life: Int, increaseSpeed: Float, x: Float, y: Float) : DynamicGa
         const val EXPLODING: Int = 3
         const val SPEED: Float = 4f
         const val SPEED_DOWN: Float = -3.5f
-
+        private const val SIMPLE_SCORE: Int = 10
         const val MOVE_RANGE_SIDES: Float = 6.7f
         const val MOVE_RANGE_DOWN: Float = 1.2f
         const val EXPLODE_TIME: Float = 0.05f * 19

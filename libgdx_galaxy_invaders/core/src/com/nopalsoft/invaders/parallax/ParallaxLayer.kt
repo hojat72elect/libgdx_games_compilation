@@ -10,17 +10,14 @@ import com.badlogic.gdx.math.Vector2
  * @param padding The padding of the region at x,y.
  */
 class ParallaxLayer(
-    @JvmField var region: TextureRegion,
-    @JvmField var parallaxRatio: Vector2?,
-    @JvmField var startPosition: Vector2,
-    @JvmField var padding: Vector2?
+    var region: TextureRegion,
+    var parallaxRatio: Vector2?,
+    var startPosition: Vector2,
+    var padding: Vector2?
 ) {
-    @JvmField
+
     var width: Float
-
-    @JvmField
     var height: Float
-
 
     constructor(
         region: TextureRegion,

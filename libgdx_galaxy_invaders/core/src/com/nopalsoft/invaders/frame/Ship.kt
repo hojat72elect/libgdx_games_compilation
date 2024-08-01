@@ -4,16 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.nopalsoft.invaders.game.World
 
 class Ship(x: Float, y: Float) : DynamicGameObject(x, y, WIDTH, HEIGHT) {
-    @JvmField
+
     var livesShield: Int = 1
-
-    @JvmField
     var lives: Int = 3
-
-    @JvmField
     var state: Int
-
-    @JvmField
     var stateTime: Float = 0f
 
     init {

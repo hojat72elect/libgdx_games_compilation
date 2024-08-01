@@ -11,15 +11,10 @@ import com.nopalsoft.invaders.MainInvaders
 import com.nopalsoft.invaders.Settings
 import com.nopalsoft.invaders.game.GameScreen
 
-abstract class Screens(@JvmField val game: MainInvaders) : InputAdapter(), Screen {
+abstract class Screens(val game: MainInvaders) : InputAdapter(), Screen {
 
-    @JvmField
     val myCamera = OrthographicCamera(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
-
-    @JvmField
     val batcher = game.spriteBatch
-
-    @JvmField
     val stage = game.stage
 
     init {

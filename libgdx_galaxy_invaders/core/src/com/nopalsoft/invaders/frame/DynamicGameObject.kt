@@ -3,7 +3,7 @@ package com.nopalsoft.invaders.frame
 import com.badlogic.gdx.math.Vector2
 
 open class DynamicGameObject : GameObject {
-    @JvmField
+
     val velocity: Vector2
 
     constructor(x: Float, y: Float, width: Float, height: Float) : super(x, y, width, height) {

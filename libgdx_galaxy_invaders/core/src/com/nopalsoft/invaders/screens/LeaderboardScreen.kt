@@ -19,11 +19,11 @@ import com.nopalsoft.invaders.Assets.styleTextButtonMenu
 import com.nopalsoft.invaders.MainInvaders
 
 class LeaderboardScreen(game: MainInvaders) : Screens(game) {
-    var btLeaderBoard: TextButton
-    var btAchievements: TextButton
-    var btBack: TextButton = TextButton(languages!!["back"], styleTextButtonBack)
-    var btSignOut: TextButton
-    var ellipseLeft: Image
+    private var btLeaderBoard: TextButton
+    private var btAchievements: TextButton
+    private var btBack: TextButton = TextButton(languages!!["back"], styleTextButtonBack)
+    private var btSignOut: TextButton
+    private var ellipseLeft: Image
 
     init {
         btBack.pad(0f, 15f, 35f, 0f)

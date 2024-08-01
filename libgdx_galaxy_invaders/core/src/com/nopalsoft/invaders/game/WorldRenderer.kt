@@ -52,7 +52,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         renderMissil()
         renderBoost()
         batch.end()
-        if (Settings.drawDebugLines) {
+        if (Settings.DRAW_DEBUG_LINES) {
             renderDebugBounds()
         }
     }

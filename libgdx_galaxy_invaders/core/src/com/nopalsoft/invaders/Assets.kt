@@ -22,87 +22,55 @@ import com.nopalsoft.invaders.parallax.ParallaxLayer
 object Assets {
 
     private val glyphLayout = GlyphLayout()
-    @JvmStatic
     var languages: I18NBundle? = null
-    var background: AtlasRegion? = null
-    @JvmStatic
     var parallaxBackground: ParallaxBackground? = null
 
-    @JvmStatic
     var shipLeft: AtlasRegion? = null
-    @JvmStatic
     var shipRight: AtlasRegion? = null
-    @JvmStatic
     var ship: AtlasRegion? = null
 
     // Fonts
-    @JvmStatic
     var font60: BitmapFont? = null // Mainly for the title of the app
-    @JvmStatic
     var font45: BitmapFont? = null
-    @JvmStatic
     var font15: BitmapFont? = null
-    @JvmStatic
     var font10: BitmapFont? = null
 
     // Menu
-    @JvmStatic
     var ellipseMenuLeft: AtlasRegion? = null
-    @JvmStatic
     var buttonSignInUp: NinePatchDrawable? = null
-    @JvmStatic
     var buttonSignInDown: NinePatchDrawable? = null
-    @JvmStatic
     var titleMenuBox: NinePatchDrawable? = null
 
     // Game
-    @JvmStatic
     var recuadroInGameStatus: NinePatchDrawable? = null
-    @JvmStatic
     var btLeft: TextureRegionDrawable? = null
-    @JvmStatic
     var btRight: TextureRegionDrawable? = null
-    @JvmStatic
     var btFire: TextureRegionDrawable? = null
-    @JvmStatic
     var btFireDown: TextureRegionDrawable? = null
-    @JvmStatic
     var btMissil: TextureRegionDrawable? = null
-    @JvmStatic
     var btMissilDown: TextureRegionDrawable? = null
 
     // Aid
-    @JvmStatic
     var help1: AtlasRegion? = null
-    @JvmStatic
     var clickHelp: AtlasRegion? = null
 
     // Buttons
-    @JvmStatic
     var buttonSoundOn: TextureRegionDrawable? = null
-    @JvmStatic
     var buttonSoundOff: TextureRegionDrawable? = null
-    @JvmStatic
     var buttonMusicOn: TextureRegionDrawable? = null
-    @JvmStatic
     var buttonMusicOff: TextureRegionDrawable? = null
 
     // Ammunition
     var balaNormal: AtlasRegion? = null
-    @JvmStatic
     var missile: Animation<TextureRegion>? = null
     var bulletLevel1: AtlasRegion? = null
     var bulletLevel2: AtlasRegion? = null
     var bulletLevel3: AtlasRegion? = null
     var bulletLevel4: AtlasRegion? = null
 
-    @JvmStatic
     var boost1: AtlasRegion? = null
-    @JvmStatic
     var boost2: AtlasRegion? = null
-    @JvmStatic
     var boost3: AtlasRegion? = null
-    @JvmStatic
     var upgLife: AtlasRegion? = null
 
     var explosionFuego: Animation<TextureRegion>? = null
@@ -115,38 +83,38 @@ object Assets {
     var alien4: AtlasRegion? = null
 
     // Sounds
-    @JvmStatic
+
     var music: Music? = null
-    @JvmStatic
+
     var coinSound: Sound? = null
-    @JvmStatic
+
     var clickSound: Sound? = null
-    @JvmStatic
+
     var explosionSound: Sound? = null
-    @JvmStatic
+
     var missileFire: Sound? = null
 
     // Styles
-    @JvmStatic
+
     var styleTextButtonMenu: TextButtonStyle? = null
-    @JvmStatic
+
     var styleTextButtonFacebook: TextButtonStyle? = null
-    @JvmStatic
+
     var styleTextButtonBack: TextButtonStyle? = null
-    @JvmStatic
+
     var styleTextButton: TextButtonStyle? = null
 
-    @JvmStatic
+
     var styleDialogPause: WindowStyle? = null
-    @JvmStatic
+
     var styleLabel: LabelStyle? = null
-    @JvmStatic
+
     var styleLabelDialog: LabelStyle? = null
-    @JvmStatic
+
     var styleSlider: SliderStyle? = null
-    @JvmStatic
+
     var styleImageButtonPause: ImageButtonStyle? = null
-    @JvmStatic
+
     var styleImageButtonStyleCheckBox: ImageButtonStyle? = null
 
 
@@ -371,12 +339,12 @@ object Assets {
         if (Settings.soundEnabled) sound.play(volumen)
     }
 
-    @JvmStatic
+
     fun playSound(sound: Sound) {
         if (soundEnabled) sound.play(1f)
     }
 
-    @JvmStatic
+
     fun getTextWidth(font: BitmapFont?, text: String?): Float {
         glyphLayout.setText(font, text)
         return glyphLayout.width

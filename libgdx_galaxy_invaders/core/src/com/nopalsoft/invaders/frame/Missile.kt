@@ -13,10 +13,7 @@ class Missile(x: Float, y: Float) : DynamicGameObject(x, y, WIDTH, HEIGHT) {
 
     private val speed: Float = 30f
 
-    @JvmField
     var stateTime: Float
-
-    @JvmField
     var state: Int
 
     init {

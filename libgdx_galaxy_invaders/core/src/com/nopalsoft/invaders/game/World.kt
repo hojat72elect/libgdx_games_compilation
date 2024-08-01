@@ -13,26 +13,17 @@ import com.nopalsoft.invaders.screens.Screens
 import java.util.Random
 
 class World {
-    @JvmField
-    var state: Int
 
-    @JvmField
+    var state: Int
     var myShip = Ship(WIDTH / 2f, 9.5f)
     var boosts = arrayListOf<Boost>()
     var missiles = arrayListOf<Missile>()
     var shipBullets = arrayListOf<Bullet>()
     var alienBullets = arrayListOf<Bullet>()
     var alienShips = arrayListOf<AlienShip>()
-
     private var oRan: Random
-
-    @JvmField
     var score: Int
-
-    @JvmField
     var currentLevel: Int
-
-    @JvmField
     var missileCount: Int = 5
 
     private var extraChanceDrop: Int
