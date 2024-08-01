@@ -28,30 +28,30 @@ abstract class Screens(@JvmField val game: MainInvaders) : InputAdapter(), Scree
         val input = InputMultiplexer(this, stage)
         Gdx.input.inputProcessor = input
 
-        Assets.font10.data.setScale(.65f)
-        Assets.font15.data.setScale(1f)
-        Assets.font45.data.setScale(.85f)
-        Assets.font60.data.setScale(1.2f)
+        Assets.font10?.data?.setScale(.65f)
+        Assets.font15?.data?.setScale(1f)
+        Assets.font45?.data?.setScale(.85f)
+        Assets.font60?.data?.setScale(1.2f)
 
         when (this) {
             is MainMenuScreen -> {
-                Assets.font10.data.setScale(.65f)
-                Assets.font15.data.setScale(1f)
-                Assets.font45.data.setScale(.85f)
-                Assets.font60.data.setScale(1.2f)
+                Assets.font10?.data?.setScale(.65f)
+                Assets.font15?.data?.setScale(1f)
+                Assets.font45?.data?.setScale(.85f)
+                Assets.font60?.data?.setScale(1.2f)
             }
 
             is GameScreen -> {
-                Assets.font15.data.setScale(1f)
-                Assets.font45.data.setScale(.7f)
-                Assets.font10.data.setScale(.65f)
+                Assets.font15?.data?.setScale(1f)
+                Assets.font45?.data?.setScale(.7f)
+                Assets.font10?.data?.setScale(.65f)
             }
 
             is SettingsScreen -> {
-                Assets.font10.data.setScale(1f)
-                Assets.font15.data.setScale(1f)
-                Assets.font45.data.setScale(.65f)
-                Assets.font60.data.setScale(1f)
+                Assets.font10?.data?.setScale(1f)
+                Assets.font15?.data?.setScale(1f)
+                Assets.font45?.data?.setScale(.65f)
+                Assets.font60?.data?.setScale(1f)
             }
         }
 
@@ -86,11 +86,11 @@ abstract class Screens(@JvmField val game: MainInvaders) : InputAdapter(), Scree
     }
 
     override fun pause() {
-        Assets.music.pause()
+        Assets.music?.pause()
     }
 
     override fun resume() {
-        if (Settings.musicEnabled && Assets.music.isPlaying.not()) Assets.music.play()
+        if (Settings.musicEnabled && Assets.music!!.isPlaying.not()) Assets.music!!.play()
     }
 
     override fun dispose() {

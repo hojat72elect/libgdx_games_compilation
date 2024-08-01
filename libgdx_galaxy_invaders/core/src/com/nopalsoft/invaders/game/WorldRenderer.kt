@@ -36,9 +36,9 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         // batch.draw(Assets.fondo1, cam.position.x - FRUSTUM_WIDTH / 2, cam.position.y - FRUSTUM_HEIGHT / 2, FRUSTUM_WIDTH,FRUSTUM_HEIGHT);
         batch.end()
         if (oWorld.state == World.STATE_RUNNING) {
-            Assets.parallaxBackground.render(deltaTime)
+            Assets.parallaxBackground?.render(deltaTime)
         } else { // GAMEOVER, PAUSA, READY, ETC
-            Assets.parallaxBackground.render(0f)
+            Assets.parallaxBackground?.render(0f)
         }
     }
 
@@ -63,7 +63,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
             else if (oWorld.myShip.velocity.x > 3) Assets.shipRight
             else Assets.ship
         } else {
-            Assets.explosionFuego.getKeyFrame(oWorld.myShip.stateTime, false)
+            Assets.explosionFuego?.getKeyFrame(oWorld.myShip.stateTime, false)
         }
         batch.draw(
             keyFrame,
@@ -77,7 +77,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         /* Dibuja el escudo de la nave */
         if (oWorld.myShip.livesShield > 0) {
             batch.draw(
-                Assets.shield.getKeyFrame(oWorld.myShip.stateTime, true),
+                Assets.shield?.getKeyFrame(oWorld.myShip.stateTime, true),
                 oWorld.myShip.position.x - 5.5f,
                 oWorld.myShip.position.y - 5.5f,
                 11f,
@@ -91,7 +91,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
         for (i in 0 until len) {
             val oAlienShip = oWorld.alienShips[i]
             val keyFrame = if (oAlienShip.state == AlienShip.EXPLODING) {
-                Assets.explosionFuego.getKeyFrame(oAlienShip.stateTime, false)
+                Assets.explosionFuego?.getKeyFrame(oAlienShip.stateTime, false)
             } else {
                 if (oAlienShip.livesLeft >= 10) Assets.alien4
                 else if (oAlienShip.livesLeft >= 5) Assets.alien3
@@ -178,13 +178,13 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
             var keyFrame: TextureRegion?
             when (oMissile.state) {
                 Missile.STATE_TRIGGERED -> {
-                    keyFrame = Assets.missile.getKeyFrame(oMissile.stateTime, true)
+                    keyFrame = Assets.missile?.getKeyFrame(oMissile.stateTime, true)
                     widht = .8f
                     heigth = 2.5f
                 }
 
                 Missile.STATE_EXPLODING -> {
-                    keyFrame = Assets.explosionFuego.getKeyFrame(oMissile.stateTime, false)
+                    keyFrame = Assets.explosionFuego?.getKeyFrame(oMissile.stateTime, false)
                     run {
                         heigth = 15.0f
                         widht = heigth
@@ -192,7 +192,7 @@ class WorldRenderer(batch: SpriteBatch, private var oWorld: World) {
                 }
 
                 else -> {
-                    keyFrame = Assets.explosionFuego.getKeyFrame(oMissile.stateTime, false)
+                    keyFrame = Assets.explosionFuego?.getKeyFrame(oMissile.stateTime, false)
                     run {
                         heigth = 15.0f
                         widht = heigth

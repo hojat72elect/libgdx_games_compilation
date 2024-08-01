@@ -73,7 +73,7 @@ public class GameScreen extends Screens {
         // OnScreen Controls
         accel = 0;
         level = oWorld.currentLevel;
-        btLeft = new ImageButton(Assets.btLeft);
+        btLeft = new ImageButton(Assets.getBtLeft());
         btLeft.setSize(65, 50);
         btLeft.setPosition(10, 5);
         btLeft.addListener(new ClickListener() {
@@ -89,7 +89,7 @@ public class GameScreen extends Screens {
             }
 
         });
-        btRight = new ImageButton(Assets.btRight);
+        btRight = new ImageButton(Assets.getBtRight());
         btRight.setSize(65, 50);
         btRight.setPosition(85, 5);
         btRight.addListener(new ClickListener() {
@@ -107,7 +107,7 @@ public class GameScreen extends Screens {
 
         });
 
-        buttonMissile = new TextButton(oWorld.missileCount + "", new TextButtonStyle(Assets.btMissil, Assets.btMissilDown, null, Assets.font10));
+        buttonMissile = new TextButton(oWorld.missileCount + "", new TextButtonStyle(Assets.getBtMissil(), Assets.getBtMissilDown(), null, Assets.getFont10()));
         buttonMissile.getLabel().setColor(Color.GREEN);
         buttonMissile.setSize(60, 60);
         buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
@@ -117,7 +117,7 @@ public class GameScreen extends Screens {
                 didItFireMissile = true;
             }
         });
-        btFire = new ImageButton(Assets.btFire, Assets.btFireDown);
+        btFire = new ImageButton(Assets.getBtFire(), Assets.getBtFireDown());
         btFire.setSize(60, 60);
         btFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
         btFire.addListener(new ClickListener() {
@@ -129,15 +129,15 @@ public class GameScreen extends Screens {
 
         // End OnScreen Controls
         // Start dialog Pause
-        dialogPause = new Dialog(Assets.languages.get("game_paused"), Assets.styleDialogPause);
+        dialogPause = new Dialog(Assets.getLanguages().get("game_paused"), Assets.getStyleDialogPause());
 
-        TextButton btContinue = new TextButton(Assets.languages.get("continue"), Assets.styleTextButton);
-        TextButton btMenu = new TextButton(Assets.languages.get("main_menu"), Assets.styleTextButton);
+        TextButton btContinue = new TextButton(Assets.getLanguages().get("continue"), Assets.getStyleTextButton());
+        TextButton btMenu = new TextButton(Assets.getLanguages().get("main_menu"), Assets.getStyleTextButton());
 
         btContinue.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 state = GAME_RUNNING;
                 oWorld.state = World.STATE_RUNNING;
                 dialogPause.hide();
@@ -148,7 +148,7 @@ public class GameScreen extends Screens {
         btMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new MainMenuScreen(game));
                 dialogPause.hide();
 
@@ -162,16 +162,16 @@ public class GameScreen extends Screens {
 
         // Inicio dialogGameOver
 
-        dialogGameOver = new Dialog("Game Over", Assets.styleDialogPause);
+        dialogGameOver = new Dialog("Game Over", Assets.getStyleDialogPause());
 
-        TextButton btTryAgain = new TextButton(Assets.languages.get("try_again"), Assets.styleTextButton);
-        TextButton btMenu2 = new TextButton(Assets.languages.get("main_menu"), Assets.styleTextButton);
-        TextButton btShare = new TextButton(Assets.languages.get("share"), Assets.styleTextButtonFacebook);
+        TextButton btTryAgain = new TextButton(Assets.getLanguages().get("try_again"), Assets.getStyleTextButton());
+        TextButton btMenu2 = new TextButton(Assets.getLanguages().get("main_menu"), Assets.getStyleTextButton());
+        TextButton btShare = new TextButton(Assets.getLanguages().get("share"), Assets.getStyleTextButtonFacebook());
 
         btTryAgain.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new GameScreen(game));
                 dialogGameOver.hide();
 
@@ -181,7 +181,7 @@ public class GameScreen extends Screens {
         btMenu2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new MainMenuScreen(game));
                 dialogGameOver.hide();
 
@@ -190,9 +190,9 @@ public class GameScreen extends Screens {
         btShare.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String text = Assets.languages.format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score);
+                String text = Assets.getLanguages().format("i_just_score_n_points_playing_droid_invaders_can_you_beat_me", oWorld.score);
                 Gdx.app.log("Share text", text);
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
             }
         });
 
@@ -203,7 +203,7 @@ public class GameScreen extends Screens {
         dialogGameOver.getButtonTable().row();
 
 
-        Label lbShare = new Label(Assets.languages.get("share_your_score_on_facebook"), Assets.styleLabelDialog);
+        Label lbShare = new Label(Assets.getLanguages().get("share_your_score_on_facebook"), Assets.getStyleLabelDialog());
         lbShare.setAlignment(Align.center);
         lbShare.setWrap(true);
         dialogGameOver.getButtonTable().add(lbShare).width(200).expand();
@@ -215,7 +215,7 @@ public class GameScreen extends Screens {
             game.dialogs.showDialogRate();
         }
 
-        btPause = new ImageButton(Assets.styleImageButtonPause);
+        btPause = new ImageButton(Assets.getStyleImageButtonPause());
         btPause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -223,13 +223,13 @@ public class GameScreen extends Screens {
             }
         });
 
-        lbLevel = new Label(Assets.languages.get("level") + " " + oWorld.currentLevel, Assets.styleLabel);
-        lbScore = new Label(Assets.languages.get("score") + " " + oWorld.score, Assets.styleLabel);
-        lbNumVidas = new Label("x" + oWorld.myShip.lives, Assets.styleLabel);
-        Image imVida = new Image(Assets.ship);
+        lbLevel = new Label(Assets.getLanguages().get("level") + " " + oWorld.currentLevel, Assets.getStyleLabel());
+        lbScore = new Label(Assets.getLanguages().get("score") + " " + oWorld.score, Assets.getStyleLabel());
+        lbNumVidas = new Label("x" + oWorld.myShip.lives, Assets.getStyleLabel());
+        Image imVida = new Image(Assets.getShip());
 
         scoresBar = new Table();
-        scoresBar.setBackground(Assets.recuadroInGameStatus);
+        scoresBar.setBackground(Assets.getRecuadroInGameStatus());
         scoresBar.setWidth(SCREEN_WIDTH);
         scoresBar.setHeight(30);
         scoresBar.setPosition(0, SCREEN_HEIGHT - 30);
@@ -249,7 +249,7 @@ public class GameScreen extends Screens {
 
     private void setUpTutorial() {
 
-        labelTiltYourDevice = new Label(Assets.languages.get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.font45, Color.GREEN));
+        labelTiltYourDevice = new Label(Assets.getLanguages().get("tilt_your_device_to_move_horizontally"), new LabelStyle(Assets.getFont45(), Color.GREEN));
         labelTiltYourDevice.setWrap(true);
         labelTiltYourDevice.setAlignment(Align.center);
         labelTiltYourDevice.setPosition(0, 120);
@@ -262,15 +262,15 @@ public class GameScreen extends Screens {
         Table boostTable = new Table();
         groupTutorial.addActor(boostTable);
 
-        Image vida = new Image(Assets.upgLife);
-        Image boostBomba = new Image(Assets.boost2);
-        Image boostEscudo = new Image(Assets.boost3);
-        Image boostUpgradeWeapon = new Image(Assets.boost1);
+        Image vida = new Image(Assets.getUpgLife());
+        Image boostBomba = new Image(Assets.getBoost2());
+        Image boostEscudo = new Image(Assets.getBoost3());
+        Image boostUpgradeWeapon = new Image(Assets.getBoost1());
 
-        Label lblVida = new Label(Assets.languages.get("get_one_extra_life"), Assets.styleLabel);
-        Label lblBomba = new Label(Assets.languages.get("get_one_extra_missil"), Assets.styleLabel);
-        Label lblShield = new Label(Assets.languages.get("get_a_shield"), Assets.styleLabel);
-        Label lblUpgradeWeapn = new Label(Assets.languages.get("upgrade_your_weapon"), Assets.styleLabel);
+        Label lblVida = new Label(Assets.getLanguages().get("get_one_extra_life"), Assets.getStyleLabel());
+        Label lblBomba = new Label(Assets.getLanguages().get("get_one_extra_missil"), Assets.getStyleLabel());
+        Label lblShield = new Label(Assets.getLanguages().get("get_a_shield"), Assets.getStyleLabel());
+        Label lblUpgradeWeapn = new Label(Assets.getLanguages().get("upgrade_your_weapon"), Assets.getStyleLabel());
 
         boostTable.setPosition(0, 340);
         boostTable.setWidth(SCREEN_WIDTH);
@@ -289,13 +289,13 @@ public class GameScreen extends Screens {
         boostTable.add(lblUpgradeWeapn).padLeft(15).left();
 
         Label touchLeft, touchRight;
-        touchLeft = new Label(Assets.languages.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
+        touchLeft = new Label(Assets.getLanguages().get("touch_left_side_to_fire_missils"), Assets.getStyleLabel());
         touchLeft.setWrap(true);
         touchLeft.setWidth(160);
         touchLeft.setAlignment(Align.center);
         touchLeft.setPosition(0, 50);
 
-        touchRight = new Label(Assets.languages.get("touch_right_side_to_fire"), Assets.styleLabel);
+        touchRight = new Label(Assets.getLanguages().get("touch_right_side_to_fire"), Assets.getStyleLabel());
         touchRight.setWrap(true);
         touchRight.setWidth(160);
         touchRight.setAlignment(Align.center);
@@ -380,10 +380,10 @@ public class GameScreen extends Screens {
 
         if (level != oWorld.currentLevel) {
             level = oWorld.currentLevel;
-            lbLevel.setText(Assets.languages.get("level") + " " + level);
+            lbLevel.setText(Assets.getLanguages().get("level") + " " + level);
         }
 
-        lbScore.setText(Assets.languages.get("score") + " " + oWorld.score);
+        lbScore.setText(Assets.getLanguages().get("score") + " " + oWorld.score);
         lbNumVidas.setText("x" + oWorld.myShip.lives);
 
         if (oWorld.state == World.STATE_GAME_OVER) {
@@ -398,7 +398,7 @@ public class GameScreen extends Screens {
     }
 
     private void setPaused() {
-        Assets.playSound(Assets.clickSound);
+        Assets.playSound(Assets.getClickSound());
         state = GAME_PAUSE;
         oWorld.state = World.STATE_PAUSED;
         dialogPause.show(stage);
@@ -410,7 +410,7 @@ public class GameScreen extends Screens {
         if (state != GAME_TUTORIAL)
             renderer.render(delta);
         else
-            Assets.parallaxBackground.render(delta);
+            Assets.getParallaxBackground().render(delta);
         myCamera.update();
         batcher.setProjectionMatrix(myCamera.combined);
         batcher.enableBlending();
@@ -437,24 +437,24 @@ public class GameScreen extends Screens {
             if (rotation < -20 || rotation > 20)
                 addRotation *= -1;
             rotation += addRotation;
-            batcher.draw(Assets.help1, SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotation);
+            batcher.draw(Assets.getHelp1(), SCREEN_WIDTH / 2f - 51, 190, 51, 0, 102, 200, 1, 1, rotation);
         } else {
-            batcher.draw(Assets.clickHelp, 155, 0, 10, 125);
+            batcher.draw(Assets.getClickHelp(), 155, 0, 10, 125);
 
         }
 
     }
 
     private void presentReady() {
-        String touchToStart = Assets.languages.get("touch_to_start");
-        float textWidth = Assets.getTextWidth(Assets.font45, touchToStart);
-        Assets.font45.draw(batcher, touchToStart, (SCREEN_WIDTH / 2f) - (textWidth / 2f), 220);
+        String touchToStart = Assets.getLanguages().get("touch_to_start");
+        float textWidth = Assets.getTextWidth(Assets.getFont45(), touchToStart);
+        Assets.getFont45().draw(batcher, touchToStart, (SCREEN_WIDTH / 2f) - (textWidth / 2f), 220);
     }
 
     private void presentRunning() {
         if (oWorld.missileCount > 0 && Settings.getTiltControlEnabled()) {
-            batcher.draw(Assets.missile.getKeyFrame(0), 1, 1, 8, 28);
-            Assets.font15.draw(batcher, "X" + oWorld.missileCount, 10, 25);
+            batcher.draw(Assets.getMissile().getKeyFrame(0), 1, 1, 8, 28);
+            Assets.getFont15().draw(batcher, "X" + oWorld.missileCount, 10, 25);
         }
     }
 
@@ -473,7 +473,7 @@ public class GameScreen extends Screens {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-            Assets.playSound(Assets.clickSound);
+            Assets.playSound(Assets.getClickSound());
             if (state == GAME_RUNNING) {
                 setPaused();
                 return true;

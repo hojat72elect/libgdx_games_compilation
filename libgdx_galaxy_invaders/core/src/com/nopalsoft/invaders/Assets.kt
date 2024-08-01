@@ -1,311 +1,385 @@
-package com.nopalsoft.invaders;
+package com.nopalsoft.invaders
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.I18NBundle;
-import com.nopalsoft.invaders.parallax.ParallaxBackground;
-import com.nopalsoft.invaders.parallax.ParallaxLayer;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.I18NBundle
+import com.nopalsoft.invaders.Settings.soundEnabled
+import com.nopalsoft.invaders.parallax.ParallaxBackground
+import com.nopalsoft.invaders.parallax.ParallaxLayer
 
-public class Assets {
+object Assets {
 
-    private static final GlyphLayout glyphLayout = new GlyphLayout();
-    public static I18NBundle languages;
-    public static ParallaxBackground parallaxBackground;
+    private val glyphLayout = GlyphLayout()
+    @JvmStatic
+    var languages: I18NBundle? = null
+    var background: AtlasRegion? = null
+    @JvmStatic
+    var parallaxBackground: ParallaxBackground? = null
 
-    public static AtlasRegion shipLeft;
-    public static AtlasRegion shipRight;
-    public static AtlasRegion ship;
+    @JvmStatic
+    var shipLeft: AtlasRegion? = null
+    @JvmStatic
+    var shipRight: AtlasRegion? = null
+    @JvmStatic
+    var ship: AtlasRegion? = null
 
     // Fonts
-    public static BitmapFont font60;// Mainly for the title of the app
-    public static BitmapFont font45;
-    public static BitmapFont font15;
-    public static BitmapFont font10;
+    @JvmStatic
+    var font60: BitmapFont? = null // Mainly for the title of the app
+    @JvmStatic
+    var font45: BitmapFont? = null
+    @JvmStatic
+    var font15: BitmapFont? = null
+    @JvmStatic
+    var font10: BitmapFont? = null
 
     // Menu
-    public static AtlasRegion ellipseMenuLeft;
-    public static NinePatchDrawable buttonSignInUp;
-    public static NinePatchDrawable buttonSignInDown;
-    public static NinePatchDrawable titleMenuBox;
+    @JvmStatic
+    var ellipseMenuLeft: AtlasRegion? = null
+    @JvmStatic
+    var buttonSignInUp: NinePatchDrawable? = null
+    @JvmStatic
+    var buttonSignInDown: NinePatchDrawable? = null
+    @JvmStatic
+    var titleMenuBox: NinePatchDrawable? = null
 
     // Game
-    public static NinePatchDrawable recuadroInGameStatus;
-    public static TextureRegionDrawable btLeft;
-    public static TextureRegionDrawable btRight;
-    public static TextureRegionDrawable btFire;
-    public static TextureRegionDrawable btFireDown;
-    public static TextureRegionDrawable btMissil;
-    public static TextureRegionDrawable btMissilDown;
+    @JvmStatic
+    var recuadroInGameStatus: NinePatchDrawable? = null
+    @JvmStatic
+    var btLeft: TextureRegionDrawable? = null
+    @JvmStatic
+    var btRight: TextureRegionDrawable? = null
+    @JvmStatic
+    var btFire: TextureRegionDrawable? = null
+    @JvmStatic
+    var btFireDown: TextureRegionDrawable? = null
+    @JvmStatic
+    var btMissil: TextureRegionDrawable? = null
+    @JvmStatic
+    var btMissilDown: TextureRegionDrawable? = null
 
     // Aid
-    public static AtlasRegion help1;
-    public static AtlasRegion clickHelp;
+    @JvmStatic
+    var help1: AtlasRegion? = null
+    @JvmStatic
+    var clickHelp: AtlasRegion? = null
 
     // Buttons
-    public static TextureRegionDrawable buttonSoundOn;
-    public static TextureRegionDrawable buttonSoundOff;
-    public static TextureRegionDrawable buttonMusicOn;
-    public static TextureRegionDrawable buttonMusicOff;
+    @JvmStatic
+    var buttonSoundOn: TextureRegionDrawable? = null
+    @JvmStatic
+    var buttonSoundOff: TextureRegionDrawable? = null
+    @JvmStatic
+    var buttonMusicOn: TextureRegionDrawable? = null
+    @JvmStatic
+    var buttonMusicOff: TextureRegionDrawable? = null
 
     // Ammunition
-    public static AtlasRegion balaNormal;
-    public static Animation<TextureRegion> missile;
-    public static AtlasRegion bulletLevel1;
-    public static AtlasRegion bulletLevel2;
-    public static AtlasRegion bulletLevel3;
-    public static AtlasRegion bulletLevel4;
+    var balaNormal: AtlasRegion? = null
+    @JvmStatic
+    var missile: Animation<TextureRegion>? = null
+    var bulletLevel1: AtlasRegion? = null
+    var bulletLevel2: AtlasRegion? = null
+    var bulletLevel3: AtlasRegion? = null
+    var bulletLevel4: AtlasRegion? = null
 
-    public static AtlasRegion boost1;
-    public static AtlasRegion boost2;
-    public static AtlasRegion boost3;
-    public static AtlasRegion upgLife;
+    @JvmStatic
+    var boost1: AtlasRegion? = null
+    @JvmStatic
+    var boost2: AtlasRegion? = null
+    @JvmStatic
+    var boost3: AtlasRegion? = null
+    @JvmStatic
+    var upgLife: AtlasRegion? = null
 
-    public static Animation<TextureRegion> explosionFuego;
-    public static Animation<TextureRegion> shield;
+    var explosionFuego: Animation<TextureRegion>? = null
+    var shield: Animation<TextureRegion>? = null
 
-    public static AtlasRegion bulletNormalEnemy;
-    public static AtlasRegion alien1;
-    public static AtlasRegion alien2;
-    public static AtlasRegion alien3;
-    public static AtlasRegion alien4;
+    var bulletNormalEnemy: AtlasRegion? = null
+    var alien1: AtlasRegion? = null
+    var alien2: AtlasRegion? = null
+    var alien3: AtlasRegion? = null
+    var alien4: AtlasRegion? = null
 
     // Sounds
-    public static Music music;
-    public static Sound coinSound;
-    public static Sound clickSound;
-    public static Sound explosionSound;
-    public static Sound missileFire;
+    @JvmStatic
+    var music: Music? = null
+    @JvmStatic
+    var coinSound: Sound? = null
+    @JvmStatic
+    var clickSound: Sound? = null
+    @JvmStatic
+    var explosionSound: Sound? = null
+    @JvmStatic
+    var missileFire: Sound? = null
 
     // Styles
-    public static TextButtonStyle styleTextButtonMenu;
-    public static TextButtonStyle styleTextButtonFacebook;
-    public static TextButtonStyle styleTextButtonBack;
-    public static TextButtonStyle styleTextButton;
+    @JvmStatic
+    var styleTextButtonMenu: TextButtonStyle? = null
+    @JvmStatic
+    var styleTextButtonFacebook: TextButtonStyle? = null
+    @JvmStatic
+    var styleTextButtonBack: TextButtonStyle? = null
+    @JvmStatic
+    var styleTextButton: TextButtonStyle? = null
 
-    public static WindowStyle styleDialogPause;
+    @JvmStatic
+    var styleDialogPause: WindowStyle? = null
+    @JvmStatic
+    var styleLabel: LabelStyle? = null
+    @JvmStatic
+    var styleLabelDialog: LabelStyle? = null
+    @JvmStatic
+    var styleSlider: SliderStyle? = null
+    @JvmStatic
+    var styleImageButtonPause: ImageButtonStyle? = null
+    @JvmStatic
+    var styleImageButtonStyleCheckBox: ImageButtonStyle? = null
 
-    public static LabelStyle styleLabel;
 
-    public static LabelStyle styleLabelDialog;
-    public static SliderStyle styleSlider;
+    private fun loadFont(atlas: TextureAtlas) {
+        font60 = BitmapFont(Gdx.files.internal("data/font35.fnt"), atlas.findRegion("font35"), false)
+        font45 = BitmapFont(Gdx.files.internal("data/font35.fnt"), atlas.findRegion("font35"), false)
+        font15 = BitmapFont(Gdx.files.internal("data/font15.fnt"), atlas.findRegion("font15"), false)
+        font10 = BitmapFont(Gdx.files.internal("data/font15.fnt"), atlas.findRegion("font15"), false)
 
-    public static ImageButtonStyle styleImageButtonPause;
-    public static ImageButtonStyle styleImageButtonStyleCheckBox;
-
-
-    static private void loadFont(TextureAtlas atlas) {
-        font60 = new BitmapFont(Gdx.files.internal("data/font35.fnt"), atlas.findRegion("font35"), false);
-        font45 = new BitmapFont(Gdx.files.internal("data/font35.fnt"), atlas.findRegion("font35"), false);
-        font15 = new BitmapFont(Gdx.files.internal("data/font15.fnt"), atlas.findRegion("font15"), false);
-        font10 = new BitmapFont(Gdx.files.internal("data/font15.fnt"), atlas.findRegion("font15"), false);
-
-        font60.setColor(Color.GREEN);
-        font45.setColor(Color.GREEN);
-        font15.setColor(Color.GREEN);
-        font10.setColor(Color.GREEN);
+        font60?.color = Color.GREEN
+        font45?.color = Color.GREEN
+        font15?.color = Color.GREEN
+        font10?.color = Color.GREEN
     }
 
-    static private void loadSceneStyles(TextureAtlas atlas) {
 
-        /* Dialog */
+    private fun loadSceneStyles(atlas: TextureAtlas) {
 
-        NinePatchDrawable recuadroLogIn = new NinePatchDrawable(atlas.createPatch("recuadroLogIn"));
-        AtlasRegion dialogDim = atlas.findRegion("fondoNegro");
-        styleDialogPause = new WindowStyle(font45, Color.GREEN, recuadroLogIn);
-        styleDialogPause.stageBackground = new NinePatchDrawable(new NinePatch(dialogDim));
-        styleLabelDialog = new LabelStyle(font15, Color.GREEN);
+        // Dialog
+        val recuadroLogIn = NinePatchDrawable(atlas.createPatch("recuadroLogIn"))
+        val dialogDim = atlas.findRegion("fondoNegro")
+        styleDialogPause = WindowStyle(font45, Color.GREEN, recuadroLogIn)
+        styleDialogPause?.stageBackground = NinePatchDrawable(NinePatch(dialogDim))
+        styleLabelDialog = LabelStyle(font15, Color.GREEN)
 
         /* */
-
-        NinePatchDrawable default_round_down = new NinePatchDrawable(atlas.createPatch("botonDown"));
-        NinePatchDrawable default_round = new NinePatchDrawable(atlas.createPatch("boton"));
-        styleTextButton = new TextButtonStyle(default_round, default_round_down, null, font15);
-        styleTextButton.fontColor = Color.GREEN;
+        val default_round_down = NinePatchDrawable(atlas.createPatch("botonDown"))
+        val default_round = NinePatchDrawable(atlas.createPatch("boton"))
+        styleTextButton = TextButtonStyle(default_round, default_round_down, null, font15)
+        styleTextButton?.fontColor = Color.GREEN
 
         /* Menu */
-        NinePatchDrawable botonMenu = new NinePatchDrawable(atlas.createPatch("botonMenu"));
-        NinePatchDrawable botonMenuDown = new NinePatchDrawable(atlas.createPatch("botonMenuPresionado"));
-        styleTextButtonMenu = new TextButtonStyle(botonMenu, botonMenuDown, null, font45);
-        styleTextButtonMenu.fontColor = Color.GREEN;
+        val botonMenu = NinePatchDrawable(atlas.createPatch("botonMenu"))
+        val botonMenuDown = NinePatchDrawable(atlas.createPatch("botonMenuPresionado"))
+        styleTextButtonMenu = TextButtonStyle(botonMenu, botonMenuDown, null, font45)
+        styleTextButtonMenu?.fontColor = Color.GREEN
 
-        styleLabel = new LabelStyle(font15, Color.GREEN);
+        styleLabel = LabelStyle(font15, Color.GREEN)
 
         /* Slider */
-        NinePatchDrawable default_slider = new NinePatchDrawable(atlas.createPatch("default-slider"));
-        TextureRegionDrawable default_slider_knob = new TextureRegionDrawable(atlas.findRegion("default-slider-knob"));
+        val default_slider = NinePatchDrawable(atlas.createPatch("default-slider"))
+        val default_slider_knob = TextureRegionDrawable(atlas.findRegion("default-slider-knob"))
 
-        styleSlider = new SliderStyle(default_slider, default_slider_knob);
+        styleSlider = SliderStyle(default_slider, default_slider_knob)
 
-        TextureRegionDrawable btBackUp = new TextureRegionDrawable(atlas.findRegion("btBack"));
-        TextureRegionDrawable btBackDown = new TextureRegionDrawable(atlas.findRegion("btBackDown"));
+        val btBackUp = TextureRegionDrawable(atlas.findRegion("btBack"))
+        val btBackDown = TextureRegionDrawable(atlas.findRegion("btBackDown"))
 
-        styleTextButtonBack = new TextButtonStyle(btBackUp, btBackDown, null, font15);
-        styleTextButtonBack.fontColor = Color.GREEN;
+        styleTextButtonBack = TextButtonStyle(btBackUp, btBackDown, null, font15)
+        styleTextButtonBack?.fontColor = Color.GREEN
 
-        TextureRegionDrawable buttonPauseUp = new TextureRegionDrawable(atlas.findRegion("btPause"));
-        TextureRegionDrawable buttonPauseDown = new TextureRegionDrawable(atlas.findRegion("btPauseDown"));
-        styleImageButtonPause = new ImageButtonStyle(buttonPauseUp, buttonPauseDown, null, null, null, null);
+        val buttonPauseUp = TextureRegionDrawable(atlas.findRegion("btPause"))
+        val buttonPauseDown = TextureRegionDrawable(atlas.findRegion("btPauseDown"))
+        styleImageButtonPause = ImageButtonStyle(buttonPauseUp, buttonPauseDown, null, null, null, null)
 
-        NinePatchDrawable botonFacebook = new NinePatchDrawable(atlas.createPatch("btShareFacebookUp"));
-        NinePatchDrawable botonFacebookDown = new NinePatchDrawable(atlas.createPatch("btShareFacebookDown"));
-        styleTextButtonFacebook = new TextButtonStyle(botonFacebook, botonFacebookDown, null, font10);
+        val botonFacebook = NinePatchDrawable(atlas.createPatch("btShareFacebookUp"))
+        val botonFacebookDown = NinePatchDrawable(atlas.createPatch("btShareFacebookDown"))
+        styleTextButtonFacebook = TextButtonStyle(botonFacebook, botonFacebookDown, null, font10)
 
-        TextureRegionDrawable checked = new TextureRegionDrawable(atlas.findRegion("checkBoxDown"));
-        TextureRegionDrawable uncheked = new TextureRegionDrawable(atlas.findRegion("checkBox"));
+        val checked = TextureRegionDrawable(atlas.findRegion("checkBoxDown"))
+        val uncheked = TextureRegionDrawable(atlas.findRegion("checkBox"))
 
-        styleImageButtonStyleCheckBox = new ImageButtonStyle(uncheked, checked, checked, null, null, null);
+        styleImageButtonStyleCheckBox = ImageButtonStyle(uncheked, checked, checked, null, null, null)
     }
 
-    public static void load() {
-        languages = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
+
+    fun load() {
+        languages = I18NBundle.createBundle(Gdx.files.internal("strings/strings"))
 
 
-        TextureAtlas atlas1 = new TextureAtlas(Gdx.files.internal("data/atlasMap.txt"));
+        val atlas1 = TextureAtlas(Gdx.files.internal("data/atlasMap.txt"))
 
-        loadFont(atlas1);
-        loadSceneStyles(atlas1);
+        loadFont(atlas1)
+        loadSceneStyles(atlas1)
 
         // Menu
-        ellipseMenuLeft = atlas1.findRegion("elipseMenuIzq");
-        titleMenuBox = new NinePatchDrawable(atlas1.createPatch("tituloMenuRecuadro"));
+        ellipseMenuLeft = atlas1.findRegion("elipseMenuIzq")
+        titleMenuBox = NinePatchDrawable(atlas1.createPatch("tituloMenuRecuadro"))
 
         // Game
-        recuadroInGameStatus = new NinePatchDrawable(atlas1.createPatch("recuadroInGameStatus"));
-        btLeft = new TextureRegionDrawable(atlas1.findRegion("btLeft"));
-        btRight = new TextureRegionDrawable(atlas1.findRegion("btRight"));
-        btFire = new TextureRegionDrawable(atlas1.findRegion("btFire"));
-        btFireDown = new TextureRegionDrawable(atlas1.findRegion("btFire"));
-        btMissil = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
-        btMissilDown = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
+        recuadroInGameStatus = NinePatchDrawable(atlas1.createPatch("recuadroInGameStatus"))
+        btLeft = TextureRegionDrawable(atlas1.findRegion("btLeft"))
+        btRight = TextureRegionDrawable(atlas1.findRegion("btRight"))
+        btFire = TextureRegionDrawable(atlas1.findRegion("btFire"))
+        btFireDown = TextureRegionDrawable(atlas1.findRegion("btFire"))
+        btMissil = TextureRegionDrawable(atlas1.findRegion("btMissil"))
+        btMissilDown = TextureRegionDrawable(atlas1.findRegion("btMissil"))
 
-        AtlasRegion background = atlas1.findRegion("fondo");
+        val background = atlas1.findRegion("fondo")
 
-        buttonSignInUp = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInUp")));
-        buttonSignInDown = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInDown")));
+        buttonSignInUp = NinePatchDrawable(NinePatch(atlas1.createPatch("btSignInUp")))
+        buttonSignInDown = NinePatchDrawable(NinePatch(atlas1.createPatch("btSignInDown")))
 
         // Aid
-        help1 = atlas1.findRegion("help1");
-        clickHelp = atlas1.findRegion("ayudaClick");
+        help1 = atlas1.findRegion("help1")
+        clickHelp = atlas1.findRegion("ayudaClick")
 
         // Buttons
-        buttonMusicOn = new TextureRegionDrawable(atlas1.findRegion("btMusica"));
-        buttonMusicOff = new TextureRegionDrawable(atlas1.findRegion("btSinMusica"));
-        buttonSoundOn = new TextureRegionDrawable(atlas1.findRegion("btSonido"));
-        buttonSoundOff = new TextureRegionDrawable(atlas1.findRegion("btSinSonido"));
+        buttonMusicOn = TextureRegionDrawable(atlas1.findRegion("btMusica"))
+        buttonMusicOff = TextureRegionDrawable(atlas1.findRegion("btSinMusica"))
+        buttonSoundOn = TextureRegionDrawable(atlas1.findRegion("btSonido"))
+        buttonSoundOff = TextureRegionDrawable(atlas1.findRegion("btSinSonido"))
 
         // Ship
-        shipRight = atlas1.findRegion("naveRight");
-        shipLeft = atlas1.findRegion("naveLeft");
-        ship = atlas1.findRegion("nave");
+        shipRight = atlas1.findRegion("naveRight")
+        shipLeft = atlas1.findRegion("naveLeft")
+        ship = atlas1.findRegion("nave")
 
-        AtlasRegion shield0 = atlas1.findRegion("shield0");
-        AtlasRegion shield1 = atlas1.findRegion("shield1");
-        AtlasRegion shield2 = atlas1.findRegion("shield2");
-        AtlasRegion shield3 = atlas1.findRegion("shield3");
-        AtlasRegion shield4 = atlas1.findRegion("shield4");
-        AtlasRegion shield5 = atlas1.findRegion("shield5");
-        AtlasRegion shield6 = atlas1.findRegion("shield6");
-        AtlasRegion shield7 = atlas1.findRegion("shield7");
-        AtlasRegion shield8 = atlas1.findRegion("shield9");
-        AtlasRegion shield9 = atlas1.findRegion("shield9");
-        AtlasRegion shield10 = atlas1.findRegion("shield10");
-        AtlasRegion shield11 = atlas1.findRegion("shield11");
-        shield = new Animation<>(.1f, shield0, shield1, shield2, shield3, shield4, shield5, shield6, shield7, shield8, shield9, shield10, shield11);
+        val shield0 = atlas1.findRegion("shield0")
+        val shield1 = atlas1.findRegion("shield1")
+        val shield2 = atlas1.findRegion("shield2")
+        val shield3 = atlas1.findRegion("shield3")
+        val shield4 = atlas1.findRegion("shield4")
+        val shield5 = atlas1.findRegion("shield5")
+        val shield6 = atlas1.findRegion("shield6")
+        val shield7 = atlas1.findRegion("shield7")
+        val shield8 = atlas1.findRegion("shield9")
+        val shield9 = atlas1.findRegion("shield9")
+        val shield10 = atlas1.findRegion("shield10")
+        val shield11 = atlas1.findRegion("shield11")
+        shield = Animation(
+            .1f,
+            shield0,
+            shield1,
+            shield2,
+            shield3,
+            shield4,
+            shield5,
+            shield6,
+            shield7,
+            shield8,
+            shield9,
+            shield10,
+            shield11
+        )
 
         // UFOs
-        alien1 = atlas1.findRegion("alien1");
-        alien2 = atlas1.findRegion("alien2");
-        alien3 = atlas1.findRegion("alien3");
-        alien4 = atlas1.findRegion("alien4");
+        alien1 = atlas1.findRegion("alien1")
+        alien2 = atlas1.findRegion("alien2")
+        alien3 = atlas1.findRegion("alien3")
+        alien4 = atlas1.findRegion("alien4")
 
-        boost1 = atlas1.findRegion("upgLaser");
-        boost2 = atlas1.findRegion("upgBomb");
-        boost3 = atlas1.findRegion("upgShield");
-        upgLife = atlas1.findRegion("upgLife");
+        boost1 = atlas1.findRegion("upgLaser")
+        boost2 = atlas1.findRegion("upgBomb")
+        boost3 = atlas1.findRegion("upgShield")
+        upgLife = atlas1.findRegion("upgLife")
 
         // Ammunition
-        balaNormal = atlas1.findRegion("balaNormal");
-        bulletNormalEnemy = atlas1.findRegion("balaNormalEnemigo");
+        balaNormal = atlas1.findRegion("balaNormal")
+        bulletNormalEnemy = atlas1.findRegion("balaNormalEnemigo")
 
-        AtlasRegion missile1 = atlas1.findRegion("misil1");
-        AtlasRegion missile2 = atlas1.findRegion("misil2");
-        missile = new Animation<>(0.2f, missile1, missile2);
+        val missile1 = atlas1.findRegion("misil1")
+        val missile2 = atlas1.findRegion("misil2")
+        missile = Animation(0.2f, missile1, missile2)
 
 
-        bulletLevel1 = atlas1.findRegion("disparoA1");
-        bulletLevel2 = atlas1.findRegion("disparoA2");
-        bulletLevel3 = atlas1.findRegion("disparoA3");
-        bulletLevel4 = atlas1.findRegion("disparoA4");
+        bulletLevel1 = atlas1.findRegion("disparoA1")
+        bulletLevel2 = atlas1.findRegion("disparoA2")
+        bulletLevel3 = atlas1.findRegion("disparoA3")
+        bulletLevel4 = atlas1.findRegion("disparoA4")
 
         // explosion fire
-        AtlasRegion newExplosion1 = atlas1.findRegion("newExplosion1");
-        AtlasRegion newExplosion2 = atlas1.findRegion("newExplosion2");
-        AtlasRegion newExplosion3 = atlas1.findRegion("newExplosion3");
-        AtlasRegion newExplosion4 = atlas1.findRegion("newExplosion4");
-        AtlasRegion newExplosion5 = atlas1.findRegion("newExplosion5");
-        AtlasRegion newExplosion6 = atlas1.findRegion("newExplosion6");
-        AtlasRegion newExplosion7 = atlas1.findRegion("newExplosion7");
-        AtlasRegion newExplosion8 = atlas1.findRegion("newExplosion8");
-        AtlasRegion newExplosion9 = atlas1.findRegion("newExplosion9");
-        AtlasRegion newExplosion10 = atlas1.findRegion("newExplosion10");
-        AtlasRegion newExplosion11 = atlas1.findRegion("newExplosion11");
-        AtlasRegion newExplosion12 = atlas1.findRegion("newExplosion12");
-        AtlasRegion newExplosion13 = atlas1.findRegion("newExplosion13");
-        AtlasRegion newExplosion14 = atlas1.findRegion("newExplosion14");
-        AtlasRegion newExplosion15 = atlas1.findRegion("newExplosion15");
-        AtlasRegion newExplosion16 = atlas1.findRegion("newExplosion16");
-        AtlasRegion newExplosion17 = atlas1.findRegion("newExplosion17");
-        AtlasRegion newExplosion18 = atlas1.findRegion("newExplosion18");
-        AtlasRegion newExplosion19 = atlas1.findRegion("newExplosion19");
-        explosionFuego = new Animation<>(0.05f, newExplosion1, newExplosion2, newExplosion3, newExplosion4, newExplosion5, newExplosion6, newExplosion7, newExplosion8, newExplosion9, newExplosion10, newExplosion11, newExplosion12, newExplosion13, newExplosion14, newExplosion15, newExplosion16, newExplosion17, newExplosion18, newExplosion19);
+        val newExplosion1 = atlas1.findRegion("newExplosion1")
+        val newExplosion2 = atlas1.findRegion("newExplosion2")
+        val newExplosion3 = atlas1.findRegion("newExplosion3")
+        val newExplosion4 = atlas1.findRegion("newExplosion4")
+        val newExplosion5 = atlas1.findRegion("newExplosion5")
+        val newExplosion6 = atlas1.findRegion("newExplosion6")
+        val newExplosion7 = atlas1.findRegion("newExplosion7")
+        val newExplosion8 = atlas1.findRegion("newExplosion8")
+        val newExplosion9 = atlas1.findRegion("newExplosion9")
+        val newExplosion10 = atlas1.findRegion("newExplosion10")
+        val newExplosion11 = atlas1.findRegion("newExplosion11")
+        val newExplosion12 = atlas1.findRegion("newExplosion12")
+        val newExplosion13 = atlas1.findRegion("newExplosion13")
+        val newExplosion14 = atlas1.findRegion("newExplosion14")
+        val newExplosion15 = atlas1.findRegion("newExplosion15")
+        val newExplosion16 = atlas1.findRegion("newExplosion16")
+        val newExplosion17 = atlas1.findRegion("newExplosion17")
+        val newExplosion18 = atlas1.findRegion("newExplosion18")
+        val newExplosion19 = atlas1.findRegion("newExplosion19")
+        explosionFuego = Animation(
+            0.05f,
+            newExplosion1,
+            newExplosion2,
+            newExplosion3,
+            newExplosion4,
+            newExplosion5,
+            newExplosion6,
+            newExplosion7,
+            newExplosion8,
+            newExplosion9,
+            newExplosion10,
+            newExplosion11,
+            newExplosion12,
+            newExplosion13,
+            newExplosion14,
+            newExplosion15,
+            newExplosion16,
+            newExplosion17,
+            newExplosion18,
+            newExplosion19
+        )
 
-        ParallaxLayer para1 = new ParallaxLayer(background, new Vector2(0, 50), new Vector2(0, 0));
-        ParallaxLayer[] arr = new ParallaxLayer[]{para1};
-        parallaxBackground = new ParallaxBackground(arr, 320, 480, new Vector2(0, 1));
+        val para1 = ParallaxLayer(background, Vector2(0f, 50f), Vector2(0f, 0f))
+        val arr = arrayOf(para1)
+        parallaxBackground = ParallaxBackground(arr, 320f, 480f, Vector2(0f, 1f))
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("data/sonidos/musica.mp3"));
-        music.setLooping(true);
-        music.setVolume(0.1f);
-        coinSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/coin.ogg"));
-        clickSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/click.ogg"));
-        explosionSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/sound_explode.ogg"));
-        missileFire = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/missilFire3.ogg"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("data/sonidos/musica.mp3"))
+        music?.isLooping = true
+        music?.volume = 0.1f
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/coin.ogg"))
+        clickSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/click.ogg"))
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/sound_explode.ogg"))
+        missileFire = Gdx.audio.newSound(Gdx.files.internal("data/sonidos/missilFire3.ogg"))
 
-        Settings.load();
-        if (Settings.getMusicEnabled())
-            music.play();
-
+        Settings.load()
+        if (Settings.musicEnabled) music?.play()
     }
 
-    public static void playSound(Sound sound, float volumen) {
-        if (Settings.getSoundEnabled())
-            sound.play(volumen);
+    fun playSound(sound: Sound, volumen: Float) {
+        if (Settings.soundEnabled) sound.play(volumen)
     }
 
-    public static void playSound(Sound sound) {
-        if (Settings.getSoundEnabled())
-            sound.play(1);
+    @JvmStatic
+    fun playSound(sound: Sound) {
+        if (soundEnabled) sound.play(1f)
     }
 
-    public static float getTextWidth(BitmapFont font, String text) {
-        glyphLayout.setText(font, text);
-        return glyphLayout.width;
+    @JvmStatic
+    fun getTextWidth(font: BitmapFont?, text: String?): Float {
+        glyphLayout.setText(font, text)
+        return glyphLayout.width
     }
+
 }

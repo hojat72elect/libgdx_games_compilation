@@ -183,7 +183,7 @@ class World {
             val y = myShip.position.y + 1
             missiles.add(Missile(x, y))
             missileCount--
-            Assets.playSound(Assets.missileFire, 0.15f)
+            Assets.playSound(Assets.missileFire!!, 0.15f)
         }
 
         // Now I update. Len recalculate in case a new missile was fired.
@@ -248,7 +248,7 @@ class World {
                             oAlien.position.x,
                             oAlien.position.y
                         ) // Here I'm going to see if it gives me any boost or not.
-                        Assets.playSound(Assets.explosionSound, 0.6f)
+                        Assets.playSound(Assets.explosionSound!!, 0.6f)
                     }
                 }
             }
@@ -271,7 +271,7 @@ class World {
                             oAlien.position.x,
                             oAlien.position.y
                         ) // Here I'm going to see if it gives me any boost or not.
-                        Assets.playSound(Assets.explosionSound, 0.6f)
+                        Assets.playSound(Assets.explosionSound!!, 0.6f)
                     }
                 }
                 // Check with the radius of the explosion
@@ -287,7 +287,7 @@ class World {
                             oAlien.position.x,
                             oAlien.position.y
                         ) // Here I'm going to see if it gives me any boost or not.
-                        Assets.playSound(Assets.explosionSound, 0.6f)
+                        Assets.playSound(Assets.explosionSound!!, 0.6f)
                     }
                 }
             }
@@ -311,7 +311,7 @@ class World {
                     else -> myShip.hitShield()
                 }
                 it.remove()
-                Assets.playSound(Assets.coinSound)
+                Assets.playSound(Assets.coinSound!!)
             }
         }
     }

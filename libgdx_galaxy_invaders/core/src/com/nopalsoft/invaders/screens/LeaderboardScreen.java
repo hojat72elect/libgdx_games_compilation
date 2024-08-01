@@ -17,53 +17,53 @@ public class LeaderboardScreen extends Screens {
     public LeaderboardScreen(final MainInvaders game) {
         super(game);
 
-        btBack = new TextButton(Assets.languages.get("back"), Assets.styleTextButtonBack);
+        btBack = new TextButton(Assets.getLanguages().get("back"), Assets.getStyleTextButtonBack());
         btBack.pad(0, 15, 35, 0);
         btBack.setSize(63, 63);
         btBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
         btBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new MainMenuScreen(game));
             }
         });
 
-        btLeaderBoard = new TextButton(Assets.languages.get("leaderboard"), Assets.styleTextButtonMenu);
+        btLeaderBoard = new TextButton(Assets.getLanguages().get("leaderboard"), Assets.getStyleTextButtonMenu());
         btLeaderBoard.setHeight(50);// Height 50
         btLeaderBoard.setSize(50, 0);// We add 50 to the current width.
         btLeaderBoard.setPosition(0, 245);
         btLeaderBoard.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
             }
         });
 
-        btAchievements = new TextButton(Assets.languages.get("achievements"), Assets.styleTextButtonMenu);
+        btAchievements = new TextButton(Assets.getLanguages().get("achievements"), Assets.getStyleTextButtonMenu());
         btAchievements.setHeight(50);// Height 50
         btAchievements.setSize(50, 0);//  We add 50 to the current width.
         btAchievements.setPosition(0, 150);
         btAchievements.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
             }
         });
 
-        btSignOut = new TextButton(Assets.languages.get("sign_out"), new TextButtonStyle(Assets.buttonSignInUp, Assets.buttonSignInDown, null, Assets.font15));
+        btSignOut = new TextButton(Assets.getLanguages().get("sign_out"), new TextButtonStyle(Assets.getButtonSignInUp(), Assets.getButtonSignInDown(), null, Assets.getFont15()));
         btSignOut.getLabel().setWrap(true);
         btSignOut.setWidth(140);
         btSignOut.setPosition(2, 2);
         btSignOut.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new MainMenuScreen(game));
             }
         });
 
-        ellipseLeft = new Image(Assets.ellipseMenuLeft);
+        ellipseLeft = new Image(Assets.getEllipseMenuLeft());
         ellipseLeft.setSize(18.5f, 250.5f);
         ellipseLeft.setPosition(0, 105);
 
@@ -81,7 +81,7 @@ public class LeaderboardScreen extends Screens {
         batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.disableBlending();
-        Assets.parallaxBackground.render(delta);
+        Assets.getParallaxBackground().render(delta);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class LeaderboardScreen extends Screens {
     @Override
     public boolean keyDown(int keyPressed) {
         if (keyPressed == Keys.BACK || keyPressed == Keys.ESCAPE) {
-            Assets.playSound(Assets.clickSound);
+            Assets.playSound(Assets.getClickSound());
             game.setScreen(new MainMenuScreen(game));
             return true;
         }

@@ -35,7 +35,7 @@ public class SettingsScreen extends Screens {
         super(game);
 
         // Accelerometer Slider
-        aceletometerSlider = new Slider(1, 20, 1f, false, Assets.styleSlider);
+        aceletometerSlider = new Slider(1, 20, 1f, false, Assets.getStyleSlider());
         aceletometerSlider.setPosition(70, 295);
         aceletometerSlider.setValue(21 - com.nopalsoft.invaders.Settings.getAccelerometerSensitivity());
         aceletometerSlider.addListener(new ChangeListener() {
@@ -49,7 +49,7 @@ public class SettingsScreen extends Screens {
         menuControls = new Table();
         menuControls.setPosition(SCREEN_WIDTH / 2f - 30, 380);// half minus 30
 
-        onScreenControl = new ImageButton(Assets.styleImageButtonStyleCheckBox);
+        onScreenControl = new ImageButton(Assets.getStyleImageButtonStyleCheckBox());
         if (!com.nopalsoft.invaders.Settings.getTiltControlEnabled())
             onScreenControl.setChecked(true);
         onScreenControl.addListener(new ClickListener() {
@@ -63,7 +63,7 @@ public class SettingsScreen extends Screens {
             }
         });
 
-        tiltControl = new ImageButton(Assets.styleImageButtonStyleCheckBox);
+        tiltControl = new ImageButton(Assets.getStyleImageButtonStyleCheckBox());
         if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
             tiltControl.setChecked(true);
         tiltControl.addListener(new ClickListener() {
@@ -78,7 +78,7 @@ public class SettingsScreen extends Screens {
 
         /* OnScreenControls */
 
-        buttonLeft = new ImageButton(Assets.btLeft);
+        buttonLeft = new ImageButton(Assets.getBtLeft());
         buttonLeft.setSize(65, 50);
         buttonLeft.setPosition(10, 5);
         buttonLeft.addListener(new ClickListener() {
@@ -94,7 +94,7 @@ public class SettingsScreen extends Screens {
             }
 
         });
-        buttonRight = new ImageButton(Assets.btRight);
+        buttonRight = new ImageButton(Assets.getBtRight());
         buttonRight.setSize(65, 50);
         buttonRight.setPosition(85, 5);
         buttonRight.addListener(new ClickListener() {
@@ -112,38 +112,38 @@ public class SettingsScreen extends Screens {
 
         });
 
-        buttonMissile = new ImageButton(Assets.btMissil, Assets.btMissilDown);
+        buttonMissile = new ImageButton(Assets.getBtMissil(), Assets.getBtMissilDown());
         buttonMissile.setSize(60, 60);
         buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
-        buttonFire = new ImageButton(Assets.btFire, Assets.btFireDown);
+        buttonFire = new ImageButton(Assets.getBtFire(), Assets.getBtFireDown());
         buttonFire.setSize(60, 60);
         buttonFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
 
-        menuControls.add(new Label(Assets.languages.get("on_screen_control"), Assets.styleLabel)).left();
+        menuControls.add(new Label(Assets.getLanguages().get("on_screen_control"), Assets.getStyleLabel())).left();
         menuControls.add(onScreenControl).size(25);
         menuControls.row().padTop(10);
-        menuControls.add(new Label(Assets.languages.get("tilt_control"), Assets.styleLabel)).left();
+        menuControls.add(new Label(Assets.getLanguages().get("tilt_control"), Assets.getStyleLabel())).left();
         menuControls.add(tiltControl).size(25);
 
-        buttonBack = new TextButton(Assets.languages.get("back"), Assets.styleTextButtonBack);
+        buttonBack = new TextButton(Assets.getLanguages().get("back"), Assets.getStyleTextButtonBack());
         buttonBack.pad(0, 15, 35, 0);
         buttonBack.setSize(63, 63);
         buttonBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
         buttonBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.getClickSound());
                 game.setScreen(new MainMenuScreen(game));
             }
         });
 
-        touchLeft = new Label(Assets.languages.get("touch_left_side_to_fire_missils"), Assets.styleLabel);
+        touchLeft = new Label(Assets.getLanguages().get("touch_left_side_to_fire_missils"), Assets.getStyleLabel());
         touchLeft.setWrap(true);
         touchLeft.setWidth(160);
         touchLeft.setAlignment(Align.center);
         touchLeft.setPosition(0, 50);
 
-        touchRight = new Label(Assets.languages.get("touch_right_side_to_fire"), Assets.styleLabel);
+        touchRight = new Label(Assets.getLanguages().get("touch_right_side_to_fire"), Assets.getStyleLabel());
         touchRight.setWrap(true);
         touchRight.setWidth(160);
         touchRight.setAlignment(Align.center);
@@ -211,27 +211,27 @@ public class SettingsScreen extends Screens {
         batcher.setProjectionMatrix(myCamera.combined);
 
         batcher.disableBlending();
-        Assets.parallaxBackground.render(delta);
+        Assets.getParallaxBackground().render(delta);
 
         stage.act(delta);
         stage.draw();
 
         batcher.enableBlending();
         batcher.begin();
-        Assets.font45.draw(batcher, Assets.languages.get("control_options"), 10, 460);
+        Assets.getFont45().draw(batcher, Assets.getLanguages().get("control_options"), 10, 460);
 
         if (com.nopalsoft.invaders.Settings.getTiltControlEnabled()) {
-            String tiltSensitive = Assets.languages.get("tilt_sensitive");
-            float textWidth = Assets.getTextWidth(Assets.font15, tiltSensitive);
-            Assets.font15.draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
-            batcher.draw(Assets.clickHelp, 155, 0, 10, 125);
+            String tiltSensitive = Assets.getLanguages().get("tilt_sensitive");
+            float textWidth = Assets.getTextWidth(Assets.getFont15(), tiltSensitive);
+            Assets.getFont15().draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
+            batcher.draw(Assets.getClickHelp(), 155, 0, 10, 125);
         } else {
-            String speed = Assets.languages.get("speed");
-            float textWidth = Assets.getTextWidth(Assets.font15, speed);
-            Assets.font15.draw(batcher, speed, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
+            String speed = Assets.getLanguages().get("speed");
+            float textWidth = Assets.getTextWidth(Assets.getFont15(), speed);
+            Assets.getFont15().draw(batcher, speed, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
 
         }
-        Assets.font15.draw(batcher, (int) aceletometerSlider.getValue() + "", 215, 313);
+        Assets.getFont15().draw(batcher, (int) aceletometerSlider.getValue() + "", 215, 313);
         batcher.end();
 
         myCameraRenderer.update();
@@ -245,11 +245,11 @@ public class SettingsScreen extends Screens {
     private void renderNave() {
         TextureRegion keyFrame;
         if (oNave.velocity.x < -3)
-            keyFrame = Assets.shipLeft;
+            keyFrame = Assets.getShipLeft();
         else if (oNave.velocity.x > 3)
-            keyFrame = Assets.shipRight;
+            keyFrame = Assets.getShipRight();
         else
-            keyFrame = Assets.ship;
+            keyFrame = Assets.getShip();
 
         batcher.draw(keyFrame, oNave.position.x - com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH / 2f, oNave.position.y - com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT / 2f, com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH, com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT);
     }
@@ -257,7 +257,7 @@ public class SettingsScreen extends Screens {
     @Override
     public boolean keyDown(int tecleada) {
         if (tecleada == Keys.BACK || tecleada == Keys.ESCAPE) {
-            Assets.playSound(Assets.clickSound);
+            Assets.playSound(Assets.getClickSound());
             game.setScreen(new MainMenuScreen(game));
             return true;
         }
