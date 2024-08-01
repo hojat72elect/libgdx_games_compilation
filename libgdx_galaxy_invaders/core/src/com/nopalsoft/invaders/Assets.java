@@ -27,7 +27,6 @@ public class Assets {
 
     private static final GlyphLayout glyphLayout = new GlyphLayout();
     public static I18NBundle languages;
-    public static AtlasRegion background;
     public static ParallaxBackground parallaxBackground;
 
     public static AtlasRegion shipLeft;
@@ -68,7 +67,6 @@ public class Assets {
     // Ammunition
     public static AtlasRegion balaNormal;
     public static Animation<TextureRegion> missile;
-    public static Animation<TextureRegion> superLightning;
     public static AtlasRegion bulletLevel1;
     public static AtlasRegion bulletLevel2;
     public static AtlasRegion bulletLevel3;
@@ -197,7 +195,7 @@ public class Assets {
         btMissil = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
         btMissilDown = new TextureRegionDrawable(atlas1.findRegion("btMissil"));
 
-        background = atlas1.findRegion("fondo");
+        AtlasRegion background = atlas1.findRegion("fondo");
 
         buttonSignInUp = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInUp")));
         buttonSignInDown = new NinePatchDrawable(new NinePatch(atlas1.createPatch("btSignInDown")));
@@ -250,9 +248,6 @@ public class Assets {
         AtlasRegion missile2 = atlas1.findRegion("misil2");
         missile = new Animation<>(0.2f, missile1, missile2);
 
-        AtlasRegion superRayo1 = atlas1.findRegion("superRayo1");
-        AtlasRegion superRayo2 = atlas1.findRegion("superRayo2");
-        superLightning = new Animation<>(0.2f, superRayo1, superRayo2);
 
         bulletLevel1 = atlas1.findRegion("disparoA1");
         bulletLevel2 = atlas1.findRegion("disparoA2");
