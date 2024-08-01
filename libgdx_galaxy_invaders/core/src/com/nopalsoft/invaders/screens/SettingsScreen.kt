@@ -1,266 +1,259 @@
-package com.nopalsoft.invaders.screens;
+package com.nopalsoft.invaders.screens
 
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.nopalsoft.invaders.Assets;
-import com.nopalsoft.invaders.MainInvaders;
+import com.badlogic.gdx.Application.ApplicationType
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
+import com.nopalsoft.invaders.Assets.btFire
+import com.nopalsoft.invaders.Assets.btFireDown
+import com.nopalsoft.invaders.Assets.btLeft
+import com.nopalsoft.invaders.Assets.btMissil
+import com.nopalsoft.invaders.Assets.btMissilDown
+import com.nopalsoft.invaders.Assets.btRight
+import com.nopalsoft.invaders.Assets.clickHelp
+import com.nopalsoft.invaders.Assets.clickSound
+import com.nopalsoft.invaders.Assets.font15
+import com.nopalsoft.invaders.Assets.font45
+import com.nopalsoft.invaders.Assets.getTextWidth
+import com.nopalsoft.invaders.Assets.languages
+import com.nopalsoft.invaders.Assets.parallaxBackground
+import com.nopalsoft.invaders.Assets.playSound
+import com.nopalsoft.invaders.Assets.ship
+import com.nopalsoft.invaders.Assets.shipLeft
+import com.nopalsoft.invaders.Assets.shipRight
+import com.nopalsoft.invaders.Assets.styleImageButtonStyleCheckBox
+import com.nopalsoft.invaders.Assets.styleLabel
+import com.nopalsoft.invaders.Assets.styleSlider
+import com.nopalsoft.invaders.Assets.styleTextButtonBack
+import com.nopalsoft.invaders.MainInvaders
+import com.nopalsoft.invaders.Settings.accelerometerSensitivity
+import com.nopalsoft.invaders.Settings.tiltControlEnabled
+import com.nopalsoft.invaders.frame.Ship
 
-public class SettingsScreen extends Screens {
+class SettingsScreen(game: MainInvaders) : Screens(game) {
+    val oNave: Ship
+    var tiltControl: ImageButton? = null
+    var onScreenControl: ImageButton
 
-    public final com.nopalsoft.invaders.frame.Ship oNave;
-    ImageButton tiltControl;
-    ImageButton onScreenControl;
-    Slider aceletometerSlider;
-    TextButton buttonBack;
-    Table menuControls;
-    ImageButton buttonLeft, buttonRight, buttonMissile, buttonFire;
-    Label touchLeft, touchRight;
-    OrthographicCamera myCameraRenderer;
-    float accel;
+    // Accelerometer Slider
+    var aceletometerSlider: Slider = Slider(1f, 20f, 1f, false, styleSlider)
+    var buttonBack: TextButton
+    var menuControls: Table
+    var buttonLeft: ImageButton
+    var buttonRight: ImageButton
+    var buttonMissile: ImageButton
+    var buttonFire: ImageButton
+    var touchLeft: Label
+    var touchRight: Label
+    var myCameraRenderer: OrthographicCamera
+    var accel: Float = 0f
 
-    public SettingsScreen(final MainInvaders game) {
-        super(game);
-
-        // Accelerometer Slider
-        aceletometerSlider = new Slider(1, 20, 1f, false, Assets.getStyleSlider());
-        aceletometerSlider.setPosition(70, 295);
-        aceletometerSlider.setValue(21 - com.nopalsoft.invaders.Settings.getAccelerometerSensitivity());
-        aceletometerSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                com.nopalsoft.invaders.Settings.setAccelerometerSensitivity(21 - (int) ((Slider) actor).getValue());
-
+    init {
+        aceletometerSlider.setPosition(70f, 295f)
+        aceletometerSlider.setValue((21 - accelerometerSensitivity).toFloat())
+        aceletometerSlider.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent, actor: Actor) {
+                accelerometerSensitivity = 21 - (actor as Slider).value.toInt()
             }
-        });
+        })
 
-        menuControls = new Table();
-        menuControls.setPosition(SCREEN_WIDTH / 2f - 30, 380);// half minus 30
+        menuControls = Table()
+        menuControls.setPosition(SCREEN_WIDTH / 2f - 30, 380f) // half minus 30
 
-        onScreenControl = new ImageButton(Assets.getStyleImageButtonStyleCheckBox());
-        if (!com.nopalsoft.invaders.Settings.getTiltControlEnabled())
-            onScreenControl.setChecked(true);
-        onScreenControl.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                com.nopalsoft.invaders.Settings.setTiltControlEnabled(false);
-                onScreenControl.setChecked(true);
-                tiltControl.setChecked(false);
-                setOptions();
-
+        onScreenControl = ImageButton(styleImageButtonStyleCheckBox)
+        if (!tiltControlEnabled) onScreenControl.isChecked = true
+        onScreenControl.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                tiltControlEnabled = false
+                onScreenControl.isChecked = true
+                tiltControl?.isChecked = false
+                setOptions()
             }
-        });
+        })
 
-        tiltControl = new ImageButton(Assets.getStyleImageButtonStyleCheckBox());
-        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
-            tiltControl.setChecked(true);
-        tiltControl.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                com.nopalsoft.invaders.Settings.setTiltControlEnabled(true);
-                onScreenControl.setChecked(false);
-                tiltControl.setChecked(true);
-                setOptions();
+        tiltControl = ImageButton(styleImageButtonStyleCheckBox)
+        if (tiltControlEnabled) tiltControl?.isChecked = true
+        tiltControl!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                tiltControlEnabled = true
+                onScreenControl.isChecked = false
+                tiltControl?.isChecked = true
+                setOptions()
             }
-        });
+        })
 
         /* OnScreenControls */
-
-        buttonLeft = new ImageButton(Assets.getBtLeft());
-        buttonLeft.setSize(65, 50);
-        buttonLeft.setPosition(10, 5);
-        buttonLeft.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                accel = 5;
+        buttonLeft = ImageButton(btLeft)
+        buttonLeft.setSize(65f, 50f)
+        buttonLeft.setPosition(10f, 5f)
+        buttonLeft.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor) {
+                accel = 5f
             }
 
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                accel = 0;
-                super.exit(event, x, y, pointer, toActor);
+            override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor) {
+                accel = 0f
+                super.exit(event, x, y, pointer, toActor)
+            }
+        })
+        buttonRight = ImageButton(btRight)
+        buttonRight.setSize(65f, 50f)
+        buttonRight.setPosition(85f, 5f)
+        buttonRight.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor) {
+                accel = -5f
             }
 
-        });
-        buttonRight = new ImageButton(Assets.getBtRight());
-        buttonRight.setSize(65, 50);
-        buttonRight.setPosition(85, 5);
-        buttonRight.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                accel = -5;
-
+            override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor) {
+                accel = 0f
+                super.exit(event, x, y, pointer, toActor)
             }
+        })
 
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                accel = 0;
-                super.exit(event, x, y, pointer, toActor);
+        buttonMissile = ImageButton(btMissil, btMissilDown)
+        buttonMissile.setSize(60f, 60f)
+        buttonMissile.setPosition((SCREEN_WIDTH - 5 - 60 - 20 - 60).toFloat(), 5f)
+        buttonFire = ImageButton(btFire, btFireDown)
+        buttonFire.setSize(60f, 60f)
+        buttonFire.setPosition((SCREEN_WIDTH - 60 - 5).toFloat(), 5f)
+
+        menuControls.add(Label(languages!!["on_screen_control"], styleLabel)).left()
+        menuControls.add(onScreenControl).size(25f)
+        menuControls.row().padTop(10f)
+        menuControls.add(Label(languages!!["tilt_control"], styleLabel)).left()
+        menuControls.add(tiltControl).size(25f)
+
+        buttonBack = TextButton(languages!!["back"], styleTextButtonBack)
+        buttonBack.pad(0f, 15f, 35f, 0f)
+        buttonBack.setSize(63f, 63f)
+        buttonBack.setPosition((SCREEN_WIDTH - 63).toFloat(), (SCREEN_HEIGHT - 63).toFloat())
+        buttonBack.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = MainMenuScreen(game)
             }
+        })
 
-        });
+        touchLeft = Label(languages!!["touch_left_side_to_fire_missils"], styleLabel)
+        touchLeft.wrap = true
+        touchLeft.width = 160f
+        touchLeft.setAlignment(Align.center)
+        touchLeft.setPosition(0f, 50f)
 
-        buttonMissile = new ImageButton(Assets.getBtMissil(), Assets.getBtMissilDown());
-        buttonMissile.setSize(60, 60);
-        buttonMissile.setPosition(SCREEN_WIDTH - 5 - 60 - 20 - 60, 5);
-        buttonFire = new ImageButton(Assets.getBtFire(), Assets.getBtFireDown());
-        buttonFire.setSize(60, 60);
-        buttonFire.setPosition(SCREEN_WIDTH - 60 - 5, 5);
+        touchRight = Label(languages!!["touch_right_side_to_fire"], styleLabel)
+        touchRight.wrap = true
+        touchRight.width = 160f
+        touchRight.setAlignment(Align.center)
+        touchRight.setPosition(165f, 50f)
 
-        menuControls.add(new Label(Assets.getLanguages().get("on_screen_control"), Assets.getStyleLabel())).left();
-        menuControls.add(onScreenControl).size(25);
-        menuControls.row().padTop(10);
-        menuControls.add(new Label(Assets.getLanguages().get("tilt_control"), Assets.getStyleLabel())).left();
-        menuControls.add(tiltControl).size(25);
-
-        buttonBack = new TextButton(Assets.getLanguages().get("back"), Assets.getStyleTextButtonBack());
-        buttonBack.pad(0, 15, 35, 0);
-        buttonBack.setSize(63, 63);
-        buttonBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
-        buttonBack.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new MainMenuScreen(game));
-            }
-        });
-
-        touchLeft = new Label(Assets.getLanguages().get("touch_left_side_to_fire_missils"), Assets.getStyleLabel());
-        touchLeft.setWrap(true);
-        touchLeft.setWidth(160);
-        touchLeft.setAlignment(Align.center);
-        touchLeft.setPosition(0, 50);
-
-        touchRight = new Label(Assets.getLanguages().get("touch_right_side_to_fire"), Assets.getStyleLabel());
-        touchRight.setWrap(true);
-        touchRight.setWidth(160);
-        touchRight.setAlignment(Align.center);
-        touchRight.setPosition(165, 50);
-
-        setOptions();
+        setOptions()
 
         // Voy a poner a la nave aqui que se mueva tambien;
-        oNave = new com.nopalsoft.invaders.frame.Ship(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 3.0f); // Coloco la nave en posicion
-        this.myCameraRenderer = new OrthographicCamera(WORLD_SCREEN_WIDTH, WORLD_SCREEN_HEIGHT);
-        myCameraRenderer.position.set(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 2.0f, 0);
+        oNave = Ship(WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 3.0f) // Coloco la nave en posicion
+        this.myCameraRenderer = OrthographicCamera(WORLD_SCREEN_WIDTH.toFloat(), WORLD_SCREEN_HEIGHT.toFloat())
+        myCameraRenderer.position[WORLD_SCREEN_WIDTH / 2.0f, WORLD_SCREEN_HEIGHT / 2.0f] = 0f
+
         // menuControls.debug();
-
     }
 
-    protected void setOptions() {
-        stage.clear();
-        accel = 0;// porque a veces se quedaba moviendo la nave cuando se pasaba de tilt a control
-        stage.addActor(buttonBack);
-        stage.addActor(menuControls);
-        stage.addActor(aceletometerSlider);
-        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled())
-            setTiltControls();
-        else
-            setOnScreenControl();
-
+    protected fun setOptions() {
+        stage!!.clear()
+        accel = 0f // porque a veces se quedaba moviendo la nave cuando se pasaba de tilt a control
+        stage.addActor(buttonBack)
+        stage.addActor(menuControls)
+        stage.addActor(aceletometerSlider)
+        if (tiltControlEnabled) setTiltControls()
+        else setOnScreenControl()
     }
 
-    private void setTiltControls() {
-        stage.addActor(touchLeft);
-        stage.addActor(touchRight);
+    private fun setTiltControls() {
+        stage!!.addActor(touchLeft)
+        stage.addActor(touchRight)
     }
 
-    protected void setOnScreenControl() {
-        stage.addActor(buttonLeft);
-        stage.addActor(buttonRight);
-        stage.addActor(buttonMissile);
-        stage.addActor(buttonFire);
+    protected fun setOnScreenControl() {
+        stage!!.addActor(buttonLeft)
+        stage.addActor(buttonRight)
+        stage.addActor(buttonMissile)
+        stage.addActor(buttonFire)
     }
 
-    @Override
-    public void update(float delta) {
-
-        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled()) {
-            accel = Gdx.input.getAccelerometerX();
-
+    override fun update(delta: Float) {
+        if (tiltControlEnabled) {
+            accel = Gdx.input.accelerometerX
         } else {
-            if (Gdx.app.getType() == ApplicationType.Applet || Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-                accel = 0;
-                if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Keys.A))
-                    accel = 5f;
-                if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Keys.D))
-                    accel = -5f;
+            if (Gdx.app.type == ApplicationType.Applet || Gdx.app.type == ApplicationType.Desktop || Gdx.app.type == ApplicationType.WebGL) {
+                accel = 0f
+                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) accel = 5f
+                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) accel = -5f
             }
         }
-        oNave.velocity.x = -accel / com.nopalsoft.invaders.Settings.getAccelerometerSensitivity() * com.nopalsoft.invaders.frame.Ship.NAVE_MOVE_SPEED;
+        oNave.velocity.x = -accel / accelerometerSensitivity * Ship.NAVE_MOVE_SPEED
 
-        oNave.update(delta);
+        oNave.update(delta)
     }
 
-    @Override
-    public void draw(float delta) {
+    override fun draw(delta: Float) {
+        myCamera.update()
+        batcher!!.projectionMatrix = myCamera.combined
 
-        myCamera.update();
-        batcher.setProjectionMatrix(myCamera.combined);
+        batcher.disableBlending()
+        parallaxBackground!!.render(delta)
 
-        batcher.disableBlending();
-        Assets.getParallaxBackground().render(delta);
+        stage!!.act(delta)
+        stage.draw()
 
-        stage.act(delta);
-        stage.draw();
+        batcher.enableBlending()
+        batcher.begin()
+        font45!!.draw(batcher, languages!!["control_options"], 10f, 460f)
 
-        batcher.enableBlending();
-        batcher.begin();
-        Assets.getFont45().draw(batcher, Assets.getLanguages().get("control_options"), 10, 460);
-
-        if (com.nopalsoft.invaders.Settings.getTiltControlEnabled()) {
-            String tiltSensitive = Assets.getLanguages().get("tilt_sensitive");
-            float textWidth = Assets.getTextWidth(Assets.getFont15(), tiltSensitive);
-            Assets.getFont15().draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
-            batcher.draw(Assets.getClickHelp(), 155, 0, 10, 125);
+        if (tiltControlEnabled) {
+            val tiltSensitive = languages!!["tilt_sensitive"]
+            val textWidth = getTextWidth(font15, tiltSensitive)
+            font15!!.draw(batcher, tiltSensitive, SCREEN_WIDTH / 2f - textWidth / 2f, 335f)
+            batcher.draw(clickHelp, 155f, 0f, 10f, 125f)
         } else {
-            String speed = Assets.getLanguages().get("speed");
-            float textWidth = Assets.getTextWidth(Assets.getFont15(), speed);
-            Assets.getFont15().draw(batcher, speed, SCREEN_WIDTH / 2f - textWidth / 2f, 335);
-
+            val speed = languages!!["speed"]
+            val textWidth = getTextWidth(font15, speed)
+            font15!!.draw(batcher, speed, SCREEN_WIDTH / 2f - textWidth / 2f, 335f)
         }
-        Assets.getFont15().draw(batcher, (int) aceletometerSlider.getValue() + "", 215, 313);
-        batcher.end();
+        font15!!.draw(batcher, aceletometerSlider.value.toInt().toString() + "", 215f, 313f)
+        batcher.end()
 
-        myCameraRenderer.update();
-        batcher.setProjectionMatrix(myCameraRenderer.combined);
-        batcher.begin();
-        renderNave();
-        batcher.end();
-
+        myCameraRenderer.update()
+        batcher.projectionMatrix = myCameraRenderer.combined
+        batcher.begin()
+        renderNave()
+        batcher.end()
     }
 
-    private void renderNave() {
-        TextureRegion keyFrame;
-        if (oNave.velocity.x < -3)
-            keyFrame = Assets.getShipLeft();
-        else if (oNave.velocity.x > 3)
-            keyFrame = Assets.getShipRight();
-        else
-            keyFrame = Assets.getShip();
+    private fun renderNave() {
+        val keyFrame: TextureRegion? = if (oNave.velocity.x < -3) shipLeft
+        else if (oNave.velocity.x > 3) shipRight
+        else ship
 
-        batcher.draw(keyFrame, oNave.position.x - com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH / 2f, oNave.position.y - com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT / 2f, com.nopalsoft.invaders.frame.Ship.DRAW_WIDTH, com.nopalsoft.invaders.frame.Ship.DRAW_HEIGHT);
+        batcher!!.draw(
+            keyFrame,
+            oNave.position.x - Ship.DRAW_WIDTH / 2f,
+            oNave.position.y - Ship.DRAW_HEIGHT / 2f,
+            Ship.DRAW_WIDTH,
+            Ship.DRAW_HEIGHT
+        )
     }
 
-    @Override
-    public boolean keyDown(int tecleada) {
-        if (tecleada == Keys.BACK || tecleada == Keys.ESCAPE) {
-            Assets.playSound(Assets.getClickSound());
-            game.setScreen(new MainMenuScreen(game));
-            return true;
+    override fun keyDown(tecleada: Int): Boolean {
+        if (tecleada == Input.Keys.BACK || tecleada == Input.Keys.ESCAPE) {
+            playSound(clickSound!!)
+            game.screen = MainMenuScreen(game)
+            return true
         }
-        return false;
+        return false
     }
 }

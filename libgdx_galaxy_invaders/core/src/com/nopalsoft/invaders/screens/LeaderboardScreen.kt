@@ -1,100 +1,100 @@
-package com.nopalsoft.invaders.screens;
+package com.nopalsoft.invaders.screens
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.invaders.Assets;
-import com.nopalsoft.invaders.MainInvaders;
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.invaders.Assets.buttonSignInDown
+import com.nopalsoft.invaders.Assets.buttonSignInUp
+import com.nopalsoft.invaders.Assets.clickSound
+import com.nopalsoft.invaders.Assets.ellipseMenuLeft
+import com.nopalsoft.invaders.Assets.font15
+import com.nopalsoft.invaders.Assets.languages
+import com.nopalsoft.invaders.Assets.parallaxBackground
+import com.nopalsoft.invaders.Assets.playSound
+import com.nopalsoft.invaders.Assets.styleTextButtonBack
+import com.nopalsoft.invaders.Assets.styleTextButtonMenu
+import com.nopalsoft.invaders.MainInvaders
 
-public class LeaderboardScreen extends Screens {
+class LeaderboardScreen(game: MainInvaders) : Screens(game) {
+    var btLeaderBoard: TextButton
+    var btAchievements: TextButton
+    var btBack: TextButton = TextButton(languages!!["back"], styleTextButtonBack)
+    var btSignOut: TextButton
+    var ellipseLeft: Image
 
-    TextButton btLeaderBoard, btAchievements, btBack, btSignOut;
-    Image ellipseLeft;
-
-    public LeaderboardScreen(final MainInvaders game) {
-        super(game);
-
-        btBack = new TextButton(Assets.getLanguages().get("back"), Assets.getStyleTextButtonBack());
-        btBack.pad(0, 15, 35, 0);
-        btBack.setSize(63, 63);
-        btBack.setPosition(SCREEN_WIDTH - 63, SCREEN_HEIGHT - 63);
-        btBack.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new MainMenuScreen(game));
+    init {
+        btBack.pad(0f, 15f, 35f, 0f)
+        btBack.setSize(63f, 63f)
+        btBack.setPosition((SCREEN_WIDTH - 63).toFloat(), (SCREEN_HEIGHT - 63).toFloat())
+        btBack.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = MainMenuScreen(game)
             }
-        });
+        })
 
-        btLeaderBoard = new TextButton(Assets.getLanguages().get("leaderboard"), Assets.getStyleTextButtonMenu());
-        btLeaderBoard.setHeight(50);// Height 50
-        btLeaderBoard.setSize(50, 0);// We add 50 to the current width.
-        btLeaderBoard.setPosition(0, 245);
-        btLeaderBoard.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
+        btLeaderBoard = TextButton(languages!!["leaderboard"], styleTextButtonMenu)
+        btLeaderBoard.height = 50f // Height 50
+        btLeaderBoard.setSize(50f, 0f) // We add 50 to the current width.
+        btLeaderBoard.setPosition(0f, 245f)
+        btLeaderBoard.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
             }
-        });
+        })
 
-        btAchievements = new TextButton(Assets.getLanguages().get("achievements"), Assets.getStyleTextButtonMenu());
-        btAchievements.setHeight(50);// Height 50
-        btAchievements.setSize(50, 0);//  We add 50 to the current width.
-        btAchievements.setPosition(0, 150);
-        btAchievements.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
+        btAchievements = TextButton(languages!!["achievements"], styleTextButtonMenu)
+        btAchievements.height = 50f // Height 50
+        btAchievements.setSize(50f, 0f) //  We add 50 to the current width.
+        btAchievements.setPosition(0f, 150f)
+        btAchievements.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
             }
-        });
+        })
 
-        btSignOut = new TextButton(Assets.getLanguages().get("sign_out"), new TextButtonStyle(Assets.getButtonSignInUp(), Assets.getButtonSignInDown(), null, Assets.getFont15()));
-        btSignOut.getLabel().setWrap(true);
-        btSignOut.setWidth(140);
-        btSignOut.setPosition(2, 2);
-        btSignOut.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.playSound(Assets.getClickSound());
-                game.setScreen(new MainMenuScreen(game));
+        btSignOut = TextButton(languages!!["sign_out"], TextButtonStyle(buttonSignInUp, buttonSignInDown, null, font15))
+        btSignOut.label.wrap = true
+        btSignOut.width = 140f
+        btSignOut.setPosition(2f, 2f)
+        btSignOut.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                playSound(clickSound!!)
+                game.screen = MainMenuScreen(game)
             }
-        });
+        })
 
-        ellipseLeft = new Image(Assets.getEllipseMenuLeft());
-        ellipseLeft.setSize(18.5f, 250.5f);
-        ellipseLeft.setPosition(0, 105);
+        ellipseLeft = Image(ellipseMenuLeft)
+        ellipseLeft.setSize(18.5f, 250.5f)
+        ellipseLeft.setPosition(0f, 105f)
 
-        stage.addActor(btSignOut);
-        stage.addActor(btAchievements);
-        stage.addActor(btLeaderBoard);
-        stage.addActor(btBack);
-        stage.addActor(ellipseLeft);
-
+        stage!!.addActor(btSignOut)
+        stage.addActor(btAchievements)
+        stage.addActor(btLeaderBoard)
+        stage.addActor(btBack)
+        stage.addActor(ellipseLeft)
     }
 
-    @Override
-    public void draw(float delta) {
-        myCamera.update();
-        batcher.setProjectionMatrix(myCamera.combined);
+    override fun draw(delta: Float) {
+        myCamera.update()
+        batcher!!.projectionMatrix = myCamera.combined
 
-        batcher.disableBlending();
-        Assets.getParallaxBackground().render(delta);
+        batcher.disableBlending()
+        parallaxBackground!!.render(delta)
     }
 
-    @Override
-    public void update(float delta) {
+    override fun update(delta: Float) {
     }
 
-    @Override
-    public boolean keyDown(int keyPressed) {
-        if (keyPressed == Keys.BACK || keyPressed == Keys.ESCAPE) {
-            Assets.playSound(Assets.getClickSound());
-            game.setScreen(new MainMenuScreen(game));
-            return true;
+    override fun keyDown(keyPressed: Int): Boolean {
+        if (keyPressed == Input.Keys.BACK || keyPressed == Input.Keys.ESCAPE) {
+            playSound(clickSound!!)
+            game.screen = MainMenuScreen(game)
+            return true
         }
-        return false;
+        return false
     }
 }
