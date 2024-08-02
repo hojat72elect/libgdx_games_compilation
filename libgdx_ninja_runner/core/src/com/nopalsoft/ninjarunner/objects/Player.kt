@@ -5,40 +5,24 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.nopalsoft.ninjarunner.Assets
 import com.nopalsoft.ninjarunner.Settings
 
-class Player(x: Float, y: Float, @JvmField val type: Int) {
+class Player(x: Float, y: Float, val type: Int) {
 
     private val speedSecondJump = 4f
     private val maxLives = Settings.LEVEL_LIFE + 5
 
 
     private val initialPosition = Vector2(x, y)
-
-    @JvmField
     var state = STATE_NORMAL
-
-    @JvmField
     val position = Vector2(x, y)
-
-    @JvmField
     var stateTime = 0f
-
-    @JvmField
     var isJumping = false // To know if I can draw the jumping animation.
     private var numberOfFloorsInContact =
         0 // Floors you are currently touching if ==0 you cannot jump.
     private var didGetHurtAtLeastOnce = false
 
-
-    @JvmField
     var lives = maxLives
-
-    @JvmField
     var isDash = false
-
-    @JvmField
     var isSlide = false
-
-    @JvmField
     var isIdle = true
 
     var isMagnetEnabled = false
@@ -239,7 +223,7 @@ class Player(x: Float, y: Float, @JvmField val type: Int) {
         private const val DURATION_MAGNET = 10f
         private const val DURATION_DASH = 5
 
-        @JvmStatic
+
         val DURATION_DEAD = Assets.playerDeadAnimation!!.animationDuration + .5f
         val DURATION_HURT = Assets.playerHurtAnimation!!.animationDuration + .1f
         const val DURATION_DIZZY = 1.25f

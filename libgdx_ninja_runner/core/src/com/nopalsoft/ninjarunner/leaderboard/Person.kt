@@ -17,14 +17,12 @@ class Person(
     val accountType: AccountType,
     private val id: String,
     val name: String,
-    @JvmField
     val score: Long,
     private val imageURL: String
 ) : Comparable<Person> {
 
     var image: TextureRegionDrawable? = null
 
-    @JvmField
     val isMe = false// Indicates that this person is the user.
 
     fun downloadImage(listener: DownloadImageCompleteListener) {

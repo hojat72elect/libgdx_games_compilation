@@ -6,26 +6,16 @@ import com.badlogic.gdx.physics.box2d.Body
 /**
  * The pet that the user will have and follows them through the game.
  */
-class Pet(x: Float, y: Float, @JvmField val petType: PetType) {
+class Pet(x: Float, y: Float, val petType: PetType) {
 
-    @JvmField
+
     val position = Vector2(x, y)
     private val targetPosition = Vector2(x, y)
     private var velocity = Vector2()
-
-    @JvmField
     var stateTime = 0f
-
-    @JvmField
     var drawWidth = 0f
-
-    @JvmField
     var drawHeight = 0f
-
-    @JvmField
     var dashDrawWidth = 0f
-
-    @JvmField
     var dashDrawHeight = 0f
 
     init {

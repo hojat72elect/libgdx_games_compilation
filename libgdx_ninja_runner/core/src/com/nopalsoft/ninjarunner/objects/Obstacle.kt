@@ -7,14 +7,9 @@ import com.nopalsoft.ninjarunner.Assets
 
 open class Obstacle : Poolable {
 
-    @JvmField
     val position = Vector2()
-
-    @JvmField
     var state = 0
     var stateTime = 0f
-
-    @JvmField
     var effect: PooledEffect? = null
 
     fun initializeObstacle(x: Float, y: Float) {

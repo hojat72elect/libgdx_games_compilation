@@ -9,7 +9,7 @@ import com.nopalsoft.ninjarunner.Assets
 
 class NextGoalFrame(x: Float, y: Float) : Group() {
 
-    @JvmField
+
     var myPerson: Person? = null
     private val labelName = Label("", Assets.labelStyleSmall)
     private val labelPersonScore = Label("", Assets.labelStyleSmall)

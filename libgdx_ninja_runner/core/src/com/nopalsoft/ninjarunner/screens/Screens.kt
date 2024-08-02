@@ -18,9 +18,8 @@ import com.nopalsoft.ninjarunner.shop.ShopScreen
 import kotlin.math.abs
 
 abstract class Screens(_game: Game) : InputAdapter(), Screen, GestureListener {
-    @JvmField
-    var game: MainGame = _game as MainGame
 
+    var game: MainGame = _game as MainGame
     var myCamera: OrthographicCamera
     var batcher: SpriteBatch?
     var stage: Stage? = game.stage

@@ -5,9 +5,7 @@ import com.badlogic.gdx.utils.Pool.Poolable
 
 class Wall : Poolable {
 
-    @JvmField
     val position = Vector2()
-    @JvmField
     var state = 0
     var stateTime = 0f
 

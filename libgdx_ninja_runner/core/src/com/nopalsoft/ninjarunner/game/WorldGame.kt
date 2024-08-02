@@ -15,22 +15,15 @@ import com.nopalsoft.ninjarunner.objects.Player.Companion.DURATION_DEAD
 class WorldGame {
     var state: Int = 0
     var myWorldBox: World = World(Vector2(0f, -9.8f), true)
-    @JvmField
     var myPlayer: Player? = null
-    @JvmField
     var myPet: Pet? = null
     var timeToSpawnMissile: Float
     var myManager: ObjectManagerBox2d
     var arrayBodies: Array<Body>
-    @JvmField
     var arrayPlatforms: Array<Platform>
-    @JvmField
     var arrayWall: Array<Wall>
-    @JvmField
     var arrayItems: Array<Item>
-    @JvmField
     var arrayObstacles: Array<Obstacle>
-    @JvmField
     var arrayMissiles: Array<Missile>
 
     /**

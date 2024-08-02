@@ -18,181 +18,69 @@ import com.nopalsoft.ninjarunner.parallax.ParallaxLayer
 object Assets {
     var fontSmall: BitmapFont? = null
     var fontLarge: BitmapFont? = null
-
-    @JvmField
     var playerRunAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerDashAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerIdleAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerDeadAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerJumpAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerHurtAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerDizzyAnimation: AnimationSprite? = null
-
-    @JvmField
     var playerSlideAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaRunAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaDashAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaIdleAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaDeadAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaJumpAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaHurtAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaDizzyAnimation: AnimationSprite? = null
-
-    @JvmField
     var ninjaSlideAnimation: AnimationSprite? = null
-
-    @JvmField
     var Pet1FlyAnimation: AnimationSprite? = null
-
-    @JvmField
     var Pet1DashAnimation: AnimationSprite? = null
-
-    @JvmField
     var PetBombFlyAnimation: AnimationSprite? = null
-
-    @JvmField
     var coinAnimation: AnimationSprite? = null
-
-    @JvmField
     var pickAnimation: AnimationSprite? = null
-
-    @JvmField
     var magnet: Sprite? = null
-
-    @JvmField
     var energy: Sprite? = null
-
-    @JvmField
     var hearth: Sprite? = null
-
-    @JvmField
     var jellyRed: Sprite? = null
-
-    @JvmField
     var beanRed: Sprite? = null
-
-    @JvmField
     var candyCorn: Sprite? = null
-
-    @JvmField
     var candyExplosionRed: AnimationSprite? = null
-
-    @JvmField
     var platform: Sprite? = null
-
-    @JvmField
     var wall: Sprite? = null
 
     // Obstacles
-    @JvmField
     var boxes4: Sprite? = null
-
-    @JvmField
     var boxes7: Sprite? = null
-
-    @JvmField
     var missileAnimation: AnimationSprite? = null
-
-    @JvmField
     var explosion: AnimationSprite? = null
-
-    @JvmField
     var backgroundNubes: ParallaxBackground? = null
-
     var music1: Music? = null
-
-    @JvmField
     var pixelNegro: NinePatchDrawable? = null
-
     var jump: Sound? = null
-
-    @JvmField
     var coin: Sound? = null
-
-    @JvmField
     var popCandy: Sound? = null
-
     var boxesEffectPool: ParticleEffectPool? = null
 
     // UI STUFF
-    @JvmField
     var title: TextureRegionDrawable? = null
-
-    @JvmField
     var backgroundMenu: NinePatchDrawable? = null
-
-    @JvmField
     var backgroundShop: NinePatchDrawable? = null
-
-    @JvmField
     var backgroundTitleShop: NinePatchDrawable? = null
-
-    @JvmField
     var backgroundItemShop: NinePatchDrawable? = null
-
-    @JvmField
     var backgroundUpgradeBar: NinePatchDrawable? = null
-
-    @JvmField
     var buttonShop: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonShopPressed: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonLeaderboard: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonLeaderboardPressed: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonAchievement: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonAchievementPressed: TextureRegionDrawable? = null
 
-    @JvmField
     var buttonSettings: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonSettingsPressed: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonRate: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonRatePressed: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonShare: TextureRegionDrawable? = null
-
-    @JvmField
     var buttonSharePressed: TextureRegionDrawable? = null
     var buttonUpgrade: TextureRegionDrawable? = null
     var buttonUpgradePressed: TextureRegionDrawable? = null
@@ -204,20 +92,10 @@ object Assets {
     var imageGoogle: TextureRegionDrawable? = null
     var imageAmazon: TextureRegionDrawable? = null
     var imageFacebook: TextureRegionDrawable? = null
-
-    @JvmField
     var labelStyleSmall: LabelStyle? = null
-
-    @JvmField
     var labelStyleLarge: LabelStyle? = null
-
-    @JvmField
     var styleTextButtonPurchased: TextButtonStyle? = null
-
-    @JvmField
     var styleTextButtonBuy: TextButtonStyle? = null
-
-    @JvmField
     var styleButtonUpgrade: ButtonStyle? = null
 
     fun load() {
@@ -513,7 +391,6 @@ object Assets {
         styleButtonUpgrade = ButtonStyle(buttonUpgrade, buttonUpgradePressed, null)
     }
 
-    @JvmStatic
     fun playSound(sound: Sound, volume: Int) {
         if (isSoundEnabled) {
             sound.play(volume.toFloat())

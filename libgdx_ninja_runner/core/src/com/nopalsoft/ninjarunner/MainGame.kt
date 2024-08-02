@@ -16,13 +16,9 @@ import com.nopalsoft.ninjarunner.screens.Screens
  * It has already been made in KT. Don't do it again.
  */
 class MainGame : Game() {
-    @JvmField
     var arrayOfPersons: Array<Person> = Array()
-    @JvmField
     var stage: Stage? = null
-    @JvmField
     var batcher: SpriteBatch? = null
-    @JvmField
     var languages: I18NBundle? = null
 
     override fun create() {

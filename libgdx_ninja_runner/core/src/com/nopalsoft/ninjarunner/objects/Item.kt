@@ -5,15 +5,13 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.utils.Pool.Poolable
 import com.nopalsoft.ninjarunner.Assets
 
-open class Item(@JvmField val width: Float, @JvmField val height: Float) : Poolable {
+open class Item( val width: Float,  val height: Float) : Poolable {
 
-    @JvmField
+
     var state = 0
-
-    @JvmField
     var stateTime = 0f
 
-    @JvmField
+
     val position = Vector2()
     private var velocity = Vector2()
 
@@ -65,7 +63,7 @@ open class Item(@JvmField val width: Float, @JvmField val height: Float) : Poola
         const val STATE_NORMAL = 0
         const val STATE_DESTROY = 1
 
-        @JvmStatic
+
         val DURATION_PICK = Assets.pickAnimation!!.animationDuration + .1
     }
 }

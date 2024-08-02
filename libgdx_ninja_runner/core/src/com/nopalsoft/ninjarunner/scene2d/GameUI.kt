@@ -12,14 +12,8 @@ import com.nopalsoft.ninjarunner.Assets
 import com.nopalsoft.ninjarunner.screens.Screens
 
 class GameUI : Group() {
-
-    @JvmField
     var didJump = false
-
-    @JvmField
     var didSlide = false
-
-    @JvmField
     var didDash = false
 
     private val tableHeader = Table()

@@ -7,13 +7,9 @@ import com.nopalsoft.ninjarunner.Assets
 
 class Missile : Poolable, Comparable<Missile> {
 
-    @JvmField
     val position = Vector2()
-    @JvmField
     var state = 0
-    @JvmField
     var stateTime = 0f
-    @JvmField
     var distanceFromCharacter = 0f
 
 
