@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.nopalsoft.ninjarunner.AnimationSprite
 
-class AnimatedSpriteActor(val animation: AnimationSprite) : Actor() {
+class AnimatedSpriteActor(private val animation: AnimationSprite) : Actor() {
     private var stateTime = 0f
 
     override fun act(delta: Float) {

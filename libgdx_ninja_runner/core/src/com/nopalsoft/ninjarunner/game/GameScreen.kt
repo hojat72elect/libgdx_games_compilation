@@ -14,14 +14,14 @@ import com.nopalsoft.ninjarunner.scene2d.GameUI
 import com.nopalsoft.ninjarunner.scene2d.MenuUI
 import com.nopalsoft.ninjarunner.screens.Screens
 
-class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
-    var myWorld: WorldGame = WorldGame()
+class GameScreen(game: Game, showMainMenu: Boolean) : Screens(game) {
+    private var myWorld: WorldGame = WorldGame()
     var state: Int = 0
-    var gameUI: GameUI = GameUI()
-    var menuUI: MenuUI = MenuUI(this, myWorld)
-    var renderer: WorldGameRenderer = WorldGameRenderer(batcher!!, myWorld)
+    private var gameUI: GameUI = GameUI()
+    private var menuUI: MenuUI = MenuUI(this, myWorld)
+    private var renderer: WorldGameRenderer = WorldGameRenderer(batcher!!, myWorld)
 
-    var nextGoalFrame: NextGoalFrame? = null
+    private var nextGoalFrame: NextGoalFrame? = null
 
     init {
         if (showMainMenu) {
@@ -79,8 +79,8 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
     }
 
 
-    fun setNextGoalFrame(puntos: Long) {
-        //Para que solo se muestren las personas que no haya superado aun
+    private fun setNextGoalFrame(puntos: Long) {
+        //So that only the people you have not surpassed yet are shown.
         var puntos = puntos
         if (puntos < bestScore) puntos = bestScore
 
@@ -88,14 +88,14 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
 
 
         var oPersonAux: Person? = null
-        //Calculo la posicion del jugador que tenga mas puntos que yo. Por ejemplo si yo voy en quinto lugar
-        //esta debe ser la pocion del cuarto lugar.
-        var posicionArribaDeMi = game.arrayOfPersons.size - 1
-        //El arreglo esta ordenado de mayor a menor
-        while (posicionArribaDeMi >= 0) {
-            val obj = game.arrayOfPersons[posicionArribaDeMi]
+        // I calculate the position of the player who has more points than me. For example if I go in fifth place,
+        // this must be the fourth place position.
+        var positionAboveMe = game.arrayOfPersons.size - 1
+        // The arrangement is ordered from largest to smallest.
+        while (positionAboveMe >= 0) {
+            val obj = game.arrayOfPersons[positionAboveMe]
             if (obj.isMe) {
-                posicionArribaDeMi--
+                positionAboveMe--
                 continue
             }
 
@@ -103,12 +103,12 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
                 oPersonAux = obj
                 break
             }
-            posicionArribaDeMi--
+            positionAboveMe--
         }
 
         val oPersona = oPersonAux ?: return
 
-        if (oPersona.equals(nextGoalFrame!!.myPerson)) return
+        if (oPersona == nextGoalFrame!!.myPerson) return
 
 
         val run = Runnable {
@@ -173,25 +173,34 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Input.Keys.R) {
-            game.screen = GameScreen(game, true)
-            return true
-        } else if (keycode == Input.Keys.SPACE || keycode == Input.Keys.W || keycode == Input.Keys.UP) {
-            gameUI.didJump = true
-            return true
-        } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
-            gameUI.didSlide = true
-            return true
-        } else if (keycode == Input.Keys.BACK) {
-            Gdx.app.exit()
-            return true
-        } else if (keycode == Input.Keys.P) {
-            if (game.arrayOfPersons != null) {
-                setNextGoalFrame(0)
+        when (keycode) {
+            Input.Keys.R -> {
+                game.screen = GameScreen(game, true)
+                return true
             }
-            return true
+
+            Input.Keys.SPACE, Input.Keys.W, Input.Keys.UP -> {
+                gameUI.didJump = true
+                return true
+            }
+
+            Input.Keys.S, Input.Keys.DOWN -> {
+                gameUI.didSlide = true
+                return true
+            }
+
+            Input.Keys.BACK -> {
+                Gdx.app.exit()
+                return true
+            }
+
+            Input.Keys.P -> {
+                setNextGoalFrame(0)
+                return true
+            }
+
+            else -> return super.keyDown(keycode)
         }
-        return super.keyDown(keycode)
     }
 
     override fun keyUp(keycode: Int): Boolean {

@@ -1,14 +1,26 @@
 package com.nopalsoft.ninjarunner.game
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.*
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.CircleShape
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.Pools
 import com.nopalsoft.ninjarunner.Settings.selectedPet
-import com.nopalsoft.ninjarunner.objects.*
+import com.nopalsoft.ninjarunner.objects.Player
+import com.nopalsoft.ninjarunner.objects.Platform
+import com.nopalsoft.ninjarunner.objects.Wall
+import com.nopalsoft.ninjarunner.objects.Missile
+import com.nopalsoft.ninjarunner.objects.Pet
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes7
+import com.nopalsoft.ninjarunner.objects.Item
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes4
 
-class ObjectManagerBox2d(var myWorld: WorldGame) {
-    var myWorldBox: World = myWorld.myWorldBox
+class ObjectManagerBox2d(private var myWorld: WorldGame) {
+    private var myWorldBox: World = myWorld.myWorldBox
 
     fun createHeroStand(x: Float, y: Float, type: Int) {
         myWorld.myPlayer = Player(x, y, type)
@@ -103,22 +115,22 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
         val shape = CircleShape()
         shape.radius = Pet.RADIUS
 
-        val fixutre = FixtureDef()
-        fixutre.shape = shape
-        fixutre.isSensor = true
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.isSensor = true
 
-        body.createFixture(fixutre)
+        body.createFixture(fixture)
         body.userData = myWorld.myPet
 
         shape.dispose()
     }
 
     fun createItem(itemClass: Class<out Item?>?, x: Float, y: Float): Float {
-        var x = x
+        var itemXPosition = x
         val obj = Pools.obtain(itemClass)!!
-        x += obj.width / 2f
+        itemXPosition += obj.width / 2f
 
-        obj.initializeItem(x, y)
+        obj.initializeItem(itemXPosition, y)
 
         val myBodyDefinition = BodyDef()
         myBodyDefinition.position[obj.position.x] = obj.position.y
@@ -139,22 +151,22 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
 
         shape.dispose()
 
-        return x + obj.width / 2f
+        return itemXPosition + obj.width / 2f
     }
 
     /**
      * Returns the position of the right edge of the box in.
      */
     fun createBox4(x: Float, y: Float): Float {
-        var x = x
+        var itemXPosition = x
         val obj = Pools.obtain(ObstacleBoxes4::class.java)
 
-        x += ObstacleBoxes4.DRAW_WIDTH / 2f
+        itemXPosition += ObstacleBoxes4.DRAW_WIDTH / 2f
 
-        obj.initializeObstacle(x, y)
+        obj.initializeObstacle(itemXPosition, y)
 
         val bd = BodyDef()
-        bd.position[x] = y
+        bd.position[itemXPosition] = y
         bd.type = BodyType.StaticBody
 
         val body = myWorldBox.createBody(bd)
@@ -178,19 +190,19 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
 
         shape.dispose()
 
-        return x + ObstacleBoxes4.DRAW_WIDTH / 2f
+        return itemXPosition + ObstacleBoxes4.DRAW_WIDTH / 2f
     }
 
     fun createBox7(x: Float, y: Float): Float {
-        var x = x
+        var itemXPosition = x
         val obj = Pools.obtain(ObstacleBoxes7::class.java)
 
-        x += ObstacleBoxes7.DRAW_WIDTH / 2f
+        itemXPosition += ObstacleBoxes7.DRAW_WIDTH / 2f
 
-        obj.initializeObstacle(x, y)
+        obj.initializeObstacle(itemXPosition, y)
 
         val bd = BodyDef()
-        bd.position[x] = y
+        bd.position[itemXPosition] = y
         bd.type = BodyType.StaticBody
 
         val body = myWorldBox.createBody(bd)
@@ -214,7 +226,7 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
 
         shape.dispose()
 
-        return x + ObstacleBoxes7.DRAW_WIDTH / 2f
+        return itemXPosition + ObstacleBoxes7.DRAW_WIDTH / 2f
     }
 
     /**
@@ -223,19 +235,19 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
      * @param numberOfPlatforms number of platforms attached.
      */
     fun createPlatform(x: Float, y: Float, numberOfPlatforms: Int): Float {
-        var x = x
+        var itemXPosition = x
         val yCenter = Platform.HEIGHT / 2f + y
 
-        var xHome = x
+        var xHome = itemXPosition
         var myPlatform: Platform? = null
         for (i in 0 until numberOfPlatforms) {
             myPlatform = Pools.obtain(Platform::class.java)
-            x += Platform.WIDTH / 2f
-            myPlatform.initializePlatform(x, yCenter)
+            itemXPosition += Platform.WIDTH / 2f
+            myPlatform.initializePlatform(itemXPosition, yCenter)
             myWorld.arrayPlatforms.add(myPlatform)
             // I subtract (-.01) so that there is one pixel on the left and the line does not
             // appear when two platforms are close together.
-            x += Platform.WIDTH / 2f - .01f
+            itemXPosition += Platform.WIDTH / 2f - .01f
         }
 
         xHome += Platform.WIDTH / 2f * numberOfPlatforms - (.005f * numberOfPlatforms)
@@ -264,11 +276,11 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
     }
 
     fun createWall(x: Float, y: Float): Float {
-        var x = x
+        var itemXPosition = x
         val myWall = Pools.obtain(Wall::class.java)
 
-        x += Wall.WIDTH / 2f
-        myWall.initializeWall(x, y)
+        itemXPosition += Wall.WIDTH / 2f
+        myWall.initializeWall(itemXPosition, y)
 
         val bd = BodyDef()
         bd.position[myWall.position.x] = myWall.position.y
@@ -289,10 +301,10 @@ class ObjectManagerBox2d(var myWorld: WorldGame) {
 
         shape.dispose()
 
-        return x + Wall.WIDTH / 2f
+        return itemXPosition + Wall.WIDTH / 2f
     }
 
-    fun crearMissil(x: Float, y: Float) {
+    fun createMissile1(x: Float, y: Float) {
         val obj = Pools.obtain(Missile::class.java)
         obj.initializeMissile(x, y)
 

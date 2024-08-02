@@ -12,9 +12,7 @@ import com.nopalsoft.ninjarunner.game.GameScreen
 import com.nopalsoft.ninjarunner.leaderboard.Person
 import com.nopalsoft.ninjarunner.screens.Screens
 
-/**
- * It has already been made in KT. Don't do it again.
- */
+
 class MainGame : Game() {
     var arrayOfPersons: Array<Person> = Array()
     var stage: Stage? = null

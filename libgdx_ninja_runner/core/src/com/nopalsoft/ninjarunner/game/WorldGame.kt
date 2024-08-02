@@ -159,7 +159,7 @@ class WorldGame {
         if (timeToSpawnMissile >= TIME_TO_SPAWN_MISSIL) {
             timeToSpawnMissile -= TIME_TO_SPAWN_MISSIL
 
-            myManager.crearMissil(myPlayer!!.position.x + 10, myPlayer!!.position.y)
+            myManager.createMissile1(myPlayer!!.position.x + 10, myPlayer!!.position.y)
         }
     }
 

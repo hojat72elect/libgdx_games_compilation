@@ -4,7 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.ParticleEffect
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
@@ -17,7 +22,7 @@ import com.nopalsoft.ninjarunner.parallax.ParallaxLayer
 
 object Assets {
     var fontSmall: BitmapFont? = null
-    var fontLarge: BitmapFont? = null
+    private var fontLarge: BitmapFont? = null
     var playerRunAnimation: AnimationSprite? = null
     var playerDashAnimation: AnimationSprite? = null
     var playerIdleAnimation: AnimationSprite? = null
@@ -82,8 +87,8 @@ object Assets {
     var buttonRatePressed: TextureRegionDrawable? = null
     var buttonShare: TextureRegionDrawable? = null
     var buttonSharePressed: TextureRegionDrawable? = null
-    var buttonUpgrade: TextureRegionDrawable? = null
-    var buttonUpgradePressed: TextureRegionDrawable? = null
+    private var buttonUpgrade: TextureRegionDrawable? = null
+    private var buttonUpgradePressed: TextureRegionDrawable? = null
     var buttonFacebook: TextureRegionDrawable? = null
     var buttonFacebookPressed: TextureRegionDrawable? = null
     var photoFrame: TextureRegionDrawable? = null
@@ -242,7 +247,7 @@ object Assets {
         popCandy = Gdx.audio.newSound(Gdx.files.internal("data/Sonidos/popBubble.mp3"))
 
         music1 = Gdx.audio.newMusic(Gdx.files.internal("data/Sonidos/Happy.mp3"))
-        music1?.setLooping(true)
+        music1?.isLooping = true
     }
 
     private fun loadShanti(atlas: TextureAtlas) {

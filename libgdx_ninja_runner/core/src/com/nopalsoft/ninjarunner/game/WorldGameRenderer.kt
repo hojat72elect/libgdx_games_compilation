@@ -6,22 +6,35 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.nopalsoft.ninjarunner.AnimationSprite
 import com.nopalsoft.ninjarunner.Assets
-import com.nopalsoft.ninjarunner.objects.*
+import com.nopalsoft.ninjarunner.objects.Item
+import com.nopalsoft.ninjarunner.objects.ItemCandyBean
+import com.nopalsoft.ninjarunner.objects.ItemCandyCorn
+import com.nopalsoft.ninjarunner.objects.ItemCandyJelly
+import com.nopalsoft.ninjarunner.objects.ItemCurrency
+import com.nopalsoft.ninjarunner.objects.ItemEnergy
+import com.nopalsoft.ninjarunner.objects.ItemHearth
+import com.nopalsoft.ninjarunner.objects.ItemMagnet
+import com.nopalsoft.ninjarunner.objects.Missile
+import com.nopalsoft.ninjarunner.objects.Obstacle
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes4
+import com.nopalsoft.ninjarunner.objects.ObstacleBoxes7
+import com.nopalsoft.ninjarunner.objects.Pet
+import com.nopalsoft.ninjarunner.objects.Platform
+import com.nopalsoft.ninjarunner.objects.Player
+import com.nopalsoft.ninjarunner.objects.Wall
 import com.nopalsoft.ninjarunner.screens.Screens
 
 class WorldGameRenderer(batcher: SpriteBatch, myWorld: WorldGame) {
-    val WIDTH: Float = Screens.WORLD_WIDTH
-    val HEIGHT: Float = Screens.WORLD_HEIGHT
 
-    var batcher: SpriteBatch
-    var myWorld: WorldGame
-
-    var myCamera: OrthographicCamera = OrthographicCamera(WIDTH, HEIGHT)
-
-    var renderBox: Box2DDebugRenderer
+    private val width: Float = Screens.WORLD_WIDTH
+    private val height: Float = Screens.WORLD_HEIGHT
+    private var batcher: SpriteBatch
+    private var myWorld: WorldGame
+    private var myCamera: OrthographicCamera = OrthographicCamera(width, height)
+    private var renderBox: Box2DDebugRenderer
 
     init {
-        myCamera.position[WIDTH / 2f, HEIGHT / 2f] = 0f
+        myCamera.position[width / 2f, height / 2f] = 0f
         this.batcher = batcher
         this.myWorld = myWorld
         this.renderBox = Box2DDebugRenderer()
@@ -30,10 +43,10 @@ class WorldGameRenderer(batcher: SpriteBatch, myWorld: WorldGame) {
     fun render(delta: Float) {
         myCamera.position[myWorld.myPlayer!!.position.x + 1.5f, myWorld.myPlayer!!.position.y] = 0f
 
-        if (myCamera.position.y < HEIGHT / 2f) myCamera.position.y = HEIGHT / 2f
-        else if (myCamera.position.y > HEIGHT / 2f) myCamera.position.y = HEIGHT / 2f
+        if (myCamera.position.y < height / 2f) myCamera.position.y = height / 2f
+        else if (myCamera.position.y > height / 2f) myCamera.position.y = height / 2f
 
-        if (myCamera.position.x < WIDTH / 2f) myCamera.position.x = WIDTH / 2f
+        if (myCamera.position.x < width / 2f) myCamera.position.x = width / 2f
 
         myCamera.update()
         batcher.projectionMatrix = myCamera.combined
@@ -59,28 +72,48 @@ class WorldGameRenderer(batcher: SpriteBatch, myWorld: WorldGame) {
             var spriteFrame: Sprite? = null
 
             if (obj.state == Item.STATE_NORMAL) {
-                if (obj is ItemCurrency) {
-                    spriteFrame = Assets.coinAnimation!!.getKeyFrame(obj.stateTime, true)
-                } else if (obj is ItemMagnet) {
-                    spriteFrame = Assets.magnet
-                } else if (obj is ItemEnergy) {
-                    spriteFrame = Assets.energy
-                } else if (obj is ItemHearth) {
-                    spriteFrame = Assets.hearth
-                } else if (obj is ItemCandyJelly) {
-                    spriteFrame = Assets.jellyRed
-                } else if (obj is ItemCandyBean) {
-                    spriteFrame = Assets.beanRed
-                } else if (obj is ItemCandyCorn) {
-                    spriteFrame = Assets.candyCorn
+                when (obj) {
+                    is ItemCurrency -> {
+                        spriteFrame = Assets.coinAnimation!!.getKeyFrame(obj.stateTime, true)
+                    }
+
+                    is ItemMagnet -> {
+                        spriteFrame = Assets.magnet
+                    }
+
+                    is ItemEnergy -> {
+                        spriteFrame = Assets.energy
+                    }
+
+                    is ItemHearth -> {
+                        spriteFrame = Assets.hearth
+                    }
+
+                    is ItemCandyJelly -> {
+                        spriteFrame = Assets.jellyRed
+                    }
+
+                    is ItemCandyBean -> {
+                        spriteFrame = Assets.beanRed
+                    }
+
+                    is ItemCandyCorn -> {
+                        spriteFrame = Assets.candyCorn
+                    }
                 }
             } else {
-                spriteFrame = if (obj is ItemCandyJelly) {
-                    Assets.candyExplosionRed!!.getKeyFrame(obj.stateTime, false)
-                } else if (obj is ItemCandyBean) {
-                    Assets.candyExplosionRed!!.getKeyFrame(obj.stateTime, false)
-                } else {
-                    Assets.pickAnimation!!.getKeyFrame(obj.stateTime, false)
+                spriteFrame = when (obj) {
+                    is ItemCandyJelly -> {
+                        Assets.candyExplosionRed!!.getKeyFrame(obj.stateTime, false)
+                    }
+
+                    is ItemCandyBean -> {
+                        Assets.candyExplosionRed!!.getKeyFrame(obj.stateTime, false)
+                    }
+
+                    else -> {
+                        Assets.pickAnimation!!.getKeyFrame(obj.stateTime, false)
+                    }
                 }
             }
 
@@ -94,7 +127,7 @@ class WorldGameRenderer(batcher: SpriteBatch, myWorld: WorldGame) {
 
     private fun renderPlatforms() {
         for (obj in myWorld.arrayPlatforms) {
-            var spriteFrame = Assets.platform
+            val spriteFrame = Assets.platform
 
             spriteFrame!!.setPosition(
                 obj.position.x - Platform.WIDTH / 2f,
@@ -233,28 +266,36 @@ class WorldGameRenderer(batcher: SpriteBatch, myWorld: WorldGame) {
                 animDead = Assets.ninjaDeadAnimation
             }
         }
-        if (oPer.state == Player.STATE_NORMAL) {
-            spriteFrame = if (oPer.isIdle) {
-                animIdle!!.getKeyFrame(oPer.stateTime, true)
-            } else if (oPer.isJumping) {
-                animJump!!.getKeyFrame(oPer.stateTime, false)
-            } else if (oPer.isSlide) {
-                animSlide!!.getKeyFrame(oPer.stateTime, true)
-            } else if (oPer.isDash) {
-                animDash!!.getKeyFrame(oPer.stateTime, true)
-            } else {
-                animRun!!.getKeyFrame(oPer.stateTime, true)
+        when (oPer.state) {
+            Player.STATE_NORMAL -> {
+                spriteFrame = if (oPer.isIdle) {
+                    animIdle!!.getKeyFrame(oPer.stateTime, true)
+                } else if (oPer.isJumping) {
+                    animJump!!.getKeyFrame(oPer.stateTime, false)
+                } else if (oPer.isSlide) {
+                    animSlide!!.getKeyFrame(oPer.stateTime, true)
+                } else if (oPer.isDash) {
+                    animDash!!.getKeyFrame(oPer.stateTime, true)
+                } else {
+                    animRun!!.getKeyFrame(oPer.stateTime, true)
+                }
+                offsetY = .1f
             }
-            offsetY = .1f
-        } else if (oPer.state == Player.STATE_HURT) {
-            spriteFrame = animHurt!!.getKeyFrame(oPer.stateTime, false)
-            offsetY = .1f
-        } else if (oPer.state == Player.STATE_DIZZY) {
-            spriteFrame = animDizzy!!.getKeyFrame(oPer.stateTime, true)
-            offsetY = .1f
-        } else {
-            spriteFrame = animDead!!.getKeyFrame(oPer.stateTime, false)
-            offsetY = .1f
+
+            Player.STATE_HURT -> {
+                spriteFrame = animHurt!!.getKeyFrame(oPer.stateTime, false)
+                offsetY = .1f
+            }
+
+            Player.STATE_DIZZY -> {
+                spriteFrame = animDizzy!!.getKeyFrame(oPer.stateTime, true)
+                offsetY = .1f
+            }
+
+            else -> {
+                spriteFrame = animDead!!.getKeyFrame(oPer.stateTime, false)
+                offsetY = .1f
+            }
         }
 
         spriteFrame.setPosition(myWorld.myPlayer!!.position.x - .75f, myWorld.myPlayer!!.position.y - .52f - offsetY)

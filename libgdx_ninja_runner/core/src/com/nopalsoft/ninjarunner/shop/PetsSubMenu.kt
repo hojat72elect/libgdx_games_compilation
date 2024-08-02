@@ -3,7 +3,11 @@ package com.nopalsoft.ninjarunner.shop
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
@@ -17,29 +21,24 @@ import com.nopalsoft.ninjarunner.Settings.selectedPet
 import com.nopalsoft.ninjarunner.Settings.totalCoins
 import com.nopalsoft.ninjarunner.objects.Pet
 import com.nopalsoft.ninjarunner.scene2d.AnimatedSpriteActor
+import com.badlogic.gdx.utils.Array as GDXArray
 
-class PetsSubMenu(var myContainer: Table, game: MainGame) {
-    val MAX_LEVEL: Int = 6
-    val BOMB_PRICE: Int = 5000
-    val PRICE_LEVEL_1: Int = 350
-    val PRICE_LEVEL_2: Int = 1000
-    val PRICE_LEVEL_3: Int = 3000
-    val PRICE_LEVEL_4: Int = 4500
-    val PRICE_LEVEL_5: Int = 5000
-    val PRICE_LEVEL_6: Int = 7500
+class PetsSubMenu(myContainer: Table, game: MainGame) {
+
+
     var didBuyBomb: Boolean = false
     var labelPriceBird: Label? = null
     var labelPriceBomb: Label? = null
     var buttonBuyOrSelectBird: TextButton? = null
     var buttonBuyBomb: TextButton? = null
-    var arrayButtons: com.badlogic.gdx.utils.Array<TextButton?>? = null
+    private var arrayButtons: GDXArray<TextButton?>? = null
     var buttonUpgradeBird: Button? = null
     var buttonUpgradeBomb: Button? = null
-    var arrayBird: Array<Image?>
-    var arrayBomb: Array<Image?>
-    var languages: I18NBundle? = game.languages
-    var textBuy: String
-    var textSelect: String
+    private var arrayBird: Array<Image?>
+    private var arrayBomb: Array<Image?>
+    private var languages: I18NBundle? = game.languages
+    private var textBuy: String
+    private var textSelect: String
 
     init {
         myContainer.clear()
@@ -97,7 +96,7 @@ class PetsSubMenu(var myContainer: Table, game: MainGame) {
         setArrays()
     }
 
-    fun addPet(
+    private fun addPet(
         title: String?,
         labelPrice: Label?,
         image: AnimationSprite?,
@@ -170,8 +169,8 @@ class PetsSubMenu(var myContainer: Table, game: MainGame) {
                 buttonUpgradeBird!!.addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (totalCoins >= calculatePrice(LEVEL_PET_BIRD)) {
-                            totalCoins = totalCoins - calculatePrice(LEVEL_PET_BIRD)
-                            LEVEL_PET_BIRD = LEVEL_PET_BIRD + 1
+                            totalCoins -= calculatePrice(LEVEL_PET_BIRD)
+                            LEVEL_PET_BIRD += 1
 
                             updateLabelPriceAndButton(LEVEL_PET_BIRD, labelPriceBird, buttonUpgradeBird)
                             setArrays()
@@ -192,7 +191,7 @@ class PetsSubMenu(var myContainer: Table, game: MainGame) {
                             selectedPet = Pet.PetType.BOMB
                             setSelected(buttonBuyBomb!!)
                         } else if (totalCoins >= BOMB_PRICE) {
-                            totalCoins = totalCoins - BOMB_PRICE
+                            totalCoins -= BOMB_PRICE
                             setButtonStylePurchased(buttonBuyBomb!!)
                             didBuyBomb = true
                             buttonUpgradeBomb!!.isVisible = true
@@ -209,8 +208,8 @@ class PetsSubMenu(var myContainer: Table, game: MainGame) {
                 buttonUpgradeBomb!!.addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (totalCoins >= calculatePrice(LEVEL_PET_BOMB)) {
-                            totalCoins = totalCoins - calculatePrice(LEVEL_PET_BOMB)
-                            LEVEL_PET_BOMB = LEVEL_PET_BOMB + 1
+                            totalCoins -= calculatePrice(LEVEL_PET_BOMB)
+                            LEVEL_PET_BOMB++
                             updateLabelPriceAndButton(LEVEL_PET_BOMB, labelPriceBomb, buttonUpgradeBomb)
                             setArrays()
                         }
@@ -286,5 +285,14 @@ class PetsSubMenu(var myContainer: Table, game: MainGame) {
 
     companion object {
         private val pref: Preferences = Gdx.app.getPreferences("com.tiar.shantirunner.shop")
+
+        private const val PRICE_LEVEL_1 = 350
+        private const val PRICE_LEVEL_2 = 1_000
+        private const val PRICE_LEVEL_3 = 3_000
+        private const val PRICE_LEVEL_4 = 4_500
+        private const val PRICE_LEVEL_5 = 5_000
+        private const val PRICE_LEVEL_6 = 7_500
+        private const val MAX_LEVEL = 6
+        const val BOMB_PRICE = 5_000
     }
 }

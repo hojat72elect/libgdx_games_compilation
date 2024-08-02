@@ -2,8 +2,13 @@ package com.nopalsoft.ninjarunner.leaderboard
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.nopalsoft.ninjarunner.Assets
 import com.nopalsoft.ninjarunner.game.GameScreen
@@ -13,15 +18,14 @@ import com.nopalsoft.ninjarunner.screens.Screens
  * Shows all the top scoring users of the game. It doesn't matter which social network they have
  * used for logging in to the game; here they are shown if they are leader board users of the game.
  */
-class LeaderboardScreen(_game: Game) : Screens(_game) {
-    var tableMenu: Table
-    var buttonLeaderboard: Button? = null
-    var buttonFacebook: Button? = null
-    var buttonInviteFriend: Button? = null
-    var buttonGoogle: Button? = null
-
-    var scroll: ScrollPane
-    var table: Table
+class LeaderboardScreen(game: Game) : Screens(game) {
+    private var tableMenu: Table
+    private var buttonLeaderboard: Button? = null
+    private var buttonFacebook: Button? = null
+    private var buttonInviteFriend: Button? = null
+    private var buttonGoogle: Button? = null
+    private var scroll: ScrollPane
+    private var table: Table
 
 
     init {
@@ -80,14 +84,11 @@ class LeaderboardScreen(_game: Game) : Screens(_game) {
         stage?.addActor(tableTitle)
         stage?.addActor(tbShop)
 
-
-        if (game.arrayOfPersons != null) updateLeaderboard()
-
-
+        updateLeaderboard()
         buttonLeaderboard!!.isChecked = true
     }
 
-    fun initButtons() {
+    private fun initButtons() {
         buttonLeaderboard = Button(Assets.buttonShop, Assets.buttonShopPressed, Assets.buttonShopPressed)
         buttonFacebook = Button(Assets.buttonFacebook, Assets.buttonFacebookPressed, Assets.buttonFacebookPressed)
         buttonGoogle =
@@ -126,7 +127,7 @@ class LeaderboardScreen(_game: Game) : Screens(_game) {
         return super.keyUp(keycode)
     }
 
-    fun updateLeaderboard() {
+    private fun updateLeaderboard() {
         table.clear()
         for (player in game.arrayOfPersons) {
             val frame = LeaderBoardFrame(player!!)
