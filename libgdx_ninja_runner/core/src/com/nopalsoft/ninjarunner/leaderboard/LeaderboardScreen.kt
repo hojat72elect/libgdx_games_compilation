@@ -37,7 +37,7 @@ class LeaderboardScreen(_game: Game?) : Screens(_game) {
         tableTitle.add(labelShop).expand()
         tableTitle.row()
 
-        val imgGem = Image(Assets.coinAnimation.getKeyFrame(0f))
+        val imgGem = Image(Assets.coinAnimation?.getKeyFrame(0f))
         imgGem.setSize(20f, 20f)
 
 
@@ -112,7 +112,7 @@ class LeaderboardScreen(_game: Game?) : Screens(_game) {
     }
 
     override fun draw(delta: Float) {
-        Assets.backgroundNubes.render(0f)
+        Assets.backgroundNubes?.render(0f)
     }
 
     override fun update(delta: Float) {

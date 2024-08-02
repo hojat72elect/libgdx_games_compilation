@@ -1,68 +1,63 @@
-package com.nopalsoft.ninjarunner;
+package com.nopalsoft.ninjarunner
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.MathUtils
+import kotlin.math.max
+import kotlin.math.min
 
-public class AnimationSprite {
-
-    public final float frameDuration;
-    public final float animationDuration;
-    final Sprite[] spriteFrames;
-    private PlayMode playMode;
+class AnimationSprite(val frameDuration: Float, vararg keyFrames: Sprite) {
+    val animationDuration: Float = keyFrames.size * frameDuration
+    val spriteFrames: Array<Sprite>
+    private var playMode: PlayMode
 
 
     /**
      * Constructor, storing the frame duration and key frames.
      *
      * @param frameDuration the time between frames in seconds.
-     * @param keyFrames     the {@link TextureRegion}s representing the frames.
+     * @param keyFrames     the [TextureRegion]s representing the frames.
      */
-    public AnimationSprite(float frameDuration, Sprite... keyFrames) {
-        this.frameDuration = frameDuration;
-        this.animationDuration = keyFrames.length * frameDuration;
-        this.spriteFrames = keyFrames;
-        this.playMode = PlayMode.NORMAL;
+    init {
+        this.spriteFrames = keyFrames as Array<Sprite>
+        this.playMode = PlayMode.NORMAL
     }
 
     /**
-     * Returns a {@link TextureRegion} based on the so called state time. This is the amount of seconds an object has spent in the state this Animation instance
+     * Returns a [TextureRegion] based on the so called state time. This is the amount of seconds an object has spent in the state this Animation instance
      * represents, e.g. running, jumping and so on. The mode specifies whether the animation is looping or not.
      *
      * @param stateTime the time spent in the state represented by this animation.
      * @param looping   whether the animation is looping or not.
      * @return the TextureRegion representing the frame of animation for the given state time.
      */
-    public Sprite getKeyFrame(float stateTime, boolean looping) {
+    fun getKeyFrame(stateTime: Float, looping: Boolean): Sprite {
         // we set the play mode by overriding the previous mode based on looping
         // parameter value
-        PlayMode oldPlayMode = playMode;
+        val oldPlayMode = playMode
         if (looping && (playMode == PlayMode.NORMAL || playMode == PlayMode.REVERSED)) {
-            if (playMode == PlayMode.NORMAL)
-                playMode = PlayMode.LOOP;
-            else
-                playMode = PlayMode.LOOP_REVERSED;
+            playMode =
+                if (playMode == PlayMode.NORMAL) PlayMode.LOOP
+                else PlayMode.LOOP_REVERSED
         } else if (!looping && !(playMode == PlayMode.NORMAL || playMode == PlayMode.REVERSED)) {
-            if (playMode == PlayMode.LOOP_REVERSED)
-                playMode = PlayMode.REVERSED;
-            else
-                playMode = PlayMode.LOOP;
+            playMode =
+                if (playMode == PlayMode.LOOP_REVERSED) PlayMode.REVERSED
+                else PlayMode.LOOP
         }
 
-        Sprite frame = getKeyFrame(stateTime);
-        playMode = oldPlayMode;
-        return frame;
+        val frame = getKeyFrame(stateTime)
+        playMode = oldPlayMode
+        return frame
     }
 
     /**
-     * Returns a {@link TextureRegion} based on the so called state time. This is the amount of seconds an object has spent in the state this Animation instance
+     * Returns a [TextureRegion] based on the so called state time. This is the amount of seconds an object has spent in the state this Animation instance
      * represents, e.g. running, jumping and so on using the mode specified by { #setPlayMode(com.tiar.shantirunner.AnimationSprite.PlayMode)} method.
      *
      * @return the TextureRegion representing the frame of animation for the given state time.
      */
-    public Sprite getKeyFrame(float stateTime) {
-        int frameNumber = getKeyFrameIndex(stateTime);
-        return spriteFrames[frameNumber];
+    fun getKeyFrame(stateTime: Float): Sprite {
+        val frameNumber = getKeyFrameIndex(stateTime)
+        return spriteFrames[frameNumber]
     }
 
     /**
@@ -70,44 +65,38 @@ public class AnimationSprite {
      *
      * @return current frame number
      */
-    public int getKeyFrameIndex(float stateTime) {
-        if (spriteFrames.length == 1)
-            return 0;
+    fun getKeyFrameIndex(stateTime: Float): Int {
+        if (spriteFrames.size == 1) return 0
 
-        int frameNumber = (int) (stateTime / frameDuration);
-        switch (playMode) {
-            case NORMAL:
-                frameNumber = Math.min(spriteFrames.length - 1, frameNumber);
-                break;
-            case LOOP:
-                frameNumber = frameNumber % spriteFrames.length;
-                break;
-            case LOOP_PINGPONG:
-                frameNumber = frameNumber % ((spriteFrames.length * 2) - 2);
-                if (frameNumber >= spriteFrames.length)
-                    frameNumber = spriteFrames.length - 2 - (frameNumber - spriteFrames.length);
-                break;
-            case LOOP_RANDOM:
-                frameNumber = MathUtils.random(spriteFrames.length - 1);
-                break;
-            case REVERSED:
-                frameNumber = Math.max(spriteFrames.length - frameNumber - 1, 0);
-                break;
-            case LOOP_REVERSED:
-                frameNumber = frameNumber % spriteFrames.length;
-                frameNumber = spriteFrames.length - frameNumber - 1;
-                break;
+        var frameNumber = (stateTime / frameDuration).toInt()
+        when (playMode) {
+            PlayMode.NORMAL -> frameNumber = min((spriteFrames.size - 1).toDouble(), frameNumber.toDouble())
+                .toInt()
+
+            PlayMode.LOOP -> frameNumber = frameNumber % spriteFrames.size
+            PlayMode.LOOP_PINGPONG -> {
+                frameNumber = frameNumber % ((spriteFrames.size * 2) - 2)
+                if (frameNumber >= spriteFrames.size) frameNumber =
+                    spriteFrames.size - 2 - (frameNumber - spriteFrames.size)
+            }
+
+            PlayMode.LOOP_RANDOM -> frameNumber = MathUtils.random(spriteFrames.size - 1)
+            PlayMode.REVERSED -> frameNumber = max((spriteFrames.size - frameNumber - 1).toDouble(), 0.0)
+                .toInt()
+
+            PlayMode.LOOP_REVERSED -> {
+                frameNumber = frameNumber % spriteFrames.size
+                frameNumber = spriteFrames.size - frameNumber - 1
+            }
         }
-
-        return frameNumber;
+        return frameNumber
     }
 
 
     /**
-     * Defines possible playback modes for an {@link com.badlogic.gdx.graphics.g2d.Animation}.
+     * Defines possible playback modes for an [com.badlogic.gdx.graphics.g2d.Animation].
      */
-    public enum PlayMode {
+    enum class PlayMode {
         NORMAL, REVERSED, LOOP, LOOP_REVERSED, LOOP_PINGPONG, LOOP_RANDOM,
     }
-
 }

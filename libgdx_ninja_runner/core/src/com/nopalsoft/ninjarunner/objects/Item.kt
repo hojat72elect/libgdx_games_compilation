@@ -66,6 +66,6 @@ open class Item(@JvmField val width: Float, @JvmField val height: Float) : Poola
         const val STATE_DESTROY = 1
 
         @JvmStatic
-        val DURATION_PICK = Assets.pickAnimation.animationDuration + .1
+        val DURATION_PICK = Assets.pickAnimation!!.animationDuration + .1
     }
 }

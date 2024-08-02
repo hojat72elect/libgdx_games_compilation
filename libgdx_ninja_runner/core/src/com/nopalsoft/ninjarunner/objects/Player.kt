@@ -119,7 +119,7 @@ class Player(x: Float, y: Float, @JvmField val type: Int) {
             isSlide = false
 
             body.gravityScale = .9f
-            Assets.playSound(Assets.jump, 1) // FIXME Fix the sound
+            Assets.playSound(Assets.jump!!, 1) // FIXME Fix the sound
         }
         if (!isJumpPressed) body.gravityScale = 1f
 
@@ -240,8 +240,8 @@ class Player(x: Float, y: Float, @JvmField val type: Int) {
         private const val DURATION_DASH = 5
 
         @JvmStatic
-        val DURATION_DEAD = Assets.playerDeadAnimation.animationDuration + .5f
-        val DURATION_HURT = Assets.playerHurtAnimation.animationDuration + .1f
+        val DURATION_DEAD = Assets.playerDeadAnimation!!.animationDuration + .5f
+        val DURATION_HURT = Assets.playerHurtAnimation!!.animationDuration + .1f
         const val DURATION_DIZZY = 1.25f
         const val JUMP_SPEED = 5f
     }

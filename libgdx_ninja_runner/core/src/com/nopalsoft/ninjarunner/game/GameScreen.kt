@@ -37,7 +37,7 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
             val run = Runnable {
                 state = STATE_RUNNING
                 if (isMusicEnabled) {
-                    Assets.music1.play()
+                    Assets.music1?.play()
                 }
 
                 nextGoalFrame = NextGoalFrame(SCREEN_WIDTH.toFloat(), 400f)
@@ -140,7 +140,7 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
     private fun setGameover() {
         setNewScore(myWorld.score)
         state = STATE_GAME_OVER
-        Assets.music1.stop()
+        Assets.music1?.stop()
     }
 
     override fun right() {
@@ -150,9 +150,9 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
 
     override fun draw(delta: Float) {
         if (state == STATE_MENU) {
-            Assets.backgroundNubes.render(0f)
+            Assets.backgroundNubes?.render(0f)
         } else {
-            Assets.backgroundNubes.render(delta)
+            Assets.backgroundNubes?.render(delta)
         }
 
         renderer.render(delta)
@@ -161,13 +161,13 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
         batcher.projectionMatrix = myCamera.combined
 
         batcher.begin()
-        Assets.fontSmall.draw(batcher, "FPS GERA" + Gdx.graphics.framesPerSecond, 5f, 20f)
-        Assets.fontSmall.draw(batcher, "Bodies " + myWorld.myWorldBox.bodyCount, 5f, 40f)
-        Assets.fontSmall.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5f, 60f)
-        Assets.fontSmall.draw(batcher, "Monedas " + myWorld.takenCoins, 5f, 80f)
-        Assets.fontSmall.draw(batcher, "Puntos " + myWorld.score, 5f, 100f)
-        Assets.fontSmall.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5f, 120f)
-        Assets.fontSmall.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5f, 140f)
+        Assets.fontSmall?.draw(batcher, "FPS GERA" + Gdx.graphics.framesPerSecond, 5f, 20f)
+        Assets.fontSmall?.draw(batcher, "Bodies " + myWorld.myWorldBox.bodyCount, 5f, 40f)
+        Assets.fontSmall?.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5f, 60f)
+        Assets.fontSmall?.draw(batcher, "Monedas " + myWorld.takenCoins, 5f, 80f)
+        Assets.fontSmall?.draw(batcher, "Puntos " + myWorld.score, 5f, 100f)
+        Assets.fontSmall?.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5f, 120f)
+        Assets.fontSmall?.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5f, 140f)
 
         batcher.end()
     }

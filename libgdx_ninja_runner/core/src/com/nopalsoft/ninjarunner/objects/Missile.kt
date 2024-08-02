@@ -69,7 +69,7 @@ class Missile : Poolable, Comparable<Missile> {
         const val WIDTH = 1.27f
         const val HEIGHT = .44f
         const val SPEED_X = -2.5f
-        private val EXPLOSION_DURATION = Assets.explosion.animationDuration + .1f
+        private val EXPLOSION_DURATION = Assets.explosion!!.animationDuration + .1f
 
     }
 }
