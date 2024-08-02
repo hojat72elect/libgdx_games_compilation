@@ -1,252 +1,274 @@
-package com.nopalsoft.ninjarunner.shop;
+package com.nopalsoft.ninjarunner.shop
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.I18NBundle;
-import com.nopalsoft.ninjarunner.Assets;
-import com.nopalsoft.ninjarunner.MainGame;
-import com.nopalsoft.ninjarunner.Settings;
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.I18NBundle
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.MainGame
+import com.nopalsoft.ninjarunner.Settings.LEVEL_COINS
+import com.nopalsoft.ninjarunner.Settings.LEVEL_ENERGY
+import com.nopalsoft.ninjarunner.Settings.LEVEL_LIFE
+import com.nopalsoft.ninjarunner.Settings.LEVEL_MAGNET
+import com.nopalsoft.ninjarunner.Settings.LEVEL_TREASURE_CHEST
+import com.nopalsoft.ninjarunner.Settings.totalCoins
 
-public class UpgradesSubMenu {
+class UpgradesSubMenu(var contenedor: Table, game: MainGame) {
+    val MAX_LEVEL: Int = 6
 
-    public final int MAX_LEVEL = 6;
+    val PRECIO_NIVEL_1: Int = 500
+    val PRECIO_NIVEL_2: Int = 1000
+    val PRECIO_NIVEL_3: Int = 1750
+    val PRECIO_NIVEL_4: Int = 2500
+    val PRECIO_NIVEL_5: Int = 3000
 
-    final int PRECIO_NIVEL_1 = 500;
-    final int PRECIO_NIVEL_2 = 1000;
-    final int PRECIO_NIVEL_3 = 1750;
-    final int PRECIO_NIVEL_4 = 2500;
-    final int PRECIO_NIVEL_5 = 3000;
+    var btUpgradeMagnet: Button? = null
+    var btUpgradeLife: Button? = null
+    var btUpgradeEnergy: Button? = null
+    var btUpgradeCoins: Button? = null
+    var btUpgradeTreasureChest: Button? = null
 
-    Button btUpgradeMagnet;
-    Button btUpgradeLife;
-    Button btUpgradeEnergy;
-    Button btUpgradeCoins;
-    Button btUpgradeTreasureChest;
+    var lbPrecioMagnet: Label? = null
+    var lbPrecioLife: Label? = null
+    var lbPrecioEnergy: Label? = null
+    var lbPrecioCoins: Label? = null
+    var lbPrecioTreasureChest: Label? = null
 
-    Label lbPrecioMagnet;
-    Label lbPrecioLife;
-    Label lbPrecioEnergy;
-    Label lbPrecioCoins;
-    Label lbPrecioTreasureChest;
+    var arrMagnet: Array<Image?>
+    var arrLife: Array<Image?>
+    var arrEnergy: Array<Image?>
+    var arrCoins: Array<Image?>
+    var arrTreasureChest: Array<Image?>
 
-    Image[] arrMagnet;
-    Image[] arrLife;
-    Image[] arrEnergy;
-    Image[] arrCoins;
-    Image[] arrTreasureChest;
+    var idiomas: I18NBundle? = game.languages
 
-    Table contenedor;
-    I18NBundle idiomas;
+    init {
+        contenedor.clear()
 
-    public UpgradesSubMenu(Table contenedor, MainGame game) {
-        this.contenedor = contenedor;
-        idiomas = game.languages;
-        contenedor.clear();
+        arrMagnet = arrayOfNulls(MAX_LEVEL)
+        arrLife = arrayOfNulls(MAX_LEVEL)
+        arrEnergy = arrayOfNulls(MAX_LEVEL)
+        arrCoins = arrayOfNulls(MAX_LEVEL)
+        arrTreasureChest = arrayOfNulls(MAX_LEVEL)
 
-        arrMagnet = new Image[MAX_LEVEL];
-        arrLife = new Image[MAX_LEVEL];
-        arrEnergy = new Image[MAX_LEVEL];
-        arrCoins = new Image[MAX_LEVEL];
-        arrTreasureChest = new Image[MAX_LEVEL];
+        if (LEVEL_MAGNET < MAX_LEVEL) lbPrecioMagnet =
+            Label(calcularPrecio(LEVEL_MAGNET).toString() + "", Assets.labelStyleSmall)
 
-        if (Settings.getLEVEL_MAGNET() < MAX_LEVEL)
-            lbPrecioMagnet = new Label(calcularPrecio(Settings.getLEVEL_MAGNET()) + "", Assets.labelStyleSmall);
+        if (LEVEL_LIFE < MAX_LEVEL) lbPrecioLife =
+            Label(calcularPrecio(LEVEL_LIFE).toString() + "", Assets.labelStyleSmall)
 
-        if (Settings.getLEVEL_LIFE() < MAX_LEVEL)
-            lbPrecioLife = new Label(calcularPrecio(Settings.getLEVEL_LIFE()) + "", Assets.labelStyleSmall);
+        if (LEVEL_ENERGY < MAX_LEVEL) lbPrecioEnergy =
+            Label(calcularPrecio(LEVEL_ENERGY).toString() + "", Assets.labelStyleSmall)
 
-        if (Settings.getLEVEL_ENERGY() < MAX_LEVEL)
-            lbPrecioEnergy = new Label(calcularPrecio(Settings.getLEVEL_ENERGY()) + "", Assets.labelStyleSmall);
+        if (LEVEL_COINS < MAX_LEVEL) lbPrecioCoins =
+            Label(calcularPrecio(LEVEL_COINS).toString() + "", Assets.labelStyleSmall)
 
-        if (Settings.getLEVEL_COINS() < MAX_LEVEL)
-            lbPrecioCoins = new Label(calcularPrecio(Settings.getLEVEL_COINS()) + "", Assets.labelStyleSmall);
+        if (LEVEL_TREASURE_CHEST < MAX_LEVEL) lbPrecioTreasureChest =
+            Label(calcularPrecio(LEVEL_TREASURE_CHEST).toString() + "", Assets.labelStyleSmall)
 
-        if (Settings.getLEVEL_TREASURE_CHEST() < MAX_LEVEL)
-            lbPrecioTreasureChest = new Label(calcularPrecio(Settings.getLEVEL_TREASURE_CHEST()) + "", Assets.labelStyleSmall);
+        inicializarBotones()
 
-        inicializarBotones();
-
-        contenedor.defaults().expand().fill().padLeft(10).padRight(20).padBottom(10);
+        contenedor.defaults().expand().fill().padLeft(10f).padRight(20f).padBottom(10f)
 
         // Upgrade MAGNET
         contenedor.add(
-                agregarPersonajeTabla(idiomas.get("upgradeMagnet"), lbPrecioMagnet, Assets.magnet, 35, 35, idiomas.get("magnetDescription"),
-                        arrMagnet, btUpgradeMagnet)).row();
+            agregarPersonajeTabla(
+                idiomas!!["upgradeMagnet"], lbPrecioMagnet, Assets.magnet, 35f, 35f, idiomas!!["magnetDescription"],
+                arrMagnet, btUpgradeMagnet
+            )
+        ).row()
         contenedor.add(
-                        agregarPersonajeTabla("Upgrade Life", lbPrecioLife, Assets.hearth, 38, 29, idiomas.get("bombDescription"), arrLife, btUpgradeLife))
-                .row();
+            agregarPersonajeTabla(
+                "Upgrade Life",
+                lbPrecioLife,
+                Assets.hearth,
+                38f,
+                29f,
+                idiomas!!["bombDescription"],
+                arrLife,
+                btUpgradeLife
+            )
+        )
+            .row()
         contenedor.add(
-                agregarPersonajeTabla("Upgrade Eneergy", lbPrecioEnergy, Assets.energy, 25, 35, idiomas.get("bombDescription"), arrEnergy,
-                        btUpgradeEnergy)).row();
+            agregarPersonajeTabla(
+                "Upgrade Eneergy", lbPrecioEnergy, Assets.energy, 25f, 35f, idiomas!!["bombDescription"], arrEnergy,
+                btUpgradeEnergy
+            )
+        ).row()
         contenedor.add(
-                agregarPersonajeTabla("Upgrade coins", lbPrecioCoins, Assets.coinAnimation.getKeyFrame(0), 35, 35, idiomas.get("bombDescription"), arrCoins,
-                        btUpgradeCoins)).row();
+            agregarPersonajeTabla(
+                "Upgrade coins",
+                lbPrecioCoins,
+                Assets.coinAnimation!!.getKeyFrame(0f),
+                35f,
+                35f,
+                idiomas!!["bombDescription"],
+                arrCoins,
+                btUpgradeCoins
+            )
+        ).row()
         contenedor.add(
-                agregarPersonajeTabla(idiomas.get("upgradeTreasureChest"), lbPrecioTreasureChest, Assets.magnet, 35, 35,
-                        idiomas.get("treasureChestDescription"), arrTreasureChest, btUpgradeTreasureChest)).row();
+            agregarPersonajeTabla(
+                idiomas!!["upgradeTreasureChest"], lbPrecioTreasureChest, Assets.magnet, 35f, 35f,
+                idiomas!!["treasureChestDescription"], arrTreasureChest, btUpgradeTreasureChest
+            )
+        ).row()
 
-        setArrays();
-
+        setArrays()
     }
 
-    private Table agregarPersonajeTabla(String titulo, Label lblPrecio, Sprite imagen, float imagenWidth, float imagenHeight, String descripcion,
-                                        Image[] arrLevel, Button btUpgrade) {
+    private fun agregarPersonajeTabla(
+        titulo: String,
+        lblPrecio: Label?,
+        imagen: Sprite?,
+        imagenWidth: Float,
+        imagenHeight: Float,
+        descripcion: String,
+        arrLevel: Array<Image?>,
+        btUpgrade: Button?
+    ): Table {
+        val moneda = Image(Assets.coinAnimation!!.getKeyFrame(0f))
+        val imgPersonaje = Image(imagen)
 
-        Image moneda = new Image(Assets.coinAnimation.getKeyFrame(0));
-        Image imgPersonaje = new Image(imagen);
+        if (lblPrecio == null) moneda.isVisible = false
 
-        if (lblPrecio == null)
-            moneda.setVisible(false);
+        val tbBarraTitulo = Table()
+        tbBarraTitulo.add(Label(titulo, Assets.labelStyleSmall)).expandX().left()
+        tbBarraTitulo.add(moneda).right().size(20f)
+        tbBarraTitulo.add(lblPrecio).right().padRight(10f)
 
-        Table tbBarraTitulo = new Table();
-        tbBarraTitulo.add(new Label(titulo, Assets.labelStyleSmall)).expandX().left();
-        tbBarraTitulo.add(moneda).right().size(20);
-        tbBarraTitulo.add(lblPrecio).right().padRight(10);
+        val tbContent = Table()
+        tbContent.background = Assets.backgroundItemShop
+        tbContent.pad(5f)
 
-        Table tbContent = new Table();
-        tbContent.setBackground(Assets.backgroundItemShop);
-        tbContent.pad(5);
+        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2)
+        tbContent.row()
 
-        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2);
-        tbContent.row();
+        tbContent.add(imgPersonaje).size(imagenWidth, imagenHeight)
+        val lblDescripcion = Label(descripcion, Assets.labelStyleSmall)
+        lblDescripcion.wrap = true
+        tbContent.add(lblDescripcion).expand().fill()
 
-        tbContent.add(imgPersonaje).size(imagenWidth, imagenHeight);
-        Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
-        lblDescripcion.setWrap(true);
-        tbContent.add(lblDescripcion).expand().fill();
-
-        Table auxTab = new Table();
-        auxTab.setBackground(Assets.backgroundUpgradeBar);
-        auxTab.pad(5);
-        auxTab.defaults().padLeft(5);
-        for (int i = 0; i < MAX_LEVEL; i++) {
-            arrLevel[i] = new Image();
-            auxTab.add(arrLevel[i]).size(15);
+        val auxTab = Table()
+        auxTab.background = Assets.backgroundUpgradeBar
+        auxTab.pad(5f)
+        auxTab.defaults().padLeft(5f)
+        for (i in 0 until MAX_LEVEL) {
+            arrLevel[i] = Image()
+            auxTab.add(arrLevel[i]).size(15f)
         }
 
-        tbContent.row();
-        tbContent.add(auxTab);
-        tbContent.add(btUpgrade).left().size(40);
+        tbContent.row()
+        tbContent.add(auxTab)
+        tbContent.add(btUpgrade).left().size(40f)
 
-        return tbContent;
-
+        return tbContent
     }
 
-    private void inicializarBotones() {
-        btUpgradeMagnet = new Button(Assets.styleButtonUpgrade);
-        btUpgradeMagnet.setUserObject(Settings.getLEVEL_MAGNET());
-        initButton(btUpgradeMagnet, lbPrecioMagnet);
+    private fun inicializarBotones() {
+        btUpgradeMagnet = Button(Assets.styleButtonUpgrade)
+        btUpgradeMagnet!!.userObject = LEVEL_MAGNET
+        initButton(btUpgradeMagnet!!, lbPrecioMagnet)
 
-        btUpgradeLife = new Button(Assets.styleButtonUpgrade);
-        btUpgradeLife.setUserObject(Settings.getLEVEL_LIFE());
-        initButton(btUpgradeLife, lbPrecioLife);
+        btUpgradeLife = Button(Assets.styleButtonUpgrade)
+        btUpgradeLife!!.userObject = LEVEL_LIFE
+        initButton(btUpgradeLife!!, lbPrecioLife)
 
-        btUpgradeEnergy = new Button(Assets.styleButtonUpgrade);
-        btUpgradeEnergy.setUserObject(Settings.getLEVEL_ENERGY());
-        initButton(btUpgradeEnergy, lbPrecioEnergy);
+        btUpgradeEnergy = Button(Assets.styleButtonUpgrade)
+        btUpgradeEnergy!!.userObject = LEVEL_ENERGY
+        initButton(btUpgradeEnergy!!, lbPrecioEnergy)
 
-        btUpgradeCoins = new Button(Assets.styleButtonUpgrade);
-        btUpgradeCoins.setUserObject(Settings.getLEVEL_COINS());
-        initButton(btUpgradeCoins, lbPrecioCoins);
+        btUpgradeCoins = Button(Assets.styleButtonUpgrade)
+        btUpgradeCoins!!.userObject = LEVEL_COINS
+        initButton(btUpgradeCoins!!, lbPrecioCoins)
 
-        btUpgradeTreasureChest = new Button(Assets.styleButtonUpgrade);
-        btUpgradeTreasureChest.setUserObject(Settings.getLEVEL_TREASURE_CHEST());
-        initButton(btUpgradeTreasureChest, lbPrecioTreasureChest);
-
+        btUpgradeTreasureChest = Button(Assets.styleButtonUpgrade)
+        btUpgradeTreasureChest!!.userObject = LEVEL_TREASURE_CHEST
+        initButton(btUpgradeTreasureChest!!, lbPrecioTreasureChest)
     }
 
-    private void initButton(final Button btn, final Label lblPrecio) {
-        if ((Integer) btn.getUserObject() == MAX_LEVEL)
-            btn.setVisible(false);
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                int levelActual = (Integer) btn.getUserObject();
+    private fun initButton(btn: Button, lblPrecio: Label?) {
+        if (btn.userObject as Int == MAX_LEVEL) btn.isVisible = false
+        btn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                var levelActual = btn.userObject as Int
 
-                if (Settings.getTotalCoins() >= calcularPrecio(levelActual)) {
-                    Settings.setTotalCoins(Settings.getTotalCoins() - calcularPrecio(levelActual));
+                if (totalCoins >= calcularPrecio(levelActual)) {
+                    totalCoins = totalCoins - calcularPrecio(levelActual)
 
-                    if (btn == btUpgradeMagnet) {
-                        Settings.setLEVEL_MAGNET(Settings.getLEVEL_MAGNET() + 1);
-                    } else if (btn == btUpgradeLife) {
-                        Settings.setLEVEL_LIFE(Settings.getLEVEL_LIFE() + 1);
-                    } else if (btn == btUpgradeEnergy) {
-                        Settings.setLEVEL_ENERGY(Settings.getLEVEL_ENERGY() + 1);
-                    } else if (btn == btUpgradeCoins) {
-                        Settings.setLEVEL_COINS(Settings.getLEVEL_COINS() + 1);
-                    } else if (btn == btUpgradeTreasureChest) {
-                        Settings.setLEVEL_TREASURE_CHEST(Settings.getLEVEL_TREASURE_CHEST() + 1);
+                    if (btn === btUpgradeMagnet) {
+                        LEVEL_MAGNET = LEVEL_MAGNET + 1
+                    } else if (btn === btUpgradeLife) {
+                        LEVEL_LIFE = LEVEL_LIFE + 1
+                    } else if (btn === btUpgradeEnergy) {
+                        LEVEL_ENERGY = LEVEL_ENERGY + 1
+                    } else if (btn === btUpgradeCoins) {
+                        LEVEL_COINS = LEVEL_COINS + 1
+                    } else if (btn === btUpgradeTreasureChest) {
+                        LEVEL_TREASURE_CHEST = LEVEL_TREASURE_CHEST + 1
                     }
 
-                    levelActual++;
-                    btn.setUserObject(levelActual);
+                    levelActual++
+                    btn.userObject = levelActual
 
-                    updateLabelPriceAndButton(levelActual, lblPrecio, btn);
-                    setArrays();
+                    updateLabelPriceAndButton(levelActual, lblPrecio, btn)
+                    setArrays()
                 }
             }
-        });
+        })
     }
 
-    private int calcularPrecio(int nivel) {
-        switch (nivel) {
-            case 0:
-                return PRECIO_NIVEL_1;
+    private fun calcularPrecio(nivel: Int): Int {
+        return when (nivel) {
+            0 -> PRECIO_NIVEL_1
 
-            case 1:
-                return PRECIO_NIVEL_2;
+            1 -> PRECIO_NIVEL_2
 
-            case 2:
-                return PRECIO_NIVEL_3;
+            2 -> PRECIO_NIVEL_3
 
-            case 3:
-                return PRECIO_NIVEL_4;
+            3 -> PRECIO_NIVEL_4
 
-            default:
-            case 4:
-                return PRECIO_NIVEL_5;
+            4 -> PRECIO_NIVEL_5
+
+            else -> PRECIO_NIVEL_5
 
         }
-
     }
 
-    private void updateLabelPriceAndButton(int nivel, Label label, Button boton) {
+    private fun updateLabelPriceAndButton(nivel: Int, label: Label?, boton: Button) {
         if (nivel < MAX_LEVEL) {
-            label.setText(calcularPrecio(nivel) + "");
-
+            label!!.setText(calcularPrecio(nivel).toString() + "")
         } else {
-            label.setVisible(false);
-            boton.setVisible(false);
+            label!!.isVisible = false
+            boton.isVisible = false
         }
     }
 
-    private void setArrays() {
-        for (int i = 0; i < Settings.getLEVEL_MAGNET(); i++) {
-            arrMagnet[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
+    private fun setArrays() {
+        for (i in 0 until LEVEL_MAGNET) {
+            arrMagnet[i]!!.drawable = TextureRegionDrawable(Assets.buttonShare)
         }
 
-        for (int i = 0; i < Settings.getLEVEL_LIFE(); i++) {
-            arrLife[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
+        for (i in 0 until LEVEL_LIFE) {
+            arrLife[i]!!.drawable = TextureRegionDrawable(Assets.buttonShare)
         }
 
-        for (int i = 0; i < Settings.getLEVEL_ENERGY(); i++) {
-            arrEnergy[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
+        for (i in 0 until LEVEL_ENERGY) {
+            arrEnergy[i]!!.drawable = TextureRegionDrawable(Assets.buttonShare)
         }
 
-        for (int i = 0; i < Settings.getLEVEL_COINS(); i++) {
-            arrCoins[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
+        for (i in 0 until LEVEL_COINS) {
+            arrCoins[i]!!.drawable = TextureRegionDrawable(Assets.buttonShare)
         }
 
-        for (int i = 0; i < Settings.getLEVEL_TREASURE_CHEST(); i++) {
-            arrTreasureChest[i].setDrawable(new TextureRegionDrawable(Assets.buttonShare));
+        for (i in 0 until LEVEL_TREASURE_CHEST) {
+            arrTreasureChest[i]!!.drawable = TextureRegionDrawable(Assets.buttonShare)
         }
-
     }
-
 }

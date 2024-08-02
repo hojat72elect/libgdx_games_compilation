@@ -13,7 +13,7 @@ import com.nopalsoft.ninjarunner.screens.Screens
  * Shows all the top scoring users of the game. It doesn't matter which social network they have
  * used for logging in to the game; here they are shown if they are leader board users of the game.
  */
-class LeaderboardScreen(_game: Game?) : Screens(_game) {
+class LeaderboardScreen(_game: Game) : Screens(_game) {
     var tableMenu: Table
     var buttonLeaderboard: Button? = null
     var buttonFacebook: Button? = null
@@ -77,8 +77,8 @@ class LeaderboardScreen(_game: Game?) : Screens(_game) {
         tbShop.add(tableMenu).expandY().width(122f)
         tbShop.add(scroll).expand().fill()
 
-        stage.addActor(tableTitle)
-        stage.addActor(tbShop)
+        stage?.addActor(tableTitle)
+        stage?.addActor(tbShop)
 
 
         if (game.arrayOfPersons != null) updateLeaderboard()

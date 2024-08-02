@@ -14,7 +14,7 @@ import com.nopalsoft.ninjarunner.scene2d.GameUI
 import com.nopalsoft.ninjarunner.scene2d.MenuUI
 import com.nopalsoft.ninjarunner.screens.Screens
 
-class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
+class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
     var myWorld: WorldGame = WorldGame()
     var state: Int = 0
     var gameUI: GameUI = GameUI()
@@ -44,14 +44,14 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
                 setNextGoalFrame(0)
             }
             gameUI.addAction(Actions.sequence(Actions.delay(GameUI.ANIMATION_TIME), Actions.run(run)))
-            gameUI.show(stage)
+            gameUI.show(stage!!)
         }
 
         if (removeMenu) {
             menuUI.addAction(Actions.sequence(Actions.delay(MenuUI.ANIMATION_TIME), Actions.run(runAfterHideMenu)))
             menuUI.removeWithAnimations()
         } else {
-            stage.addAction(Actions.run(runAfterHideMenu))
+            stage?.addAction(Actions.run(runAfterHideMenu))
         }
     }
 
@@ -125,7 +125,7 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
         }
 
         if (!nextGoalFrame!!.hasParent()) {
-            stage.addActor(nextGoalFrame)
+            stage?.addActor(nextGoalFrame)
             Gdx.app.postRunnable(run)
         } else if (!nextGoalFrame!!.hasActions()) {
             nextGoalFrame!!.addAction(
@@ -158,9 +158,9 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
         renderer.render(delta)
 
         myCamera.update()
-        batcher.projectionMatrix = myCamera.combined
+        batcher?.projectionMatrix = myCamera.combined
 
-        batcher.begin()
+        batcher?.begin()
         Assets.fontSmall?.draw(batcher, "FPS GERA" + Gdx.graphics.framesPerSecond, 5f, 20f)
         Assets.fontSmall?.draw(batcher, "Bodies " + myWorld.myWorldBox.bodyCount, 5f, 40f)
         Assets.fontSmall?.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5f, 60f)
@@ -169,7 +169,7 @@ class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
         Assets.fontSmall?.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5f, 120f)
         Assets.fontSmall?.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5f, 140f)
 
-        batcher.end()
+        batcher?.end()
     }
 
     override fun keyDown(keycode: Int): Boolean {

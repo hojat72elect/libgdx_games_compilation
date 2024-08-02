@@ -11,7 +11,7 @@ import com.nopalsoft.ninjarunner.Settings.totalCoins
 import com.nopalsoft.ninjarunner.game.GameScreen
 import com.nopalsoft.ninjarunner.screens.Screens
 
-class ShopScreen(game: MainGame?) : Screens(game) {
+class ShopScreen(game: MainGame) : Screens(game) {
     var tbMenu: Table
     var btPersonajes: Button? = null
     var btMascota: Button? = null
@@ -82,8 +82,8 @@ class ShopScreen(game: MainGame?) : Screens(game) {
         tbShop.add(tbMenu).expandY().width(122f)
         tbShop.add(scroll).expand().fill()
 
-        stage.addActor(tbTitle)
-        stage.addActor(tbShop)
+        stage?.addActor(tbTitle)
+        stage?.addActor(tbShop)
 
         PersonajesSubMenu(contenedor, game)
         btPersonajes!!.isChecked = true
