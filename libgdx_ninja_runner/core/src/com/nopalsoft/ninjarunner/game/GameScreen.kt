@@ -57,8 +57,8 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
 
     override fun update(delta: Float) {
         if (state == STATE_MENU) {
-            myWorld.myPlayer.updateStateTime(delta)
-            myWorld.myPet.updateStateTime(delta)
+            myWorld.myPlayer?.updateStateTime(delta)
+            myWorld.myPet?.updateStateTime(delta)
         } else if (state == STATE_RUNNING) {
             myWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide)
 
@@ -163,10 +163,10 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
         batcher?.begin()
         Assets.fontSmall?.draw(batcher, "FPS GERA" + Gdx.graphics.framesPerSecond, 5f, 20f)
         Assets.fontSmall?.draw(batcher, "Bodies " + myWorld.myWorldBox.bodyCount, 5f, 40f)
-        Assets.fontSmall?.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5f, 60f)
+        Assets.fontSmall?.draw(batcher, "Vidas " + myWorld.myPlayer?.lives, 5f, 60f)
         Assets.fontSmall?.draw(batcher, "Monedas " + myWorld.takenCoins, 5f, 80f)
         Assets.fontSmall?.draw(batcher, "Puntos " + myWorld.score, 5f, 100f)
-        Assets.fontSmall?.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5f, 120f)
+        Assets.fontSmall?.draw(batcher, "Distancia " + myWorld.myPlayer?.position?.x, 5f, 120f)
         Assets.fontSmall?.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5f, 140f)
 
         batcher?.end()
