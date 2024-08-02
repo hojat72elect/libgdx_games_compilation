@@ -1,220 +1,210 @@
-package com.nopalsoft.ninjarunner.game;
+package com.nopalsoft.ninjarunner.game
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.nopalsoft.ninjarunner.Assets;
-import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.leaderboard.NextGoalFrame;
-import com.nopalsoft.ninjarunner.leaderboard.Person;
-import com.nopalsoft.ninjarunner.scene2d.GameUI;
-import com.nopalsoft.ninjarunner.scene2d.MenuUI;
-import com.nopalsoft.ninjarunner.screens.Screens;
+import com.badlogic.gdx.Game
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.Settings.bestScore
+import com.nopalsoft.ninjarunner.Settings.isMusicEnabled
+import com.nopalsoft.ninjarunner.Settings.setNewScore
+import com.nopalsoft.ninjarunner.leaderboard.NextGoalFrame
+import com.nopalsoft.ninjarunner.leaderboard.Person
+import com.nopalsoft.ninjarunner.scene2d.GameUI
+import com.nopalsoft.ninjarunner.scene2d.MenuUI
+import com.nopalsoft.ninjarunner.screens.Screens
 
+class GameScreen(_game: Game?, showMainMenu: Boolean) : Screens(_game) {
+    var myWorld: WorldGame = WorldGame()
+    var state: Int = 0
+    var gameUI: GameUI = GameUI()
+    var menuUI: MenuUI = MenuUI(this, myWorld)
+    var renderer: WorldGameRenderer = WorldGameRenderer(batcher, myWorld)
 
-public class GameScreen extends Screens {
-    static final int STATE_MENU = 0;
-    static final int STATE_RUNNING = 1;
-    static final int STATE_GAME_OVER = 2;
-    public WorldGame myWorld;
-    int state;
-    GameUI gameUI;
-    MenuUI menuUI;
-    WorldGameRenderer renderer;
+    var nextGoalFrame: NextGoalFrame? = null
 
-    NextGoalFrame nextGoalFrame;
-
-    public GameScreen(Game _game, boolean showMainMenu) {
-        super(_game);
-        myWorld = new WorldGame();
-        renderer = new WorldGameRenderer(batcher, myWorld);
-        gameUI = new GameUI();
-        menuUI = new MenuUI(this, myWorld);
-
+    init {
         if (showMainMenu) {
-            state = STATE_MENU;
-            menuUI.show(stage, true);
+            state = STATE_MENU
+            menuUI.show(stage, true)
         } else {
-            setRunning(false);
+            setRunning(false)
         }
-
     }
 
-    public void setRunning(boolean removeMenu) {
-        Runnable runAfterHideMenu = () -> {
-            Runnable run = () -> {
-                state = STATE_RUNNING;
-                if (Settings.isMusicEnabled()) {
-                    Assets.music1.play();
+    fun setRunning(removeMenu: Boolean) {
+        val runAfterHideMenu = Runnable {
+            val run = Runnable {
+                state = STATE_RUNNING
+                if (isMusicEnabled) {
+                    Assets.music1.play()
                 }
 
-                nextGoalFrame = new NextGoalFrame(SCREEN_WIDTH, 400);
-                setNextGoalFrame(0);
-
-
-            };
-            gameUI.addAction(Actions.sequence(Actions.delay(GameUI.ANIMATION_TIME), Actions.run(run)));
-            gameUI.show(stage);
-        };
+                nextGoalFrame = NextGoalFrame(SCREEN_WIDTH.toFloat(), 400f)
+                setNextGoalFrame(0)
+            }
+            gameUI.addAction(Actions.sequence(Actions.delay(GameUI.ANIMATION_TIME), Actions.run(run)))
+            gameUI.show(stage)
+        }
 
         if (removeMenu) {
-            menuUI.addAction(Actions.sequence(Actions.delay(MenuUI.ANIMATION_TIME), Actions.run(runAfterHideMenu)));
-            menuUI.removeWithAnimations();
+            menuUI.addAction(Actions.sequence(Actions.delay(MenuUI.ANIMATION_TIME), Actions.run(runAfterHideMenu)))
+            menuUI.removeWithAnimations()
         } else {
-            stage.addAction(Actions.run(runAfterHideMenu));
+            stage.addAction(Actions.run(runAfterHideMenu))
         }
-
     }
 
-    @Override
-    public void update(float delta) {
-
+    override fun update(delta: Float) {
         if (state == STATE_MENU) {
-            myWorld.myPlayer.updateStateTime(delta);
-            myWorld.myPet.updateStateTime(delta);
-
+            myWorld.myPlayer.updateStateTime(delta)
+            myWorld.myPet.updateStateTime(delta)
         } else if (state == STATE_RUNNING) {
+            myWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide)
 
-            myWorld.update(delta, gameUI.didJump, gameUI.didDash, gameUI.didSlide);
-
-            gameUI.didJump = false;
-            gameUI.didDash = false;
+            gameUI.didJump = false
+            gameUI.didDash = false
 
             if (myWorld.state == WorldGame.STATE_GAMEOVER) {
-                setGameover();
+                setGameover()
             }
 
-            setNextGoalFrame(myWorld.score);
-            nextGoalFrame.updateScore(myWorld.score);
-
+            setNextGoalFrame(myWorld.score)
+            nextGoalFrame!!.updateScore(myWorld.score)
         } else if (state == STATE_GAME_OVER) {
             if (Gdx.input.justTouched()) {
-                game.setScreen(new GameScreen(game, true));
+                game.screen = GameScreen(game, true)
             }
         }
-
-
     }
 
 
-    public void setNextGoalFrame(long puntos) {
+    fun setNextGoalFrame(puntos: Long) {
         //Para que solo se muestren las personas que no haya superado aun
-        if (puntos < Settings.getBestScore())
-            puntos = Settings.getBestScore();
+        var puntos = puntos
+        if (puntos < bestScore) puntos = bestScore
 
-        game.arrayOfPersons.sort(); // Acomoda de mayor puntuacion a menor puntuacion
+        game.arrayOfPersons.sort() // Acomoda de mayor puntuacion a menor puntuacion
 
 
-        Person oPersonAux = null;
+        var oPersonAux: Person? = null
         //Calculo la posicion del jugador que tenga mas puntos que yo. Por ejemplo si yo voy en quinto lugar
         //esta debe ser la pocion del cuarto lugar.
-        int posicionArribaDeMi = game.arrayOfPersons.size - 1;
+        var posicionArribaDeMi = game.arrayOfPersons.size - 1
         //El arreglo esta ordenado de mayor a menor
-        for (; posicionArribaDeMi >= 0; posicionArribaDeMi--) {
-            Person obj = game.arrayOfPersons.get(posicionArribaDeMi);
-            if (obj.isMe)
-                continue;
+        while (posicionArribaDeMi >= 0) {
+            val obj = game.arrayOfPersons[posicionArribaDeMi]
+            if (obj.isMe) {
+                posicionArribaDeMi--
+                continue
+            }
 
             if (obj.score > puntos) {
-                oPersonAux = obj;
-                break;
+                oPersonAux = obj
+                break
             }
+            posicionArribaDeMi--
         }
 
-        final Person oPersona = oPersonAux;
+        val oPersona = oPersonAux ?: return
 
-        if (oPersona == null)
-            return;
-
-        if (oPersona.equals(nextGoalFrame.myPerson))
-            return;
+        if (oPersona.equals(nextGoalFrame!!.myPerson)) return
 
 
-        Runnable run = () -> {
-            nextGoalFrame.updatePerson(oPersona);
-            nextGoalFrame.addAction(Actions.sequence(Actions.moveTo(SCREEN_WIDTH - NextGoalFrame.WIDTH, nextGoalFrame.getY(), 1)));
+        val run = Runnable {
+            nextGoalFrame!!.updatePerson(oPersona)
+            nextGoalFrame!!.addAction(
+                Actions.sequence(
+                    Actions.moveTo(
+                        SCREEN_WIDTH - NextGoalFrame.WIDTH,
+                        nextGoalFrame!!.y,
+                        1f
+                    )
+                )
+            )
+        }
 
-        };
-
-        if (!nextGoalFrame.hasParent()) {
-            stage.addActor(nextGoalFrame);
-            Gdx.app.postRunnable(run);
-        } else if (!nextGoalFrame.hasActions()) {
-            nextGoalFrame.addAction(Actions.sequence(Actions.moveTo(SCREEN_WIDTH, nextGoalFrame.getY(), 1), Actions.run(run)));
+        if (!nextGoalFrame!!.hasParent()) {
+            stage.addActor(nextGoalFrame)
+            Gdx.app.postRunnable(run)
+        } else if (!nextGoalFrame!!.hasActions()) {
+            nextGoalFrame!!.addAction(
+                Actions.sequence(
+                    Actions.moveTo(SCREEN_WIDTH.toFloat(), nextGoalFrame!!.y, 1f),
+                    Actions.run(run)
+                )
+            )
         }
     }
 
-    private void setGameover() {
-        Settings.setNewScore(myWorld.score);
-        state = STATE_GAME_OVER;
-        Assets.music1.stop();
-
+    private fun setGameover() {
+        setNewScore(myWorld.score)
+        state = STATE_GAME_OVER
+        Assets.music1.stop()
     }
 
-    @Override
-    public void right() {
-        super.right();
-        gameUI.didDash = true;
+    override fun right() {
+        super.right()
+        gameUI.didDash = true
     }
 
-    @Override
-    public void draw(float delta) {
-
+    override fun draw(delta: Float) {
         if (state == STATE_MENU) {
-            Assets.backgroundNubes.render(0);
+            Assets.backgroundNubes.render(0f)
         } else {
-            Assets.backgroundNubes.render(delta);
+            Assets.backgroundNubes.render(delta)
         }
 
-        renderer.render(delta);
+        renderer.render(delta)
 
-        myCamera.update();
-        batcher.setProjectionMatrix(myCamera.combined);
+        myCamera.update()
+        batcher.projectionMatrix = myCamera.combined
 
-        batcher.begin();
-        Assets.fontSmall.draw(batcher, "FPS GERA" + Gdx.graphics.getFramesPerSecond(), 5, 20);
-        Assets.fontSmall.draw(batcher, "Bodies " + myWorld.myWorldBox.getBodyCount(), 5, 40);
-        Assets.fontSmall.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5, 60);
-        Assets.fontSmall.draw(batcher, "Monedas " + myWorld.takenCoins, 5, 80);
-        Assets.fontSmall.draw(batcher, "Puntos " + myWorld.score, 5, 100);
-        Assets.fontSmall.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5, 120);
-        Assets.fontSmall.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5, 140);
+        batcher.begin()
+        Assets.fontSmall.draw(batcher, "FPS GERA" + Gdx.graphics.framesPerSecond, 5f, 20f)
+        Assets.fontSmall.draw(batcher, "Bodies " + myWorld.myWorldBox.bodyCount, 5f, 40f)
+        Assets.fontSmall.draw(batcher, "Vidas " + myWorld.myPlayer.lives, 5f, 60f)
+        Assets.fontSmall.draw(batcher, "Monedas " + myWorld.takenCoins, 5f, 80f)
+        Assets.fontSmall.draw(batcher, "Puntos " + myWorld.score, 5f, 100f)
+        Assets.fontSmall.draw(batcher, "Distancia " + myWorld.myPlayer.position.x, 5f, 120f)
+        Assets.fontSmall.draw(batcher, "Plataformas " + myWorld.arrayPlatforms.size, 5f, 140f)
 
-        batcher.end();
-
+        batcher.end()
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Keys.R) {
-            game.setScreen(new GameScreen(game, true));
-            return true;
-        } else if (keycode == Keys.SPACE || keycode == Keys.W || keycode == Keys.UP) {
-            gameUI.didJump = true;
-            return true;
-        } else if (keycode == Keys.S || keycode == Keys.DOWN) {
-            gameUI.didSlide = true;
-            return true;
-        } else if (keycode == Keys.BACK) {
-            Gdx.app.exit();
-            return true;
-        } else if (keycode == Keys.P) {
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.R) {
+            game.screen = GameScreen(game, true)
+            return true
+        } else if (keycode == Input.Keys.SPACE || keycode == Input.Keys.W || keycode == Input.Keys.UP) {
+            gameUI.didJump = true
+            return true
+        } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
+            gameUI.didSlide = true
+            return true
+        } else if (keycode == Input.Keys.BACK) {
+            Gdx.app.exit()
+            return true
+        } else if (keycode == Input.Keys.P) {
             if (game.arrayOfPersons != null) {
-                setNextGoalFrame(0);
+                setNextGoalFrame(0)
             }
-            return true;
+            return true
         }
-        return super.keyDown(keycode);
-
+        return super.keyDown(keycode)
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        if (keycode == Keys.S || keycode == Keys.DOWN) {
-            gameUI.didSlide = false;
-            return true;
+    override fun keyUp(keycode: Int): Boolean {
+        if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
+            gameUI.didSlide = false
+            return true
         }
-        return super.keyUp(keycode);
+        return super.keyUp(keycode)
+    }
+
+    companion object {
+        const val STATE_MENU: Int = 0
+        const val STATE_RUNNING: Int = 1
+        const val STATE_GAME_OVER: Int = 2
     }
 }
