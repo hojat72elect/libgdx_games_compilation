@@ -1,157 +1,142 @@
-package com.nopalsoft.ninjarunner.shop;
+package com.nopalsoft.ninjarunner.shop
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.ninjarunner.Assets;
-import com.nopalsoft.ninjarunner.MainGame;
-import com.nopalsoft.ninjarunner.Settings;
-import com.nopalsoft.ninjarunner.game.GameScreen;
-import com.nopalsoft.ninjarunner.screens.Screens;
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.ninjarunner.Assets
+import com.nopalsoft.ninjarunner.MainGame
+import com.nopalsoft.ninjarunner.Settings.totalCoins
+import com.nopalsoft.ninjarunner.game.GameScreen
+import com.nopalsoft.ninjarunner.screens.Screens
 
-public class ShopScreen extends Screens {
+class ShopScreen(game: MainGame?) : Screens(game) {
+    var tbMenu: Table
+    var btPersonajes: Button? = null
+    var btMascota: Button? = null
+    var btUpgrades: Button? = null
+    var btNoAds: Button? = null
+    var btMore: Button? = null
 
-    Table tbMenu;
-    Button btPersonajes, btMascota, btUpgrades, btNoAds, btMore;
+    var scroll: ScrollPane
+    var contenedor: Table
 
-    ScrollPane scroll;
-    Table contenedor;
+    var lbCoins: Label
 
-    Label lbCoins;
+    init {
+        val lbShop = Label("Shop", Assets.labelStyleLarge)
 
-    public ShopScreen(MainGame game) {
-        super(game);
+        val tbTitle = Table()
+        tbTitle.setSize(400f, 100f)
+        tbTitle.setPosition(SCREEN_WIDTH / 2f - tbTitle.width / 2f, SCREEN_HEIGHT - tbTitle.height)
+        tbTitle.background = Assets.backgroundTitleShop
+        tbTitle.padTop(20f).padBottom(5f)
 
-        Label lbShop = new Label("Shop", Assets.labelStyleLarge);
+        tbTitle.row().colspan(2)
+        tbTitle.add(lbShop).expand()
+        tbTitle.row()
 
-        Table tbTitle = new Table();
-        tbTitle.setSize(400, 100);
-        tbTitle.setPosition(SCREEN_WIDTH / 2f - tbTitle.getWidth() / 2f, SCREEN_HEIGHT - tbTitle.getHeight());
-        tbTitle.setBackground(Assets.backgroundTitleShop);
-        tbTitle.padTop(20).padBottom(5);
+        val imgGem = Image(Assets.coinAnimation!!.getKeyFrame(0f))
+        imgGem.setSize(20f, 20f)
 
-        tbTitle.row().colspan(2);
-        tbTitle.add(lbShop).expand();
-        tbTitle.row();
+        lbCoins = Label("x0", Assets.labelStyleSmall)
 
-        Image imgGem = new Image(Assets.coinAnimation.getKeyFrame(0));
-        imgGem.setSize(20, 20);
+        tbTitle.add(imgGem).size(20f).right()
+        tbTitle.add(lbCoins).padLeft(5f).left()
 
-        lbCoins = new Label("x0", Assets.labelStyleSmall);
+        initButtons()
 
-        tbTitle.add(imgGem).size(20).right();
-        tbTitle.add(lbCoins).padLeft(5).left();
+        tbMenu = Table()
+        tbMenu.defaults().size(58f).padBottom(8f)
 
-        initButtons();
+        tbMenu.row()
+        tbMenu.add(btPersonajes)
 
-        tbMenu = new Table();
-        tbMenu.defaults().size(58).padBottom(8);
+        tbMenu.row()
+        tbMenu.add(btMascota)
 
-        tbMenu.row();
-        tbMenu.add(btPersonajes);
+        tbMenu.row()
+        tbMenu.add(btUpgrades)
 
-        tbMenu.row();
-        tbMenu.add(btMascota);
+        tbMenu.row()
+        tbMenu.add(btNoAds)
 
-        tbMenu.row();
-        tbMenu.add(btUpgrades);
+        tbMenu.row()
+        tbMenu.add(btMore)
 
-        tbMenu.row();
-        tbMenu.add(btNoAds);
-
-        tbMenu.row();
-        tbMenu.add(btMore);
-
-        Table tbShop = new Table();
-        tbShop.setSize(SCREEN_WIDTH, SCREEN_HEIGHT - tbTitle.getHeight());
-        tbShop.setBackground(Assets.backgroundShop);
-        tbShop.pad(25, 5, 15, 5);
+        val tbShop = Table()
+        tbShop.setSize(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT - tbTitle.height)
+        tbShop.background = Assets.backgroundShop
+        tbShop.pad(25f, 5f, 15f, 5f)
 
         // Contenedor
-        contenedor = new Table();
+        contenedor = Table()
 
-        scroll = new ScrollPane(contenedor, new ScrollPaneStyle(null, null, null, null, null));
-        scroll.setFadeScrollBars(false);
-        scroll.setSize(SCREEN_WIDTH - tbMenu.getWidth(), 420);
-        scroll.setPosition(tbMenu.getWidth() + 1, 0);
-        scroll.setVariableSizeKnobs(false);
+        scroll = ScrollPane(contenedor, ScrollPaneStyle(null, null, null, null, null))
+        scroll.fadeScrollBars = false
+        scroll.setSize(SCREEN_WIDTH - tbMenu.width, 420f)
+        scroll.setPosition(tbMenu.width + 1, 0f)
+        scroll.variableSizeKnobs = false
 
-        tbShop.add(tbMenu).expandY().width(122);
-        tbShop.add(scroll).expand().fill();
+        tbShop.add(tbMenu).expandY().width(122f)
+        tbShop.add(scroll).expand().fill()
 
-        stage.addActor(tbTitle);
-        stage.addActor(tbShop);
+        stage.addActor(tbTitle)
+        stage.addActor(tbShop)
 
-        new PersonajesSubMenu(contenedor, game);
-        btPersonajes.setChecked(true);
-
+        PersonajesSubMenu(contenedor, game)
+        btPersonajes!!.isChecked = true
     }
 
-    void initButtons() {
-        btPersonajes = new Button(Assets.buttonShop, Assets.buttonShopPressed, Assets.buttonShopPressed);
-        btMascota = new Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed, Assets.buttonLeaderboardPressed);
-        btUpgrades = new Button(Assets.buttonAchievement, Assets.buttonAchievementPressed, Assets.buttonLeaderboardPressed);
-        btNoAds = new Button(Assets.buttonSettings, Assets.buttonSettingsPressed, Assets.buttonLeaderboardPressed);
-        btMore = new Button(Assets.buttonRate, Assets.buttonSettingsPressed);
+    fun initButtons() {
+        btPersonajes = Button(Assets.buttonShop, Assets.buttonShopPressed, Assets.buttonShopPressed)
+        btMascota = Button(Assets.buttonLeaderboard, Assets.buttonLeaderboardPressed, Assets.buttonLeaderboardPressed)
+        btUpgrades = Button(Assets.buttonAchievement, Assets.buttonAchievementPressed, Assets.buttonLeaderboardPressed)
+        btNoAds = Button(Assets.buttonSettings, Assets.buttonSettingsPressed, Assets.buttonLeaderboardPressed)
+        btMore = Button(Assets.buttonRate, Assets.buttonSettingsPressed)
 
-        btPersonajes.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                new PersonajesSubMenu(contenedor, game);
+        btPersonajes!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                PersonajesSubMenu(contenedor, game)
             }
+        })
 
-        });
-
-        btMascota.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                new PetsSubMenu(contenedor, game);
+        btMascota!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                PetsSubMenu(contenedor, game)
             }
-        });
+        })
 
-        btUpgrades.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                new UpgradesSubMenu(contenedor, game);
+        btUpgrades!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                UpgradesSubMenu(contenedor, game)
             }
-        });
+        })
 
-        btNoAds.addListener(new ClickListener() {
-        });
+        btNoAds!!.addListener(object : ClickListener() {
+        })
 
-        btMore.addListener(new ClickListener() {
-        });
+        btMore!!.addListener(object : ClickListener() {
+        })
 
-        ButtonGroup<Button> radioGroup = new ButtonGroup<>();
-        radioGroup.add(btPersonajes, btMascota, btUpgrades, btNoAds);
-
+        val radioGroup = ButtonGroup<Button>()
+        radioGroup.add(btPersonajes, btMascota, btUpgrades, btNoAds)
     }
 
-    @Override
-    public void draw(float delta) {
-        Assets.backgroundNubes.render(0);
-
+    override fun draw(delta: Float) {
+        Assets.backgroundNubes!!.render(0f)
     }
 
-    @Override
-    public void update(float delta) {
-        lbCoins.setText("x" + Settings.getTotalCoins());
+    override fun update(delta: Float) {
+        lbCoins.setText("x" + totalCoins)
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
-            changeScreenWithFadeOut(GameScreen.class, game);
-            return true;
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+            changeScreenWithFadeOut(GameScreen::class.java, game)
+            return true
         }
-        return super.keyUp(keycode);
+        return super.keyUp(keycode)
     }
-
 }
