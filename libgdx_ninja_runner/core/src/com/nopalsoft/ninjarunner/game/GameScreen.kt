@@ -19,7 +19,7 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
     var state: Int = 0
     var gameUI: GameUI = GameUI()
     var menuUI: MenuUI = MenuUI(this, myWorld)
-    var renderer: WorldGameRenderer = WorldGameRenderer(batcher, myWorld)
+    var renderer: WorldGameRenderer = WorldGameRenderer(batcher!!, myWorld)
 
     var nextGoalFrame: NextGoalFrame? = null
 
