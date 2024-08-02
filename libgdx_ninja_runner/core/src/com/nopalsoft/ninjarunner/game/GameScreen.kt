@@ -26,7 +26,7 @@ class GameScreen(_game: Game, showMainMenu: Boolean) : Screens(_game) {
     init {
         if (showMainMenu) {
             state = STATE_MENU
-            menuUI.show(stage, true)
+            menuUI.show(stage!!, true)
         } else {
             setRunning(false)
         }
