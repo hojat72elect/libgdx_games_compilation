@@ -30,18 +30,18 @@ public class Assets {
     public static NinePatchDrawable verticalSeparator;
     public static AtlasRegion background;
     public static AtlasRegion backgroundGameOver;
-    public static AtlasRegion personaje;
-    public static AtlasRegion personajeShopDefault;
-    public static AtlasRegion personajeShopRojo;
-    public static AtlasRegion personajeShopAzul;
-    public static Animation<TextureRegion> animPersonajeJump;
-    public static Animation<TextureRegion> animPersonajeSlam;
-    public static Animation<TextureRegion> animPersonajeHit;
+    public static AtlasRegion player;
+    public static AtlasRegion playerShopDefault;
+    public static AtlasRegion playerShopRed;
+    public static AtlasRegion playerShopBlue;
+    public static Animation<TextureRegion> animationPlayerJump;
+    public static Animation<TextureRegion> animationPlayerSlam;
+    public static Animation<TextureRegion> animationPlayerHit;
     public static Animation<TextureRegion> slam;
-    public static NinePatchDrawable pixelNegro;
-    public static AtlasRegion plataforma;
-    public static Animation<TextureRegion> animPlataformFire;
-    public static Animation<TextureRegion> plataformBreakable;
+    public static NinePatchDrawable blackPixel;
+    public static AtlasRegion platform;
+    public static Animation<TextureRegion> animationPlatformFire;
+    public static Animation<TextureRegion> breakablePlatform;
     public static TextureRegionDrawable buttonAchievements;
     public static TextureRegionDrawable buttonLeaderBoard;
     public static TextureRegionDrawable buttonMore;
@@ -56,8 +56,8 @@ public class Assets {
     public static TextureRegionDrawable buttonUpgradeOn;
     public static TextureRegionDrawable buttonUpgradeOff;
     public static TextureRegionDrawable buttonScores;
-    public static AtlasRegion flapSpawn;
-    public static AtlasRegion flapAzul;
+    public static AtlasRegion birdSpawn;
+    public static AtlasRegion birdBlue;
     public static Animation<TextureRegion> animationBlueBirdFlap;
     public static Animation<TextureRegion> animationRedBirdFlap;
     public static Animation<TextureRegion> animationEvolving;
@@ -160,7 +160,7 @@ public class Assets {
             selectedPlayer = "AndroidBotAzul";
         }
 
-        personaje = textureAtlas.findRegion("Personajes/" + selectedPlayer
+        player = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeFall");
 
         AtlasRegion per1 = textureAtlas.findRegion("Personajes/" + selectedPlayer
@@ -171,7 +171,7 @@ public class Assets {
                 + "/personajeSlam3");
         AtlasRegion per4 = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeSlam4");
-        animPersonajeSlam = new Animation<>(.05f, per1, per2, per3, per4);
+        animationPlayerSlam = new Animation<>(.05f, per1, per2, per3, per4);
 
         per1 = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeJump1");
@@ -179,7 +179,7 @@ public class Assets {
                 + "/personajeJump1");
         per3 = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeJump1");
-        animPersonajeJump = new Animation<>(.1f, per1, per2, per3);
+        animationPlayerJump = new Animation<>(.1f, per1, per2, per3);
 
         per1 = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeHit");
@@ -187,14 +187,14 @@ public class Assets {
                 + "/personajeHit");
         per3 = textureAtlas.findRegion("Personajes/" + selectedPlayer
                 + "/personajeHit");
-        animPersonajeHit = new Animation<>(.1f, per1, per2, per3);
+        animationPlayerHit = new Animation<>(.1f, per1, per2, per3);
 
         // Estos son los que aparecen en la tienda;
-        personajeShopDefault = textureAtlas
+        playerShopDefault = textureAtlas
                 .findRegion("Personajes/AndroidBot/personajeFall");
-        personajeShopRojo = textureAtlas
+        playerShopRed = textureAtlas
                 .findRegion("Personajes/AndroidBotRojo/personajeFall");
-        personajeShopAzul = textureAtlas
+        playerShopBlue = textureAtlas
                 .findRegion("Personajes/AndroidBotAzul/personajeFall");
     }
 
@@ -228,7 +228,7 @@ public class Assets {
         buttonUpgradeOn = new TextureRegionDrawable(
                 textureAtlas.findRegion("Shop/upgradeOn"));
 
-        pixelNegro = new NinePatchDrawable(new NinePatch(
+        blackPixel = new NinePatchDrawable(new NinePatch(
                 textureAtlas.findRegion("MenuPrincipal/pixelNegro"), 1, 1, 0, 0));
 
         AtlasRegion per1 = textureAtlas.findRegion("moneda1");
@@ -237,8 +237,8 @@ public class Assets {
         coin = per1;
         animationCoin = new Animation<>(.15f, per1, per2, per3, per2);
 
-        flapAzul = textureAtlas.findRegion("InGame/flapAzul");
-        flapSpawn = textureAtlas.findRegion("InGame/flapSpawn");
+        birdBlue = textureAtlas.findRegion("InGame/flapAzul");
+        birdSpawn = textureAtlas.findRegion("InGame/flapSpawn");
 
         AtlasRegion flap1 = textureAtlas.findRegion("InGame/flapAzulAlas1");
         AtlasRegion flap2 = textureAtlas.findRegion("InGame/flapAzulAlas2");
@@ -249,19 +249,19 @@ public class Assets {
         flap2 = textureAtlas.findRegion("InGame/flapRojoAlas2");
         flap3 = textureAtlas.findRegion("InGame/flapRojoAlas3");
         animationRedBirdFlap = new Animation<>(.15f, flap1, flap2, flap3, flap2);
-        animationEvolving = new Animation<>(.075f, flapAzul, flap1, flapAzul, flap2,
-                flapAzul, flap3);
+        animationEvolving = new Animation<>(.075f, birdBlue, flap1, birdBlue, flap2,
+                birdBlue, flap3);
 
         flap1 = textureAtlas.findRegion("InGame/plataformFire1");
         flap2 = textureAtlas.findRegion("InGame/plataformFire2");
         flap3 = textureAtlas.findRegion("InGame/plataformFire3");
-        animPlataformFire = new Animation<>(.15f, flap1, flap2, flap3, flap2);
+        animationPlatformFire = new Animation<>(.15f, flap1, flap2, flap3, flap2);
 
         flap1 = textureAtlas.findRegion("InGame/plataforma2");
         flap2 = textureAtlas.findRegion("InGame/plataforma3");
         flap3 = textureAtlas.findRegion("InGame/plataforma4");
-        plataformBreakable = new Animation<>(.1f, flap1, flap2, flap3);
-        plataforma = textureAtlas.findRegion("InGame/plataforma1");
+        breakablePlatform = new Animation<>(.1f, flap1, flap2, flap3);
+        platform = textureAtlas.findRegion("InGame/plataforma1");
 
         flap1 = textureAtlas.findRegion("InGame/slam1");
         flap2 = textureAtlas.findRegion("InGame/slam2");
@@ -318,7 +318,7 @@ public class Assets {
 
         Settings.load();
 
-        // Se debe llamar despues de cargar settings
+        // It should be called after loading settings
         loadPlayer();
 
         soundCoin = Gdx.audio.newSound(Gdx.files

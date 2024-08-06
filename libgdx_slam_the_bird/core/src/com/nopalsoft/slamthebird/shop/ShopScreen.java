@@ -62,7 +62,7 @@ public class ShopScreen extends Screens {
 
     private void initButtons() {
         btPersonajes = new Button(new TextureRegionDrawable(
-                Assets.personajeShopDefault));
+                Assets.playerShopDefault));
         btPersonajes.setSize(55, 55);
         btPersonajes.setPosition(17, 660);
         addEfectoPress(btPersonajes);

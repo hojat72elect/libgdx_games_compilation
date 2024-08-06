@@ -80,7 +80,7 @@ public class GetCoinsSubMenu {
                 .height(5);
         contenedor.row();
         contenedor
-                .add(agregarPersonajeTabla(monedasLikeFacebook,
+                .add(addCharacterTable(monedasLikeFacebook,
                         Assets.buttonFacebook, "Like us on facebook and get "
                                 + monedasLikeFacebook + " coins",
                         btLikeFacebook)).expandX().fill();
@@ -92,16 +92,16 @@ public class GetCoinsSubMenu {
 
         // Comprar 5mil
         contenedor
-                .add(agregarPersonajeTabla(
+                .add(addCharacterTable(
                         5000,
                         moneda,
                         "Coin simple pack. A quick way to buy simple upgrades",
                         btBuy5milCoins)).expandX().fill();
         contenedor.row();
 
-        // Comprar 15mil
+        // Buy 15 thousand
         contenedor
-                .add(agregarPersonajeTabla(
+                .add(addCharacterTable(
                         15000,
                         moneda,
                         "Coin super pack. Get some cash for upgrades and characters",
@@ -109,7 +109,7 @@ public class GetCoinsSubMenu {
         contenedor.row();
 
         contenedor
-                .add(agregarPersonajeTabla(
+                .add(addCharacterTable(
                         30000,
                         moneda,
                         "Coin mega pack. You can buy a lot of characters and upgrades",
@@ -117,7 +117,7 @@ public class GetCoinsSubMenu {
         contenedor.row();
 
         contenedor
-                .add(agregarPersonajeTabla(
+                .add(addCharacterTable(
                         50000,
                         moneda,
                         "Coin super mega pack. Get this pack and you will be slamming in cash",
@@ -127,21 +127,21 @@ public class GetCoinsSubMenu {
 
     }
 
-    private Table agregarPersonajeTabla(int numMonedasToGet,
-                                        TextureRegionDrawable imagen, String descripcion, TextButton boton) {
+    private Table addCharacterTable(int numCoinsToGet,
+                                    TextureRegionDrawable image, String description, TextButton button) {
 
         Image moneda = new Image(Assets.coin);
-        Image imgPersonaje = new Image(imagen);
+        Image imgPersonaje = new Image(image);
 
         Table tbBarraTitulo = new Table();
         tbBarraTitulo
-                .add(new Label("Get " + numMonedasToGet, Assets.labelStyleSmall))
+                .add(new Label("Get " + numCoinsToGet, Assets.labelStyleSmall))
                 .left().padLeft(5);
         tbBarraTitulo.add(moneda).left().expandX().padLeft(5);
 
         Table tbDescrip = new Table();
         tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
+        Label lblDescripcion = new Label(description, Assets.labelStyleSmall);
         lblDescripcion.setWrap(true);
         tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
 
@@ -151,7 +151,7 @@ public class GetCoinsSubMenu {
         tbContent.add(tbDescrip).expandX().fill();
         tbContent.row().colspan(2);
 
-        tbContent.add(boton).right().padRight(10).size(120, 45);
+        tbContent.add(button).right().padRight(10).size(120, 45);
 
         tbContent.row().colspan(2);
         tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill()

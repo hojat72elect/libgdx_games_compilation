@@ -17,82 +17,82 @@ public class NoAdsSubMenu {
 
     int priceNoAds = 35000;
 
-    TextButton btNoAds;
-    Label lblNoAds;
+    TextButton buttonNoAds;
+    Label labelNoAds;
 
-    Table contenedor;
+    Table container;
     MainSlamBird game;
 
-    public NoAdsSubMenu(final MainSlamBird game, Table contenedor) {
+    public NoAdsSubMenu(final MainSlamBird game, Table container) {
         this.game = game;
-        this.contenedor = contenedor;
-        contenedor.clear();
+        this.container = container;
+        container.clear();
 
         if (!Settings.didBuyNoAds)
-            lblNoAds = new Label(priceNoAds + "", Assets.labelStyleSmall);
+            labelNoAds = new Label(priceNoAds + "", Assets.labelStyleSmall);
 
-        btNoAds = new TextButton("Buy", Assets.textButtonStyleBuy);
+        buttonNoAds = new TextButton("Buy", Assets.textButtonStyleBuy);
         if (Settings.didBuyNoAds)
-            btNoAds.setVisible(false);
-        addEfectoPress(btNoAds);
-        btNoAds.addListener(new ClickListener() {
+            buttonNoAds.setVisible(false);
+        addPressEffect(buttonNoAds);
+        buttonNoAds.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (Settings.currentCoins >= priceNoAds) {
                     Settings.currentCoins -= priceNoAds;
                     Settings.didBuyNoAds = true;
-                    lblNoAds.setVisible(false);
-                    btNoAds.setVisible(false);
+                    labelNoAds.setVisible(false);
+                    buttonNoAds.setVisible(false);
                 }
             }
         });
 
         // Upgrade BoostTime
-        contenedor.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5);
-        contenedor.row();
-        contenedor
-                .add(agregarPersonajeTabla(lblNoAds, Assets.buttonNoAds,
-                        btNoAds)).expandX().fill();
-        contenedor.row();
+        container.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5);
+        container.row();
+        container
+                .add(addCharacterTable(labelNoAds, Assets.buttonNoAds,
+                        buttonNoAds)).expandX().fill();
+        container.row();
 
     }
 
-    private Table agregarPersonajeTabla(Label lblPrecio, TextureRegionDrawable imagen,
-                                        com.badlogic.gdx.scenes.scene2d.ui.TextButton boton) {
+    private Table addCharacterTable(Label labelPrice, TextureRegionDrawable image,
+                                    TextButton button) {
 
-        Image moneda = new Image(Assets.coin);
-        Image imgPersonaje = new Image(imagen);
+        Image imageCoin = new Image(Assets.coin);
+        Image imagePlayer = new Image(image);
 
-        if (lblPrecio == null)
-            moneda.setVisible(false);
+        if (labelPrice == null)
+            imageCoin.setVisible(false);
 
-        Table tbBarraTitulo = new Table();
-        tbBarraTitulo.add(new Label("No more ads", Assets.labelStyleSmall)).expandX().left().padLeft(5);
-        tbBarraTitulo.add(moneda).right();
-        tbBarraTitulo.add(lblPrecio).right().padRight(10);
+        Table tableTitleBar = new Table();
+        tableTitleBar.add(new Label("No more ads", Assets.labelStyleSmall)).expandX().left().padLeft(5);
+        tableTitleBar.add(imageCoin).right();
+        tableTitleBar.add(labelPrice).right().padRight(10);
 
-        Table tbDescrip = new Table();
-        tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label("Buy it and no more ads will apper in the app", Assets.labelStyleSmall);
-        lblDescripcion.setWrap(true);
-        tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
+        Table tableDescription = new Table();
+        tableDescription.add(imagePlayer).left().pad(10).size(55, 45);
+        Label labelDescription = new Label("Buy it and no more ads will appear in the app", Assets.labelStyleSmall);
+        labelDescription.setWrap(true);
+        tableDescription.add(labelDescription).expand().fill().padLeft(5);
 
-        Table tbContent = new Table();
-        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2).padTop(8);
-        tbContent.row().colspan(2);
-        tbContent.add(tbDescrip).expandX().fill();
-        tbContent.row().colspan(2);
+        Table tableContent = new Table();
+        tableContent.add(tableTitleBar).expandX().fill().colspan(2).padTop(8);
+        tableContent.row().colspan(2);
+        tableContent.add(tableDescription).expandX().fill();
+        tableContent.row().colspan(2);
 
-        tbContent.add(boton).right().padRight(10).size(120, 45);
+        tableContent.add(button).right().padRight(10).size(120, 45);
 
-        tbContent.row().colspan(2);
-        tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5).padTop(15);
+        tableContent.row().colspan(2);
+        tableContent.add(new Image(Assets.horizontalSeparator)).expandX().fill().height(5).padTop(15);
 
-        return tbContent;
+        return tableContent;
 
     }
 
-    protected void addEfectoPress(final Actor actor) {
+    protected void addPressEffect(final Actor actor) {
         actor.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

@@ -67,18 +67,18 @@ public class WorldGameRender {
     private void renderPlatforms() {
 
         for (com.nopalsoft.slamthebird.objects.Platform obj : worldGame.arrayPlatforms) {
-            TextureRegion keyFrame = Assets.plataforma;
+            TextureRegion keyFrame = Assets.platform;
 
             if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_BROKEN) {
-                if (obj.stateTime < Assets.plataformBreakable.getAnimationDuration())
-                    keyFrame = Assets.plataformBreakable.getKeyFrame(
+                if (obj.stateTime < Assets.breakablePlatform.getAnimationDuration())
+                    keyFrame = Assets.breakablePlatform.getKeyFrame(
                             obj.stateTime, false);
                 else
                     continue;
             }
 
             if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_BREAKABLE)
-                keyFrame = Assets.plataformBreakable.getKeyFrame(0);
+                keyFrame = Assets.breakablePlatform.getKeyFrame(0);
 
             if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_CHANGING)
                 batcher.draw(keyFrame, obj.position.x - .5f,
@@ -89,7 +89,7 @@ public class WorldGameRender {
                         obj.position.y - .15f, 1f, .3f);
 
             if (obj.state == com.nopalsoft.slamthebird.objects.Platform.STATE_FIRE)
-                batcher.draw(Assets.animPlataformFire.getKeyFrame(
+                batcher.draw(Assets.animationPlatformFire.getKeyFrame(
                                 obj.stateTime, true), obj.position.x - .5f,
                         obj.position.y + .1f, 1f, .3f);
         }
@@ -136,7 +136,7 @@ public class WorldGameRender {
     public void renderEnemies() {
         for (Enemy obj : worldGame.arrayEnemies) {
             if (obj.state == Enemy.STATE_JUST_APPEAR) {
-                batcher.draw(Assets.flapSpawn, obj.position.x - .25f,
+                batcher.draw(Assets.birdSpawn, obj.position.x - .25f,
                         obj.position.y - .25f, .25f, .25f, .5f, .5f,
                         obj.appearScale, obj.appearScale, 0);
                 continue;
@@ -153,7 +153,7 @@ public class WorldGameRender {
             } else if (obj.state == Enemy.STATE_EVOLVING) {
                 keyFrame = Assets.animationEvolving.getKeyFrame(obj.stateTime, true);
             } else {
-                keyFrame = Assets.flapAzul;
+                keyFrame = Assets.birdBlue;
             }
 
             if (obj.speed.x > 0)
@@ -172,15 +172,15 @@ public class WorldGameRender {
         TextureRegion keyFrame;
 
         if (obj.slam && obj.state == Robot.STATE_FALLING) {
-            keyFrame = Assets.animPersonajeSlam.getKeyFrame(obj.stateTime);
+            keyFrame = Assets.animationPlayerSlam.getKeyFrame(obj.stateTime);
             batcher.draw(Assets.slam.getKeyFrame(obj.stateTime, true),
                     obj.position.x - .4f, obj.position.y - .55f, .8f, .5f);
         } else if (obj.state == Robot.STATE_FALLING
                 || obj.state == Robot.STATE_JUMPING) {
-            keyFrame = Assets.animPersonajeJump
+            keyFrame = Assets.animationPlayerJump
                     .getKeyFrame(obj.stateTime, true);
         } else
-            keyFrame = Assets.animPersonajeHit.getKeyFrame(obj.stateTime, true);
+            keyFrame = Assets.animationPlayerHit.getKeyFrame(obj.stateTime, true);
 
         // c
 
@@ -191,7 +191,7 @@ public class WorldGameRender {
             batcher.draw(keyFrame, obj.position.x + .3f, obj.position.y - .3f,
                     -.3f, .3f, -.6f, .6f, 1, 1, obj.angleGrad);
         else
-            batcher.draw(Assets.personaje, obj.position.x - .3f,
+            batcher.draw(Assets.player, obj.position.x - .3f,
                     obj.position.y - .3f, .3f, .3f, .6f, .6f, 1, 1,
                     obj.angleGrad);
 

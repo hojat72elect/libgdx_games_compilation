@@ -17,141 +17,141 @@ import com.nopalsoft.slamthebird.Settings;
 public class UpgradesSubMenu {
     public final int MAX_LEVEL = 6;
 
-    int precioNivel1 = 500;
-    int precioNivel2 = 1000;
-    int precioNivel3 = 2500;
-    int precioNivel4 = 4000;
-    int precioNivel5 = 5000;
-    int precioNivel6 = 6000;
+    int level1Price = 500;
+    int level2Price = 1000;
+    int level3Price = 2500;
+    int level4Price = 4000;
+    int level5Price = 5000;
+    int level6Price = 6000;
 
-    TextButton btUpgradeBoostTime, btUpgradeIce, buttonUpgradeCoins,
-            btUpgradeSuperSalto, btUpgradeInvencible;
-    Label lblPrecioBoostTime, lblPrecioIce, lblPrecioMonedas,
-            lblPrecioSuperSalto, lblPrecioInvencible;
+    TextButton buttonUpgradeBoostTime, buttonUpgradeIce, buttonUpgradeCoins,
+            buttonUpgradeSuperJump, buttonUpgradeInvincible;
+    Label labelPriceBoostTime, labelPriceIce, labelPriceCoins,
+            labelPriceSuperJump, labelPriceInvincible;
 
     Image[] arrBoostTime;
     Image[] arrBoostIce;
-    Image[] arrBoostMonedas;
+    Image[] arrBoostCoins;
     Image[] arrBoostSuperJump;
-    Image[] arrBoostInvencible;
+    Image[] arrBoostInvincible;
 
-    Table contenedor;
+    Table container;
     MainSlamBird game;
 
-    public UpgradesSubMenu(MainSlamBird game, Table contenedor) {
+    public UpgradesSubMenu(MainSlamBird game, Table container) {
         this.game = game;
-        this.contenedor = contenedor;
-        contenedor.clear();
+        this.container = container;
+        container.clear();
 
         arrBoostTime = new Image[MAX_LEVEL];
         arrBoostIce = new Image[MAX_LEVEL];
-        arrBoostMonedas = new Image[MAX_LEVEL];
+        arrBoostCoins = new Image[MAX_LEVEL];
         arrBoostSuperJump = new Image[MAX_LEVEL];
-        arrBoostInvencible = new Image[MAX_LEVEL];
+        arrBoostInvincible = new Image[MAX_LEVEL];
 
         if (Settings.LEVEL_BOOST_TIME < MAX_LEVEL)
-            lblPrecioBoostTime = new Label(
-                    calcularPrecio(Settings.LEVEL_BOOST_TIME) + "",
+            labelPriceBoostTime = new Label(
+                    calculatePrice(Settings.LEVEL_BOOST_TIME) + "",
                     Assets.labelStyleSmall);
 
         if (Settings.LEVEL_BOOST_ICE < MAX_LEVEL)
-            lblPrecioIce = new Label(calcularPrecio(Settings.LEVEL_BOOST_ICE)
+            labelPriceIce = new Label(calculatePrice(Settings.LEVEL_BOOST_ICE)
                     + "", Assets.labelStyleSmall);
 
         if (Settings.LEVEL_BOOST_COINS < MAX_LEVEL)
-            lblPrecioMonedas = new Label(
-                    calcularPrecio(Settings.LEVEL_BOOST_COINS) + "",
+            labelPriceCoins = new Label(
+                    calculatePrice(Settings.LEVEL_BOOST_COINS) + "",
                     Assets.labelStyleSmall);
 
         if (Settings.LEVEL_BOOST_SUPER_JUMP < MAX_LEVEL)
-            lblPrecioSuperSalto = new Label(
-                    calcularPrecio(Settings.LEVEL_BOOST_SUPER_JUMP) + "",
+            labelPriceSuperJump = new Label(
+                    calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP) + "",
                     Assets.labelStyleSmall);
 
         if (Settings.LEVEL_BOOST_INVINCIBLE < MAX_LEVEL)
-            lblPrecioInvencible = new Label(
-                    calcularPrecio(Settings.LEVEL_BOOST_INVINCIBLE) + "",
+            labelPriceInvincible = new Label(
+                    calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE) + "",
                     Assets.labelStyleSmall);
 
-        inicializarBotones();
+        initializeButtons();
 
-        contenedor.add(new Image(Assets.horizontalSeparator)).expandX().fill()
+        container.add(new Image(Assets.horizontalSeparator)).expandX().fill()
                 .height(5);
-        contenedor.row();
+        container.row();
 
         // Upgrade BoostTime
-        contenedor
-                .add(agregarPersonajeTabla("More power-ups",
-                        lblPrecioBoostTime, Assets.boosts,
+        container
+                .add(addCharacterTable("More power-ups",
+                        labelPriceBoostTime, Assets.boosts,
                         "Power-ups will appear more often in the game",
-                        arrBoostTime, btUpgradeBoostTime)).expandX().fill();
-        contenedor.row();
+                        arrBoostTime, buttonUpgradeBoostTime)).expandX().fill();
+        container.row();
 
         // Upgrade Super Jump
-        contenedor
-                .add(agregarPersonajeTabla("Super jump", lblPrecioSuperSalto,
+        container
+                .add(addCharacterTable("Super jump", labelPriceSuperJump,
                         Assets.superJumpBoost,
                         "Super jump power up will last more time",
-                        arrBoostSuperJump, btUpgradeSuperSalto)).expandX()
+                        arrBoostSuperJump, buttonUpgradeSuperJump)).expandX()
                 .fill();
-        contenedor.row();
+        container.row();
 
         // Upgrade Ice
-        contenedor
-                .add(agregarPersonajeTabla("Freeze enemies", lblPrecioIce,
+        container
+                .add(addCharacterTable("Freeze enemies", labelPriceIce,
                         Assets.IceBoost, "Enemies will last more time frozen",
-                        arrBoostIce, btUpgradeIce)).expandX().fill();
-        contenedor.row();
+                        arrBoostIce, buttonUpgradeIce)).expandX().fill();
+        container.row();
 
-        // Upgrade Invencible
-        contenedor
-                .add(agregarPersonajeTabla("Invencible", lblPrecioInvencible,
+        // Upgrade invincible
+        container
+                .add(addCharacterTable("Invencible", labelPriceInvincible,
                         Assets.invincibleBoost,
                         "The invencible power-up will last more time",
-                        arrBoostInvencible, btUpgradeInvencible)).expandX()
+                        arrBoostInvincible, buttonUpgradeInvincible)).expandX()
                 .fill();
-        contenedor.row();
+        container.row();
 
         // Upgrade Monedas
-        contenedor
-                .add(agregarPersonajeTabla(
+        container
+                .add(addCharacterTable(
                         "Coin rain",
-                        lblPrecioMonedas,
+                        labelPriceCoins,
                         Assets.coinRainBoost,
                         "More coins will fall down when the coin rain power-up is taken",
-                        arrBoostMonedas, buttonUpgradeCoins)).expandX().fill();
-        contenedor.row();
+                        arrBoostCoins, buttonUpgradeCoins)).expandX().fill();
+        container.row();
 
         setArrays();
 
     }
 
-    private Table agregarPersonajeTabla(String titulo, Label lblPrecio,
-                                        AtlasRegion imagen, String descripcion, Image[] arrLevel,
-                                        TextButton boton) {
+    private Table addCharacterTable(String title, Label labelPrice,
+                                    AtlasRegion image, String description, Image[] arrLevel,
+                                    TextButton button) {
 
-        Image moneda = new Image(Assets.coin);
-        Image imgPersonaje = new Image(imagen);
+        Image coinImage = new Image(Assets.coin);
+        Image playerImage = new Image(image);
 
-        if (lblPrecio == null)
-            moneda.setVisible(false);
+        if (labelPrice == null)
+            coinImage.setVisible(false);
 
-        Table tbBarraTitulo = new Table();
-        tbBarraTitulo.add(new Label(titulo, Assets.labelStyleSmall)).expandX()
+        Table tableTitleBar = new Table();
+        tableTitleBar.add(new Label(title, Assets.labelStyleSmall)).expandX()
                 .left().padLeft(5);
-        tbBarraTitulo.add(moneda).right();
-        tbBarraTitulo.add(lblPrecio).right().padRight(10);
+        tableTitleBar.add(coinImage).right();
+        tableTitleBar.add(labelPrice).right().padRight(10);
 
-        Table tbDescrip = new Table();
-        tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label(descripcion, Assets.labelStyleSmall);
-        lblDescripcion.setWrap(true);
-        tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
+        Table tableDescription = new Table();
+        tableDescription.add(playerImage).left().pad(10).size(55, 45);
+        Label labelDescription = new Label(description, Assets.labelStyleSmall);
+        labelDescription.setWrap(true);
+        tableDescription.add(labelDescription).expand().fill().padLeft(5);
 
         Table tbContent = new Table();
-        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2).padTop(8);
+        tbContent.add(tableTitleBar).expandX().fill().colspan(2).padTop(8);
         tbContent.row().colspan(2);
-        tbContent.add(tbDescrip).expandX().fill();
+        tbContent.add(tableDescription).expandX().fill();
         tbContent.row();
 
         Table auxTab = new Table();
@@ -162,7 +162,7 @@ public class UpgradesSubMenu {
         }
 
         tbContent.add(auxTab).center().expand();
-        tbContent.add(boton).right().padRight(10).size(120, 45);
+        tbContent.add(button).right().padRight(10).size(120, 45);
 
         tbContent.row().colspan(2);
         tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill()
@@ -172,75 +172,75 @@ public class UpgradesSubMenu {
 
     }
 
-    private void inicializarBotones() {
-        btUpgradeBoostTime = new TextButton("Upgrade",
+    private void initializeButtons() {
+        buttonUpgradeBoostTime = new TextButton("Upgrade",
                 Assets.textButtonStyleSelected);
         if (Settings.LEVEL_BOOST_TIME == MAX_LEVEL)
-            btUpgradeBoostTime.setVisible(false);
-        addEfectoPress(btUpgradeBoostTime);
-        btUpgradeBoostTime.addListener(new ClickListener() {
+            buttonUpgradeBoostTime.setVisible(false);
+        addPressEffect(buttonUpgradeBoostTime);
+        buttonUpgradeBoostTime.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.currentCoins >= calcularPrecio(Settings.LEVEL_BOOST_TIME)) {
-                    Settings.currentCoins -= calcularPrecio(Settings.LEVEL_BOOST_TIME);
+                if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_TIME)) {
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_TIME);
                     Settings.LEVEL_BOOST_TIME++;
                     updateLabelPriceAndButton(Settings.LEVEL_BOOST_TIME,
-                            lblPrecioBoostTime, btUpgradeBoostTime);
+                            labelPriceBoostTime, buttonUpgradeBoostTime);
                     setArrays();
                 }
             }
         });
 
-        btUpgradeSuperSalto = new TextButton("Upgrade",
+        buttonUpgradeSuperJump = new TextButton("Upgrade",
                 Assets.textButtonStyleSelected);
         if (Settings.LEVEL_BOOST_SUPER_JUMP == MAX_LEVEL)
-            btUpgradeSuperSalto.setVisible(false);
-        addEfectoPress(btUpgradeSuperSalto);
-        btUpgradeSuperSalto.addListener(new ClickListener() {
+            buttonUpgradeSuperJump.setVisible(false);
+        addPressEffect(buttonUpgradeSuperJump);
+        buttonUpgradeSuperJump.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.currentCoins >= calcularPrecio(Settings.LEVEL_BOOST_SUPER_JUMP)) {
-                    Settings.currentCoins -= calcularPrecio(Settings.LEVEL_BOOST_SUPER_JUMP);
+                if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP)) {
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP);
                     Settings.LEVEL_BOOST_SUPER_JUMP++;
                     updateLabelPriceAndButton(Settings.LEVEL_BOOST_SUPER_JUMP,
-                            lblPrecioSuperSalto, btUpgradeSuperSalto);
+                            labelPriceSuperJump, buttonUpgradeSuperJump);
                     setArrays();
                 }
             }
         });
 
-        btUpgradeIce = new TextButton("Upgrade", Assets.textButtonStyleSelected);
+        buttonUpgradeIce = new TextButton("Upgrade", Assets.textButtonStyleSelected);
         if (Settings.LEVEL_BOOST_ICE == MAX_LEVEL)
-            btUpgradeIce.setVisible(false);
+            buttonUpgradeIce.setVisible(false);
 
-        addEfectoPress(btUpgradeIce);
-        btUpgradeIce.addListener(new ClickListener() {
+        addPressEffect(buttonUpgradeIce);
+        buttonUpgradeIce.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.currentCoins >= calcularPrecio(Settings.LEVEL_BOOST_ICE)) {
-                    Settings.currentCoins -= calcularPrecio(Settings.LEVEL_BOOST_ICE);
+                if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_ICE)) {
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_ICE);
                     Settings.LEVEL_BOOST_ICE++;
                     updateLabelPriceAndButton(Settings.LEVEL_BOOST_ICE,
-                            lblPrecioIce, btUpgradeIce);
+                            labelPriceIce, buttonUpgradeIce);
                     setArrays();
                 }
             }
         });
 
-        btUpgradeInvencible = new TextButton("Upgrade",
+        buttonUpgradeInvincible = new TextButton("Upgrade",
                 Assets.textButtonStyleSelected);
         if (Settings.LEVEL_BOOST_INVINCIBLE == MAX_LEVEL)
-            btUpgradeInvencible.setVisible(false);
+            buttonUpgradeInvincible.setVisible(false);
 
-        addEfectoPress(btUpgradeInvencible);
-        btUpgradeInvencible.addListener(new ClickListener() {
+        addPressEffect(buttonUpgradeInvincible);
+        buttonUpgradeInvincible.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.currentCoins >= calcularPrecio(Settings.LEVEL_BOOST_INVINCIBLE)) {
-                    Settings.currentCoins -= calcularPrecio(Settings.LEVEL_BOOST_INVINCIBLE);
+                if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE)) {
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE);
                     Settings.LEVEL_BOOST_INVINCIBLE++;
                     updateLabelPriceAndButton(Settings.LEVEL_BOOST_INVINCIBLE,
-                            lblPrecioInvencible, btUpgradeInvencible);
+                            labelPriceInvincible, buttonUpgradeInvincible);
                     setArrays();
                 }
             }
@@ -251,15 +251,15 @@ public class UpgradesSubMenu {
         if (Settings.LEVEL_BOOST_COINS == MAX_LEVEL)
             buttonUpgradeCoins.setVisible(false);
 
-        addEfectoPress(buttonUpgradeCoins);
+        addPressEffect(buttonUpgradeCoins);
         buttonUpgradeCoins.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Settings.currentCoins >= calcularPrecio(Settings.LEVEL_BOOST_COINS)) {
-                    Settings.currentCoins -= calcularPrecio(Settings.LEVEL_BOOST_COINS);
+                if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_COINS)) {
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_COINS);
                     Settings.LEVEL_BOOST_COINS++;
                     updateLabelPriceAndButton(Settings.LEVEL_BOOST_COINS,
-                            lblPrecioMonedas, buttonUpgradeCoins);
+                            labelPriceCoins, buttonUpgradeCoins);
                     setArrays();
                 }
             }
@@ -279,7 +279,7 @@ public class UpgradesSubMenu {
         }
 
         for (int i = 0; i < Settings.LEVEL_BOOST_INVINCIBLE; i++) {
-            arrBoostInvencible[i].setDrawable(new TextureRegionDrawable(
+            arrBoostInvincible[i].setDrawable(new TextureRegionDrawable(
                     Assets.buttonUpgradeOn));
         }
 
@@ -289,47 +289,47 @@ public class UpgradesSubMenu {
         }
 
         for (int i = 0; i < Settings.LEVEL_BOOST_COINS; i++) {
-            arrBoostMonedas[i].setDrawable(new TextureRegionDrawable(
+            arrBoostCoins[i].setDrawable(new TextureRegionDrawable(
                     Assets.buttonUpgradeOn));
         }
     }
 
-    private int calcularPrecio(int nivel) {
-        switch (nivel) {
+    private int calculatePrice(int level) {
+        switch (level) {
             case 0:
-                return precioNivel1;
+                return level1Price;
 
             case 1:
-                return precioNivel2;
+                return level2Price;
 
             case 2:
-                return precioNivel3;
+                return level3Price;
 
             case 3:
-                return precioNivel4;
+                return level4Price;
 
             case 4:
-                return precioNivel5;
+                return level5Price;
             default:
             case 5:
-                return precioNivel6;
+                return level6Price;
 
         }
 
     }
 
-    private void updateLabelPriceAndButton(int nivel, Label label,
-                                           TextButton boton) {
-        if (nivel < MAX_LEVEL) {
-            label.setText(calcularPrecio(nivel) + "");
+    private void updateLabelPriceAndButton(int level, Label label,
+                                           TextButton button) {
+        if (level < MAX_LEVEL) {
+            label.setText(calculatePrice(level) + "");
 
         } else {
             label.setVisible(false);
-            boton.setVisible(false);
+            button.setVisible(false);
         }
     }
 
-    protected void addEfectoPress(final Actor actor) {
+    protected void addPressEffect(final Actor actor) {
         actor.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,

@@ -54,7 +54,7 @@ public class PlayersSubMenu {
         // Use Default
         container
                 .add(addPlayerTable("Green robot", null,
-                        Assets.personajeShopDefault,
+                        Assets.playerShopDefault,
                         "Just a simple robot for slaming birds", textButtonBuyDefault))
                 .expandX().fill();
         container.row();
@@ -64,7 +64,7 @@ public class PlayersSubMenu {
                 .add(addPlayerTable(
                         "Red robot",
                         labelPriceRed,
-                        Assets.personajeShopRojo,
+                        Assets.playerShopRed,
                         "Do you like red color. Play with this amazing red robot and slam those birds",
                         textButtonBuyRedAndroid)).expandX().fill();
         container.row();
@@ -74,7 +74,7 @@ public class PlayersSubMenu {
                 .add(addPlayerTable(
                         "Blue robot",
                         labelPriceBlue,
-                        Assets.personajeShopAzul,
+                        Assets.playerShopBlue,
                         "Do you like blue color. Play with this amazing blue robot and slam those birds",
                         textButtonBuyBlueAndroid)).expandX().fill();
         container.row();
