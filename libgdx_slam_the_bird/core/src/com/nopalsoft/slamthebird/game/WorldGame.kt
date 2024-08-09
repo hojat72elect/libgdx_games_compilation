@@ -1,627 +1,607 @@
-package com.nopalsoft.slamthebird.game;
+package com.nopalsoft.slamthebird.game
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.nopalsoft.slamthebird.Achievements;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.Settings;
-import com.nopalsoft.slamthebird.objects.Boost;
-import com.nopalsoft.slamthebird.objects.Coin;
-import com.nopalsoft.slamthebird.objects.Robot;
-import com.nopalsoft.slamthebird.screens.Screens;
-import com.nopalsoft.slamthebird.objects.Platform;
-import com.nopalsoft.slamthebird.objects.Enemy;
-import java.util.Random;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.ContactListener
+import com.badlogic.gdx.physics.box2d.EdgeShape
+import com.badlogic.gdx.physics.box2d.Fixture
+import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.Manifold
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.Pool
+import com.nopalsoft.slamthebird.Achievements.unlockCombos
+import com.nopalsoft.slamthebird.Achievements.unlockSuperJump
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.Assets.playSound
+import com.nopalsoft.slamthebird.Settings
+import com.nopalsoft.slamthebird.objects.Boost
+import com.nopalsoft.slamthebird.objects.Coin
+import com.nopalsoft.slamthebird.objects.Coin.Companion.createCoinBody
+import com.nopalsoft.slamthebird.objects.Enemy
+import com.nopalsoft.slamthebird.objects.Platform
+import com.nopalsoft.slamthebird.objects.Robot
+import com.nopalsoft.slamthebird.screens.Screens
+import java.util.Random
 
-public class WorldGame {
-    public static final float COMBO_TO_START_GETTING_COINS = 3;
-    final public static int STATE_RUNNING = 0;
-    final public static int STATE_GAME_OVER = 1;
-    final public float TIME_TO_SPAWN_ENEMY = 7;
-    final public float TIME_TO_CHANGE_STATE_PLATFORM = 16f; // Este tiempo debe ser mayor que DURATION_ACTIVE en la clase plataformas.
-    final public float TIME_TO_SPAWN_COIN = .75f;
-    final float WIDTH = Screens.WORLD_SCREEN_WIDTH;
-    private final Pool<Boost> boostPool = new Pool<Boost>() {
-        @Override
-        protected Boost newObject() {
-            return new Boost();
+class WorldGame {
+    val TIME_TO_SPAWN_ENEMY: Float = 7f
+    val TIME_TO_CHANGE_STATE_PLATFORM: Float =
+        16f // Este tiempo debe ser mayor que DURATION_ACTIVE en la clase plataformas.
+    val TIME_TO_SPAWN_COIN: Float = .75f
+    val WIDTH: Float = Screens.WORLD_SCREEN_WIDTH
+    private val boostPool: Pool<Boost> = object : Pool<Boost>() {
+        override fun newObject(): Boost {
+            return Boost()
         }
-    };
-    private final Pool<Coin> coinPool = new Pool<Coin>() {
-        @Override
-        protected Coin newObject() {
-            return new Coin();
+    }
+    private val coinPool: Pool<Coin> = object : Pool<Coin>() {
+        override fun newObject(): Coin {
+            return Coin()
         }
-    };
-    public float timeToSpawnEnemy;
-    public float TIME_TO_SPAWN_BOOST = 15f;
-    public float timeToSpawnBoost;
-    public float timeToChangeStatePlatform;
-    public float timeToSpawnCoin;
-    public World oWorldBox;
-    int state;
-    Robot robot;
-    Array<Platform> arrayPlatforms;
-    Array<Enemy> arrayEnemies;
-    Array<Body> arrayBodies;
-    Array<Boost> arrayBoost;
-    Array<Coin> arrayCoins;
-    Random random;
-    int scoreSlammed;
-    int takenCoins;
-    int combo;
-    boolean isCoinRain;
+    }
+    var timeToSpawnEnemy: Float
+    var TIME_TO_SPAWN_BOOST: Float = 15f
+    var timeToSpawnBoost: Float = 0f
+    var timeToChangeStatePlatform: Float = 0f
+    var timeToSpawnCoin: Float = 0f
+    var oWorldBox: World = World(Vector2(0f, -9.8f), true)
+    @JvmField
+    var state: Int
+    @JvmField
+    var robot: Robot? = null
+    var arrayPlatforms: Array<Platform>
+    var arrayEnemies: Array<Enemy>
+    var arrayBodies: Array<Body>
+    var arrayBoost: Array<Boost>
+    var arrayCoins: Array<Coin>
+    var random: Random
+    @JvmField
+    var scoreSlammed: Int
+    @JvmField
+    var takenCoins: Int
+    @JvmField
+    var combo: Int = 0
+    var isCoinRain: Boolean
 
-    public WorldGame() {
-        oWorldBox = new World(new Vector2(0, -9.8f), true);
-        oWorldBox.setContactListener(new Colisiones());
+    init {
+        oWorldBox.setContactListener(Colisiones())
 
-        state = STATE_RUNNING;
-        arrayBodies = new Array<>();
-        arrayEnemies = new Array<>();
-        arrayPlatforms = new Array<>();
-        arrayBoost = new Array<>();
-        arrayCoins = new Array<>();
+        state = STATE_RUNNING
+        arrayBodies = Array()
+        arrayEnemies = Array()
+        arrayPlatforms = Array()
+        arrayBoost = Array()
+        arrayCoins = Array()
 
-        random = new Random();
+        random = Random()
 
-        timeToSpawnEnemy = 5;
-        isCoinRain = false;
+        timeToSpawnEnemy = 5f
+        isCoinRain = false
 
-        takenCoins = scoreSlammed = 0;
+        scoreSlammed = 0
+        takenCoins = scoreSlammed
 
-        float posPiso = .6f;
-        crearParedes(posPiso);// .05
-        crearRobot(WIDTH / 2f, posPiso + .251f);
+        val posPiso = .6f
+        crearParedes(posPiso) // .05
+        crearRobot(WIDTH / 2f, posPiso + .251f)
 
-        crearPlataformas(0 + Platform.WIDTH / 2f, 1.8f + posPiso);// Izq Abajo
-        crearPlataformas(WIDTH - Platform.WIDTH / 2f + .1f, 1.8f + posPiso);// Derecha abajo
+        crearPlataformas(0 + Platform.WIDTH / 2f, 1.8f + posPiso) // Izq Abajo
+        crearPlataformas(WIDTH - Platform.WIDTH / 2f + .1f, 1.8f + posPiso) // Derecha abajo
 
-        crearPlataformas(0 + Platform.WIDTH / 2f, 1.8f * 2f + posPiso);// Izq Arriba
-        crearPlataformas(WIDTH - Platform.WIDTH / 2f + .1f,
-                1.8f * 2f + posPiso);// Derecha Arribadd
+        crearPlataformas(0 + Platform.WIDTH / 2f, 1.8f * 2f + posPiso) // Izq Arriba
+        crearPlataformas(
+            WIDTH - Platform.WIDTH / 2f + .1f,
+            1.8f * 2f + posPiso
+        ) // Derecha Arribadd
 
         // Boost stuff
-        TIME_TO_SPAWN_BOOST -= Settings.LEVEL_BOOST_TIME;
+        TIME_TO_SPAWN_BOOST -= Settings.LEVEL_BOOST_TIME.toFloat()
     }
 
-    private void crearParedes(float posPisoY) {
-        BodyDef bd = new BodyDef();
-        bd.position.x = 0;
-        bd.position.y = 0;
-        bd.type = BodyType.StaticBody;
-        Body oBody = oWorldBox.createBody(bd);
+    private fun crearParedes(posPisoY: Float) {
+        val bd = BodyDef()
+        bd.position.x = 0f
+        bd.position.y = 0f
+        bd.type = BodyType.StaticBody
+        val oBody = oWorldBox.createBody(bd)
 
-        ChainShape shape = new ChainShape();
-        Vector2[] vertices = new Vector2[4];
-        vertices[0] = new Vector2(0.005f, 50);
-        vertices[1] = new Vector2(0.005f, 0);
-        vertices[2] = new Vector2(WIDTH, 0);
-        vertices[3] = new Vector2(WIDTH, 50);
-        shape.createChain(vertices);
+        val shape = ChainShape()
+        val vertices = arrayOfNulls<Vector2>(4)
+        vertices[0] = Vector2(0.005f, 50f)
+        vertices[1] = Vector2(0.005f, 0f)
+        vertices[2] = Vector2(WIDTH, 0f)
+        vertices[3] = Vector2(WIDTH, 50f)
+        shape.createChain(vertices)
 
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.restitution = 0;
-        fixture.friction = 0;
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.restitution = 0f
+        fixture.friction = 0f
 
-        oBody.createFixture(fixture);
-        oBody.setUserData("pared");
-        shape.dispose();
+        oBody.createFixture(fixture)
+        oBody.userData = "pared"
+        shape.dispose()
 
         // Piso
-        EdgeShape shapePiso = new EdgeShape();
-        shapePiso.set(0, 0, WIDTH, 0);
-        bd.position.y = posPisoY;
-        Body oBodyPiso = oWorldBox.createBody(bd);
+        val shapePiso = EdgeShape()
+        shapePiso[0f, 0f, WIDTH] = 0f
+        bd.position.y = posPisoY
+        val oBodyPiso = oWorldBox.createBody(bd)
 
-        fixture.shape = shapePiso;
-        oBodyPiso.createFixture(fixture);
-        oBodyPiso.setUserData("piso");
+        fixture.shape = shapePiso
+        oBodyPiso.createFixture(fixture)
+        oBodyPiso.userData = "piso"
 
-        shapePiso.dispose();
-
+        shapePiso.dispose()
     }
 
-    private void crearRobot(float x, float y) {
-        robot = new Robot(x, y);
-        BodyDef bd = new BodyDef();
-        bd.position.x = x;
-        bd.position.y = y;
-        bd.type = BodyType.DynamicBody;
+    private fun crearRobot(x: Float, y: Float) {
+        robot = Robot(x, y)
+        val bd = BodyDef()
+        bd.position.x = x
+        bd.position.y = y
+        bd.type = BodyType.DynamicBody
 
-        Body oBody = oWorldBox.createBody(bd);
+        val oBody = oWorldBox.createBody(bd)
 
-        CircleShape shape = new CircleShape();
-        shape.setRadius(Robot.RADIUS);
+        val shape = CircleShape()
+        shape.radius = Robot.RADIUS
 
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.density = 5;
-        fixture.restitution = 0;
-        fixture.friction = 0;
-        oBody.createFixture(fixture);
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.density = 5f
+        fixture.restitution = 0f
+        fixture.friction = 0f
+        oBody.createFixture(fixture)
 
-        oBody.setFixedRotation(true);
-        oBody.setUserData(robot);
-        oBody.setBullet(true);
+        oBody.isFixedRotation = true
+        oBody.userData = robot
+        oBody.isBullet = true
 
-        shape.dispose();
+        shape.dispose()
     }
 
-    private void createEnemies() {
-        float x = random.nextFloat() * (WIDTH - 1) + .5f;// Para que no apareza
-        float y = random.nextFloat() * 4f + .6f;
+    private fun createEnemies() {
+        val x = random.nextFloat() * (WIDTH - 1) + .5f // Para que no apareza
+        val y = random.nextFloat() * 4f + .6f
 
-        Enemy obj = new Enemy(x, y);
-        arrayEnemies.add(obj);
-        BodyDef bd = new BodyDef();
-        bd.position.x = x;
-        bd.position.y = y;
-        bd.type = BodyType.DynamicBody;
+        val obj = Enemy(x, y)
+        arrayEnemies.add(obj)
+        val bd = BodyDef()
+        bd.position.x = x
+        bd.position.y = y
+        bd.type = BodyType.DynamicBody
 
-        Body oBody = oWorldBox.createBody(bd);
+        val oBody = oWorldBox.createBody(bd)
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Enemy.WIDTH / 2f, Enemy.HEIGHT / 2f);
+        val shape = PolygonShape()
+        shape.setAsBox(Enemy.WIDTH / 2f, Enemy.HEIGHT / 2f)
 
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.density = 5;
-        fixture.restitution = 0;
-        fixture.friction = 0;
-        fixture.filter.groupIndex = -1;
-        oBody.createFixture(fixture);
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.density = 5f
+        fixture.restitution = 0f
+        fixture.friction = 0f
+        fixture.filter.groupIndex = -1
+        oBody.createFixture(fixture)
 
-        oBody.setFixedRotation(true);
-        oBody.setGravityScale(0);
-        oBody.setUserData(obj);
+        oBody.isFixedRotation = true
+        oBody.gravityScale = 0f
+        oBody.userData = obj
 
-        shape.dispose();
+        shape.dispose()
     }
 
-    private void crearPlataformas(float x, float y) {
+    private fun crearPlataformas(x: Float, y: Float) {
+        val bd = BodyDef()
+        bd.position.x = x
+        bd.position.y = y
+        bd.type = BodyType.StaticBody
+        val oBody = oWorldBox.createBody(bd)
 
-        BodyDef bd = new BodyDef();
-        bd.position.x = x;
-        bd.position.y = y;
-        bd.type = BodyType.StaticBody;
-        Body oBody = oWorldBox.createBody(bd);
+        val shape = PolygonShape()
 
-        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Platform.WIDTH / 2f, Platform.HEIGHT / 2f)
 
-        shape.setAsBox(Platform.WIDTH / 2f, Platform.HEIGHT / 2f);
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.restitution = 0f
+        fixture.friction = 0f
+        oBody.createFixture(fixture)
 
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.restitution = 0;
-        fixture.friction = 0;
-        oBody.createFixture(fixture);
+        val obj = Platform(bd.position.x, bd.position.y)
+        oBody.userData = obj
+        shape.dispose()
 
-        Platform obj = new Platform(bd.position.x, bd.position.y);
-        oBody.setUserData(obj);
-        shape.dispose();
-
-        arrayPlatforms.add(obj);
+        arrayPlatforms.add(obj)
     }
 
-    private void crearBoost() {
-        Boost obj = boostPool.obtain();
+    private fun crearBoost() {
+        val obj = boostPool.obtain()
 
-        int plat = random.nextInt(4);// arriba de que plataforma
-        int tipo = random.nextInt(4);// ice, invencible,moneda,etc
-        obj.init(this, arrayPlatforms.get(plat).position.x,
-                arrayPlatforms.get(plat).position.y + .3f, tipo);
+        val plat = random.nextInt(4) // arriba de que plataforma
+        val tipo = random.nextInt(4) // ice, invencible,moneda,etc
+        obj.init(
+            this, arrayPlatforms[plat].position.x,
+            arrayPlatforms[plat].position.y + .3f, tipo
+        )
 
-        arrayBoost.add(obj);
-
+        arrayBoost.add(obj)
     }
 
-    private void createCoins() {
-
-        for (int i = 0; i < 6; i++) {
-            float x = 0;
-            float y = 8.4f + (i * .5f);
-            float speed = Coin.SPEED_MOVE;
-            if (i % 2f != 0) {
-                speed *= -1;
-                x = WIDTH;
+    private fun createCoins() {
+        for (i in 0..5) {
+            var x = 0f
+            val y = 8.4f + (i * .5f)
+            var speed = Coin.SPEED_MOVE
+            if (i % 2f != 0f) {
+                speed *= -1f
+                x = WIDTH
             }
 
-            Body body = Coin.createCoinBody(oWorldBox, x, y, speed);
-            Coin obj = coinPool.obtain();
-            obj.initializeCoin(body.getPosition().x, body.getPosition().y);
-            arrayCoins.add(obj);
-            body.setUserData(obj);
+            val body = createCoinBody(oWorldBox, x, y, speed)
+            val obj = coinPool.obtain()
+            obj.initializeCoin(body.position.x, body.position.y)
+            arrayCoins.add(obj)
+            body.userData = obj
         }
-
     }
 
-    public void updateReady(float delta, float acelX) {
-        oWorldBox.step(delta, 8, 4);
-        oWorldBox.getBodies(arrayBodies);
-        for (Body body : arrayBodies) {
-            if (body.getUserData() instanceof Robot) {
-                robot.updateReady(body, acelX);
-                break;
+    fun updateReady(delta: Float, acelX: Float) {
+        oWorldBox.step(delta, 8, 4)
+        oWorldBox.getBodies(arrayBodies)
+        for (body in arrayBodies) {
+            if (body.userData is Robot) {
+                robot!!.updateReady(body, acelX)
+                break
             }
         }
     }
 
-    public void update(float delta, float acelX, boolean slam) {
-        oWorldBox.step(delta, 8, 4);
+    fun update(delta: Float, acelX: Float, slam: Boolean) {
+        oWorldBox.step(delta, 8, 4)
 
-        eliminarObjetos();
+        eliminarObjetos()
 
-        timeToSpawnEnemy += delta;
-        timeToSpawnBoost += delta;
-        timeToChangeStatePlatform += delta;
-        timeToSpawnCoin += delta;
+        timeToSpawnEnemy += delta
+        timeToSpawnBoost += delta
+        timeToChangeStatePlatform += delta
+        timeToSpawnCoin += delta
 
         if (timeToSpawnEnemy >= TIME_TO_SPAWN_ENEMY) {
-            timeToSpawnEnemy -= TIME_TO_SPAWN_ENEMY;
-            timeToSpawnEnemy += (scoreSlammed * .025f); // Hace que aparezcan mas rapido los malos
+            timeToSpawnEnemy -= TIME_TO_SPAWN_ENEMY
+            timeToSpawnEnemy += (scoreSlammed * .025f) // Hace que aparezcan mas rapido los malos
             if (arrayEnemies.size < 7 + (scoreSlammed * .15f)) {
                 if (scoreSlammed <= 15) {
-                    createEnemies();
+                    createEnemies()
                 } else if (scoreSlammed <= 50) {
-                    createEnemies();
-                    createEnemies();
+                    createEnemies()
+                    createEnemies()
                 } else {
-                    createEnemies();
-                    createEnemies();
-                    createEnemies();
+                    createEnemies()
+                    createEnemies()
+                    createEnemies()
                 }
             }
-
         }
 
         if (timeToSpawnBoost >= TIME_TO_SPAWN_BOOST) {
-            timeToSpawnBoost -= TIME_TO_SPAWN_BOOST;
-            if (random.nextBoolean())
-                crearBoost();
+            timeToSpawnBoost -= TIME_TO_SPAWN_BOOST
+            if (random.nextBoolean()) crearBoost()
         }
 
         if (timeToSpawnCoin >= TIME_TO_SPAWN_COIN) {
-            timeToSpawnCoin -= TIME_TO_SPAWN_COIN;
-            createCoins();
+            timeToSpawnCoin -= TIME_TO_SPAWN_COIN
+            createCoins()
         }
 
         if (timeToChangeStatePlatform >= TIME_TO_CHANGE_STATE_PLATFORM) {
-            timeToChangeStatePlatform -= TIME_TO_CHANGE_STATE_PLATFORM;
+            timeToChangeStatePlatform -= TIME_TO_CHANGE_STATE_PLATFORM
             if (random.nextBoolean()) {
-                int plat = random.nextInt(4);
-                int state = random.nextInt(2);
-                Platform obj = arrayPlatforms.get(plat);
+                val plat = random.nextInt(4)
+                val state = random.nextInt(2)
+                val obj = arrayPlatforms[plat]
                 if (state == 0) {
-                    obj.setBreakable();
+                    obj.setBreakable()
                 } else {
-                    obj.setFire();
+                    obj.setFire()
                 }
             }
         }
 
-        oWorldBox.getBodies(arrayBodies);
+        oWorldBox.getBodies(arrayBodies)
 
-        for (Body body : arrayBodies) {
-            if (body.getUserData() instanceof Robot) {
-                updateRobot(delta, body, acelX, slam);
-            } else if (body.getUserData() instanceof Enemy) {
-                updateEnemy(delta, body);
-            } else if (body.getUserData() instanceof Boost) {
-                updateBoost(delta, body);
-            } else if (body.getUserData() instanceof Platform) {
-                updatePlataforma(delta, body);
-            } else if (body.getUserData() instanceof Coin) {
-                updateCoin(delta, body);
+        for (body in arrayBodies) {
+            if (body.userData is Robot) {
+                updateRobot(delta, body, acelX, slam)
+            } else if (body.userData is Enemy) {
+                updateEnemy(delta, body)
+            } else if (body.userData is Boost) {
+                updateBoost(delta, body)
+            } else if (body.userData is Platform) {
+                updatePlataforma(delta, body)
+            } else if (body.userData is Coin) {
+                updateCoin(delta, body)
             }
         }
 
-        isCoinRain = false;
+        isCoinRain = false
     }
 
-    private void eliminarObjetos() {
-        oWorldBox.getBodies(arrayBodies);
+    private fun eliminarObjetos() {
+        oWorldBox.getBodies(arrayBodies)
 
-        for (Body body : arrayBodies) {
-            if (!oWorldBox.isLocked()) {
-                if (body.getUserData() instanceof Robot) {
-                    Robot obj = (Robot) body.getUserData();
+        for (body in arrayBodies) {
+            if (!oWorldBox.isLocked) {
+                if (body.userData is Robot) {
+                    val obj = body.userData as Robot
                     if (obj.state == Robot.STATE_DEAD
-                            && obj.stateTime >= Robot.DURATION_DEAD_ANIMATION) {
-                        oWorldBox.destroyBody(body);
-                        state = STATE_GAME_OVER;
+                        && obj.stateTime >= Robot.DURATION_DEAD_ANIMATION
+                    ) {
+                        oWorldBox.destroyBody(body)
+                        state = STATE_GAME_OVER
                     }
-                } else if (body.getUserData() instanceof Enemy) {
-                    Enemy obj = (Enemy) body.getUserData();
+                } else if (body.userData is Enemy) {
+                    val obj = body.userData as Enemy
                     if (obj.state == Enemy.STATE_DEAD) {
-                        oWorldBox.destroyBody(body);
-                        arrayEnemies.removeValue(obj, true);
-                        scoreSlammed++;
+                        oWorldBox.destroyBody(body)
+                        arrayEnemies.removeValue(obj, true)
+                        scoreSlammed++
 
                         /*
                          * If there are no enemies, I'll at least create one. I'll put this here
                          * so that it doesn't affect the time in which the first bad guy appears.
                          */
-                        if (arrayEnemies.size == 0)
-                            createEnemies();
+                        if (arrayEnemies.size == 0) createEnemies()
                     }
-                } else if (body.getUserData() instanceof Boost) {
-                    Boost obj = (Boost) body.getUserData();
+                } else if (body.userData is Boost) {
+                    val obj = body.userData as Boost
                     if (obj.state == Boost.STATE_TAKEN) {
-                        oWorldBox.destroyBody(body);
-                        arrayBoost.removeValue(obj, true);
-                        boostPool.free(obj);
+                        oWorldBox.destroyBody(body)
+                        arrayBoost.removeValue(obj, true)
+                        boostPool.free(obj)
                     }
-                } else if (body.getUserData() instanceof Coin) {
-                    Coin obj = (Coin) body.getUserData();
+                } else if (body.userData is Coin) {
+                    val obj = body.userData as Coin
                     if (obj.state == Coin.STATE_TAKEN) {
-                        oWorldBox.destroyBody(body);
-                        arrayCoins.removeValue(obj, true);
-                        coinPool.free(obj);
+                        oWorldBox.destroyBody(body)
+                        arrayCoins.removeValue(obj, true)
+                        coinPool.free(obj)
                     }
                 }
             }
-
         }
     }
 
-    private void updateRobot(float delta, Body body, float acelX, boolean slam) {
-        Robot obj = (Robot) body.getUserData();
-        obj.update(delta, body, acelX, slam);
+    private fun updateRobot(delta: Float, body: Body, acelX: Float, slam: Boolean) {
+        val obj = body.userData as Robot
+        obj.update(delta, body, acelX, slam)
 
         if (obj.position.y > 12) {
-            Achievements.unlockSuperJump();
-            Gdx.app.log("ACHIIIII", "Asdsadasd");
+            unlockSuperJump()
+            Gdx.app.log("ACHIIIII", "Asdsadasd")
         }
-
     }
 
-    private void updateEnemy(float delta, Body body) {
-        Enemy obj = (Enemy) body.getUserData();
-        obj.update(delta, body, random);
-
+    private fun updateEnemy(delta: Float, body: Body) {
+        val obj = body.userData as Enemy
+        obj.update(delta, body, random)
     }
 
-    private void updateBoost(float delta, Body body) {
-        Boost obj = (Boost) body.getUserData();
-        obj.update(delta, body);
-
+    private fun updateBoost(delta: Float, body: Body) {
+        val obj = body.userData as Boost
+        obj.update(delta, body)
     }
 
-    private void updatePlataforma(float delta, Body body) {
-        Platform obj = (Platform) body.getUserData();
-        obj.update(delta);
-
+    private fun updatePlataforma(delta: Float, body: Body) {
+        val obj = body.userData as Platform
+        obj.update(delta)
     }
 
-    private void updateCoin(float delta, Body body) {
-        Coin obj = (Coin) body.getUserData();
-        obj.update(delta, body);
+    private fun updateCoin(delta: Float, body: Body) {
+        val obj = body.userData as Coin
+        obj.update(delta, body)
 
         if (obj.position.x < -3 || obj.position.x > WIDTH + 3) {
-            obj.state = Coin.STATE_TAKEN;
+            obj.state = Coin.STATE_TAKEN
         }
 
         if (isCoinRain) {
-            body.setGravityScale(1);
-            body.setLinearVelocity(body.getLinearVelocity().x * .25f, 0);
+            body.gravityScale = 1f
+            body.setLinearVelocity(body.linearVelocity.x * .25f, 0f)
         }
     }
 
-    class Colisiones implements ContactListener {
+    internal inner class Colisiones : ContactListener {
+        override fun beginContact(contact: Contact) {
+            val a = contact.fixtureA
+            val b = contact.fixtureB
 
-        @Override
-        public void beginContact(Contact contact) {
-            Fixture a = contact.getFixtureA();
-            Fixture b = contact.getFixtureB();
+            if (a.body.userData is Robot) beginContactRobotOtraCosa(a, b)
+            else if (b.body.userData is Robot) beginContactRobotOtraCosa(b, a)
 
-            if (a.getBody().getUserData() instanceof Robot)
-                beginContactRobotOtraCosa(a, b);
-            else if (b.getBody().getUserData() instanceof Robot)
-                beginContactRobotOtraCosa(b, a);
-
-            if (a.getBody().getUserData() instanceof Enemy)
-                beginContactEnemyWithOthers(a, b);
-            else if (b.getBody().getUserData() instanceof Enemy)
-                beginContactEnemyWithOthers(b, a);
-
+            if (a.body.userData is Enemy) beginContactEnemyWithOthers(a, b)
+            else if (b.body.userData is Enemy) beginContactEnemyWithOthers(b, a)
         }
 
         /**
          * Begin contacto ROBOT con OTRA-COSA
          */
-        private void beginContactRobotOtraCosa(Fixture robotFixture, Fixture otherFixture) {
-            Robot robot = (Robot) robotFixture.getBody().getUserData();
-            Object otherObject = otherFixture.getBody().getUserData();
+        private fun beginContactRobotOtraCosa(robotFixture: Fixture, otherFixture: Fixture) {
+            val robot = robotFixture.body.userData as Robot
+            val otherObject = otherFixture.body.userData
 
-            if (otherObject.equals("piso")) {
-                robot.jump();
+            if (otherObject == "piso") {
+                robot.jump()
 
-                if (!robot.isInvincible)// Si es invencible no le quito el combo
-                    combo = 0;
-            } else if (otherObject instanceof Platform) {
-                Platform platform = (Platform) otherObject;
+                if (!robot.isInvincible) // Si es invencible no le quito el combo
+                    combo = 0
+            } else if (otherObject is Platform) {
+                val platform = otherObject
                 if (platform.state == Platform.STATE_FIRE && !robot.isInvincible) {
-                    robot.hit();
-                    return;
+                    robot.hit()
+                    return
                 } else if (platform.state == Platform.STATE_BREAKABLE) {
-                    platform.setBroken();
+                    platform.setBroken()
                 } else if (platform.state == Platform.STATE_BROKEN) {
-                    return;
+                    return
                 }
-                if (!robot.isInvincible && robot.state == Robot.STATE_FALLING)// Si es invencible no le quito el combo
-                    combo = 0;
-                robot.jump();
-            } else if (otherObject instanceof Boost) {
-                Boost boost = (Boost) otherObject;
-                boost.hit();
-                Assets.playSound(Assets.soundBoost);
+                if (!robot.isInvincible && robot.state == Robot.STATE_FALLING) // Si es invencible no le quito el combo
+                    combo = 0
+                robot.jump()
+            } else if (otherObject is Boost) {
+                val boost = otherObject
+                boost.hit()
+                playSound(Assets.soundBoost!!)
 
                 if (boost.type == Boost.TIPO_SUPERJUMP) {
-                    robot.isSuperJump = true;
+                    robot.isSuperJump = true
                 } else if (boost.type == Boost.TIPO_INVENCIBLE) {
-                    robot.isInvincible = true;
+                    robot.isInvincible = true
                 } else if (boost.type == Boost.TIPO_COIN_RAIN) {
-                    isCoinRain = true;
+                    isCoinRain = true
                 } else if (boost.type == Boost.TIPO_ICE) {
-                    for (Enemy arrEnemy : arrayEnemies) {
-                        arrEnemy.setFrozen();
+                    for (arrEnemy in arrayEnemies) {
+                        arrEnemy.setFrozen()
                     }
                 }
-            } else if (otherObject instanceof Coin) {
-                Coin coin = (Coin) otherObject;
+            } else if (otherObject is Coin) {
+                val coin = otherObject
                 if (coin.state == Coin.STATE_NORMAL) {
-                    coin.state = Coin.STATE_TAKEN;
-                    takenCoins++;
-                    Settings.currentCoins++;
-                    Assets.playSound(Assets.soundCoin);
+                    coin.state = Coin.STATE_TAKEN
+                    takenCoins++
+                    Settings.currentCoins++
+                    playSound(Assets.soundCoin!!)
                 }
-
-            } else if (otherObject instanceof Enemy) {
-                Enemy enemy = (Enemy) otherObject;
+            } else if (otherObject is Enemy) {
+                val enemy = otherObject
 
                 // I can touch from the middle of the enemy up
-                float posRobot = robot.position.y - Robot.RADIUS;
-                float pisY = enemy.position.y;
+                val posRobot = robot.position.y - Robot.RADIUS
+                val pisY = enemy.position.y
 
                 if (enemy.state != Enemy.STATE_JUST_APPEAR) {
                     if (robot.isInvincible) {
-                        enemy.die();
-                        combo++;
+                        enemy.die()
+                        combo++
                     } else if (posRobot > pisY) {
-                        enemy.hit();
-                        robot.jump();
-                        combo++;
+                        enemy.hit()
+                        robot.jump()
+                        combo++
                     } else if (robot.state != Robot.STATE_DEAD) {
-                        robot.hit();
-                        combo = 0;
+                        robot.hit()
+                        combo = 0
                     }
                     if (combo >= COMBO_TO_START_GETTING_COINS) {
-                        takenCoins += combo;
-                        Settings.currentCoins += combo;
+                        takenCoins += combo
+                        Settings.currentCoins += combo
                     }
 
-                    Achievements.unlockCombos();
+                    unlockCombos()
                 }
             }
         }
 
-        private void beginContactEnemyWithOthers(Fixture enemyFixture, Fixture otherFixture) {
-            Enemy enemy = (Enemy) enemyFixture.getBody().getUserData();
-            Object otherObject = otherFixture.getBody().getUserData();
+        private fun beginContactEnemyWithOthers(enemyFixture: Fixture, otherFixture: Fixture) {
+            val enemy = enemyFixture.body.userData as Enemy
+            val otherObject = otherFixture.body.userData
 
-            if (otherObject.equals("pared")) {
-
-                enemyFixture.getBody().setLinearVelocity(
-                        enemyFixture.getBody().getLinearVelocity().x * -1,
-                        enemyFixture.getBody().getLinearVelocity().y);
-            } else if (otherObject.equals("piso")) {
+            if (otherObject == "pared") {
+                enemyFixture.body.setLinearVelocity(
+                    enemyFixture.body.linearVelocity.x * -1,
+                    enemyFixture.body.linearVelocity.y
+                )
+            } else if (otherObject == "piso") {
                 if (enemy.state == Enemy.STATE_FLYING) {
-                    enemyFixture.getBody().setLinearVelocity(
-                            enemyFixture.getBody().getLinearVelocity().x,
-                            enemyFixture.getBody().getLinearVelocity().y * -1);
+                    enemyFixture.body.setLinearVelocity(
+                        enemyFixture.body.linearVelocity.x,
+                        enemyFixture.body.linearVelocity.y * -1
+                    )
                 }
             }
         }
 
-        @Override
-        public void endContact(Contact contact) {
-
+        override fun endContact(contact: Contact) {
         }
 
-        @Override
-        public void preSolve(Contact contact, Manifold oldManifold) {
+        override fun preSolve(contact: Contact, oldManifold: Manifold) {
+            val a = contact.fixtureA
+            val b = contact.fixtureB
 
-            Fixture a = contact.getFixtureA();
-            Fixture b = contact.getFixtureB();
+            if (a.body.userData is Robot) preSolveRobot(a, b, contact)
+            else if (b.body.userData is Robot) preSolveRobot(b, a, contact)
 
-            if (a.getBody().getUserData() instanceof Robot)
-                preSolveRobot(a, b, contact);
-            else if (b.getBody().getUserData() instanceof Robot)
-                preSolveRobot(b, a, contact);
+            if (a.body.userData is Enemy) preSolveEnemy(a, b, contact)
+            else if (b.body.userData is Enemy) preSolveEnemy(b, a, contact)
 
-            if (a.getBody().getUserData() instanceof Enemy)
-                preSolveEnemy(a, b, contact);
-            else if (b.getBody().getUserData() instanceof Enemy)
-                preSolveEnemy(b, a, contact);
-
-            if (a.getBody().getUserData() instanceof Coin)
-                preSolveCoin(b, contact);
-            else if (b.getBody().getUserData() instanceof Coin)
-                preSolveCoin(a, contact);
-
+            if (a.body.userData is Coin) preSolveCoin(b, contact)
+            else if (b.body.userData is Coin) preSolveCoin(a, contact)
         }
 
-        private void preSolveRobot(Fixture robotFixture, Fixture otherFixture,
-                                   Contact contact) {
-            Object otherObject = otherFixture.getBody().getUserData();
-            Robot robot = (Robot) robotFixture.getBody().getUserData();
+        private fun preSolveRobot(
+            robotFixture: Fixture, otherFixture: Fixture,
+            contact: Contact
+        ) {
+            val otherObject = otherFixture.body.userData
+            val robot = robotFixture.body.userData as Robot
 
             // Platform oneSide
-            if (otherObject instanceof Platform) {
-                Platform obj = (Platform) otherObject;
-                float posRobot = robot.position.y - Robot.RADIUS + .05f;
-                float pisY = obj.position.y + (Platform.HEIGHT / 2f);
+            if (otherObject is Platform) {
+                val obj = otherObject
+                val posRobot = robot.position.y - Robot.RADIUS + .05f
+                val pisY = obj.position.y + (Platform.HEIGHT / 2f)
 
-                if (posRobot < pisY || obj.state == Platform.STATE_BROKEN)
-                    contact.setEnabled(false);
-
-            }
-            // Enemy cannot be touched when it appears
-            else if (otherObject instanceof Enemy) {
-                Enemy enemy = (Enemy) otherObject;
-                if (enemy.state == Enemy.STATE_JUST_APPEAR
-                        || robot.isInvincible)
-                    contact.setEnabled(false);
-            } else if (otherObject instanceof Coin) {
-                contact.setEnabled(false);
+                if (posRobot < pisY || obj.state == Platform.STATE_BROKEN) contact.isEnabled = false
+            } else if (otherObject is Enemy) {
+                if (otherObject.state == Enemy.STATE_JUST_APPEAR
+                    || robot.isInvincible
+                ) contact.isEnabled = false
+            } else if (otherObject is Coin) {
+                contact.isEnabled = false
             }
         }
 
-        private void preSolveEnemy(Fixture enemyFixture, Fixture otherFixture,
-                                   Contact contact) {
-            Object otherObject = otherFixture.getBody().getUserData();
-            Enemy enemy = (Enemy) enemyFixture.getBody().getUserData();
+        private fun preSolveEnemy(
+            enemyFixture: Fixture, otherFixture: Fixture,
+            contact: Contact
+        ) {
+            val otherObject = otherFixture.body.userData
+            val enemy = enemyFixture.body.userData as Enemy
 
             // Enemy cannot touch the platforms if he is flying
-            if (otherObject instanceof Platform) {
-                if (enemy.state == Enemy.STATE_FLYING)
-                    contact.setEnabled(false);
-
+            if (otherObject is Platform) {
+                if (enemy.state == Enemy.STATE_FLYING) contact.isEnabled = false
             }
         }
 
-        private void preSolveCoin(Fixture otherFixture,
-                                  Contact contact) {
-            Object otherObject = otherFixture.getBody().getUserData();
+        private fun preSolveCoin(
+            otherFixture: Fixture,
+            contact: Contact
+        ) {
+            val otherObject = otherFixture.body.userData
 
-            if (otherObject.equals("pared")) {
-                contact.setEnabled(false);
+            if (otherObject == "pared") {
+                contact.isEnabled = false
             }
         }
 
-        @Override
-        public void postSolve(Contact contact, ContactImpulse impulse) {
+        override fun postSolve(contact: Contact, impulse: ContactImpulse) {
             // TODO Auto-generated method stub
-
         }
     }
 
+    companion object {
+        const val COMBO_TO_START_GETTING_COINS: Float = 3f
+        const val STATE_RUNNING: Int = 0
+        const val STATE_GAME_OVER: Int = 1
+    }
 }

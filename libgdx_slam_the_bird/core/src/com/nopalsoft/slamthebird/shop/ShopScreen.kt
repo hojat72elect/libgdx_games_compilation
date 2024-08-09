@@ -15,7 +15,7 @@ import com.nopalsoft.slamthebird.Settings
 import com.nopalsoft.slamthebird.game.GameScreen
 import com.nopalsoft.slamthebird.screens.Screens
 
-class ShopScreen(game: MainSlamBird?) : Screens(game) {
+class ShopScreen(game: MainSlamBird?) : Screens(game!!) {
     var btPersonajes: Button? = null
     var btPowerUps: Button? = null
     var buttonCoins: Button? = null
@@ -47,17 +47,17 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         scroll.setSize((SCREEN_WIDTH - 95).toFloat(), (SCREEN_HEIGHT - 62).toFloat())
         scroll.setPosition(95f, 0f)
 
-        stage.addActor(shop)
-        stage.addActor(separadorV)
-        stage.addActor(separadorH)
-        stage.addActor(btPersonajes)
-        stage.addActor(btPowerUps)
-        stage.addActor(buttonCoins)
-        stage.addActor(btNoAds)
-        stage.addActor(btAtras)
-        stage.addActor(scroll)
+        stage!!.addActor(shop)
+        stage!!.addActor(separadorV)
+        stage!!.addActor(separadorH)
+        stage!!.addActor(btPersonajes)
+        stage!!.addActor(btPowerUps)
+        stage!!.addActor(buttonCoins)
+        stage!!.addActor(btNoAds)
+        stage!!.addActor(btAtras)
+        stage!!.addActor(scroll)
 
-        PlayersSubMenu(game, contenedor)
+        PlayersSubMenu(game!!, contenedor)
 
         buttonCoins!!.remove()
     }
@@ -70,7 +70,7 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         )
         btPersonajes!!.setSize(55f, 55f)
         btPersonajes!!.setPosition(17f, 660f)
-        addEfectoPress(btPersonajes)
+        addEfectoPress(btPersonajes!!)
         btPersonajes!!.addListener(object : ClickListener() {
             override fun clicked(
                 event: InputEvent, x: Float,
@@ -83,7 +83,7 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         btPowerUps = Button(TextureRegionDrawable(Assets.boosts))
         btPowerUps!!.setSize(55f, 55f)
         btPowerUps!!.setPosition(17f, 570f)
-        addEfectoPress(btPowerUps)
+        addEfectoPress(btPowerUps!!)
         btPowerUps!!.addListener(object : ClickListener() {
             override fun clicked(
                 event: InputEvent, x: Float,
@@ -96,7 +96,7 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         buttonCoins = Button(TextureRegionDrawable(Assets.coin))
         buttonCoins!!.setSize(55f, 55f)
         buttonCoins!!.setPosition(17f, 480f)
-        addEfectoPress(buttonCoins)
+        addEfectoPress(buttonCoins!!)
         buttonCoins!!.addListener(object : ClickListener() {
             override fun clicked(
                 event: InputEvent, x: Float,
@@ -109,7 +109,7 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         btNoAds = Button(TextureRegionDrawable(Assets.buttonNoAds))
         btNoAds!!.setSize(55f, 55f)
         btNoAds!!.setPosition(17f, 390f)
-        addEfectoPress(btNoAds)
+        addEfectoPress(btNoAds!!)
         btNoAds!!.addListener(object : ClickListener() {
             override fun clicked(
                 event: InputEvent, x: Float,
@@ -122,7 +122,7 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
         btAtras = Button(TextureRegionDrawable(Assets.buttonBack))
         btAtras!!.setSize(55f, 55f)
         btAtras!!.setPosition(17f, 10f)
-        addEfectoPress(btAtras)
+        addEfectoPress(btAtras!!)
         btAtras!!.addListener(object : ClickListener() {
             override fun clicked(
                 event: InputEvent, x: Float,
@@ -135,12 +135,12 @@ class ShopScreen(game: MainSlamBird?) : Screens(game) {
 
     override fun draw(delta: Float) {
         oCam.update()
-        batcher.projectionMatrix = oCam.combined
+        batcher!!.projectionMatrix = oCam.combined
 
-        batcher.begin()
-        batcher.draw(Assets.coin, 449f, 764f, 30f, 34f)
+        batcher!!.begin()
+        batcher!!.draw(Assets.coin, 449f, 764f, 30f, 34f)
         drawPuntuacionChicoOrigenDerecha(445f, 764f, Settings.currentCoins)
-        batcher.end()
+        batcher?.end()
     }
 
     override fun update(delta: Float) {

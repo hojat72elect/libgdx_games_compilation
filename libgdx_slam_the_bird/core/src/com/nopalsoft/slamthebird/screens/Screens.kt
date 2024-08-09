@@ -1,256 +1,260 @@
-package com.nopalsoft.slamthebird.screens;
+package com.nopalsoft.slamthebird.screens
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.Settings;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.Settings.save
+import com.nopalsoft.slamthebird.game.GameScreen
+import com.nopalsoft.slamthebird.shop.ShopScreen
 
-public abstract class Screens extends InputAdapter implements Screen {
-    public static final int SCREEN_WIDTH = 480;
-    public static final int SCREEN_HEIGHT = 800;
+abstract class Screens(game: MainSlamBird) : InputAdapter(), Screen {
+    @JvmField
+    var game: MainSlamBird
 
-    public static final float WORLD_SCREEN_WIDTH = 4.8f;
-    public static final float WORLD_SCREEN_HEIGHT = 8;
+    @JvmField
+    var oCam: OrthographicCamera
+    @JvmField
+    var batcher: SpriteBatch?
+    @JvmField
+    var stage: Stage? = game.stage
 
-    public MainSlamBird game;
+    var blackFadeOut: Image? = null
 
-    public OrthographicCamera oCam;
-    public SpriteBatch batcher;
-    public Stage stage;
+    init {
+        stage!!.clear()
+        this.batcher = game.batcher
+        this.game = game
 
-    Image blackFadeOut;
+        oCam = OrthographicCamera(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        oCam.position[SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f] = 0f
 
-    public Screens(MainSlamBird game) {
-        this.stage = game.stage;
-        this.stage.clear();
-        this.batcher = game.batcher;
-        this.game = game;
-
-        oCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        oCam.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
-
-        InputMultiplexer input = new InputMultiplexer(this, stage);
-        Gdx.input.setInputProcessor(input);
-
+        val input = InputMultiplexer(this, stage)
+        Gdx.input.inputProcessor = input
     }
 
-    @Override
-    public void render(float delta) {
-        if (delta > .1f)
-            delta = .1f;
+    override fun render(delta: Float) {
+        var delta = delta
+        if (delta > .1f) delta = .1f
 
-        update(delta);
+        update(delta)
 
         // Gdx.gl.glClearColor(.3f, 0, 1f, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        draw(delta);
+        draw(delta)
 
-        stage.act(delta);
-        stage.draw();
+        stage!!.act(delta)
+        stage!!.draw()
 
 
-//        stage.setDebugAll(true);
+        //        stage.setDebugAll(true);
     }
 
-    public void drawNumGrandeCentradoX(float x, float y, int puntuacion) {
-        String score = String.valueOf(puntuacion);
+    fun drawNumGrandeCentradoX(x: Float, y: Float, puntuacion: Int) {
+        val score = puntuacion.toString()
 
-        int len = score.length();
-        float charWidth = 42;
-        float textWidth = len * charWidth;
-        for (int i = 0; i < len; i++) {
-            AtlasRegion keyFrame;
+        val len = score.length
+        val charWidth = 42f
+        val textWidth = len * charWidth
+        for (i in 0 until len) {
+            var keyFrame: AtlasRegion?
 
-            char character = score.charAt(i);
+            val character = score[i]
 
-            if (character == '0') {
-                keyFrame = Assets.num0Big;
+            keyFrame = if (character == '0') {
+                Assets.num0Big
             } else if (character == '1') {
-                keyFrame = Assets.num1Big;
+                Assets.num1Big
             } else if (character == '2') {
-                keyFrame = Assets.num2Big;
+                Assets.num2Big
             } else if (character == '3') {
-                keyFrame = Assets.num3Big;
+                Assets.num3Big
             } else if (character == '4') {
-                keyFrame = Assets.num4Big;
+                Assets.num4Big
             } else if (character == '5') {
-                keyFrame = Assets.num5Big;
+                Assets.num5Big
             } else if (character == '6') {
-                keyFrame = Assets.num6Big;
+                Assets.num6Big
             } else if (character == '7') {
-                keyFrame = Assets.num7Big;
+                Assets.num7Big
             } else if (character == '8') {
-                keyFrame = Assets.num8Big;
-            } else {// 9
-                keyFrame = Assets.num9Big;
+                Assets.num8Big
+            } else { // 9
+                Assets.num9Big
             }
 
-            batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,
-                    y, charWidth, 64);
+            batcher!!.draw(
+                keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,
+                y, charWidth, 64f
+            )
         }
     }
 
-    public void drawPuntuacionChicoOrigenDerecha(float x, float y,
-                                                 int puntuacion) {
-        String score = String.valueOf(puntuacion);
+    fun drawPuntuacionChicoOrigenDerecha(
+        x: Float, y: Float,
+        puntuacion: Int
+    ) {
+        val score = puntuacion.toString()
 
-        int len = score.length();
-        float charWidth;
-        float textWidth = 0;
-        for (int i = len - 1; i >= 0; i--) {
-            AtlasRegion keyFrame;
+        val len = score.length
+        var charWidth: Float
+        var textWidth = 0f
+        for (i in len - 1 downTo 0) {
+            var keyFrame: AtlasRegion?
 
-            charWidth = 22;
-            char character = score.charAt(i);
+            charWidth = 22f
+            val character = score[i]
 
             if (character == '0') {
-                keyFrame = Assets.num0Small;
+                keyFrame = Assets.num0Small
             } else if (character == '1') {
-                keyFrame = Assets.num1Small;
-                charWidth = 11f;
+                keyFrame = Assets.num1Small
+                charWidth = 11f
             } else if (character == '2') {
-                keyFrame = Assets.num2Small;
+                keyFrame = Assets.num2Small
             } else if (character == '3') {
-                keyFrame = Assets.num3Small;
+                keyFrame = Assets.num3Small
             } else if (character == '4') {
-                keyFrame = Assets.num4Small;
+                keyFrame = Assets.num4Small
             } else if (character == '5') {
-                keyFrame = Assets.num5Small;
+                keyFrame = Assets.num5Small
             } else if (character == '6') {
-                keyFrame = Assets.num6Small;
+                keyFrame = Assets.num6Small
             } else if (character == '7') {
-                keyFrame = Assets.num7Small;
+                keyFrame = Assets.num7Small
             } else if (character == '8') {
-                keyFrame = Assets.num8Small;
-            } else {// 9
-                keyFrame = Assets.num9Small;
+                keyFrame = Assets.num8Small
+            } else { // 9
+                keyFrame = Assets.num9Small
             }
-            textWidth += charWidth;
-            batcher.draw(keyFrame, x - textWidth, y, charWidth, 32);
+            textWidth += charWidth
+            batcher!!.draw(keyFrame, x - textWidth, y, charWidth, 32f)
         }
     }
 
-    public void drawNumChicoCentradoX(float x, float y, int puntuacion) {
-        String score = String.valueOf(puntuacion);
+    fun drawNumChicoCentradoX(x: Float, y: Float, puntuacion: Int) {
+        val score = puntuacion.toString()
 
-        int len = score.length();
-        float charWidth = 22;
-        float textWidth = len * charWidth;
-        for (int i = 0; i < len; i++) {
-            AtlasRegion keyFrame;
+        val len = score.length
+        val charWidth = 22f
+        val textWidth = len * charWidth
+        for (i in 0 until len) {
+            var keyFrame: AtlasRegion?
 
-            char character = score.charAt(i);
+            val character = score[i]
 
-            if (character == '0') {
-                keyFrame = Assets.num0Small;
+            keyFrame = if (character == '0') {
+                Assets.num0Small
             } else if (character == '1') {
-                keyFrame = Assets.num1Small;
+                Assets.num1Small
             } else if (character == '2') {
-                keyFrame = Assets.num2Small;
+                Assets.num2Small
             } else if (character == '3') {
-                keyFrame = Assets.num3Small;
+                Assets.num3Small
             } else if (character == '4') {
-                keyFrame = Assets.num4Small;
+                Assets.num4Small
             } else if (character == '5') {
-                keyFrame = Assets.num5Small;
+                Assets.num5Small
             } else if (character == '6') {
-                keyFrame = Assets.num6Small;
+                Assets.num6Small
             } else if (character == '7') {
-                keyFrame = Assets.num7Small;
+                Assets.num7Small
             } else if (character == '8') {
-                keyFrame = Assets.num8Small;
-            } else {// 9
-                keyFrame = Assets.num9Small;
+                Assets.num8Small
+            } else { // 9
+                Assets.num9Small
             }
 
-            batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,
-                    y, charWidth, 32);
+            batcher!!.draw(
+                keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f,
+                y, charWidth, 32f
+            )
         }
     }
 
-    public void changeScreenWithFadeOut(final Class<?> newScreen,
-                                        final MainSlamBird game) {
-        blackFadeOut = new Image(Assets.blackPixel);
-        blackFadeOut.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        blackFadeOut.getColor().a = 0;
-        blackFadeOut.addAction(Actions.sequence(Actions.fadeIn(.5f),
-                Actions.run(() -> {
-                    if (newScreen == com.nopalsoft.slamthebird.game.GameScreen.class)
-                        game.setScreen(new com.nopalsoft.slamthebird.game.GameScreen(game));
-                    else if (newScreen == com.nopalsoft.slamthebird.shop.ShopScreen.class)
-                        game.setScreen(new com.nopalsoft.slamthebird.shop.ShopScreen(game));
-
-                    // El blackFadeOut se remueve del stage cuando se le da new Screens(game) "Revisar el constructor de la clase Screens" por lo que no hay necesidad de hacer
-                    // blackFadeout.remove();
-                })));
-        stage.addActor(blackFadeOut);
+    fun changeScreenWithFadeOut(
+        newScreen: Class<*>,
+        game: MainSlamBird
+    ) {
+        blackFadeOut = Image(Assets.blackPixel)
+        blackFadeOut!!.setSize(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        blackFadeOut!!.color.a = 0f
+        blackFadeOut!!.addAction(
+            Actions.sequence(
+                Actions.fadeIn(.5f),
+                Actions.run {
+                    if (newScreen == GameScreen::class.java) game.screen = GameScreen(game)
+                    else if (newScreen == ShopScreen::class.java) game.screen = ShopScreen(game)
+                })
+        )
+        stage!!.addActor(blackFadeOut)
     }
 
-    public void addEfectoPress(final Actor actor) {
-        actor.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() - 5);
-                event.stop();
-                return true;
+    fun addEfectoPress(actor: Actor) {
+        actor.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                actor.setPosition(actor.x, actor.y - 5)
+                event.stop()
+                return true
             }
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y,
-                                int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() + 5);
+            override fun touchUp(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ) {
+                actor.setPosition(actor.x, actor.y + 5)
             }
-        });
+        })
     }
 
-    public abstract void draw(float delta);
+    abstract fun draw(delta: Float)
 
-    public abstract void update(float delta);
+    abstract fun update(delta: Float)
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+    override fun resize(width: Int, height: Int) {
+        stage!!.viewport.update(width, height, true)
     }
 
-    @Override
-    public void show() {
+    override fun show() {
     }
 
-    @Override
-    public void hide() {
-        Settings.save();
+    override fun hide() {
+        save()
     }
 
-    @Override
-    public void pause() {
-
+    override fun pause() {
     }
 
-    @Override
-    public void resume() {
-
+    override fun resume() {
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-        batcher.dispose();
-        Settings.save();
+    override fun dispose() {
+        stage!!.dispose()
+        batcher!!.dispose()
+        save()
     }
 
+    companion object {
+        const val SCREEN_WIDTH: Int = 480
+        const val SCREEN_HEIGHT: Int = 800
+
+        const val WORLD_SCREEN_WIDTH: Float = 4.8f
+        const val WORLD_SCREEN_HEIGHT: Float = 8f
+    }
 }

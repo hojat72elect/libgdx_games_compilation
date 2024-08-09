@@ -1,181 +1,196 @@
-package com.nopalsoft.slamthebird.shop;
+package com.nopalsoft.slamthebird.shop
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.Settings;
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.Settings
 
-public class GetCoinsSubMenu {
-
-    int monedasLikeFacebook = 1500;
+class GetCoinsSubMenu(var game: MainSlamBird, var contenedor: Table) {
+    var monedasLikeFacebook: Int = 1500
 
     // Comun
-    TextButton btLikeFacebook;
+    var btLikeFacebook: TextButton
 
     // iOS
-    TextButton btBuy5milCoins, btBuy15MilCoins, btBuy30MilCoins,
-            btBuy50MilCoins;
+    var btBuy5milCoins: TextButton
+    var btBuy15MilCoins: TextButton
+    var btBuy30MilCoins: TextButton
+    var btBuy50MilCoins: TextButton
 
-    Table contenedor;
-    MainSlamBird game;
+    init {
+        contenedor.clear()
 
-    public GetCoinsSubMenu(final MainSlamBird game, Table contenedor) {
-        this.game = game;
-        this.contenedor = contenedor;
-        contenedor.clear();
-
-        btLikeFacebook = new TextButton("Like us", Assets.textButtonStyleBuy);
-        if (Settings.didLikeFacebook)
-            btLikeFacebook = new TextButton("Visit Us",
-                    Assets.textButtonStyleSelected);
-        addEfectoPress(btLikeFacebook);
-        btLikeFacebook.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        btLikeFacebook = TextButton("Like us", Assets.textButtonStyleBuy)
+        if (Settings.didLikeFacebook) btLikeFacebook = TextButton(
+            "Visit Us",
+            Assets.textButtonStyleSelected
+        )
+        addEfectoPress(btLikeFacebook)
+        btLikeFacebook.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (!Settings.didLikeFacebook) {
-
-                    Settings.didLikeFacebook = true;
-                    game.stage.addAction(Actions.sequence(Actions.delay(1),
-                            Actions.run(() -> {
-                                com.nopalsoft.slamthebird.Settings.currentCoins += monedasLikeFacebook;
-                                btLikeFacebook.setText("Visit us");
-                                btLikeFacebook
-                                        .setStyle(com.nopalsoft.slamthebird.Assets.textButtonStyleSelected);
-                            })));
+                    Settings.didLikeFacebook = true
+                    game.stage!!.addAction(
+                        Actions.sequence(
+                            Actions.delay(1f),
+                            Actions.run {
+                                Settings.currentCoins += monedasLikeFacebook
+                                btLikeFacebook.setText("Visit us")
+                                btLikeFacebook.style = Assets.textButtonStyleSelected
+                            })
+                    )
                 }
             }
-        });
+        })
 
-        btBuy5milCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
-        addEfectoPress(btBuy5milCoins);
-        btBuy5milCoins.addListener(new ClickListener() {
-        });
+        btBuy5milCoins = TextButton("Buy", Assets.textButtonStyleBuy)
+        addEfectoPress(btBuy5milCoins)
+        btBuy5milCoins.addListener(object : ClickListener() {
+        })
 
-        btBuy15MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
-        addEfectoPress(btBuy15MilCoins);
-        btBuy15MilCoins.addListener(new ClickListener() {
-        });
+        btBuy15MilCoins = TextButton("Buy", Assets.textButtonStyleBuy)
+        addEfectoPress(btBuy15MilCoins)
+        btBuy15MilCoins.addListener(object : ClickListener() {
+        })
 
-        btBuy30MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
-        addEfectoPress(btBuy30MilCoins);
-        btBuy30MilCoins.addListener(new ClickListener() {
-        });
+        btBuy30MilCoins = TextButton("Buy", Assets.textButtonStyleBuy)
+        addEfectoPress(btBuy30MilCoins)
+        btBuy30MilCoins.addListener(object : ClickListener() {
+        })
 
-        btBuy50MilCoins = new TextButton("Buy", Assets.textButtonStyleBuy);
-        addEfectoPress(btBuy50MilCoins);
-        btBuy50MilCoins.addListener(new ClickListener() {
-        });
+        btBuy50MilCoins = TextButton("Buy", Assets.textButtonStyleBuy)
+        addEfectoPress(btBuy50MilCoins)
+        btBuy50MilCoins.addListener(object : ClickListener() {
+        })
 
         // Facebook Like
-        contenedor.add(new Image(Assets.horizontalSeparator)).expandX().fill()
-                .height(5);
-        contenedor.row();
+        contenedor.add(Image(Assets.horizontalSeparator)).expandX().fill()
+            .height(5f)
+        contenedor.row()
         contenedor
-                .add(addCharacterTable(monedasLikeFacebook,
-                        Assets.buttonFacebook, "Like us on facebook and get "
-                                + monedasLikeFacebook + " coins",
-                        btLikeFacebook)).expandX().fill();
-        contenedor.row();
+            .add(
+                addCharacterTable(
+                    monedasLikeFacebook,
+                    Assets.buttonFacebook, "Like us on facebook and get "
+                            + monedasLikeFacebook + " coins",
+                    btLikeFacebook
+                )
+            ).expandX().fill()
+        contenedor.row()
 
-        TextureRegionDrawable moneda = new TextureRegionDrawable(Assets.coin);
+        val moneda = TextureRegionDrawable(Assets.coin)
+
+
         // Venta de monedas
 
 
         // Comprar 5mil
         contenedor
-                .add(addCharacterTable(
-                        5000,
-                        moneda,
-                        "Coin simple pack. A quick way to buy simple upgrades",
-                        btBuy5milCoins)).expandX().fill();
-        contenedor.row();
+            .add(
+                addCharacterTable(
+                    5000,
+                    moneda,
+                    "Coin simple pack. A quick way to buy simple upgrades",
+                    btBuy5milCoins
+                )
+            ).expandX().fill()
+        contenedor.row()
 
         // Buy 15 thousand
         contenedor
-                .add(addCharacterTable(
-                        15000,
-                        moneda,
-                        "Coin super pack. Get some cash for upgrades and characters",
-                        btBuy15MilCoins)).expandX().fill();
-        contenedor.row();
+            .add(
+                addCharacterTable(
+                    15000,
+                    moneda,
+                    "Coin super pack. Get some cash for upgrades and characters",
+                    btBuy15MilCoins
+                )
+            ).expandX().fill()
+        contenedor.row()
 
         contenedor
-                .add(addCharacterTable(
-                        30000,
-                        moneda,
-                        "Coin mega pack. You can buy a lot of characters and upgrades",
-                        btBuy30MilCoins)).expandX().fill();
-        contenedor.row();
+            .add(
+                addCharacterTable(
+                    30000,
+                    moneda,
+                    "Coin mega pack. You can buy a lot of characters and upgrades",
+                    btBuy30MilCoins
+                )
+            ).expandX().fill()
+        contenedor.row()
 
         contenedor
-                .add(addCharacterTable(
-                        50000,
-                        moneda,
-                        "Coin super mega pack. Get this pack and you will be slamming in cash",
-                        btBuy50MilCoins)).expandX().fill();
-        contenedor.row();
-
-
+            .add(
+                addCharacterTable(
+                    50000,
+                    moneda,
+                    "Coin super mega pack. Get this pack and you will be slamming in cash",
+                    btBuy50MilCoins
+                )
+            ).expandX().fill()
+        contenedor.row()
     }
 
-    private Table addCharacterTable(int numCoinsToGet,
-                                    TextureRegionDrawable image, String description, TextButton button) {
+    private fun addCharacterTable(
+        numCoinsToGet: Int,
+        image: TextureRegionDrawable?, description: String, button: TextButton
+    ): Table {
+        val moneda = Image(Assets.coin)
+        val imgPersonaje = Image(image)
 
-        Image moneda = new Image(Assets.coin);
-        Image imgPersonaje = new Image(image);
-
-        Table tbBarraTitulo = new Table();
+        val tbBarraTitulo = Table()
         tbBarraTitulo
-                .add(new Label("Get " + numCoinsToGet, Assets.labelStyleSmall))
-                .left().padLeft(5);
-        tbBarraTitulo.add(moneda).left().expandX().padLeft(5);
+            .add(Label("Get $numCoinsToGet", Assets.labelStyleSmall))
+            .left().padLeft(5f)
+        tbBarraTitulo.add(moneda).left().expandX().padLeft(5f)
 
-        Table tbDescrip = new Table();
-        tbDescrip.add(imgPersonaje).left().pad(10).size(55, 45);
-        Label lblDescripcion = new Label(description, Assets.labelStyleSmall);
-        lblDescripcion.setWrap(true);
-        tbDescrip.add(lblDescripcion).expand().fill().padLeft(5);
+        val tbDescrip = Table()
+        tbDescrip.add(imgPersonaje).left().pad(10f).size(55f, 45f)
+        val lblDescripcion = Label(description, Assets.labelStyleSmall)
+        lblDescripcion.wrap = true
+        tbDescrip.add(lblDescripcion).expand().fill().padLeft(5f)
 
-        Table tbContent = new Table();
-        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2).padTop(8);
-        tbContent.row().colspan(2);
-        tbContent.add(tbDescrip).expandX().fill();
-        tbContent.row().colspan(2);
+        val tbContent = Table()
+        tbContent.add(tbBarraTitulo).expandX().fill().colspan(2).padTop(8f)
+        tbContent.row().colspan(2)
+        tbContent.add(tbDescrip).expandX().fill()
+        tbContent.row().colspan(2)
 
-        tbContent.add(button).right().padRight(10).size(120, 45);
+        tbContent.add(button).right().padRight(10f).size(120f, 45f)
 
-        tbContent.row().colspan(2);
-        tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill()
-                .height(5).padTop(15);
+        tbContent.row().colspan(2)
+        tbContent.add(Image(Assets.horizontalSeparator)).expandX().fill()
+            .height(5f).padTop(15f)
 
-        return tbContent;
-
+        return tbContent
     }
 
-    protected void addEfectoPress(final Actor actor) {
-        actor.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() - 3);
-                event.stop();
-                return true;
+    protected fun addEfectoPress(actor: Actor) {
+        actor.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                actor.setPosition(actor.x, actor.y - 3)
+                event.stop()
+                return true
             }
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y,
-                                int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() + 3);
+            override fun touchUp(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ) {
+                actor.setPosition(actor.x, actor.y + 3)
             }
-        });
+        })
     }
 }
