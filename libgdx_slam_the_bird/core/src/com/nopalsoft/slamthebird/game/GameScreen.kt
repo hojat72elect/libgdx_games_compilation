@@ -1,467 +1,466 @@
-package com.nopalsoft.slamthebird.game;
+package com.nopalsoft.slamthebird.game
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.slamthebird.Achievements;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.Settings;
-import com.nopalsoft.slamthebird.scene2d.LabelCoins;
-import com.nopalsoft.slamthebird.scene2d.LabelCombo;
-import com.nopalsoft.slamthebird.scene2d.LabelScore;
-import com.nopalsoft.slamthebird.scene2d.WindowPause;
-import com.nopalsoft.slamthebird.scene2d.WindowRate;
-import com.nopalsoft.slamthebird.screens.Screens;
-import com.nopalsoft.slamthebird.shop.ShopScreen;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.slamthebird.Achievements.unlockCoins
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.Assets.pauseMusic
+import com.nopalsoft.slamthebird.Assets.playMusic
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.Settings
+import com.nopalsoft.slamthebird.Settings.setBestScores
+import com.nopalsoft.slamthebird.scene2d.LabelCoins
+import com.nopalsoft.slamthebird.scene2d.LabelCombo
+import com.nopalsoft.slamthebird.scene2d.LabelScore
+import com.nopalsoft.slamthebird.scene2d.WindowPause
+import com.nopalsoft.slamthebird.scene2d.WindowRate
+import com.nopalsoft.slamthebird.screens.Screens
+import com.nopalsoft.slamthebird.shop.ShopScreen
 
-public class GameScreen extends Screens {
-    static final int STATE_READY = 1;
-    static final int STATE_RUNNING = 2;
-    static final int STATE_PAUSED = 3;
-    static final int STATE_GAME_OVER = 4;
-    static final int STATE_TRY_AGAIN = 5;
+class GameScreen(game: MainSlamBird?) : Screens(game!!) {
+    var worldGame: WorldGame
+    var renderer: WorldGameRender
+    var imageGameOver: Image? = null
+    var groupTryAgain: Group
+    var groupButtons: Group? = null
+    var imageAppTitle: Image? = null
+    var sideComboText: Boolean = false // Create new scratch file from selection.
 
-    static int state;
+    var windowRate: WindowRate
+    var windowPause: WindowPause
+    var combo: Int = 0
 
-    WorldGame worldGame;
-    WorldGameRender renderer;
-    Image imageGameOver;
-    Group groupTryAgain;
-    Group groupButtons;
-    Image imageAppTitle;
-    boolean sideComboText;// Create new scratch file from selection.
+    init {
+        worldGame = WorldGame()
+        renderer = WorldGameRender(batcher!!, worldGame)
 
-    WindowRate windowRate;
-    WindowPause windowPause;
-    int combo;
+        groupTryAgain = Group()
+        windowRate = WindowRate(this)
+        windowPause = WindowPause(this)
 
-    public GameScreen(MainSlamBird game) {
-        super(game);
-        worldGame = new WorldGame();
-        renderer = new WorldGameRender(batcher, worldGame);
-
-        groupTryAgain = new Group();
-        windowRate = new WindowRate(this);
-        windowPause = new WindowPause(this);
-
-        setUpButtons();
-        setUpGameover();
-        setReady();
-
+        setUpButtons()
+        setUpGameover()
+        setReady()
     }
 
-    private void setUpButtons() {
-        groupButtons = new Group();
-        groupButtons.setSize(stage.getWidth(), stage.getHeight());
-        groupButtons.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                if (windowRate.isVisible())
-                    return false;
+    private fun setUpButtons() {
+        groupButtons = Group()
+        groupButtons!!.setSize(stage!!.width, stage!!.height)
+        groupButtons!!.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                if (windowRate.isVisible) return false
 
-                setRunning();
-                Settings.numberOfTimesPlayed++;
-                return true;
+                setRunning()
+                Settings.numberOfTimesPlayed++
+                return true
             }
-        });
+        })
 
-        Button buttonAchievements, buttonLeaderboard, buttonMore, buttonRate, buttonShop;
-        Button buttonShareFacebook, buttonShareTwitter;
+        val bestScore = Image(Assets.bestScore)
+        bestScore.setSize(170f, 25f)
+        bestScore.setPosition(SCREEN_WIDTH / 2f - bestScore.width / 2f, 770f)
+        bestScore.addAction(
+            Actions.repeat(
+                Int.MAX_VALUE,
+                Actions.sequence(
+                    Actions.alpha(.6f, .75f),
+                    Actions.alpha(1f, .75f)
+                )
+            )
+        )
 
-        Image tapToPlay, bestScore;
-
-        bestScore = new Image(Assets.bestScore);
-        bestScore.setSize(170, 25);
-        bestScore.setPosition(SCREEN_WIDTH / 2f - bestScore.getWidth() / 2f, 770);
-        bestScore.addAction(Actions.repeat(
-                Integer.MAX_VALUE,
-                Actions.sequence(Actions.alpha(.6f, .75f),
-                        Actions.alpha(1, .75f))));
-
-        buttonShop = new Button(Assets.buttonShop);
-        buttonShop.setSize(90, 70);
-        buttonShop.setPosition(0, 730);
-        addEfectoPress(buttonShop);
-        buttonShop.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                changeScreenWithFadeOut(ShopScreen.class, game);
+        val buttonShop = Button(Assets.buttonShop)
+        buttonShop.setSize(90f, 70f)
+        buttonShop.setPosition(0f, 730f)
+        addEfectoPress(buttonShop)
+        buttonShop.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                changeScreenWithFadeOut(ShopScreen::class.java, game)
             }
-        });
+        })
 
-        buttonMore = new Button(Assets.buttonMore);
-        buttonMore.setSize(90, 70);
-        buttonMore.setPosition(390, 730);
-        addEfectoPress(buttonMore);
-        buttonMore.addListener(new ClickListener() {
-        });
+        val buttonMore = Button(Assets.buttonMore)
+        buttonMore.setSize(90f, 70f)
+        buttonMore.setPosition(390f, 730f)
+        addEfectoPress(buttonMore)
+        buttonMore.addListener(object : ClickListener() {
+        })
 
-        buttonLeaderboard = new Button(Assets.buttonLeaderBoard);
-        buttonLeaderboard.setSize(110, 75);
-        buttonLeaderboard.setPosition(230 - 110, 310);
-        addEfectoPress(buttonLeaderboard);
-        buttonLeaderboard.addListener(new ClickListener() {
-        });
+        val buttonLeaderboard = Button(Assets.buttonLeaderBoard)
+        buttonLeaderboard.setSize(110f, 75f)
+        buttonLeaderboard.setPosition((230 - 110).toFloat(), 310f)
+        addEfectoPress(buttonLeaderboard)
+        buttonLeaderboard.addListener(object : ClickListener() {
+        })
 
-        buttonAchievements = new Button(Assets.buttonAchievements);
-        buttonAchievements.setSize(110, 75);
-        buttonAchievements.setPosition(250, 310);
-        addEfectoPress(buttonAchievements);
-        buttonAchievements.addListener(new ClickListener() {
-        });
+        val buttonAchievements = Button(Assets.buttonAchievements)
+        buttonAchievements.setSize(110f, 75f)
+        buttonAchievements.setPosition(250f, 310f)
+        addEfectoPress(buttonAchievements)
+        buttonAchievements.addListener(object : ClickListener() {
+        })
 
-        buttonRate = new Button(Assets.buttonRate);
-        buttonRate.setSize(110, 75);
+        val buttonRate = Button(Assets.buttonRate)
+        buttonRate.setSize(110f, 75f)
 
-        buttonRate.setPosition(SCREEN_WIDTH / 2f - buttonRate.getWidth() / 2f - 25, 220);// Con el boton face y twitter cambia la pos
-        addEfectoPress(buttonRate);
-        buttonRate.addListener(new ClickListener() {
-        });
+        buttonRate.setPosition(
+            SCREEN_WIDTH / 2f - buttonRate.width / 2f - 25,
+            220f
+        ) // Con el boton face y twitter cambia la pos
+        addEfectoPress(buttonRate)
+        buttonRate.addListener(object : ClickListener() {
+        })
 
-        buttonShareFacebook = new Button(new TextureRegionDrawable(
-                Assets.buttonFacebook));
-        buttonShareFacebook.setSize(40, 40);
-        buttonShareFacebook.setPosition(280, 257);
-        addEfectoPress(buttonShareFacebook);
-        buttonShareFacebook.addListener(new ClickListener() {
-        });
+        val buttonShareFacebook = Button(
+            TextureRegionDrawable(
+                Assets.buttonFacebook
+            )
+        )
+        buttonShareFacebook.setSize(40f, 40f)
+        buttonShareFacebook.setPosition(280f, 257f)
+        addEfectoPress(buttonShareFacebook)
+        buttonShareFacebook.addListener(object : ClickListener() {
+        })
 
-        buttonShareTwitter = new Button(new TextureRegionDrawable(Assets.buttonTwitter));
-        buttonShareTwitter.setSize(40, 40);
-        buttonShareTwitter.setPosition(280, 212);
-        addEfectoPress(buttonShareTwitter);
-        buttonShareTwitter.addListener(new ClickListener() {
-        });
+        val buttonShareTwitter = Button(TextureRegionDrawable(Assets.buttonTwitter))
+        buttonShareTwitter.setSize(40f, 40f)
+        buttonShareTwitter.setPosition(280f, 212f)
+        addEfectoPress(buttonShareTwitter)
+        buttonShareTwitter.addListener(object : ClickListener() {
+        })
 
-        final Button btMusica, btSonido;
-
-        btMusica = new Button(Assets.buttonStyleMusic);
-        btMusica.setPosition(5, 100);
-        btMusica.setChecked(!Settings.isMusicOn);
-        btMusica.addListener(new InputListener() {
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                event.stop();
-                return true;
+        val btMusica = Button(Assets.buttonStyleMusic)
+        btMusica.setPosition(5f, 100f)
+        btMusica.isChecked = !Settings.isMusicOn
+        btMusica.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                event.stop()
+                return true
             }
-        });
-        btMusica.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                event.stop();
-                Settings.isMusicOn = !Settings.isMusicOn;
-                btMusica.setChecked(!Settings.isMusicOn);
-                if (Settings.isMusicOn)
-                    Assets.playMusic();
-                else
-                    Assets.pauseMusic();
-                Gdx.app.log("Muscia", Settings.isMusicOn + "");
+        })
+        btMusica.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                event.stop()
+                Settings.isMusicOn = !Settings.isMusicOn
+                btMusica.isChecked = !Settings.isMusicOn
+                if (Settings.isMusicOn) playMusic()
+                else pauseMusic()
+                Gdx.app.log("Muscia", Settings.isMusicOn.toString() + "")
             }
-        });
+        })
 
-        btSonido = new Button(Assets.buttonStyleSound);
-        btSonido.setPosition(5, 180);
-        btSonido.setChecked(!Settings.isSoundOn);
-        btSonido.addListener(new InputListener() {
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                event.stop();
-                return true;
+        val btSonido = Button(Assets.buttonStyleSound)
+        btSonido.setPosition(5f, 180f)
+        btSonido.isChecked = !Settings.isSoundOn
+        btSonido.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                event.stop()
+                return true
             }
-        });
-        btSonido.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                Settings.isSoundOn = !Settings.isSoundOn;
-                btSonido.setChecked(!Settings.isSoundOn);
-
+        })
+        btSonido.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                Settings.isSoundOn = !Settings.isSoundOn
+                btSonido.isChecked = !Settings.isSoundOn
             }
-        });
+        })
 
-        tapToPlay = new Image(Assets.tapToPlay);
-        tapToPlay.setSize(333, 40);
+        val tapToPlay = Image(Assets.tapToPlay)
+        tapToPlay.setSize(333f, 40f)
         tapToPlay
-                .setPosition(SCREEN_WIDTH / 2f - tapToPlay.getWidth() / 2f, 140);
-        tapToPlay.setOrigin(tapToPlay.getWidth() / 2f,
-                tapToPlay.getHeight() / 2f);
-        float scaleTime = .75f;
-        tapToPlay.addAction(Actions.repeat(Integer.MAX_VALUE, Actions.sequence(
-                Actions.scaleTo(.95f, .95f, scaleTime),
-                Actions.scaleTo(1f, 1f, scaleTime))));
+            .setPosition(SCREEN_WIDTH / 2f - tapToPlay.width / 2f, 140f)
+        tapToPlay.setOrigin(
+            tapToPlay.width / 2f,
+            tapToPlay.height / 2f
+        )
+        val scaleTime = .75f
+        tapToPlay.addAction(
+            Actions.repeat(
+                Int.MAX_VALUE, Actions.sequence(
+                    Actions.scaleTo(.95f, .95f, scaleTime),
+                    Actions.scaleTo(1f, 1f, scaleTime)
+                )
+            )
+        )
 
 
-        groupButtons.addActor(tapToPlay);
-        groupButtons.addActor(bestScore);
-        groupButtons.addActor(buttonShop);
-        groupButtons.addActor(buttonMore);
-        groupButtons.addActor(buttonLeaderboard);
-        groupButtons.addActor(buttonAchievements);
-        groupButtons.addActor(buttonRate);
-        groupButtons.addActor(btMusica);
-        groupButtons.addActor(btSonido);
-        groupButtons.addActor(buttonShareFacebook);
-        groupButtons.addActor(buttonShareTwitter);
+        groupButtons!!.addActor(tapToPlay)
+        groupButtons!!.addActor(bestScore)
+        groupButtons!!.addActor(buttonShop)
+        groupButtons!!.addActor(buttonMore)
+        groupButtons!!.addActor(buttonLeaderboard)
+        groupButtons!!.addActor(buttonAchievements)
+        groupButtons!!.addActor(buttonRate)
+        groupButtons!!.addActor(btMusica)
+        groupButtons!!.addActor(btSonido)
+        groupButtons!!.addActor(buttonShareFacebook)
+        groupButtons!!.addActor(buttonShareTwitter)
     }
 
-    private void setUpGameover() {
-        imageGameOver = new Image(Assets.backgroundGameOver);
-        imageGameOver.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        imageGameOver.setOrigin(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
-        imageGameOver.setScale(2);
-        imageGameOver.addAction(Actions.sequence(
+    private fun setUpGameover() {
+        imageGameOver = Image(Assets.backgroundGameOver)
+        imageGameOver!!.setSize(SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat())
+        imageGameOver!!.setOrigin(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f)
+        imageGameOver!!.setScale(2f)
+        imageGameOver!!.addAction(
+            Actions.sequence(
                 Actions.scaleTo(1.1f, 1.1f, .25f), Actions.delay(1f),
-                Actions.run(() -> {
-                    imageGameOver.remove();
-                    imageGameOver.setScale(2);
-                    setTryAgain();
-                })));
-
+                Actions.run {
+                    imageGameOver!!.remove()
+                    imageGameOver!!.setScale(2f)
+                    setTryAgain()
+                })
+        )
     }
 
-    @Override
-    public void update(float delta) {
+    override fun update(delta: Float) {
+        when (state) {
+            STATE_RUNNING -> updateRunning(delta)
+            STATE_READY, STATE_TRY_AGAIN -> updateReady(delta)
+            else -> {}
+        }
+    }
 
-        switch (state) {
-            case STATE_RUNNING:
-                updateRunning(delta);
-                break;
-            case STATE_READY:
-            case STATE_TRY_AGAIN:
-                updateReady(delta);
-                break;
-            default:
-                break;
+    private fun updateReady(delta: Float) {
+        var acelX = Gdx.input.accelerometerX * -1 / 5f
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) acelX = -1f
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) acelX = 1f
+
+        worldGame.updateReady(delta, acelX)
+    }
+
+    private fun updateRunning(delta: Float) {
+        var slam = false
+        var acelX = Gdx.input.accelerometerX * -1 / 5f
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) acelX = -1f
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)
+            || Gdx.input.isKeyPressed(Input.Keys.RIGHT)
+        ) acelX = 1f
+        Gdx.app.log("Slam is", " " + false)
+
+        if (Gdx.input.isTouched || Gdx.input.isKeyPressed(Input.Keys.SPACE)
+            || Gdx.input.isKeyPressed(Input.Keys.DOWN)
+        ) {
+            slam = true
+            Gdx.app.log("Slam is", " " + true)
         }
 
-    }
-
-    private void updateReady(float delta) {
-        float acelX = Gdx.input.getAccelerometerX() * -1 / 5f;
-
-        if (Gdx.input.isKeyPressed(Keys.A))
-            acelX = -1;
-        else if (Gdx.input.isKeyPressed(Keys.D))
-            acelX = 1;
-
-        worldGame.updateReady(delta, acelX);
-
-    }
-
-    private void updateRunning(float delta) {
-        boolean slam = false;
-        float acelX = Gdx.input.getAccelerometerX() * -1 / 5f;
-
-        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))
-            acelX = -1;
-        else if (Gdx.input.isKeyPressed(Keys.D)
-                || Gdx.input.isKeyPressed(Keys.RIGHT))
-            acelX = 1;
-        Gdx.app.log("Slam is", " " + false);
-
-        if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE)
-                || Gdx.input.isKeyPressed(Keys.DOWN)) {
-            slam = true;
-            Gdx.app.log("Slam is", " " + true);
-        }
-
-        worldGame.update(delta, acelX, slam);
+        worldGame.update(delta, acelX, slam)
 
         if (worldGame.state == WorldGame.STATE_GAME_OVER) {
-            setGameover();
+            setGameover()
         }
 
-        if (worldGame.combo == 0)
-            combo = 0;
+        if (worldGame.combo == 0) combo = 0
 
         if (worldGame.combo > combo) {
-            stage.getBatch().setColor(1, 1, 1, 1);// Un BUG que no pone el alpha en 1 otra vez
+            stage!!.batch.setColor(1f, 1f, 1f, 1f) // Un BUG que no pone el alpha en 1 otra vez
 
-            combo = worldGame.combo;
-            LabelCombo lblCombo = new LabelCombo(worldGame.robot.position.x * 100,
-                    worldGame.robot.position.y * 100 - 50, combo);
+            combo = worldGame.combo
+            val lblCombo = LabelCombo(
+                worldGame.robot!!.position.x * 100,
+                worldGame.robot!!.position.y * 100 - 50, combo
+            )
 
-            float sideToMove;
+            val sideToMove: Float
             if (sideComboText) {
-                sideToMove = 0;
-                sideComboText = false;
+                sideToMove = 0f
+                sideComboText = false
             } else {
-                sideComboText = true;
-                sideToMove = 380;
+                sideComboText = true
+                sideToMove = 380f
             }
 
-            lblCombo.addAction(Actions.sequence(Actions.moveTo(sideToMove, 400,
-                    2.5f, Interpolation.exp10Out), Actions.removeActor()));
-            stage.addActor(lblCombo);
-
+            lblCombo.addAction(
+                Actions.sequence(
+                    Actions.moveTo(
+                        sideToMove, 400f,
+                        2.5f, Interpolation.exp10Out
+                    ), Actions.removeActor()
+                )
+            )
+            stage!!.addActor(lblCombo)
         }
-
     }
 
-    @Override
-    public void draw(float delta) {
-        renderer.render();
+    override fun draw(delta: Float) {
+        renderer.render()
 
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+        oCam.update()
+        batcher!!.projectionMatrix = oCam.combined
 
-        batcher.begin();
+        batcher!!.begin()
 
-        switch (state) {
-            case STATE_RUNNING:
-                drawRunning();
-                break;
-            case STATE_READY:
-            case STATE_TRY_AGAIN:
-                drawReady();
-                break;
-            default:
-                break;
+        when (state) {
+            STATE_RUNNING -> drawRunning()
+            STATE_READY, STATE_TRY_AGAIN -> drawReady()
+            else -> {}
         }
-        batcher.end();
-
+        batcher!!.end()
     }
 
-    private void drawRunning() {
-        drawNumGrandeCentradoX(SCREEN_WIDTH / 2f, 700, worldGame.scoreSlammed);
+    private fun drawRunning() {
+        drawNumGrandeCentradoX(SCREEN_WIDTH / 2f, 700f, worldGame.scoreSlammed)
 
-        batcher.draw(Assets.coin, 449, 764, 30, 34);
-        drawPuntuacionChicoOrigenDerecha(445, 764, worldGame.takenCoins);
-
+        batcher!!.draw(Assets.coin, 449f, 764f, 30f, 34f)
+        drawPuntuacionChicoOrigenDerecha(445f, 764f, worldGame.takenCoins)
     }
 
-    private void drawReady() {
-
-        drawNumChicoCentradoX(SCREEN_WIDTH / 2f, 730, Settings.bestScore);
-
+    private fun drawReady() {
+        drawNumChicoCentradoX(SCREEN_WIDTH / 2f, 730f, Settings.bestScore)
     }
 
-    private void setPaused() {
+    private fun setPaused() {
         if (state == STATE_RUNNING) {
-            state = STATE_PAUSED;
-            windowPause.show(stage);
+            state = STATE_PAUSED
+            windowPause.show(stage!!)
         }
-
     }
 
-    public void setRunningFromPaused() {
+    fun setRunningFromPaused() {
         if (state == STATE_PAUSED) {
-            state = STATE_RUNNING;
+            state = STATE_RUNNING
         }
-
     }
 
-    private void setReady() {
-        imageAppTitle = new Image(Assets.title);
-        imageAppTitle.setSize(400, 290);
-        imageAppTitle.setPosition(SCREEN_WIDTH / 2f - imageAppTitle.getWidth() / 2f,
-                415);
-        state = STATE_READY;
-        stage.addActor(groupButtons);
-        stage.addActor(imageAppTitle);
-
+    private fun setReady() {
+        imageAppTitle = Image(Assets.title)
+        imageAppTitle!!.setSize(400f, 290f)
+        imageAppTitle!!.setPosition(
+            SCREEN_WIDTH / 2f - imageAppTitle!!.width / 2f,
+            415f
+        )
+        state = STATE_READY
+        stage!!.addActor(groupButtons)
+        stage!!.addActor(imageAppTitle)
     }
 
-    private void setRunning() {
-
-        groupTryAgain.addAction(Actions.sequence(Actions.fadeOut(.5f),
-                Actions.removeActor()));
-        imageAppTitle.addAction(Actions.sequence(Actions.fadeOut(.5f),
-                Actions.removeActor()));
-        groupButtons.addAction(Actions.sequence(Actions.fadeOut(.5f),
-                Actions.run(() -> {
-                    groupButtons.remove();
-                    groupTryAgain.remove();// POr el bug
-                    state = STATE_RUNNING;
-                })));
-
+    private fun setRunning() {
+        groupTryAgain.addAction(
+            Actions.sequence(
+                Actions.fadeOut(.5f),
+                Actions.removeActor()
+            )
+        )
+        imageAppTitle!!.addAction(
+            Actions.sequence(
+                Actions.fadeOut(.5f),
+                Actions.removeActor()
+            )
+        )
+        groupButtons!!.addAction(
+            Actions.sequence(
+                Actions.fadeOut(.5f),
+                Actions.run {
+                    groupButtons!!.remove()
+                    groupTryAgain.remove() // POr el bug
+                    state = STATE_RUNNING
+                })
+        )
     }
 
-    private void setGameover() {
-        Settings.setBestScores(worldGame.scoreSlammed);
-        state = STATE_GAME_OVER;
-        stage.addActor(imageGameOver);
+    private fun setGameover() {
+        setBestScores(worldGame.scoreSlammed)
+        state = STATE_GAME_OVER
+        stage!!.addActor(imageGameOver)
     }
 
-    private void setTryAgain() {
-        state = STATE_TRY_AGAIN;
-        setUpGameover();
+    private fun setTryAgain() {
+        state = STATE_TRY_AGAIN
+        setUpGameover()
 
-        groupTryAgain = new Group();
-        groupTryAgain.setSize(420, 300);
-        groupTryAgain.setPosition(SCREEN_WIDTH / 2f - groupTryAgain.getWidth()
-                / 2, 800);
-        groupTryAgain.addAction(Actions.sequence(Actions.moveTo(
-                groupTryAgain.getX(), 410, 1, Interpolation.bounceOut), Actions
-                .run(() -> {
-                    groupButtons.addAction(Actions.fadeIn(.5f));
-                    stage.addActor(groupButtons);
+        groupTryAgain = Group()
+        groupTryAgain.setSize(420f, 300f)
+        groupTryAgain.setPosition(
+            SCREEN_WIDTH / 2f - (groupTryAgain.width
+                    / 2), 800f
+        )
+        groupTryAgain.addAction(
+            Actions.sequence(
+                Actions.moveTo(
+                    groupTryAgain.x, 410f, 1f, Interpolation.bounceOut
+                ), Actions
+                    .run {
+                        groupButtons!!.addAction(Actions.fadeIn(.5f))
+                        stage!!.addActor(groupButtons)
+                        if (Settings.numberOfTimesPlayed % 7 == 0
+                            && !Settings.isQualified
+                        ) {
+                            windowRate.show(stage!!)
+                        }
+                    })
+        )
 
-                    if (Settings.numberOfTimesPlayed % 7 == 0
-                            && !Settings.isQualified) {
-                        windowRate.show(stage);
-                    }
-                })));
-
-        Image background = new Image(Assets.buttonScores);
-        background.setSize(groupTryAgain.getWidth(), groupTryAgain.getHeight());
-        groupTryAgain.addActor(background);
+        val background = Image(Assets.buttonScores)
+        background.setSize(groupTryAgain.width, groupTryAgain.height)
+        groupTryAgain.addActor(background)
 
         /*
          * Aqui voy a agregar lo de mas del try agai
          */
-        Image score = new Image(Assets.score);
-        score.setSize(225, 70);
-        score.setPosition(420 / 2f - score.getWidth() / 2f, 200);
+        val score = Image(Assets.score)
+        score.setSize(225f, 70f)
+        score.setPosition(420 / 2f - score.width / 2f, 200f)
 
-        Image coinsEarned = new Image(Assets.coinsEarned);
-        coinsEarned.setSize(243, 25);
-        coinsEarned.setPosition(25, 47);
+        val coinsEarned = Image(Assets.coinsEarned)
+        coinsEarned.setSize(243f, 25f)
+        coinsEarned.setPosition(25f, 47f)
 
-        LabelScore labelScore = new LabelScore(420 / 2f, 120, worldGame.scoreSlammed);
-        LabelCoins labelCoins = new LabelCoins(385, 45, worldGame.takenCoins);
+        val labelScore = LabelScore(420 / 2f, 120f, worldGame.scoreSlammed)
+        val labelCoins = LabelCoins(385f, 45f, worldGame.takenCoins)
 
-        Achievements.unlockCoins();
+        unlockCoins()
 
-        groupTryAgain.addActor(score);
-        groupTryAgain.addActor(labelScore);
-        groupTryAgain.addActor(labelCoins);
-        groupTryAgain.addActor(coinsEarned);
+        groupTryAgain.addActor(score)
+        groupTryAgain.addActor(labelScore)
+        groupTryAgain.addActor(labelCoins)
+        groupTryAgain.addActor(coinsEarned)
 
-        worldGame = new WorldGame();
-        renderer = new WorldGameRender(batcher, worldGame);
+        worldGame = WorldGame()
+        renderer = WorldGameRender(batcher!!, worldGame)
 
-        stage.addActor(groupTryAgain);
-
+        stage!!.addActor(groupTryAgain)
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-            if (state == STATE_READY)
-                Gdx.app.exit();
-            else if (state == STATE_TRY_AGAIN)
-                changeScreenWithFadeOut(GameScreen.class, game);
-            setPaused();
-            return true;
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.BACK || keycode == Input.Keys.ESCAPE) {
+            if (state == STATE_READY) Gdx.app.exit()
+            else if (state == STATE_TRY_AGAIN) changeScreenWithFadeOut(
+                GameScreen::class.java, game
+            )
+            setPaused()
+            return true
         }
-        return false;
+        return false
+    }
 
+    companion object {
+        const val STATE_READY: Int = 1
+        const val STATE_RUNNING: Int = 2
+        const val STATE_PAUSED: Int = 3
+        const val STATE_GAME_OVER: Int = 4
+        const val STATE_TRY_AGAIN: Int = 5
+
+        var state: Int = 0
     }
 }
