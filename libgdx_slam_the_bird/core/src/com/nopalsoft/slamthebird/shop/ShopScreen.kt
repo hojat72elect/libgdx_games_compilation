@@ -1,154 +1,156 @@
-package com.nopalsoft.slamthebird.shop;
+package com.nopalsoft.slamthebird.shop
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.Settings;
-import com.nopalsoft.slamthebird.game.GameScreen;
-import com.nopalsoft.slamthebird.screens.Screens;
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.Settings
+import com.nopalsoft.slamthebird.game.GameScreen
+import com.nopalsoft.slamthebird.screens.Screens
 
-public class ShopScreen extends Screens {
+class ShopScreen(game: MainSlamBird?) : Screens(game) {
+    var btPersonajes: Button? = null
+    var btPowerUps: Button? = null
+    var buttonCoins: Button? = null
+    var btNoAds: Button? = null
+    var btAtras: Button? = null
 
-    Button btPersonajes, btPowerUps, buttonCoins, btNoAds, btAtras;
+    var scroll: ScrollPane
+    var contenedor: Table
 
-    ScrollPane scroll;
-    Table contenedor;
+    init {
+        val shop = Image(Assets.shop)
+        shop.setSize(135f, 50f)
+        shop.setPosition(3f, 747f)
 
-    public ShopScreen(final MainSlamBird game) {
-        super(game);
-        Image shop = new Image(Assets.shop);
-        shop.setSize(135, 50);
-        shop.setPosition(3, 747);
+        val separadorH = Image(Assets.horizontalSeparator)
+        separadorH.setSize(SCREEN_WIDTH.toFloat(), 5f)
+        separadorH.color = Color.LIGHT_GRAY
+        separadorH.setPosition(0f, 740f)
 
-        Image separadorH = new Image(Assets.horizontalSeparator);
-        separadorH.setSize(SCREEN_WIDTH, 5);
-        separadorH.setColor(Color.LIGHT_GRAY);
-        separadorH.setPosition(0, 740);
+        val separadorV = Image(Assets.verticalSeparator)
+        separadorV.setSize(5f, 745f)
+        separadorV.color = Color.LIGHT_GRAY
+        separadorV.setPosition(90f, 0f)
 
-        Image separadorV = new Image(Assets.verticalSeparator);
-        separadorV.setSize(5, 745);
-        separadorV.setColor(Color.LIGHT_GRAY);
-        separadorV.setPosition(90, 0);
+        initButtons()
 
-        initButtons();
+        contenedor = Table()
+        scroll = ScrollPane(contenedor, Assets.scrollPaneStyle)
+        scroll.setSize((SCREEN_WIDTH - 95).toFloat(), (SCREEN_HEIGHT - 62).toFloat())
+        scroll.setPosition(95f, 0f)
 
-        contenedor = new Table();
-        scroll = new ScrollPane(contenedor, Assets.scrollPaneStyle);
-        scroll.setSize(SCREEN_WIDTH - 95, (SCREEN_HEIGHT - 62));
-        scroll.setPosition(95, 0);
+        stage.addActor(shop)
+        stage.addActor(separadorV)
+        stage.addActor(separadorH)
+        stage.addActor(btPersonajes)
+        stage.addActor(btPowerUps)
+        stage.addActor(buttonCoins)
+        stage.addActor(btNoAds)
+        stage.addActor(btAtras)
+        stage.addActor(scroll)
 
-        stage.addActor(shop);
-        stage.addActor(separadorV);
-        stage.addActor(separadorH);
-        stage.addActor(btPersonajes);
-        stage.addActor(btPowerUps);
-        stage.addActor(buttonCoins);
-        stage.addActor(btNoAds);
-        stage.addActor(btAtras);
-        stage.addActor(scroll);
+        PlayersSubMenu(game, contenedor)
 
-        new PlayersSubMenu(game, contenedor);
-
-        buttonCoins.remove();
-
+        buttonCoins!!.remove()
     }
 
-    private void initButtons() {
-        btPersonajes = new Button(new TextureRegionDrawable(
-                Assets.playerShopDefault));
-        btPersonajes.setSize(55, 55);
-        btPersonajes.setPosition(17, 660);
-        addEfectoPress(btPersonajes);
-        btPersonajes.addListener(new ClickListener() {
-            public void clicked(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y) {
-                new PlayersSubMenu(game, contenedor);
+    private fun initButtons() {
+        btPersonajes = Button(
+            TextureRegionDrawable(
+                Assets.playerShopDefault
+            )
+        )
+        btPersonajes!!.setSize(55f, 55f)
+        btPersonajes!!.setPosition(17f, 660f)
+        addEfectoPress(btPersonajes)
+        btPersonajes!!.addListener(object : ClickListener() {
+            override fun clicked(
+                event: InputEvent, x: Float,
+                y: Float
+            ) {
+                PlayersSubMenu(game, contenedor)
             }
+        })
 
-        });
-
-        btPowerUps = new Button(new TextureRegionDrawable(Assets.boosts));
-        btPowerUps.setSize(55, 55);
-        btPowerUps.setPosition(17, 570);
-        addEfectoPress(btPowerUps);
-        btPowerUps.addListener(new ClickListener() {
-            public void clicked(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y) {
-                new UpgradesSubMenu(game, contenedor);
+        btPowerUps = Button(TextureRegionDrawable(Assets.boosts))
+        btPowerUps!!.setSize(55f, 55f)
+        btPowerUps!!.setPosition(17f, 570f)
+        addEfectoPress(btPowerUps)
+        btPowerUps!!.addListener(object : ClickListener() {
+            override fun clicked(
+                event: InputEvent, x: Float,
+                y: Float
+            ) {
+                UpgradesSubMenu(game, contenedor)
             }
+        })
 
-        });
-
-        buttonCoins = new Button(new TextureRegionDrawable(Assets.coin));
-        buttonCoins.setSize(55, 55);
-        buttonCoins.setPosition(17, 480);
-        addEfectoPress(buttonCoins);
-        buttonCoins.addListener(new ClickListener() {
-            public void clicked(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y) {
-                new GetCoinsSubMenu(game, contenedor);
+        buttonCoins = Button(TextureRegionDrawable(Assets.coin))
+        buttonCoins!!.setSize(55f, 55f)
+        buttonCoins!!.setPosition(17f, 480f)
+        addEfectoPress(buttonCoins)
+        buttonCoins!!.addListener(object : ClickListener() {
+            override fun clicked(
+                event: InputEvent, x: Float,
+                y: Float
+            ) {
+                GetCoinsSubMenu(game, contenedor)
             }
-        });
+        })
 
-        btNoAds = new Button(new TextureRegionDrawable(Assets.buttonNoAds));
-        btNoAds.setSize(55, 55);
-        btNoAds.setPosition(17, 390);
-        addEfectoPress(btNoAds);
-        btNoAds.addListener(new ClickListener() {
-            public void clicked(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y) {
-                new NoAdsSubMenu(game, contenedor);
+        btNoAds = Button(TextureRegionDrawable(Assets.buttonNoAds))
+        btNoAds!!.setSize(55f, 55f)
+        btNoAds!!.setPosition(17f, 390f)
+        addEfectoPress(btNoAds)
+        btNoAds!!.addListener(object : ClickListener() {
+            override fun clicked(
+                event: InputEvent, x: Float,
+                y: Float
+            ) {
+                NoAdsSubMenu(game, contenedor)
             }
-        });
+        })
 
-        btAtras = new Button(new TextureRegionDrawable(Assets.buttonBack));
-        btAtras.setSize(55, 55);
-        btAtras.setPosition(17, 10);
-        addEfectoPress(btAtras);
-        btAtras.addListener(new ClickListener() {
-            public void clicked(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y) {
-                changeScreenWithFadeOut(GameScreen.class, game);
+        btAtras = Button(TextureRegionDrawable(Assets.buttonBack))
+        btAtras!!.setSize(55f, 55f)
+        btAtras!!.setPosition(17f, 10f)
+        addEfectoPress(btAtras)
+        btAtras!!.addListener(object : ClickListener() {
+            override fun clicked(
+                event: InputEvent, x: Float,
+                y: Float
+            ) {
+                changeScreenWithFadeOut(GameScreen::class.java, game)
             }
-        });
-
+        })
     }
 
-    @Override
-    public void draw(float delta) {
-        oCam.update();
-        batcher.setProjectionMatrix(oCam.combined);
+    override fun draw(delta: Float) {
+        oCam.update()
+        batcher.projectionMatrix = oCam.combined
 
-        batcher.begin();
-        batcher.draw(Assets.coin, 449, 764, 30, 34);
-        drawPuntuacionChicoOrigenDerecha(445, 764, Settings.currentCoins);
-        batcher.end();
+        batcher.begin()
+        batcher.draw(Assets.coin, 449f, 764f, 30f, 34f)
+        drawPuntuacionChicoOrigenDerecha(445f, 764f, Settings.currentCoins)
+        batcher.end()
     }
 
-    @Override
-    public void update(float delta) {
-
+    override fun update(delta: Float) {
     }
 
-    @Override
-    public boolean keyDown(int tecleada) {
-        if (tecleada == Keys.BACK || tecleada == Keys.ESCAPE) {
-            changeScreenWithFadeOut(GameScreen.class, game);
-            return true;
+    override fun keyDown(tecleada: Int): Boolean {
+        if (tecleada == Input.Keys.BACK || tecleada == Input.Keys.ESCAPE) {
+            changeScreenWithFadeOut(GameScreen::class.java, game)
+            return true
         }
-        return false;
+        return false
     }
-
 }

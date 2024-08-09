@@ -1,84 +1,85 @@
-package com.nopalsoft.slamthebird.objects;
+package com.nopalsoft.slamthebird.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.nopalsoft.slamthebird.game.WorldGame;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.utils.Pool.Poolable
+import com.nopalsoft.slamthebird.game.WorldGame
 
-public class Boost implements Poolable {
+class Boost : Poolable {
+    @JvmField
+    var state: Int = 0
 
-    public static final int TIPO_SUPERJUMP = 0;
-    public static final int TIPO_INVENCIBLE = 1;
-    public static final int TIPO_COIN_RAIN = 2;
-    public static final int TIPO_ICE = 3;
+    @JvmField
+    var position: Vector2 = Vector2()
+    var stateTime: Float = 0f
 
-    public static float DURATION_AVAILABLE = 5;
+    @JvmField
+    var type: Int = 0
 
-    public static int STATE_NORMAL = 0;
-    public static int STATE_TAKEN = 1;
-    public int state;
+    fun init(worldGame: WorldGame, x: Float, y: Float, type: Int) {
+        this.type = type
+        position[x] = y
+        stateTime = 0f
+        state = STATE_NORMAL
 
-    public Vector2 position;
-    public float stateTime;
-    public int type;
+        val bodyDefinition = BodyDef()
+        bodyDefinition.position.x = x
+        bodyDefinition.position.y = y
+        bodyDefinition.type = BodyType.KinematicBody
 
-    public Boost() {
-        position = new Vector2();
+        val body = worldGame.oWorldBox.createBody(bodyDefinition)
+
+        val shape = PolygonShape()
+        shape.setAsBox(.15f, .15f)
+
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.density = 8f
+        fixture.restitution = 0f
+        fixture.friction = 0f
+        fixture.isSensor = true
+
+        body.createFixture(fixture)
+
+        body.userData = this
+        shape.dispose()
     }
 
-    public void init(WorldGame worldGame, float x, float y, int type) {
-        this.type = type;
-        position.set(x, y);
-        stateTime = 0;
-        state = STATE_NORMAL;
-
-        BodyDef bodyDefinition = new BodyDef();
-        bodyDefinition.position.x = x;
-        bodyDefinition.position.y = y;
-        bodyDefinition.type = BodyType.KinematicBody;
-
-        Body body = worldGame.oWorldBox.createBody(bodyDefinition);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(.15f, .15f);
-
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.density = 8;
-        fixture.restitution = 0;
-        fixture.friction = 0;
-        fixture.isSensor = true;
-
-        body.createFixture(fixture);
-
-        body.setUserData(this);
-        shape.dispose();
-    }
-
-    public void update(float delta, Body body) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
-        stateTime += delta;
+    fun update(delta: Float, body: Body) {
+        position.x = body.position.x
+        position.y = body.position.y
+        stateTime += delta
 
         if (stateTime >= DURATION_AVAILABLE) {
-            state = STATE_TAKEN;
-            stateTime = 0;
+            state = STATE_TAKEN
+            stateTime = 0f
         }
     }
 
-    public void hit() {
-        state = STATE_TAKEN;
-        stateTime = 0;
+    fun hit() {
+        state = STATE_TAKEN
+        stateTime = 0f
     }
 
-    @Override
-    public void reset() {
+    override fun reset() {
         // TODO Auto-generated method stub
-
     }
 
+    companion object {
+        const val TIPO_SUPERJUMP: Int = 0
+        const val TIPO_INVENCIBLE: Int = 1
+        const val TIPO_COIN_RAIN: Int = 2
+        const val TIPO_ICE: Int = 3
+
+        var DURATION_AVAILABLE: Float = 5f
+
+        var STATE_NORMAL: Int = 0
+
+        @JvmField
+        var STATE_TAKEN: Int = 1
+    }
 }
