@@ -1,349 +1,377 @@
-package com.nopalsoft.slamthebird.shop;
+package com.nopalsoft.slamthebird.shop
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.Settings;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.Settings
 
-public class UpgradesSubMenu {
-    public final int MAX_LEVEL = 6;
+class UpgradesSubMenu(var game: MainSlamBird, var container: Table) {
+    val MAX_LEVEL: Int = 6
 
-    int level1Price = 500;
-    int level2Price = 1000;
-    int level3Price = 2500;
-    int level4Price = 4000;
-    int level5Price = 5000;
-    int level6Price = 6000;
+    var level1Price: Int = 500
+    var level2Price: Int = 1000
+    var level3Price: Int = 2500
+    var level4Price: Int = 4000
+    var level5Price: Int = 5000
+    var level6Price: Int = 6000
 
-    TextButton buttonUpgradeBoostTime, buttonUpgradeIce, buttonUpgradeCoins,
-            buttonUpgradeSuperJump, buttonUpgradeInvincible;
-    Label labelPriceBoostTime, labelPriceIce, labelPriceCoins,
-            labelPriceSuperJump, labelPriceInvincible;
+    var buttonUpgradeBoostTime: TextButton? = null
+    var buttonUpgradeIce: TextButton? = null
+    var buttonUpgradeCoins: TextButton? = null
+    var buttonUpgradeSuperJump: TextButton? = null
+    var buttonUpgradeInvincible: TextButton? = null
+    var labelPriceBoostTime: Label? = null
+    var labelPriceIce: Label? = null
+    var labelPriceCoins: Label? = null
+    var labelPriceSuperJump: Label? = null
+    var labelPriceInvincible: Label? = null
 
-    Image[] arrBoostTime;
-    Image[] arrBoostIce;
-    Image[] arrBoostCoins;
-    Image[] arrBoostSuperJump;
-    Image[] arrBoostInvincible;
+    var arrBoostTime: Array<Image?>
+    var arrBoostIce: Array<Image?>
+    var arrBoostCoins: Array<Image?>
+    var arrBoostSuperJump: Array<Image?>
+    var arrBoostInvincible: Array<Image?>
 
-    Table container;
-    MainSlamBird game;
+    init {
+        container.clear()
 
-    public UpgradesSubMenu(MainSlamBird game, Table container) {
-        this.game = game;
-        this.container = container;
-        container.clear();
+        arrBoostTime = arrayOfNulls(MAX_LEVEL)
+        arrBoostIce = arrayOfNulls(MAX_LEVEL)
+        arrBoostCoins = arrayOfNulls(MAX_LEVEL)
+        arrBoostSuperJump = arrayOfNulls(MAX_LEVEL)
+        arrBoostInvincible = arrayOfNulls(MAX_LEVEL)
 
-        arrBoostTime = new Image[MAX_LEVEL];
-        arrBoostIce = new Image[MAX_LEVEL];
-        arrBoostCoins = new Image[MAX_LEVEL];
-        arrBoostSuperJump = new Image[MAX_LEVEL];
-        arrBoostInvincible = new Image[MAX_LEVEL];
+        if (Settings.LEVEL_BOOST_TIME < MAX_LEVEL) labelPriceBoostTime = Label(
+            calculatePrice(Settings.LEVEL_BOOST_TIME).toString() + "",
+            Assets.labelStyleSmall
+        )
 
-        if (Settings.LEVEL_BOOST_TIME < MAX_LEVEL)
-            labelPriceBoostTime = new Label(
-                    calculatePrice(Settings.LEVEL_BOOST_TIME) + "",
-                    Assets.labelStyleSmall);
+        if (Settings.LEVEL_BOOST_ICE < MAX_LEVEL) labelPriceIce = Label(
+            calculatePrice(Settings.LEVEL_BOOST_ICE)
+                .toString() + "", Assets.labelStyleSmall
+        )
 
-        if (Settings.LEVEL_BOOST_ICE < MAX_LEVEL)
-            labelPriceIce = new Label(calculatePrice(Settings.LEVEL_BOOST_ICE)
-                    + "", Assets.labelStyleSmall);
+        if (Settings.LEVEL_BOOST_COINS < MAX_LEVEL) labelPriceCoins = Label(
+            calculatePrice(Settings.LEVEL_BOOST_COINS).toString() + "",
+            Assets.labelStyleSmall
+        )
 
-        if (Settings.LEVEL_BOOST_COINS < MAX_LEVEL)
-            labelPriceCoins = new Label(
-                    calculatePrice(Settings.LEVEL_BOOST_COINS) + "",
-                    Assets.labelStyleSmall);
+        if (Settings.LEVEL_BOOST_SUPER_JUMP < MAX_LEVEL) labelPriceSuperJump = Label(
+            calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP).toString() + "",
+            Assets.labelStyleSmall
+        )
 
-        if (Settings.LEVEL_BOOST_SUPER_JUMP < MAX_LEVEL)
-            labelPriceSuperJump = new Label(
-                    calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP) + "",
-                    Assets.labelStyleSmall);
+        if (Settings.LEVEL_BOOST_INVINCIBLE < MAX_LEVEL) labelPriceInvincible = Label(
+            calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE).toString() + "",
+            Assets.labelStyleSmall
+        )
 
-        if (Settings.LEVEL_BOOST_INVINCIBLE < MAX_LEVEL)
-            labelPriceInvincible = new Label(
-                    calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE) + "",
-                    Assets.labelStyleSmall);
+        initializeButtons()
 
-        initializeButtons();
-
-        container.add(new Image(Assets.horizontalSeparator)).expandX().fill()
-                .height(5);
-        container.row();
+        container.add(Image(Assets.horizontalSeparator)).expandX().fill()
+            .height(5f)
+        container.row()
 
         // Upgrade BoostTime
         container
-                .add(addCharacterTable("More power-ups",
-                        labelPriceBoostTime, Assets.boosts,
-                        "Power-ups will appear more often in the game",
-                        arrBoostTime, buttonUpgradeBoostTime)).expandX().fill();
-        container.row();
+            .add(
+                addCharacterTable(
+                    "More power-ups",
+                    labelPriceBoostTime, Assets.boosts,
+                    "Power-ups will appear more often in the game",
+                    arrBoostTime, buttonUpgradeBoostTime
+                )
+            ).expandX().fill()
+        container.row()
 
         // Upgrade Super Jump
         container
-                .add(addCharacterTable("Super jump", labelPriceSuperJump,
-                        Assets.superJumpBoost,
-                        "Super jump power up will last more time",
-                        arrBoostSuperJump, buttonUpgradeSuperJump)).expandX()
-                .fill();
-        container.row();
+            .add(
+                addCharacterTable(
+                    "Super jump", labelPriceSuperJump,
+                    Assets.superJumpBoost,
+                    "Super jump power up will last more time",
+                    arrBoostSuperJump, buttonUpgradeSuperJump
+                )
+            ).expandX()
+            .fill()
+        container.row()
 
         // Upgrade Ice
         container
-                .add(addCharacterTable("Freeze enemies", labelPriceIce,
-                        Assets.IceBoost, "Enemies will last more time frozen",
-                        arrBoostIce, buttonUpgradeIce)).expandX().fill();
-        container.row();
+            .add(
+                addCharacterTable(
+                    "Freeze enemies", labelPriceIce,
+                    Assets.IceBoost, "Enemies will last more time frozen",
+                    arrBoostIce, buttonUpgradeIce
+                )
+            ).expandX().fill()
+        container.row()
 
         // Upgrade invincible
         container
-                .add(addCharacterTable("Invencible", labelPriceInvincible,
-                        Assets.invincibleBoost,
-                        "The invencible power-up will last more time",
-                        arrBoostInvincible, buttonUpgradeInvincible)).expandX()
-                .fill();
-        container.row();
+            .add(
+                addCharacterTable(
+                    "Invencible", labelPriceInvincible,
+                    Assets.invincibleBoost,
+                    "The invencible power-up will last more time",
+                    arrBoostInvincible, buttonUpgradeInvincible
+                )
+            ).expandX()
+            .fill()
+        container.row()
 
         // Upgrade Monedas
         container
-                .add(addCharacterTable(
-                        "Coin rain",
-                        labelPriceCoins,
-                        Assets.coinRainBoost,
-                        "More coins will fall down when the coin rain power-up is taken",
-                        arrBoostCoins, buttonUpgradeCoins)).expandX().fill();
-        container.row();
+            .add(
+                addCharacterTable(
+                    "Coin rain",
+                    labelPriceCoins,
+                    Assets.coinRainBoost,
+                    "More coins will fall down when the coin rain power-up is taken",
+                    arrBoostCoins, buttonUpgradeCoins
+                )
+            ).expandX().fill()
+        container.row()
 
-        setArrays();
-
+        setArrays()
     }
 
-    private Table addCharacterTable(String title, Label labelPrice,
-                                    AtlasRegion image, String description, Image[] arrLevel,
-                                    TextButton button) {
+    private fun addCharacterTable(
+        title: String, labelPrice: Label?,
+        image: AtlasRegion?, description: String, arrLevel: Array<Image?>,
+        button: TextButton?
+    ): Table {
+        val coinImage = Image(Assets.coin)
+        val playerImage = Image(image)
 
-        Image coinImage = new Image(Assets.coin);
-        Image playerImage = new Image(image);
+        if (labelPrice == null) coinImage.isVisible = false
 
-        if (labelPrice == null)
-            coinImage.setVisible(false);
+        val tableTitleBar = Table()
+        tableTitleBar.add(Label(title, Assets.labelStyleSmall)).expandX()
+            .left().padLeft(5f)
+        tableTitleBar.add(coinImage).right()
+        tableTitleBar.add(labelPrice).right().padRight(10f)
 
-        Table tableTitleBar = new Table();
-        tableTitleBar.add(new Label(title, Assets.labelStyleSmall)).expandX()
-                .left().padLeft(5);
-        tableTitleBar.add(coinImage).right();
-        tableTitleBar.add(labelPrice).right().padRight(10);
+        val tableDescription = Table()
+        tableDescription.add(playerImage).left().pad(10f).size(55f, 45f)
+        val labelDescription = Label(description, Assets.labelStyleSmall)
+        labelDescription.wrap = true
+        tableDescription.add(labelDescription).expand().fill().padLeft(5f)
 
-        Table tableDescription = new Table();
-        tableDescription.add(playerImage).left().pad(10).size(55, 45);
-        Label labelDescription = new Label(description, Assets.labelStyleSmall);
-        labelDescription.setWrap(true);
-        tableDescription.add(labelDescription).expand().fill().padLeft(5);
+        val tbContent = Table()
+        tbContent.add(tableTitleBar).expandX().fill().colspan(2).padTop(8f)
+        tbContent.row().colspan(2)
+        tbContent.add(tableDescription).expandX().fill()
+        tbContent.row()
 
-        Table tbContent = new Table();
-        tbContent.add(tableTitleBar).expandX().fill().colspan(2).padTop(8);
-        tbContent.row().colspan(2);
-        tbContent.add(tableDescription).expandX().fill();
-        tbContent.row();
-
-        Table auxTab = new Table();
-        auxTab.defaults().padLeft(5);
-        for (int i = 0; i < MAX_LEVEL; i++) {
-            arrLevel[i] = new Image(Assets.buttonUpgradeOff);
-            auxTab.add(arrLevel[i]).width(18).height(25);
+        val auxTab = Table()
+        auxTab.defaults().padLeft(5f)
+        for (i in 0 until MAX_LEVEL) {
+            arrLevel[i] = Image(Assets.buttonUpgradeOff)
+            auxTab.add(arrLevel[i]).width(18f).height(25f)
         }
 
-        tbContent.add(auxTab).center().expand();
-        tbContent.add(button).right().padRight(10).size(120, 45);
+        tbContent.add(auxTab).center().expand()
+        tbContent.add(button).right().padRight(10f).size(120f, 45f)
 
-        tbContent.row().colspan(2);
-        tbContent.add(new Image(Assets.horizontalSeparator)).expandX().fill()
-                .height(5).padTop(15);
+        tbContent.row().colspan(2)
+        tbContent.add(Image(Assets.horizontalSeparator)).expandX().fill()
+            .height(5f).padTop(15f)
 
-        return tbContent;
-
+        return tbContent
     }
 
-    private void initializeButtons() {
-        buttonUpgradeBoostTime = new TextButton("Upgrade",
-                Assets.textButtonStyleSelected);
-        if (Settings.LEVEL_BOOST_TIME == MAX_LEVEL)
-            buttonUpgradeBoostTime.setVisible(false);
-        addPressEffect(buttonUpgradeBoostTime);
-        buttonUpgradeBoostTime.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+    private fun initializeButtons() {
+        buttonUpgradeBoostTime = TextButton(
+            "Upgrade",
+            Assets.textButtonStyleSelected
+        )
+        if (Settings.LEVEL_BOOST_TIME == MAX_LEVEL) buttonUpgradeBoostTime!!.isVisible = false
+        addPressEffect(buttonUpgradeBoostTime!!)
+        buttonUpgradeBoostTime!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_TIME)) {
-                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_TIME);
-                    Settings.LEVEL_BOOST_TIME++;
-                    updateLabelPriceAndButton(Settings.LEVEL_BOOST_TIME,
-                            labelPriceBoostTime, buttonUpgradeBoostTime);
-                    setArrays();
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_TIME)
+                    Settings.LEVEL_BOOST_TIME++
+                    updateLabelPriceAndButton(
+                        Settings.LEVEL_BOOST_TIME,
+                        labelPriceBoostTime, buttonUpgradeBoostTime!!
+                    )
+                    setArrays()
                 }
             }
-        });
+        })
 
-        buttonUpgradeSuperJump = new TextButton("Upgrade",
-                Assets.textButtonStyleSelected);
-        if (Settings.LEVEL_BOOST_SUPER_JUMP == MAX_LEVEL)
-            buttonUpgradeSuperJump.setVisible(false);
-        addPressEffect(buttonUpgradeSuperJump);
-        buttonUpgradeSuperJump.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        buttonUpgradeSuperJump = TextButton(
+            "Upgrade",
+            Assets.textButtonStyleSelected
+        )
+        if (Settings.LEVEL_BOOST_SUPER_JUMP == MAX_LEVEL) buttonUpgradeSuperJump!!.isVisible = false
+        addPressEffect(buttonUpgradeSuperJump!!)
+        buttonUpgradeSuperJump!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP)) {
-                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP);
-                    Settings.LEVEL_BOOST_SUPER_JUMP++;
-                    updateLabelPriceAndButton(Settings.LEVEL_BOOST_SUPER_JUMP,
-                            labelPriceSuperJump, buttonUpgradeSuperJump);
-                    setArrays();
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_SUPER_JUMP)
+                    Settings.LEVEL_BOOST_SUPER_JUMP++
+                    updateLabelPriceAndButton(
+                        Settings.LEVEL_BOOST_SUPER_JUMP,
+                        labelPriceSuperJump, buttonUpgradeSuperJump!!
+                    )
+                    setArrays()
                 }
             }
-        });
+        })
 
-        buttonUpgradeIce = new TextButton("Upgrade", Assets.textButtonStyleSelected);
-        if (Settings.LEVEL_BOOST_ICE == MAX_LEVEL)
-            buttonUpgradeIce.setVisible(false);
+        buttonUpgradeIce = TextButton("Upgrade", Assets.textButtonStyleSelected)
+        if (Settings.LEVEL_BOOST_ICE == MAX_LEVEL) buttonUpgradeIce!!.isVisible = false
 
-        addPressEffect(buttonUpgradeIce);
-        buttonUpgradeIce.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        addPressEffect(buttonUpgradeIce!!)
+        buttonUpgradeIce!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_ICE)) {
-                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_ICE);
-                    Settings.LEVEL_BOOST_ICE++;
-                    updateLabelPriceAndButton(Settings.LEVEL_BOOST_ICE,
-                            labelPriceIce, buttonUpgradeIce);
-                    setArrays();
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_ICE)
+                    Settings.LEVEL_BOOST_ICE++
+                    updateLabelPriceAndButton(
+                        Settings.LEVEL_BOOST_ICE,
+                        labelPriceIce, buttonUpgradeIce!!
+                    )
+                    setArrays()
                 }
             }
-        });
+        })
 
-        buttonUpgradeInvincible = new TextButton("Upgrade",
-                Assets.textButtonStyleSelected);
-        if (Settings.LEVEL_BOOST_INVINCIBLE == MAX_LEVEL)
-            buttonUpgradeInvincible.setVisible(false);
+        buttonUpgradeInvincible = TextButton(
+            "Upgrade",
+            Assets.textButtonStyleSelected
+        )
+        if (Settings.LEVEL_BOOST_INVINCIBLE == MAX_LEVEL) buttonUpgradeInvincible!!.isVisible = false
 
-        addPressEffect(buttonUpgradeInvincible);
-        buttonUpgradeInvincible.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        addPressEffect(buttonUpgradeInvincible!!)
+        buttonUpgradeInvincible!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE)) {
-                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE);
-                    Settings.LEVEL_BOOST_INVINCIBLE++;
-                    updateLabelPriceAndButton(Settings.LEVEL_BOOST_INVINCIBLE,
-                            labelPriceInvincible, buttonUpgradeInvincible);
-                    setArrays();
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_INVINCIBLE)
+                    Settings.LEVEL_BOOST_INVINCIBLE++
+                    updateLabelPriceAndButton(
+                        Settings.LEVEL_BOOST_INVINCIBLE,
+                        labelPriceInvincible, buttonUpgradeInvincible!!
+                    )
+                    setArrays()
                 }
             }
-        });
+        })
 
-        buttonUpgradeCoins = new TextButton("Upgrade",
-                Assets.textButtonStyleSelected);
-        if (Settings.LEVEL_BOOST_COINS == MAX_LEVEL)
-            buttonUpgradeCoins.setVisible(false);
+        buttonUpgradeCoins = TextButton(
+            "Upgrade",
+            Assets.textButtonStyleSelected
+        )
+        if (Settings.LEVEL_BOOST_COINS == MAX_LEVEL) buttonUpgradeCoins!!.isVisible = false
 
-        addPressEffect(buttonUpgradeCoins);
-        buttonUpgradeCoins.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        addPressEffect(buttonUpgradeCoins!!)
+        buttonUpgradeCoins!!.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (Settings.currentCoins >= calculatePrice(Settings.LEVEL_BOOST_COINS)) {
-                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_COINS);
-                    Settings.LEVEL_BOOST_COINS++;
-                    updateLabelPriceAndButton(Settings.LEVEL_BOOST_COINS,
-                            labelPriceCoins, buttonUpgradeCoins);
-                    setArrays();
+                    Settings.currentCoins -= calculatePrice(Settings.LEVEL_BOOST_COINS)
+                    Settings.LEVEL_BOOST_COINS++
+                    updateLabelPriceAndButton(
+                        Settings.LEVEL_BOOST_COINS,
+                        labelPriceCoins, buttonUpgradeCoins!!
+                    )
+                    setArrays()
                 }
             }
-        });
-
+        })
     }
 
-    private void setArrays() {
-        for (int i = 0; i < Settings.LEVEL_BOOST_TIME; i++) {
-            arrBoostTime[i].setDrawable(new TextureRegionDrawable(
-                    Assets.buttonUpgradeOn));
+    private fun setArrays() {
+        for (i in 0 until Settings.LEVEL_BOOST_TIME) {
+            arrBoostTime[i]!!.drawable = TextureRegionDrawable(
+                Assets.buttonUpgradeOn
+            )
         }
 
-        for (int i = 0; i < Settings.LEVEL_BOOST_ICE; i++) {
-            arrBoostIce[i].setDrawable(new TextureRegionDrawable(
-                    Assets.buttonUpgradeOn));
+        for (i in 0 until Settings.LEVEL_BOOST_ICE) {
+            arrBoostIce[i]!!.drawable = TextureRegionDrawable(
+                Assets.buttonUpgradeOn
+            )
         }
 
-        for (int i = 0; i < Settings.LEVEL_BOOST_INVINCIBLE; i++) {
-            arrBoostInvincible[i].setDrawable(new TextureRegionDrawable(
-                    Assets.buttonUpgradeOn));
+        for (i in 0 until Settings.LEVEL_BOOST_INVINCIBLE) {
+            arrBoostInvincible[i]!!.drawable = TextureRegionDrawable(
+                Assets.buttonUpgradeOn
+            )
         }
 
-        for (int i = 0; i < Settings.LEVEL_BOOST_SUPER_JUMP; i++) {
-            arrBoostSuperJump[i].setDrawable(new TextureRegionDrawable(
-                    Assets.buttonUpgradeOn));
+        for (i in 0 until Settings.LEVEL_BOOST_SUPER_JUMP) {
+            arrBoostSuperJump[i]!!.drawable = TextureRegionDrawable(
+                Assets.buttonUpgradeOn
+            )
         }
 
-        for (int i = 0; i < Settings.LEVEL_BOOST_COINS; i++) {
-            arrBoostCoins[i].setDrawable(new TextureRegionDrawable(
-                    Assets.buttonUpgradeOn));
+        for (i in 0 until Settings.LEVEL_BOOST_COINS) {
+            arrBoostCoins[i]!!.drawable = TextureRegionDrawable(
+                Assets.buttonUpgradeOn
+            )
         }
     }
 
-    private int calculatePrice(int level) {
-        switch (level) {
-            case 0:
-                return level1Price;
+    private fun calculatePrice(level: Int): Int {
+        return when (level) {
+            0 -> level1Price
 
-            case 1:
-                return level2Price;
+            1 -> level2Price
 
-            case 2:
-                return level3Price;
+            2 -> level3Price
 
-            case 3:
-                return level4Price;
+            3 -> level4Price
 
-            case 4:
-                return level5Price;
-            default:
-            case 5:
-                return level6Price;
+            4 -> level5Price
+            5 -> level6Price
+
+            else -> level6Price
 
         }
-
     }
 
-    private void updateLabelPriceAndButton(int level, Label label,
-                                           TextButton button) {
+    private fun updateLabelPriceAndButton(
+        level: Int, label: Label?,
+        button: TextButton
+    ) {
         if (level < MAX_LEVEL) {
-            label.setText(calculatePrice(level) + "");
-
+            label!!.setText(calculatePrice(level).toString() + "")
         } else {
-            label.setVisible(false);
-            button.setVisible(false);
+            label!!.isVisible = false
+            button.isVisible = false
         }
     }
 
-    protected void addPressEffect(final Actor actor) {
-        actor.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() - 3);
-                event.stop();
-                return true;
+    protected fun addPressEffect(actor: Actor) {
+        actor.addListener(object : InputListener() {
+            override fun touchDown(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ): Boolean {
+                actor.setPosition(actor.x, actor.y - 3)
+                event.stop()
+                return true
             }
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y,
-                                int pointer, int button) {
-                actor.setPosition(actor.getX(), actor.getY() + 3);
+            override fun touchUp(
+                event: InputEvent, x: Float, y: Float,
+                pointer: Int, button: Int
+            ) {
+                actor.setPosition(actor.x, actor.y + 3)
             }
-        });
+        })
     }
 }

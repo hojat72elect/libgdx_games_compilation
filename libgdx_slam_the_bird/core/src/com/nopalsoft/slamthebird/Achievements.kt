@@ -1,45 +1,46 @@
-package com.nopalsoft.slamthebird;
+package com.nopalsoft.slamthebird
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx
 
-public class Achievements {
-
-    static boolean didInit = false;
-
-
-    static String SuperJump, SlamCombo, SuperSlam, InvencibleSlam, YouGotAnySpareChange, coinMaster;
-
-    public static void init() {
+object Achievements {
+    var didInit: Boolean = false
 
 
-        SuperJump = "20274";
-        SlamCombo = "20276";
-        SuperSlam = "20278";
-        InvencibleSlam = "20280";
-        YouGotAnySpareChange = "20282";
-        coinMaster = "20284";
+    var SuperJump: String? = null
+    var SlamCombo: String? = null
+    var SuperSlam: String? = null
+    var InvencibleSlam: String? = null
+    var YouGotAnySpareChange: String? = null
+    var coinMaster: String? = null
 
-        didInit = true;
+    fun init() {
+        SuperJump = "20274"
+        SlamCombo = "20276"
+        SuperSlam = "20278"
+        InvencibleSlam = "20280"
+        YouGotAnySpareChange = "20282"
+        coinMaster = "20284"
+
+        didInit = true
     }
 
-    private static void didInit() {
-        if (didInit)
-            return;
-        Gdx.app.log("Achievements", "You must call first Achievements.init()");
-
+    private fun didInit() {
+        if (didInit) return
+        Gdx.app.log("Achievements", "You must call first Achievements.init()")
     }
 
-    public static void unlockSuperJump() {
-        didInit();
-
+    @JvmStatic
+    fun unlockSuperJump() {
+        didInit()
     }
 
-    public static void unlockCombos() {
-        didInit();
+    @JvmStatic
+    fun unlockCombos() {
+        didInit()
     }
 
-    public static void unlockCoins() {
-        didInit();
+    @JvmStatic
+    fun unlockCoins() {
+        didInit()
     }
-
 }

@@ -1,28 +1,25 @@
-package com.nopalsoft.slamthebird;
+package com.nopalsoft.slamthebird
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nopalsoft.slamthebird.game.GameScreen;
-import com.nopalsoft.slamthebird.screens.Screens;
+import com.badlogic.gdx.Game
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.nopalsoft.slamthebird.game.GameScreen
+import com.nopalsoft.slamthebird.screens.Screens
 
-public class MainSlamBird extends Game {
-    public Stage stage;
-    public SpriteBatch batcher;
+class MainSlamBird : Game() {
+    @JvmField
+    var stage: Stage? = null
+    @JvmField
+    var batcher: SpriteBatch? = null
 
-    public MainSlamBird() {
+    override fun create() {
+        stage = Stage(StretchViewport(Screens.SCREEN_WIDTH.toFloat(), Screens.SCREEN_HEIGHT.toFloat()))
+
+        batcher = SpriteBatch()
+        Assets.load()
+        Achievements.init()
+
+        setScreen(GameScreen(this))
     }
-
-    @Override
-    public void create() {
-        stage = new Stage(new StretchViewport(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT));
-
-        batcher = new SpriteBatch();
-        Assets.load();
-        Achievements.init();
-
-        setScreen(new GameScreen(this));
-    }
-
 }
