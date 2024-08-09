@@ -1,68 +1,67 @@
-package com.nopalsoft.slamthebird.scene2d;
+package com.nopalsoft.slamthebird.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.screens.Screens;
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.screens.Screens
 
-public class WindowRate extends Window {
+class WindowRate(currentScreen: Screens?) : Window(currentScreen!!) {
+    init {
+        setSize(390f, 260f)
+        y = 300f
+        setBackGround()
 
-    public WindowRate(Screens currentScreen) {
-        super(currentScreen);
-        setSize(390, 260);
-        setY(300);
-        setBackGround();
+        val labelTitle = Label("Support this game", Assets.labelStyleSmall)
+        labelTitle.setPosition(width / 2f - labelTitle.width / 2f, 210f)
 
-        Label labelTitle = new Label("Support this game", Assets.labelStyleSmall);
-        labelTitle.setPosition(getWidth() / 2f - labelTitle.getWidth() / 2f, 210);
+        val lbContenido = Label(
+            "Hello, thank you for playing Slam the Bird.\nHelp us to support this game. Just rate us at the app store.",
+            Assets.labelStyleSmall
+        )
+        lbContenido.setSize(width - 20, 170f)
+        lbContenido.setPosition(
+            width / 2f - lbContenido.width / 2f,
+            50f
+        )
+        lbContenido.wrap = true
 
-        Label lbContenido = new Label(
-                "Hello, thank you for playing Slam the Bird.\nHelp us to support this game. Just rate us at the app store.",
-                Assets.labelStyleSmall);
-        lbContenido.setSize(getWidth() - 20, 170);
-        lbContenido.setPosition(getWidth() / 2f - lbContenido.getWidth() / 2f,
-                50);
-        lbContenido.setWrap(true);
-
-        TextButton btRate = new TextButton("Rate",
-                Assets.textButtonStylePurchased);
-        screen.addEfectoPress(btRate);
-        btRate.getLabel().setWrap(true);
-        btRate.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                hide();
-
+        val btRate = TextButton(
+            "Rate",
+            Assets.textButtonStylePurchased
+        )
+        screen.addEfectoPress(btRate)
+        btRate.label.wrap = true
+        btRate.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                hide()
             }
-        });
+        })
 
-        TextButton btNotNow = new TextButton("Not now",
-                Assets.textButtonStyleSelected);
-        screen.addEfectoPress(btNotNow);
-        btNotNow.getLabel().setWrap(true);
-        btNotNow.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                hide();
-
+        val btNotNow = TextButton(
+            "Not now",
+            Assets.textButtonStyleSelected
+        )
+        screen.addEfectoPress(btNotNow)
+        btNotNow.label.wrap = true
+        btNotNow.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
+                hide()
             }
-        });
+        })
 
-        Table tbBotones = new Table();
-        tbBotones.setSize(getWidth() - 20, 60);
-        tbBotones.setPosition(getWidth() / 2f - tbBotones.getWidth() / 2f, 10);
+        val tbBotones = Table()
+        tbBotones.setSize(width - 20, 60f)
+        tbBotones.setPosition(width / 2f - tbBotones.width / 2f, 10f)
 
-        tbBotones.defaults().uniform().expand().center().fill().pad(10);
-        tbBotones.add(btRate);
-        tbBotones.add(btNotNow);
+        tbBotones.defaults().uniform().expand().center().fill().pad(10f)
+        tbBotones.add(btRate)
+        tbBotones.add(btNotNow)
 
-        addActor(lbContenido);
-        addActor(tbBotones);
-        addActor(labelTitle);
-
+        addActor(lbContenido)
+        addActor(tbBotones)
+        addActor(labelTitle)
     }
-
 }

@@ -1,60 +1,55 @@
-package com.nopalsoft.slamthebird.scene2d;
+package com.nopalsoft.slamthebird.scene2d
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.nopalsoft.slamthebird.Assets;
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.nopalsoft.slamthebird.Assets
 
-public class LabelCoins extends Actor {
-    int numberOfCoins;
-
-    public LabelCoins(float x, float y, int numberOfCoins) {
-        this.numberOfCoins = numberOfCoins;
-        this.setPosition(x, y);
+class LabelCoins(x: Float, y: Float, var numberOfCoins: Int) : Actor() {
+    init {
+        this.setPosition(x, y)
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        drawPuntuacionChicoOrigenDerecha(batch, this.getX(), this.getY(), numberOfCoins);
-
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        drawPuntuacionChicoOrigenDerecha(batch, this.x, this.y, numberOfCoins)
     }
 
-    public void drawPuntuacionChicoOrigenDerecha(Batch batcher, float x, float y, int numMonedas) {
-        String score = String.valueOf(numMonedas);
+    fun drawPuntuacionChicoOrigenDerecha(batcher: Batch, x: Float, y: Float, numMonedas: Int) {
+        val score = numMonedas.toString()
 
-        int len = score.length();
-        float charWidth;
-        float textWidth = 0;
-        for (int i = len - 1; i >= 0; i--) {
-            AtlasRegion keyFrame;
+        val len = score.length
+        var charWidth: Float
+        var textWidth = 0f
+        for (i in len - 1 downTo 0) {
+            var keyFrame: AtlasRegion?
 
-            charWidth = 22;
-            char character = score.charAt(i);
+            charWidth = 22f
+            val character = score[i]
 
             if (character == '0') {
-                keyFrame = Assets.num0Small;
+                keyFrame = Assets.num0Small
             } else if (character == '1') {
-                keyFrame = Assets.num1Small;
-                charWidth = 11f;
+                keyFrame = Assets.num1Small
+                charWidth = 11f
             } else if (character == '2') {
-                keyFrame = Assets.num2Small;
+                keyFrame = Assets.num2Small
             } else if (character == '3') {
-                keyFrame = Assets.num3Small;
+                keyFrame = Assets.num3Small
             } else if (character == '4') {
-                keyFrame = Assets.num4Small;
+                keyFrame = Assets.num4Small
             } else if (character == '5') {
-                keyFrame = Assets.num5Small;
+                keyFrame = Assets.num5Small
             } else if (character == '6') {
-                keyFrame = Assets.num6Small;
+                keyFrame = Assets.num6Small
             } else if (character == '7') {
-                keyFrame = Assets.num7Small;
+                keyFrame = Assets.num7Small
             } else if (character == '8') {
-                keyFrame = Assets.num8Small;
-            } else {// 9
-                keyFrame = Assets.num9Small;
+                keyFrame = Assets.num8Small
+            } else { // 9
+                keyFrame = Assets.num9Small
             }
-            textWidth += charWidth;
-            batcher.draw(keyFrame, x - textWidth, y, charWidth, 32);
+            textWidth += charWidth
+            batcher.draw(keyFrame, x - textWidth, y, charWidth, 32f)
         }
     }
 }

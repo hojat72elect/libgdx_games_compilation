@@ -1,57 +1,53 @@
-package com.nopalsoft.slamthebird.scene2d;
+package com.nopalsoft.slamthebird.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.MainSlamBird;
-import com.nopalsoft.slamthebird.screens.Screens;
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.MainSlamBird
+import com.nopalsoft.slamthebird.screens.Screens
 
-public class Window extends Group {
-    public static final float DURATION_ANIMATION = .3f;
-    Screens screen;
-    MainSlamBird game;
+open class Window(@JvmField var screen: Screens) : Group() {
+    @JvmField
+    var game: MainSlamBird = screen.game
 
-    private boolean isVisible = false;
+    private var isVisible = false
 
-    public Window(Screens currentScreen) {
-        screen = currentScreen;
-        game = currentScreen.game;
+    fun setBackGround() {
+        val img = Image(Assets.buttonScores)
+        img.setSize(width, height)
+        addActor(img)
     }
 
-    public void setBackGround() {
-        Image img = new Image(Assets.buttonScores);
-        img.setSize(getWidth(), getHeight());
-        addActor(img);
+    fun show(stage: Stage) {
+        setOrigin(width / 2f, height / 2f)
+        x = Screens.SCREEN_WIDTH / 2f - width / 2f
 
+        setScale(.5f)
+        addAction(
+            Actions.sequence(
+                Actions.scaleTo(1f, 1f, DURATION_ANIMATION),
+                Actions.run { this.endResize() })
+        )
+
+        isVisible = true
+        stage.addActor(this)
     }
 
-    public void show(Stage stage) {
-
-        setOrigin(getWidth() / 2f, getHeight() / 2f);
-        setX(Screens.SCREEN_WIDTH / 2f - getWidth() / 2f);
-
-        setScale(.5f);
-        addAction(Actions.sequence(Actions.scaleTo(1, 1, DURATION_ANIMATION),
-                Actions.run(this::endResize)));
-
-        isVisible = true;
-        stage.addActor(this);
-
+    override fun isVisible(): Boolean {
+        return isVisible
     }
 
-    public boolean isVisible() {
-        return isVisible;
+    fun hide() {
+        isVisible = false
+        remove()
     }
 
-    public void hide() {
-        isVisible = false;
-        remove();
+    protected fun endResize() {
     }
 
-    protected void endResize() {
-
+    companion object {
+        const val DURATION_ANIMATION: Float = .3f
     }
-
 }

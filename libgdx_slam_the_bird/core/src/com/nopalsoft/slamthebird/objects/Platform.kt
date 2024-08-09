@@ -1,67 +1,75 @@
-package com.nopalsoft.slamthebird.objects;
+package com.nopalsoft.slamthebird.objects
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector2
 
-public class Platform {
-    final public static int STATE_NORMAL = 0;
-    final public static int STATE_CHANGING = 1;
-    final public static int STATE_FIRE = 2;
-    final public static int STATE_BREAKABLE = 3;
-    final public static int STATE_BROKEN = 4;
-    public static float WIDTH = .75f;
-    public static float HEIGHT = .2f;
-    public final float DURATION_ACTIVE = 10; // This time should be less than TIME_TO_CHANGE_STATE_PLATFORM in the WorldGame class.
-    final float TIME_TO_BE_ACTIVE = 1.25f;
-    public int state;
-    public Vector2 position;
-    public float stateTime;
-    public float changingScale;// For when it changes you see an animation. Start at .5 so that everything doesn't get smaller
-    private boolean isFire, isBreakable;
+class Platform(x: Float, y: Float) {
+    val DURATION_ACTIVE: Float =
+        10f // This time should be less than TIME_TO_CHANGE_STATE_PLATFORM in the WorldGame class.
+    val TIME_TO_BE_ACTIVE: Float = 1.25f
+    @JvmField
+    var state: Int
+    @JvmField
+    var position: Vector2 = Vector2(x, y)
+    @JvmField
+    var stateTime: Float = 0f
+    @JvmField
+    var changingScale: Float // For when it changes you see an animation. Start at .5 so that everything doesn't get smaller
+    private var isFire = false
+    private var isBreakable = false
 
-    public Platform(float x, float y) {
-        position = new Vector2(x, y);
-        state = STATE_NORMAL;
-        changingScale = .5f;
+    init {
+        state = STATE_NORMAL
+        changingScale = .5f
     }
 
-    public void update(float delta) {
-        stateTime += delta;
+    fun update(delta: Float) {
+        stateTime += delta
 
         if (state == STATE_CHANGING) {
-            changingScale = stateTime / TIME_TO_BE_ACTIVE;// 1.2 maximum scale.
+            changingScale = stateTime / TIME_TO_BE_ACTIVE // 1.2 maximum scale.
 
             if (stateTime >= TIME_TO_BE_ACTIVE) {
-                if (isFire)
-                    state = STATE_FIRE;
-                else if (isBreakable)
-                    state = STATE_BREAKABLE;
-                stateTime = 0;
+                if (isFire) state = STATE_FIRE
+                else if (isBreakable) state = STATE_BREAKABLE
+                stateTime = 0f
             }
         }
 
         if ((state == STATE_FIRE || state == STATE_BREAKABLE || state == STATE_BROKEN) && stateTime >= DURATION_ACTIVE) {
-            isBreakable = isFire = false;
-            state = STATE_NORMAL;
-            stateTime = 0;
-            changingScale = .5f;
+            isFire = false
+            isBreakable = isFire
+            state = STATE_NORMAL
+            stateTime = 0f
+            changingScale = .5f
         }
     }
 
-    public void setFire() {
-        state = STATE_CHANGING;
-        isFire = true;
-        stateTime = 0;
+    fun setFire() {
+        state = STATE_CHANGING
+        isFire = true
+        stateTime = 0f
     }
 
-    public void setBreakable() {
-        state = STATE_CHANGING;
-        isBreakable = true;
-        stateTime = 0;
+    fun setBreakable() {
+        state = STATE_CHANGING
+        isBreakable = true
+        stateTime = 0f
     }
 
-    public void setBroken() {
-        state = STATE_BROKEN;
-        stateTime = 0;
+    fun setBroken() {
+        state = STATE_BROKEN
+        stateTime = 0f
     }
 
+    companion object {
+        const val STATE_NORMAL: Int = 0
+        const val STATE_CHANGING: Int = 1
+        const val STATE_FIRE: Int = 2
+        const val STATE_BREAKABLE: Int = 3
+        const val STATE_BROKEN: Int = 4
+        @JvmField
+        var WIDTH: Float = .75f
+        @JvmField
+        var HEIGHT: Float = .2f
+    }
 }

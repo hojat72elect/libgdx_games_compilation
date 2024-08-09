@@ -1,57 +1,52 @@
-package com.nopalsoft.slamthebird.scene2d;
+package com.nopalsoft.slamthebird.scene2d
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.nopalsoft.slamthebird.Assets;
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.nopalsoft.slamthebird.Assets
 
-public class LabelScore extends Actor {
-    int puntuacion;
-
-    public LabelScore(float x, float y, int puntuacion) {
-        this.puntuacion = puntuacion;
-        this.setPosition(x, y);
+class LabelScore(x: Float, y: Float, var puntuacion: Int) : Actor() {
+    init {
+        this.setPosition(x, y)
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        drawNumGrandeCentradoX(batch, this.getX(), this.getY(), puntuacion);
-
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        drawNumGrandeCentradoX(batch, this.x, this.y, puntuacion)
     }
 
-    public void drawNumGrandeCentradoX(Batch batcher, float x, float y, int puntuacion) {
-        String score = String.valueOf(puntuacion);
+    fun drawNumGrandeCentradoX(batcher: Batch, x: Float, y: Float, puntuacion: Int) {
+        val score = puntuacion.toString()
 
-        int len = score.length();
-        float charWidth = 42;
-        float textWidth = len * charWidth;
-        for (int i = 0; i < len; i++) {
-            AtlasRegion keyFrame;
+        val len = score.length
+        val charWidth = 42f
+        val textWidth = len * charWidth
+        for (i in 0 until len) {
+            var keyFrame: AtlasRegion?
 
-            char character = score.charAt(i);
+            val character = score[i]
 
-            if (character == '0') {
-                keyFrame = Assets.num0Big;
+            keyFrame = if (character == '0') {
+                Assets.num0Big
             } else if (character == '1') {
-                keyFrame = Assets.num1Big;
+                Assets.num1Big
             } else if (character == '2') {
-                keyFrame = Assets.num2Big;
+                Assets.num2Big
             } else if (character == '3') {
-                keyFrame = Assets.num3Big;
+                Assets.num3Big
             } else if (character == '4') {
-                keyFrame = Assets.num4Big;
+                Assets.num4Big
             } else if (character == '5') {
-                keyFrame = Assets.num5Big;
+                Assets.num5Big
             } else if (character == '6') {
-                keyFrame = Assets.num6Big;
+                Assets.num6Big
             } else if (character == '7') {
-                keyFrame = Assets.num7Big;
+                Assets.num7Big
             } else if (character == '8') {
-                keyFrame = Assets.num8Big;
-            } else {// 9
-                keyFrame = Assets.num9Big;
+                Assets.num8Big
+            } else { // 9
+                Assets.num9Big
             }
-            batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f, y, charWidth, 64);
+            batcher.draw(keyFrame, x + ((charWidth - 1f) * i) - textWidth / 2f, y, charWidth, 64f)
         }
     }
 }

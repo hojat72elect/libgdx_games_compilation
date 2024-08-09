@@ -1,192 +1,191 @@
-package com.nopalsoft.slamthebird.objects;
+package com.nopalsoft.slamthebird.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.nopalsoft.slamthebird.Settings;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.nopalsoft.slamthebird.Settings
+import java.util.Random
 
-import java.util.Random;
+class Enemy(x: Float, y: Float) {
+    var TIME_JUST_APPEAR: Float = 1.7f
+    var TIME_TO_CHANGE_VEL: Float = 3f
+    var timeToChangeVel: Float = 0f
 
-public class Enemy {
-    public static float WIDTH = .4f;
-    public static float HEIGHT = .4f;
+    var TIME_TO_EVOLVE: Float = 3f
+    var timeToEvolve: Float = 0f
 
-    public static int STATE_JUST_APPEAR = 0;
-    public static int STATE_FLYING = 1;
-    public static int STATE_HIT = 2;
-    public static int STATE_EVOLVING = 3;// For it to fly again
-    public static int STATE_DEAD = 4;
-    public static float MAX_SPEED_BLUE = 1.75f;
-    public static float MAX_SPEED_RED = 3.25f;
-    public float TIME_JUST_APPEAR = 1.7f;
-    public float TIME_TO_CHANGE_VEL = 3;
-    public float timeToChangeVel;
+    var DURARTION_EVOLVING: Float = 1.5f
 
-    public float TIME_TO_EVOLVE = 3f;
-    public float timeToEvolve;
+    var DURARTION_FROZEN: Float = 5f
+    @JvmField
+    var position: Vector2 = Vector2(x, y)
+    @JvmField
+    var speed: Vector2
+    var isFrozen: Boolean
+    @JvmField
+    var state: Int
+    @JvmField
+    var stateTime: Float
+    @JvmField
+    var lives: Int
+    @JvmField
+    var appearScale: Float = 0f
+    var durationFrozen: Float
 
-    public float DURARTION_EVOLVING = 1.5f;
-
-    public float DURARTION_FROZEN = 5f;
-    public Vector2 position;
-    public Vector2 speed;
-    public boolean isFrozen;
-    public int state;
-    public float stateTime;
-    public int lives;
-    public float appearScale;
-    float durationFrozen;
-
-    public Enemy(float x, float y) {
-        position = new Vector2(x, y);
-        state = STATE_JUST_APPEAR;
-        lives = 2;
-        stateTime = 0;
-        speed = new Vector2();
-        isFrozen = false;
-        durationFrozen = 0;
-        DURARTION_FROZEN += Settings.LEVEL_BOOST_ICE;
-
+    init {
+        state = STATE_JUST_APPEAR
+        lives = 2
+        stateTime = 0f
+        speed = Vector2()
+        isFrozen = false
+        durationFrozen = 0f
+        DURARTION_FROZEN += Settings.LEVEL_BOOST_ICE.toFloat()
     }
 
-    public void update(float delta, Body body, Random random) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
+    fun update(delta: Float, body: Body, random: Random) {
+        position.x = body.position.x
+        position.y = body.position.y
 
         if (isFrozen) {
-            body.setLinearVelocity(0, 0);
+            body.setLinearVelocity(0f, 0f)
             if (durationFrozen >= DURARTION_FROZEN) {
-                isFrozen = false;
-                durationFrozen = 0;
-                setNewVelocity(body, random, false);
+                isFrozen = false
+                durationFrozen = 0f
+                setNewVelocity(body, random, false)
             }
-            durationFrozen += delta;
-            return;// Nothing more is done if it is frozen. It doesn't move, it doesn't change speed, it doesn't evolve, it doesn't swim.
+            durationFrozen += delta
+            return  // Nothing more is done if it is frozen. It doesn't move, it doesn't change speed, it doesn't evolve, it doesn't swim.
         }
 
         // Whatever happens, I don't want it to be above 10f.
         if (position.y > 10f) {
-            speed = body.getLinearVelocity();
-            body.setLinearVelocity(speed.x, speed.y * -1);
+            speed = body.linearVelocity
+            body.setLinearVelocity(speed.x, speed.y * -1)
         }
         if (state == STATE_JUST_APPEAR) {
-            appearScale = stateTime * 1.5f / TIME_JUST_APPEAR;// 1.5f maximum scale
+            appearScale = stateTime * 1.5f / TIME_JUST_APPEAR // 1.5f maximum scale
 
             if (stateTime >= TIME_JUST_APPEAR) {
-                state = STATE_FLYING;
-                stateTime = 0;
-                setNewVelocity(body, random, false);
+                state = STATE_FLYING
+                stateTime = 0f
+                setNewVelocity(body, random, false)
             }
         }
 
         if (state != STATE_JUST_APPEAR) {
-
-            timeToChangeVel += delta;
+            timeToChangeVel += delta
             if (timeToChangeVel >= TIME_TO_CHANGE_VEL) {
-                timeToChangeVel -= TIME_TO_CHANGE_VEL;
+                timeToChangeVel -= TIME_TO_CHANGE_VEL
 
-                Vector2 vel = body.getLinearVelocity();
+                val vel = body.linearVelocity
 
                 // Change in X
-                if (random.nextBoolean())
-                    vel.x *= -1;
+                if (random.nextBoolean()) vel.x *= -1f
 
                 if (state == STATE_FLYING) {
-                    if (random.nextBoolean())
-                        vel.y *= -1;
+                    if (random.nextBoolean()) vel.y *= -1f
                 }
-                body.setLinearVelocity(vel);
+                body.linearVelocity = vel
             }
         }
 
         if (state == STATE_HIT) {
-            body.setGravityScale(1);
-            timeToEvolve += delta;
+            body.gravityScale = 1f
+            timeToEvolve += delta
             if (timeToEvolve >= TIME_TO_EVOLVE) {
-                state = STATE_EVOLVING;
-                stateTime = 0;
-                timeToEvolve = 0;
+                state = STATE_EVOLVING
+                stateTime = 0f
+                timeToEvolve = 0f
             }
         }
 
         if (state == STATE_EVOLVING && stateTime >= DURARTION_EVOLVING) {
-            state = STATE_FLYING;
-            body.setGravityScale(0);
-            setNewVelocity(body, random, true);
-            lives = 3;
-            stateTime = 0;
+            state = STATE_FLYING
+            body.gravityScale = 0f
+            setNewVelocity(body, random, true)
+            lives = 3
+            stateTime = 0f
         }
 
-        speed = body.getLinearVelocity();
+        speed = body.linearVelocity
 
-        limitSpeed(body);
-        speed = body.getLinearVelocity();
+        limitSpeed(body)
+        speed = body.linearVelocity
 
-        stateTime += delta;
+        stateTime += delta
     }
 
     /*
      * Limit the speed because sometimes the force resulting from the collision drove the enemy crazy.
      */
-    private void limitSpeed(Body body) {
-        float vel = MAX_SPEED_BLUE;
-        if (lives == 3)
-            vel = MAX_SPEED_RED;
+    private fun limitSpeed(body: Body) {
+        var vel = MAX_SPEED_BLUE
+        if (lives == 3) vel = MAX_SPEED_RED
 
         if (speed.x > vel) {
-            speed.x = vel;
+            speed.x = vel
         } else if (speed.x < -vel) {
-            speed.x = -vel;
+            speed.x = -vel
         }
 
-        if (lives > 1) {// So the bird fell quickly if I took off its wings.
+        if (lives > 1) { // So the bird fell quickly if I took off its wings.
             if (speed.y > vel) {
-                speed.y = vel;
+                speed.y = vel
             } else if (speed.y < -vel) {
-                speed.y = -vel;
+                speed.y = -vel
             }
         }
-        body.setLinearVelocity(speed);
-
+        body.linearVelocity = speed
     }
 
     /**
      * If it is touching the floor I make the Y velocity always generated positive.
      */
-    private void setNewVelocity(Body body, Random random, boolean isTouchingFLoor) {
-        float vel = MAX_SPEED_BLUE;
-        if (lives == 3)
-            vel = MAX_SPEED_RED;
+    private fun setNewVelocity(body: Body, random: Random, isTouchingFLoor: Boolean) {
+        var vel = MAX_SPEED_BLUE
+        if (lives == 3) vel = MAX_SPEED_RED
 
-        float velocityX = random.nextFloat() * vel * 2 - vel;
-        float velocityY;
-        if (isTouchingFLoor)
-            velocityY = random.nextFloat() * vel;
-        else
-            velocityY = random.nextFloat() * vel * 2 - vel;
+        val velocityX = random.nextFloat() * vel * 2 - vel
+        val velocityY = if (isTouchingFLoor) random.nextFloat() * vel
+        else random.nextFloat() * vel * 2 - vel
 
-        body.setLinearVelocity(velocityX, velocityY);
+        body.setLinearVelocity(velocityX, velocityY)
     }
 
-    public void hit() {
-        lives--;
-        if (lives == 1)
-            state = STATE_HIT;
-        else if (lives == 0)
-            state = STATE_DEAD;
+    fun hit() {
+        lives--
+        if (lives == 1) state = STATE_HIT
+        else if (lives == 0) state = STATE_DEAD
 
-        stateTime = 0;
-
+        stateTime = 0f
     }
 
-    public void die() {
-        lives = 0;
-        state = STATE_DEAD;
-        stateTime = 0;
+    fun die() {
+        lives = 0
+        state = STATE_DEAD
+        stateTime = 0f
     }
 
-    public void setFrozen() {
-        durationFrozen = 0;
-        isFrozen = true;
+    fun setFrozen() {
+        durationFrozen = 0f
+        isFrozen = true
     }
 
+    companion object {
+        @JvmField
+        var WIDTH: Float = .4f
+        @JvmField
+        var HEIGHT: Float = .4f
+
+        @JvmField
+        var STATE_JUST_APPEAR: Int = 0
+        @JvmField
+        var STATE_FLYING: Int = 1
+        var STATE_HIT: Int = 2
+        @JvmField
+        var STATE_EVOLVING: Int = 3 // For it to fly again
+        @JvmField
+        var STATE_DEAD: Int = 4
+        var MAX_SPEED_BLUE: Float = 1.75f
+        var MAX_SPEED_RED: Float = 3.25f
+    }
 }

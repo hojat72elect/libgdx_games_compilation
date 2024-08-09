@@ -1,125 +1,143 @@
-package com.nopalsoft.slamthebird.objects;
+package com.nopalsoft.slamthebird.objects
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.nopalsoft.slamthebird.Assets;
-import com.nopalsoft.slamthebird.Settings;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.nopalsoft.slamthebird.Assets
+import com.nopalsoft.slamthebird.Settings
 
-public class Robot {
-    public static final float DURATION_DEAD_ANIMATION = 2;
-    public static float RADIUS = .28f;
-    public static int STATE_FALLING = 0;
-    public static int STATE_JUMPING = 1;
-    public static int STATE_DEAD = 2;
-    public float SPEED_JUMP = 6.25f;
-    public float SPEED_MOVE = 5f;
-    public float DURATION_SUPER_JUMP = 5;
-    public float durationSuperJump;
-    public float DURATION_INVINCIBLE = 5;
-    public float durationInvincible;
-    public Vector2 position;
+class Robot(x: Float, y: Float) {
+    var SPEED_JUMP: Float = 6.25f
+    var SPEED_MOVE: Float = 5f
+    @JvmField
+    var DURATION_SUPER_JUMP: Float = 5f
+    @JvmField
+    var durationSuperJump: Float = 0f
+    @JvmField
+    var DURATION_INVINCIBLE: Float = 5f
+    @JvmField
+    var durationInvincible: Float = 0f
+    @JvmField
+    var position: Vector2 = Vector2(x, y)
 
-    public int state;
-    public float stateTime;
+    @JvmField
+    var state: Int
+    @JvmField
+    var stateTime: Float = 0f
 
-    public boolean jump, slam;
-    public boolean isSuperJump;
-    public boolean isInvincible;
+    var jump: Boolean
+    @JvmField
+    var slam: Boolean = false
+    @JvmField
+    var isSuperJump: Boolean = false
+    @JvmField
+    var isInvincible: Boolean = false
 
-    public float angleGrad;
-    public Vector2 speed;
+    @JvmField
+    var angleGrad: Float = 0f
+    @JvmField
+    var speed: Vector2
 
-    public Robot(float x, float y) {
-        position = new Vector2(x, y);
-        state = STATE_JUMPING;
-        speed = new Vector2();
-        jump = true; // To make the first jump
+    init {
+        state = STATE_JUMPING
+        speed = Vector2()
+        jump = true // To make the first jump
 
-        DURATION_SUPER_JUMP += Settings.LEVEL_BOOST_SUPER_JUMP;
-        DURATION_INVINCIBLE += Settings.LEVEL_BOOST_INVINCIBLE;
-
+        DURATION_SUPER_JUMP += Settings.LEVEL_BOOST_SUPER_JUMP.toFloat()
+        DURATION_INVINCIBLE += Settings.LEVEL_BOOST_INVINCIBLE.toFloat()
     }
 
-    public void update(float delta, Body body, float accelerationX, boolean slam) {
-        this.slam = slam;// To draw the fast fall =)
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
-        angleGrad = 0;
+    fun update(delta: Float, body: Body, accelerationX: Float, slam: Boolean) {
+        this.slam = slam // To draw the fast fall =)
+        position.x = body.position.x
+        position.y = body.position.y
+        angleGrad = 0f
         if (state == STATE_FALLING || state == STATE_JUMPING) {
-
-            if (slam)
-                body.setGravityScale(2.5f);
-            else
-                body.setGravityScale(1);
+            if (slam) body.gravityScale = 2.5f
+            else body.gravityScale = 1f
 
             if (jump) {
-                jump = false;
-                state = STATE_JUMPING;
-                stateTime = 0;
+                jump = false
+                state = STATE_JUMPING
+                stateTime = 0f
                 if (isSuperJump) {
-                    body.setLinearVelocity(body.getLinearVelocity().x,
-                            SPEED_JUMP + 3);
+                    body.setLinearVelocity(
+                        body.linearVelocity.x,
+                        SPEED_JUMP + 3
+                    )
                 } else {
-                    body.setLinearVelocity(body.getLinearVelocity().x,
-                            SPEED_JUMP);
+                    body.setLinearVelocity(
+                        body.linearVelocity.x,
+                        SPEED_JUMP
+                    )
                 }
             }
 
-            Vector2 speed = body.getLinearVelocity();
+            val speed = body.linearVelocity
 
             if (speed.y < 0 && state != STATE_FALLING) {
-                state = STATE_FALLING;
-                stateTime = 0;
+                state = STATE_FALLING
+                stateTime = 0f
             }
-            body.setLinearVelocity(accelerationX * SPEED_MOVE, speed.y);
+            body.setLinearVelocity(accelerationX * SPEED_MOVE, speed.y)
 
             if (isSuperJump) {
-                durationSuperJump += delta;
+                durationSuperJump += delta
                 if (durationSuperJump >= DURATION_SUPER_JUMP) {
-                    isSuperJump = false;
-                    durationSuperJump = 0;
+                    isSuperJump = false
+                    durationSuperJump = 0f
                 }
             }
 
             if (isInvincible) {
-                durationInvincible += delta;
+                durationInvincible += delta
                 if (durationInvincible >= DURATION_INVINCIBLE) {
-                    isInvincible = false;
-                    durationInvincible = 0;
+                    isInvincible = false
+                    durationInvincible = 0f
                 }
             }
         } else if (state == STATE_DEAD) {
-            body.setLinearVelocity(0, -3);
-            body.setFixedRotation(false);
-            angleGrad = (float) Math.toDegrees(body.getAngle());
-            body.setAngularVelocity((float) Math.toRadians(20));
+            body.setLinearVelocity(0f, -3f)
+            body.isFixedRotation = false
+            angleGrad = Math.toDegrees(body.angle.toDouble()).toFloat()
+            body.angularVelocity = Math.toRadians(20.0).toFloat()
         }
-        speed = body.getLinearVelocity();
-        stateTime += delta;
+        speed = body.linearVelocity
+        stateTime += delta
     }
 
-    public void updateReady(Body body, float acelX) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
+    fun updateReady(body: Body, acelX: Float) {
+        position.x = body.position.x
+        position.y = body.position.y
 
-        body.setLinearVelocity(acelX * SPEED_MOVE, 0);
-        speed = body.getLinearVelocity();
+        body.setLinearVelocity(acelX * SPEED_MOVE, 0f)
+        speed = body.linearVelocity
     }
 
-    public void jump() {
+    fun jump() {
         if (state == STATE_FALLING) {
-            jump = true;
-            stateTime = 0;
-            Assets.playSound(Assets.soundJump);
+            jump = true
+            stateTime = 0f
+            Assets.playSound(Assets.soundJump)
         }
     }
 
     /**
      * The robot is hit and dies.
      */
-    public void hit() {
-        state = STATE_DEAD;
-        stateTime = 0;
+    fun hit() {
+        state = STATE_DEAD
+        stateTime = 0f
     }
 
+    companion object {
+        const val DURATION_DEAD_ANIMATION: Float = 2f
+        @JvmField
+        var RADIUS: Float = .28f
+        @JvmField
+        var STATE_FALLING: Int = 0
+        @JvmField
+        var STATE_JUMPING: Int = 1
+        @JvmField
+        var STATE_DEAD: Int = 2
+    }
 }
